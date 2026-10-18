@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VOLAND CHRONICLES</title>
+<style>
+:root{--bg:#0a0908;--gold:#c9a96e;--gold2:#f2d492;--red:#ef4444;--blue:#60a5fa;--green:#4ade80;--xp:#f2d492}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#e8e0d0;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}
+.wrap{max-width:980px;margin:0 auto;padding:20px}
+.top{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(201,169,110,.15);padding:14px 0;margin-bottom:18px}
+.logo{font-family:Georgia,serif;letter-spacing:.2em;font-weight:700;color:var(--gold2)}
+.nav{display:flex;gap:12px;font-size:12px;letter-spacing:.1em}
+.nav b{color:var(--gold2);border-bottom:1px solid var(--gold)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.card{border:1px solid rgba(201,169,110,.15);background:#12100e;padding:14px;border-radius:10px;cursor:pointer;transition:.2s}
+.card:hover{border-color:rgba(201,169,110,.35);transform:translateY(-2px)}
+.emoji{font-size:28px}.hname{font-family:Georgia,serif;margin:8px 0 4px;color:var(--gold2);font-size:14px;letter-spacing:.08em}
+.meta{font-size:10px;color:#8a7d6a;line-height:1.4}
+.filter{display:flex;gap:8px;margin:12px 0}
+.filter button{background:transparent;border:1px solid rgba(201,169,110,.2);color:#8a7d6a;padding:6px 12px;border-radius:20px;font-size:11px;cursor:pointer}
+.filter button.active{color:#0a0908;background:linear-gradient(90deg,var(--gold2),var(--gold));border-color:transparent}
+#modal{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;padding:20px;z-index:10}
+.modalBox{background:#12100e;border:1px solid rgba(201,169,110,.25);padding:22px;border-radius:14px;max-width:360px;width:100%}
+.bar{height:6px;border-radius:3px;background:#1a1816;margin:4px 0 10px;overflow:hidden}
+.bar i{display:block;height:100%}
+.hp i{background:var(--red)} .mana i{background:var(--blue)} .stam i{background:var(--green)} .xp i{background:var(--xp)}
+.input{background:#0a0908;border:1px solid rgba(201,169,110,.2);color:var(--gold2);padding:8px 10px;border-radius:6px;width:100%;margin:10px 0;font-family:inherit}
+.btn{background:linear-gradient(90deg,var(--gold2),var(--gold));color:#0a0908;border:0;padding:10px 14px;border-radius:8px;font-weight:700;letter-spacing:.05em;width:100%;cursor:pointer}
+.tabs{display:flex;gap:16px;border-bottom:1px solid rgba(201,169,110,.12);margin:16px 0 12px;font-size:11px;letter-spacing:.12em}
+.tabs span{padding-bottom:8px;cursor:pointer;color:#8a7d6a}.tabs span.on{color:var(--gold2);border-bottom:1px solid var(--gold)}
+.page{display:none}.page.on{display:block}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="top"><div class="logo">VOLAND CHRONICLES</div><div class="nav"><b>HERO</b><span>QUESTS</span><span>BATTLE</span><span>MAP</span><span>INVENTORY</span></div></div>
+<div id="p1" class="page on">
+<div style="font-family:Georgia,serif;font-size:22px;color:#f2d492;letter-spacing:.08em">CHOOSE YOUR CHAMPION</div>
+<div style="font-size:11px;color:#8a7d6a;margin:6px 0 14px;letter-spacing:.12em">ALL 08 • MALE 04 • FEMALE 04 • LIGHT PACK ~35KB</div>
+<div class="filter"><button class="active" onclick="f('all',this)">ALL 08</button><button onclick="f('male',this)">MALE 04</button><button onclick="f('female',this)">FEMALE 04</button></div>
+<div id="grid" class="grid"></div>
+</div>
+<div id="p3" class="page">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+<div><div id="p3name" style="font-family:Georgia,serif;color:#f2d492;font-size:18px">IRON VOW</div><div style="font-size:11px;color:#8a7d6a;margin:6px 0">VOLAND_1337 • LVL 1</div>
+<div style="font-size:10px;letter-spacing:.1em;margin-top:14px">HP <span id="hpv" style="float:right">1420/1420</span></div><div class="bar hp"><i style="width:100%"></i></div>
+<div style="font-size:10px;letter-spacing:.1em">MANA <span style="float:right">110/110</span></div><div class="bar mana"><i style="width:100%"></i></div>
+<div style="font-size:10px;letter-spacing:.1em">STAMINA <span style="float:right">100/100</span></div><div class="bar stam"><i style="width:85%"></i></div>
+<div style="font-size:10px;letter-spacing:.1em">XP <span style="float:right">0/1000</span></div><div class="bar xp"><i style="width:12%"></i></div>
+</div>
+<div style="border:1px solid rgba(201,169,110,.12);border-radius:10px;padding:14px;background:#12100e"><div style="font-size:11px;letter-spacing:.12em;color:#c9a96e;margin-bottom:8px">JJHDAHDHA // LOG</div><div style="font-size:11px;line-height:1.6;color:#8a7d6a">• Spawned at Elder Ruins<br>• Iron Vow stands ready.<br>• HP red • MANA blue • STAMINA green • XP gold<br>• Choose action: QUESTS / BATTLE / MAP</div></div>
+</div>
+<div class="tabs"><span class="on">HERO</span><span>QUESTS</span><span>BATTLE</span><span>MAP</span><span>INVENTORY</span></div>
+<div style="font-size:11px;color:#8a7d6a">Light GitHub Pages build. No images required, webp fallback handled.</div>
+</div>
+</div>
+<div id="modal"><div class="modalBox">
+<div id="mEmoji" style="font-size:32px">🛡️</div>
+<div id="mName" style="font-family:Georgia,serif;color:#f2d492;margin:8px 0;font-size:18px;letter-spacing:.06em">IRON VOW</div>
+<div id="mStats" style="font-size:10px;color:#8a7d6a;line-height:1.5">HP1420 DEF290 DAMAGE152 CRIT13% DODGE8% MANA110</div>
+<input id="nick" class="input" value="VOLAND_1337">
+<button class="btn" onclick="go3()">ENTER CHRONICLES</button>
+<div style="text-align:center;margin-top:10px"><span style="font-size:10px;color:#8a7d6a;cursor:pointer;text-decoration:underline" onclick="closeM()">CANCEL</span></div>
+</div></div>
+<script>
+var DATA=[
+{id:'archer-m',name:'DARK RANGER',hp:920,def:115,dmg:185,mana:210,crit:26,dodge:19,gender:'male',emoji:'🏹'},
+{id:'warrior-m',name:'LION WARDEN',hp:1550,def:320,dmg:145,mana:80,crit:10,dodge:5,gender:'male',emoji:'🦁'},
+{id:'archmage-m',name:'AZURE SAGE',hp:680,def:75,dmg:235,mana:380,crit:31,dodge:12,gender:'male',emoji:'🔮'},
+{id:'necro-m',name:'GRAVELORD',hp:810,def:98,dmg:205,mana:320,crit:22,dodge:10,gender:'male',emoji:'💀'},
+{id:'archer-f',name:'WILD PATH',hp:860,def:108,dmg:178,mana:190,crit:29,dodge:21,gender:'female',emoji:'🌿'},
+{id:'warrior-f',name:'IRON VOW',hp:1420,def:290,dmg:152,mana:110,crit:13,dodge:8,gender:'female',emoji:'🛡️'},
+{id:'mage-f-new',name:'VOLCANIC',hp:730,def:85,dmg:250,mana:400,crit:35,dodge:11,gender:'female',emoji:'🌋'},
+{id:'necro-f-new',name:'AMETHYST',hp:840,def:102,dmg:215,mana:340,crit:25,dodge:9,gender:'female',emoji:'💜'}
+];
+var chosen=null;
+var grid=document.getElementById('grid');
+function render(filter){filter=filter||'all';grid.innerHTML='';DATA.forEach(function(h){if(filter!=='all'&&h.gender!==filter)return;var d=document.createElement('div');d.className='card';d.innerHTML='<div class=emoji>'+h.emoji+'</div><div class=hname>'+h.name+'</div><div class=meta>HP'+h.hp+' DEF'+h.def+' DMG'+h.dmg+'<br>CRIT'+h.crit+'% DODGE'+h.dodge+'% MANA'+h.mana+'</div><img src=./assets/heroes/'+h.id+'.webp onerror=this.style.display="none" style=width:100%;aspect-ratio:1;object-fit:cover;border-radius:6px;margin-top:8px;opacity:.75>';d.onclick=function(){openM(h.id)};grid.appendChild(d);});}
+function f(type,btn){document.querySelectorAll('.filter button').forEach(function(b){b.classList.remove('active')});btn.classList.add('active');render(type);}
+function openM(id){chosen=DATA.find(function(x){return x.id===id});document.getElementById('mEmoji').textContent=chosen.emoji;document.getElementById('mName').textContent=chosen.name;document.getElementById('mStats').textContent='HP'+chosen.hp+' DEF'+chosen.def+' DAMAGE'+chosen.dmg+' CRIT'+chosen.crit+'% DODGE'+chosen.dodge+'% MANA'+chosen.mana;document.getElementById('modal').style.display='flex';}
+function closeM(){document.getElementById('modal').style.display='none';}
+function go3(){var n=document.getElementById('nick').value||'VOLAND_1337';document.getElementById('p3name').textContent=chosen?chosen.name:'IRON VOW';document.getElementById('p1').classList.remove('on');document.getElementById('p3').classList.add('on');closeM();window.scrollTo(0,0);}
+render('all');
+</script>
+</body>
+</html>

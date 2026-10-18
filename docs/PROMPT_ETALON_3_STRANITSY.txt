@@ -1,0 +1,23 @@
+VOLAND CHRONICLES - ETALON 3 STRANITSY
+
+Page1 CHOOSE:
+- Title: CHOOSE YOUR CHAMPION
+- Filter: ALL 08 MALE 04 FEMALE 04
+- Grid 8 heroes: archer-m DARK RANGER, warrior-m LION WARDEN, archmage-m AZURE SAGE, necro-m GRAVELORD, archer-f WILD PATH, warrior-f IRON VOW, mage-f-new VOLCANIC, necro-f-new AMETHYST
+- Card: emoji + name + HP/DEF/DMG/CRIT/DODGE/MANA + webp fallback
+
+Page2 MODAL:
+- Trigger on card click
+- Show: avatar emoji, hname, stats line example IRON VOW HP1420 DEF290 DAMAGE152 CRIT13% DODGE8% MANA110
+- Input name VOLAND_1337
+- Buttons: ENTER CHRONICLES, CANCEL
+- Close overlay
+
+Page3 MAIN:
+- Header VOLAND CHRONICLES + nav HERO/QUESTS/BATTLE/MAP/INVENTORY (JJHDAHDHA style log)
+- Left: hero name + VOLAND_1337 + LVL 1 + bars: HP red (#ef4444) 1420/1420, MANA blue (#60a5fa) 110/110, STAMINA green (#4ade80), XP gold (#f2d492)
+- Right: log box with spawn message
+- Tabs underline gold
+
+Design: bg #0a0908, gold #c9a96e #f2d492, card #12100e, border rgba(201,169,110,.15), monospace + serif.
+Size target JS <8KB.
