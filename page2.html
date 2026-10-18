@@ -1,29 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>DARK RANGER</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DARK RANGER - VOLAND</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#0a0e16 url('assets/heroes/bg-battlefield.webp') fixed center/cover;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;font-family:Inter,sans-serif}
-.frame{width:100%;max-width:1280px;display:grid;grid-template-columns:380px 1fr 380px;background:rgba(0,0,0,.4);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.08)}
+.frame{width:100%;max-width:1280px;display:grid;grid-template-columns:380px 1fr 380px;background:rgba(0,0,0,.45);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.08);box-shadow:0 30px 80px rgba(0,0,0,.9)}
 .left{background:#121214;padding:18px;border-right:1px solid rgba(255,255,255,.06)}
 .skill{background:#17171b;border:1px solid #23232a;border-radius:12px;padding:11px;display:flex;gap:11px;margin-bottom:10px}
 .skill .icon{width:64px;height:64px;border-radius:12px;overflow:hidden;flex-shrink:0;background:#1e1e22;border:1px solid #2a2a32}
-.skill .icon img{width:100%;height:100%;object-fit:cover}
+.skill .icon img{width:100%;height:100%;object-fit:cover;display:block}
 .sname{font-size:12px;font-weight:700;color:#e6e0cc}.badge{font-size:7px;background:#1e1e22;border:1px solid #2a2a32;padding:2px 5px;border-radius:4px;color:#8a8678;margin-left:6px}
 .sdesc{font-size:10px;color:#8b8b95;line-height:1.4;margin-top:3px}.smeta{font-size:7.5px;color:#5e5e68;margin-top:5px}
 .center{position:relative;background:#0c1218;overflow:hidden}
 .center img.hero{width:100%;height:100%;min-height:780px;object-fit:cover;object-position:top center;display:block}
-.right{background:rgba(18,18,22,.96);padding:0}
-.right-header{background:#1a1a1e;padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between}
+.right{background:rgba(18,18,22,.96);padding:0;display:flex;flex-direction:column}
+.right-header{background:#1a1a1e;padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;align-items:flex-start}
 .right-header h1{font-family:Cinzel;font-size:20px;color:#e8dcc0;letter-spacing:.15em;line-height:1}
 .right-header .sub{font-size:7px;color:#8a8678;letter-spacing:.25em;margin-top:6px}
-.close{width:26px;height:26px;border-radius:50%;border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;color:#6b6875;cursor:pointer}
+.close{width:26px;height:26px;border-radius:50%;border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;color:#6b6875;cursor:pointer;font-size:12px}
 .name-block{background:#2a2a2e;border:1px solid #3a3a42;margin:16px;padding:10px}
 .name-block label{font-size:8px;letter-spacing:.2em;color:#8a8678;display:block;margin-bottom:6px}
-.name-block input{width:100%;background:#0e0e10;border:1px solid #3a3a42;color:#e8dcc0;padding:8px 10px;font-size:11px;outline:none;font-family:Inter}
+.name-block input{width:100%;background:#0e0e10;border:1px solid #3a3a42;color:#e8dcc0;padding:9px 10px;font-size:11px;outline:none;font-family:Inter}
+.name-block input:focus{border-color:#e6d5a0}
 .stats{padding:0 18px}
 .stats-title{font-size:8px;letter-spacing:.3em;color:#6b6875;text-align:center;display:flex;align-items:center;gap:10px;margin:10px 0}
 .stats-title::before,.stats-title::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.08)}
@@ -37,17 +39,19 @@ body{background:#0a0e16 url('assets/heroes/bg-battlefield.webp') fixed center/co
 .archetype .small{font-size:7px;color:#6b6875;letter-spacing:.2em}
 .archetype h3{font-size:11px;color:#e6e0cc;margin:4px 0}
 .archetype p{font-size:9.5px;color:#8b8b95;line-height:1.5}
-.confirm{margin:18px;padding:11px;background:rgba(40,35,25,.6);border:1px solid rgba(230,213,160,.15);text-align:center;font-size:8px;letter-spacing:.25em;color:#6b6875;cursor:pointer}
+.confirm{margin:18px;padding:11px;background:rgba(40,35,25,.3);border:1px solid rgba(255,255,255,.08);text-align:center;font-size:8px;letter-spacing:.25em;color:#4a4a52;cursor:not-allowed;transition:.2s}
+.confirm.active{background:rgba(230,213,160,.12);border-color:#e6d5a0;color:#e6d5a0;cursor:pointer;box-shadow:0 0 15px rgba(230,213,160,.2)}
+.confirm.active:hover{background:rgba(230,213,160,.2)}
 .esc{font-size:7px;color:#4a4a52;text-align:center;padding-bottom:12px;letter-spacing:.15em}
 </style>
 </head>
 <body>
-<div class="confirm">
+<div class="frame">
 <div class="left"><div style="font-size:9px;letter-spacing:.3em;color:#6b6875;text-align:center;margin-bottom:14px">SKILLS</div><div id="skillsList"></div></div>
-<div class="center"><img class="hero" id="heroImg" src="assets/heroes/archer-m.webp"></div>
+<div class="center"><img class="hero" src="assets/heroes/archer-m.webp" alt="Dark Ranger"></div>
 <div class="right">
 <div class="right-header"><div><h1>DARK RANGER</h1><div class="sub">SHADOW RANGER • ARCHER • MALE</div></div><div class="close" onclick="location.href='index.html'">✕</div></div>
-<div class="name-block"><label>ENTER YOUR NAME</label><input id="nameInput" type="text" value="VOLAND 1337" placeholder="Type your name..."></div>
+<div class="name-block"><label>ENTER YOUR NAME</label><input id="nameInput" type="text" value="VOLAND 1337" placeholder="Type your name..." maxlength="16"></div>
 <div class="stats"><div class="stats-title">STATS</div>
 <div class="stat"><div class="stat-head"><span class="label">HP</span><span class="val">928</span></div><div class="bar"><span class="bar-fill" style="width:72%"></span></div></div>
 <div class="stat"><div class="stat-head"><span class="label">DEF</span><span class="val">115</span></div><div class="bar"><span class="bar-fill" style="width:38%"></span></div></div>
@@ -57,65 +61,11 @@ body{background:#0a0e16 url('assets/heroes/bg-battlefield.webp') fixed center/co
 <div class="stat"><div class="stat-head"><span class="label">MANA</span><span class="val">210</span></div><div class="bar"><span class="bar-fill" style="width:52%"></span></div></div>
 </div>
 <div class="archetype"><div class="small">CLASS ARCHETYPE</div><h3>SHADOW RANGER</h3><p>Precision eliminator. High crit & dodge, mid survivability. Cursed arrows bypass armor.</p><div class="small" style="margin-top:12px">LORE</div><p>Silent hunter of the Gloomwood. Arrows cursed with winter.</p></div>
-<div class="confirm">CONFIRM CHAMPION — ENTER NAME</div>
+<div id="confirmBtn" class="confirm">CONFIRM CHAMPION — ENTER NAME</div>
 <div class="esc">ESC TO CLOSE • CLICK OUTSIDE TO DISMISS</div>
 </div>
 </div>
-<<div class="name-block">
-  <label>ENTER YOUR NAME</label>
-  <input id="nameInput" type="text" value="VOLAND 1337" placeholder="Type your name..." maxlength="16">
-</div>
-
-<!-- ... stats ... -->
-
-<div id="confirmBtn" class="confirm disabled">CONFIRM CHAMPION — ENTER NAME</div>
-
-<style>
-.confirm{margin:18px;padding:11px;background:rgba(40,35,25,.3);border:1px solid rgba(255,255,255,.08);text-align:center;font-size:8px;letter-spacing:.25em;color:#4a4a52;cursor:not-allowed;transition:.2s}
-.confirm.active{background:rgba(230,213,160,.12);border-color:#e6d5a0;color:#e6d5a0;cursor:pointer;box-shadow:0 0 15px rgba(230,213,160,.2)}
-.confirm.active:hover{background:rgba(230,213,160,.2)}
-</style>
-
 <script>
-const nameInput = document.getElementById('nameInput');
-const confirmBtn = document.getElementById('confirmBtn');
-
-function checkName(){
-  const val = nameInput.value.trim();
-  if(val.length >= 3){
-    confirmBtn.classList.add('active');
-    confirmBtn.classList.remove('disabled');
-    confirmBtn.textContent = `CONFIRM CHAMPION — SAVE AS ${val.toUpperCase()}`;
-  } else {
-    confirmBtn.classList.remove('active');
-    confirmBtn.classList.add('disabled');
-    confirmBtn.textContent = 'CONFIRM CHAMPION — ENTER NAME';
-  }
-}
-
-nameInput.addEventListener('input', checkName);
-nameInput.addEventListener('keydown', (e)=>{
-  if(e.key==='Enter' && confirmBtn.classList.contains('active')){
-    confirmBtn.click();
-  }
-});
-
-confirmBtn.addEventListener('click', ()=>{
-  if(!confirmBtn.classList.contains('active')) return;
-  const name = nameInput.value.trim();
-  localStorage.setItem('voland_player_name', name);
-  localStorage.setItem('voland_hero', 'archer-m');
-  confirmBtn.textContent = `✓ SAVED — WELCOME ${name.toUpperCase()}`;
-  confirmBtn.style.background = 'rgba(80,180,80,.15)';
-  confirmBtn.style.borderColor = '#50b450';
-  confirmBtn.style.color = '#8fdc8f';
-  setTimeout(()=>{ location.href='index.html'; }, 800);
-});
-
-// начальная проверка
-checkName();
-nameInput.focus();
-</script>>
 const skills=[
 {img:"heroes/icon_metka_teni.jpg",name:"Метка Тени",badge:"PASSIVE",desc:"Каждая 2-я атака накладывает Метку Тени на 3 раунда. Отмеченные цели получают +200% урона от твоих стрел. Убийство отмеченной цели восстанавливает 15 маны.",meta:"КД: — • Мана: 0"},
 {img:"heroes/icon_begliy_vistrel.jpg",name:"Беглый выстрел",badge:"1",desc:"Стреляет по ближайшему врагу, нанося 200% урона.",meta:"КД: 3 раунда • Мана: 5 • Урон: 200%"},
@@ -124,8 +74,28 @@ const skills=[
 {img:"heroes/icon_zalp_bezdny.jpg",name:"Залп Бездны",badge:"4",desc:"ULTIMATE: Выпускает 7 стрел. Каждая стрела наносит +100% урона одному противнику. Если цель одна — весь урон попадает в неё +700% урона.",meta:"КД: 25 раундов • Мана: 40 • Урон: +700% в одну цель"}
 ];
 const list=document.getElementById('skillsList');
-skills.forEach(s=>{list.innerHTML+=`<div class="skill"><div class="icon"><img src="${s.img}"></div><div><div class="sname">${s.name} <span class="badge">${s.badge}</span></div><div class="sdesc">${s.desc}</div><div class="smeta">${s.meta}</div></div></div>`});
-document.getElementById('nameInput').focus();
+skills.forEach(s=>{list.innerHTML+=`<div class="skill"><div class="icon"><img src="${s.img}" onerror="this.src='assets/heroes/archer-m.webp'"></div><div><div class="sname">${s.name} <span class="badge">${s.badge}</span></div><div class="sdesc">${s.desc}</div><div class="smeta">${s.meta}</div></div></div>`});
+const nameInput=document.getElementById('nameInput');
+const confirmBtn=document.getElementById('confirmBtn');
+function checkName(){
+  const v=nameInput.value.trim();
+  if(v.length>=3){confirmBtn.classList.add('active');confirmBtn.textContent=`CONFIRM CHAMPION — SAVE AS ${v.toUpperCase()}`;}
+  else{confirmBtn.classList.remove('active');confirmBtn.textContent='CONFIRM CHAMPION — ENTER NAME';}
+}
+nameInput.addEventListener('input',checkName);
+nameInput.addEventListener('keydown',e=>{if(e.key==='Enter'&&confirmBtn.classList.contains('active'))confirmBtn.click();});
+confirmBtn.addEventListener('click',()=>{
+  if(!confirmBtn.classList.contains('active'))return;
+  const name=nameInput.value.trim();
+  localStorage.setItem('voland_player_name',name);
+  localStorage.setItem('voland_hero','archer-m');
+  confirmBtn.textContent=`✓ SAVED — WELCOME ${name.toUpperCase()}`;
+  confirmBtn.style.background='rgba(80,180,80,.15)';confirmBtn.style.borderColor='#50b450';confirmBtn.style.color='#8fdc8f';
+  setTimeout(()=>location.href='index.html',800);
+});
+checkName();
+nameInput.focus();
+nameInput.select();
 </script>
 </body>
 </html>
