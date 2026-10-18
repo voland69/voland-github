@@ -3,32 +3,80 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>VOLAND</title>
+<title>VOLAND CHRONICLES</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#0e151f}
-.bg{position:fixed;inset:0;background:url('assets/heroes/bg-battlefield.webp') center top / cover no-repeat;filter:brightness(1.4)}
-.main{position:relative;z-index:2;max-width:1280px;margin:0 auto;padding:60px 20px}
-h1{text-align:center;color:#c9a96e;letter-spacing:.3em;font:600 26px Cinzel,serif;margin-bottom:50px;text-shadow:0 2px 12px #000}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:30px}
-@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
-.card{background:transparent;border:0}
-.img{aspect-ratio:3/4;display:flex;align-items:end}
-.img img{width:100%;height:100%;object-fit:contain;object-position:bottom;display:block;filter:drop-shadow(0 12px 24px #000)}
+body{background:#0f1a29 url('assets/heroes/bg-battlefield.webp') no-repeat fixed center top;background-size:cover;min-height:100vh;color:#e6e0cc;font-family:Inter,sans-serif}
+.main{max-width:1280px;margin:0 auto;padding:40px 24px 60px}
+.top{text-align:center;margin-bottom:32px}
+.top .era{font-size:10px;letter-spacing:.35em;color:#8a8678;margin-bottom:8px}
+.top h1{font-family:Cinzel,serif;font-size:38px;letter-spacing:.22em;color:#d9b77a;text-shadow:0 2px 14px #000}
+.top .sub{font-size:10px;letter-spacing:.3em;color:#8a8678;margin-top:12px}
+.filters{display:flex;justify-content:center;gap:8px;margin:28px auto;background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.08);border-radius:24px;padding:6px;width:fit-content;backdrop-filter:blur(6px)}
+.filters button{background:transparent;border:0;color:#8a8678;padding:8px 18px;border-radius:18px;font-size:10px;letter-spacing:.15em;cursor:pointer}
+.filters button.active{background:#e8dcc0;color:#1a1a1a;font-weight:600}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+@media(max-width:1000px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.grid{grid-template-columns:1fr}}
+.card{position:relative;aspect-ratio:3/4;overflow:hidden;border-radius:6px;cursor:pointer;background:#0a0f18;box-shadow:0 8px 24px rgba(0,0,0,.6);transition:.3s}
+.card:hover{transform:translateY(-4px);box-shadow:0 14px 32px rgba(0,0,0,.8)}
+.card img{width:100%;height:100%;object-fit:cover;display:block}
+.card .fade{position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.85) 0%,rgba(0,0,0,.15) 45%,transparent 70%)}
+.card .info{position:absolute;left:0;right:0;bottom:0;padding:14px 12px}
+.card .name{font-size:11px;letter-spacing:.18em;font-weight:600;color:#e6e0cc}
+.card .meta{font-size:8px;letter-spacing:.18em;color:#c9a96e;margin-top:3px}
+.modal{display:none;position:fixed;inset:0;z-index:99;background:rgba(7,11,18,.92);padding:24px;overflow:auto}
+.modal.open{display:block}
+.modal .box{max-width:520px;margin:40px auto;background:#121214;border:1px solid #1e1e24;border-radius:12px;padding:20px}
+.skill{background:#17171b;border:1px solid #222227;border-radius:10px;padding:12px;margin-bottom:10px;display:flex;gap:10px}
+.sinfo{flex:1}
+.sname{font-size:12px;font-weight:600}
+.sdesc{font-size:10px;color:#8b8b95;margin-top:3px;line-height:1.4}
+.smeta{font-size:8px;color:#5e5e68;margin-top:4px}
+.close{cursor:pointer;text-align:right;font-size:12px;color:#8a8678;margin-bottom:10px}
 </style>
 </head>
 <body>
-<div class="bg"></div>
 <div class="main">
-<h1>VOLAND CHRONICLES</h1>
-<div class="grid">
-<div class="card"><div class="img"><img src="assets/heroes/archer-m.webp"></div></div>
-<div class="card"><div class="img"><img src="assets/heroes/warrior-m.webp"></div></div>
-<div class="card"><div class="img"><img src="assets/heroes/archmage-m.webp"></div></div>
-<div class="card"><div class="img"><img src="assets/heroes/necro-m.webp"></div></div>
-<div class="card"><div class="img"><img src="assets/heroes/archer-f.webp"></div></div>
-<div class="card"><div class="img"><img src="assets/heroes/warrior-f.webp"></div></div>
-<div class="card"><div class="img"><img src="assets/heroes/mage-f-new.webp"></div></div>
-<div class="card"><div class="img"><img src="assets/heroes/necro-f-new.webp"></div></div>
-</div></div></body></html>
-
+<div class="top">
+<div class="era">EST. VOLAND ERA</div>
+<h1>VOLAND<br>CHRONICLES</h1>
+<div class="sub">CHOOSE YOUR CHAMPION — 8 HEROES</div>
+</div>
+<div class="filters">
+<button class="active" data-f="all">ALL 08</button>
+<button data-f="male">MALE 04</button>
+<button data-f="female">FEMALE 04</button>
+</div>
+<div class="grid" id="grid">
+<div class="card" data-g="male" data-id="archer-m"><img src="assets/heroes/archer-m.webp"><div class="fade"></div><div class="info"><div class="name">DARK RANGER</div><div class="meta">ARCHER - MALE</div></div></div>
+<div class="card" data-g="male" data-id="warrior-m"><img src="assets/heroes/warrior-m.webp"><div class="fade"></div><div class="info"><div class="name">LION WARDEN</div><div class="meta">WARRIOR - MALE</div></div></div>
+<div class="card" data-g="male" data-id="archmage-m"><img src="assets/heroes/archmage-m.webp"><div class="fade"></div><div class="info"><div class="name">AZURE SAGE</div><div class="meta">ARCHMAGE - MALE</div></div></div>
+<div class="card" data-g="male" data-id="necro-m"><img src="assets/heroes/necro-m.webp"><div class="fade"></div><div class="info"><div class="name">GRAVELORD</div><div class="meta">NECROMANCER - MALE</div></div></div>
+<div class="card" data-g="female" data-id="archer-f"><img src="assets/heroes/archer-f.webp"><div class="fade"></div><div class="info"><div class="name">WILD PATH</div><div class="meta">ARCHER - FEMALE</div></div></div>
+<div class="card" data-g="female" data-id="warrior-f"><img src="assets/heroes/warrior-f.webp"><div class="fade"></div><div class="info"><div class="name">IRON VOW</div><div class="meta">WARRIOR - FEMALE</div></div></div>
+<div class="card" data-g="female" data-id="mage-f-new"><img src="assets/heroes/mage-f-new.webp"><div class="fade"></div><div class="info"><div class="name">VOLCANIC</div><div class="meta">MAGE - FEMALE</div></div></div>
+<div class="card" data-g="female" data-id="necro-f-new"><img src="assets/heroes/necro-f-new.webp"><div class="fade"></div><div class="info"><div class="name">AMETHYST</div><div class="meta">NECROMANCER - FEMALE</div></div></div>
+</div>
+</div>
+<div class="modal" id="modal"><div class="box"><div class="close" id="close">✕ CLOSE</div><div id="mcontent"></div></div></div>
+<script>
+const heroes={
+"archer-m":{n:"DARK RANGER",d:[["Метка Тени PASSIVE","Каждая 2-я атака накладывает Метку Тени на 3 раунда. +200% урона от стрел. Убийство отмеченной цели +15 маны."],["Беглый выстрел 1","200% урона по ближайшему врагу. КД 3 • Мана 5"],["Шаг в Ничто 2","Невидимость на 3 раунда. Следующая атака гарантированный крит. КД 20 • Мана 25"],["Призрачная Стрела 3","140% урона, стан 33% на 1 раунд. Пронзает до 3 целей. КД 5 • Мана 20"],["Залп Бездны ULT","7 стрел по 100% каждая. Если 1 цель — 700% в неё. КД 25 • Мана 40"]]},
+"archer-f":{n:"WILD PATH",d:[["Тропы Зверя PASSIVE","При уклонении следующая атака 100% крит."],["Двойной Выстрел 1","2 стрелы по 100% каждая. Если в 1 цель — кровотечение 25% на 4 раунда."],["Ядовитая Лиана 2","Оглушение 1 раунд + яд 100% за 3 раунда. КД 10"],["Глаз Ястреба 3","+25% крит шанс на 4 раунда, видит инвиз, игнор 20% брони."],["Буря Стрел ULT","12 стрел по 80% за 3 раунда, 25% шанс стана."]]},
+"archmage-m":{n:"AZURE SAGE",d:[["Искривление Времени PASSIVE","Каждое заклинание +10% урона, стак 5 раундов. На 5 стаках +50% к след. заклинанию."],["Ледяное Копье 1","+250% урона, -20% защиты врага."],["Сфера Бури 2","3 раунда бьет 3 цели по 160% каждый раунд."],["Лавина 3","+300% урона всем врагам."],["Аннигиляция Времени ULT","Заморозка времени на 3 раунда (стан), затем 350% всем."]]},
+"necro-m":{n:"GRAVELORD",d:[["Костяной Легион PASSIVE","Каждый раунд 1 скелет (макс 3), 50% твоего урона, бессмертны."],["Костяное Копье 1","+150% урона + Уязвимость Костей +25% урон от саммонов 2 раунда."],["Костяной Щит 2","Щит 20% HP, при разрушении взрыв 300% AOE."],["Поднять Мертвых 3","2 скелета подрывника: 200% AOE в 1 раунде, 300% во 2 раунде."],["Армия Погибели ULT","5 скелетов на 3 раунда по 50% урона."]]},
+"warrior-f":{n:"IRON VOW",d:[["Клятва Стаи PASSIVE","При HP <30% +50% урона и +30% лайфстил."],["Рассекающий Волк 1","2 удара по 110% каждый, всего 220%."],["Щит Волчьего Вожака 2","Блок 50% на 4 раунда, контратака 350% при блоке."],["Зов Стаи 3","Стан 1 врага, остальные 200% AOE, оглушенный получает x2."],["Альфа Хищник ULT","Волк на 5 раундов: +50% HP, +30% урона, кровотечение 100%."]]},
+"mage-f-new":{n:"VOLCANIC",d:[["Сердце Кальдеры PASSIVE","Каждое 4 заклинание поджигает землю на 2 раунда 100% AOE."],["Огненный Шар 1","150% + поджог 20% на 2 раунда, при крите AOE."],["Извержение 2","200% AOE + лава 50% в раунд 3 раунда."],["Метеор 3","500% AOE + 300% волна в след. раунде."],["Судный День ULT","4 метеора по 200% + последний 400% + поджог."]]},
+"necro-f-new":{n:"AMETHYST",d:[["Шепот Аметиста PASSIVE","Каждое 3-е заклинание — дух на 3 раунда 100% урона +5 маны/раунд."],["Проклятие Душ 1","200% + кража 5 маны, -15% урона врага 4 раунда."],["Аметистовая Тюрьма 2","Стан всех на 1 раунд, взрыв 300% AOE."],["Похищение Жизни 3","Связь 4 раунда: 30% получаемого урона отражается, 30% хилит."],["Аметистовый Закат ULT","5 душ по 200% + стан 1 раунд, если 1 враг — до 1000%."]]},
+"warrior-m":{n:"LION WARDEN",d:[["Клятва Льва PASSIVE","+20% защиты союзникам рядом."],["Удар Льва 1","250% урона + оглушение."],["Щит Льва 2","Блок 60% на 3 раунда."],["Рев 3","AOE страх 1 раунд."],["Аватар Льва ULT","+50% HP и урона на 5 раундов."]]}
+};
+const grid=document.getElementById('grid'),modal=document.getElementById('modal'),mc=document.getElementById('mcontent');
+document.querySelectorAll('.filters button').forEach(b=>{b.onclick=()=>{document.querySelectorAll('.filters button').forEach(x=>x.classList.remove('active'));b.classList.add('active');const f=b.dataset.f;document.querySelectorAll('.card').forEach(c=>{c.style.display=(f==='all'||c.dataset.g===f)?'':'none'})}});
+grid.onclick=e=>{const c=e.target.closest('.card');if(!c)return;const h=heroes[c.dataset.id];mc.innerHTML=<h2 style="margin-bottom:14px">${h.n}</h2>+h.d.map(s=><div class="skill"><div class="sinfo"><div class="sname">${s[0]}</div><div class="sdesc">${s[1]}</div></div></div>).join('');modal.classList.add('open')};
+document.getElementById('close').onclick=()=>modal.classList.remove('open');
+modal.onclick=e=>{if(e.target===modal)modal.classList.remove('open')};
+</script>
+</body>
+</html>
