@@ -1,62 +1,54 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>VOLAND - HERO DETAIL</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#0f1a29 url('assets/heroes/bg-battlefield.webp') no-repeat fixed center top;background-size:cover;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px;font-family:Inter,sans-serif}
-.frame{width:100%;max-width:1320px;background:rgba(10,15,24,.92);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.08);display:grid;grid-template-columns:380px 1fr 360px;box-shadow:0 20px 70px rgba(0,0,0,.8)}
-@media(max-width:1100px){.frame{grid-template-columns:1fr}}
-.skills-panel{background:#121214;border-right:1px solid rgba(255,255,255,.06);padding:16px;overflow:auto;max-height:860px}
+.frame{width:100%;max-width:1320px;background:rgba(10,15,24,.92);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.08);display:grid;grid-template-columns:380px 1fr 360px}
+.skills-panel{background:#121214;border-right:1px solid rgba(255,255,255,.06);padding:16px}
 .panel-title{font-size:8px;letter-spacing:.35em;color:#8a8678;text-align:center;display:flex;align-items:center;gap:10px;margin-bottom:12px}
 .panel-title::before,.panel-title::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.1)}
 .skill-card{background:#17171b;border:1px solid #222227;border-radius:12px;padding:12px;display:flex;gap:12px;margin-bottom:10px}
 .skill-card .icon{width:64px;height:64px;background:#1e1e22;border:1px solid #2a2a32;border-radius:12px;overflow:hidden;flex-shrink:0}
 .skill-card .icon img{width:100%;height:100%;object-fit:cover;display:block}
-.skill-card .sname{font-size:12px;font-weight:700;color:#e6e0cc}
-.skill-card .badge{font-size:7px;background:#1e1e22;border:1px solid #2a2a32;padding:1px 5px;border-radius:4px;margin-left:6px;color:#8a8678}
-.skill-card .sdesc{font-size:9.5px;color:#8b8b95;line-height:1.35;margin-top:3px}
-.skill-card .smeta{font-size:7px;color:#5e5e68;margin-top:4px}
+.sname{font-size:12px;font-weight:700;color:#e6e0cc}
+.badge{font-size:7px;background:#1e1e22;border:1px solid #2a2a32;padding:1px 5px;border-radius:4px;margin-left:6px;color:#8a8678}
+.sdesc{font-size:9.5px;color:#8b8b95;line-height:1.35;margin-top:3px}
+.smeta{font-size:7px;color:#5e5e68;margin-top:4px}
 .center{position:relative;background:#0a0f18}
 .center img{width:100%;height:100%;min-height:740px;object-fit:cover;object-position:top center;display:block}
-.right{background:linear-gradient(180deg,#121214 0%,#0e0e10 100%);padding:16px 18px 12px;display:flex;flex-direction:column;gap:12px;border-left:1px solid rgba(255,255,255,.06)}
-.close{width:24px;height:24px;border-radius:50%;border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;color:#8a8678;cursor:pointer}
 </style>
 </head>
 <body>
 <div class="frame">
-<div class="skills-panel"><div class="panel-title">SKILLS — COLOR ICONS</div><div id="skillsList"></div></div>
-<div class="center"><img id="heroImg" src="assets/heroes/warrior-m.webp"><div style="position:absolute;top:12px;left:12px;right:12px;display:flex;justify-content:space-between"><div><h1 id="heroName" style="font-family:Cinzel;color:#e8dcc0;letter-spacing:.15em">LION WARDEN</h1><div id="heroSub" style="font-size:7px;color:#8a8678;letter-spacing:.2em"></div></div><div class="close" onclick="location.href='index.html'">✕</div></div></div>
-<div class="right"><div id="statsList"></div></div>
+<div class="skills-panel"><div class="panel-title">SKILLS — JPG REAL</div><div id="skillsList"></div></div>
+<div class="center"><img id="heroImg" src="assets/heroes/archer-m.webp"><div style="position:absolute;top:12px;left:12px;right:12px;display:flex;justify-content:space-between"><div><h1 id="heroName" style="font-family:Cinzel;color:#e8dcc0">DARK RANGER</h1></div><div onclick="location.href='index.html'" style="width:24px;height:24px;border-radius:50%;border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;color:#8a8678;cursor:pointer">✕</div></div></div>
+<div class="right"></div>
 </div>
 <script>
-var heroes={
-"warrior-m":{name:"LION WARDEN",sub:"IMPERIAL TANK • WARRIOR • MALE",img:"assets/heroes/warrior-m.webp",skills:[
-{img:"heroes/warrior-m/icon_klyatva_lva.png",name:"Клятва Льва",badge:"PASSIVE",desc:"При HP <30% урон +40% и щит 20% HP.",meta:"КД: — • Мана: 0"},
-{img:"heroes/warrior-m/icon_udar_lva.png",name:"Удар Льва",badge:"1",desc:"Мощный удар 180% + стан 30%.",meta:"КД: 3 • Мана: 10"},
-{img:"heroes/warrior-m/icon_shchit_lva.png",name:"Щит Льва",badge:"2",desc:"Блок 60% на 4 раунда + контратака 300%.",meta:"КД: 12 • Мана: 20"},
-{img:"heroes/warrior-m/icon_rev.png",name:"Рев",badge:"3",desc:"Стан всех врагов 1 раунд +20% DEF союзникам.",meta:"КД: 15 • Мана: 25"},
-{img:"heroes/warrior-m/icon_avatar_lva.png",name:"Аватар Льва",badge:"4",desc:"ULTIMATE: Золотой лев на 5 раундов.",meta:"КД: 22 • Мана: 60"}
-]},
-"archer-m":{name:"DARK RANGER",sub:"SHADOW HUNTER • ARCHER • MALE",img:"assets/heroes/archer-m.webp",skills:[
-{img:"heroes/archer-m/icon_metka_teni.png",name:"Метка Тени",badge:"PASSIVE",desc:"Каждая 2-я атака +200% урона по метке.",meta:"КД: — • Мана: 0"},
-{img:"heroes/archer-m/icon_begliy_vistrel.png",name:"Беглый выстрел",badge:"1",desc:"200% урона ближайшему.",meta:"КД: 3 • Мана: 5"},
-{img:"heroes/archer-m/icon_shag_v_nichto.png",name:"Шаг в Ничто",badge:"2",desc:"Инвиз 3 раунда, крит гарант.",meta:"КД: 20 • Мана: 25"},
-{img:"heroes/archer-m/icon_prizrachnaya_strela.png",name:"Призрачная Стрела",badge:"3",desc:"Пронзает 3 цели, 140% + стан 33%.",meta:"КД: 5 • Мана: 20"},
-{img:"heroes/archer-m/icon_zalp_bezdny.png",name:"Залп Бездны",badge:"4",desc:"ULTIMATE: 7 стрел по 100%, в одну +700%.",meta:"КД: 25 • Мана: 40"}
-]}
+const heroes={
+"archer-m":{
+name:"DARK RANGER",
+img:"assets/heroes/archer-m.webp",
+skills:[
+{img:"heroes/icon_metka_teni.jpg",name:"Метка Тени",badge:"PASSIVE",desc:"Каждая 2-я атака +200% урона по метке. Убийство +15 маны.",meta:"КД: — • Мана: 0"},
+{img:"heroes/icon_begliy_vistrel.jpg",name:"Беглый выстрел",badge:"1",desc:"Стреляет по ближайшему, 200% урона.",meta:"КД: 3 • Мана: 5"},
+{img:"heroes/icon_shag_v_nichto.jpg",name:"Шаг в Ничто",badge:"2",desc:"Инвиз 3 раунда, следующая атака крит гарант.",meta:"КД: 20 • Мана: 25"},
+{img:"heroes/icon_prizrachnaya_strela.jpg",name:"Призрачная Стрела",badge:"3",desc:"Пронзает 3 цели, 140% + стан 33%.",meta:"КД: 5 • Мана: 20"},
+{img:"heroes/icon_zalp_bezdny.jpg",name:"Залп Бездны",badge:"4",desc:"ULTIMATE: 7 стрел, в одну цель +700%.",meta:"КД: 25 • Мана: 40"}
+]
+}
 };
-function getId(){var p=new URLSearchParams(location.search);return p.get('hero')||localStorage.getItem('voland_hero')||'archer-m'}
-var id=getId();var h=heroes[id]||heroes['archer-m'];
+function getId(){return new URLSearchParams(location.search).get('hero')||localStorage.getItem('voland_hero')||'archer-m'}
+const id=getId();const h=heroes[id]||heroes['archer-m'];
 document.getElementById('heroName').innerText=h.name;
-document.getElementById('heroSub').innerText=h.sub;
 document.getElementById('heroImg').src=h.img;
-var list=document.getElementById('skillsList');
-h.skills.forEach(function(s){
-  var fallback = s.name.charAt(0);
-  list.innerHTML+='<div class="skill-card"><div class="icon"><img src="'+s.img+'" onerror="this.parentElement.innerHTML=\'<div style=\\\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#1e1e22;color:#c9a96e\\\' >'+fallback+'</div>\'"></div><div><div class="sname">'+s.name+' <span class="badge">'+s.badge+'</span></div><div class="sdesc">'+s.desc+'</div><div class="smeta">'+s.meta+'</div></div></div>';
+const list=document.getElementById('skillsList');
+h.skills.forEach(s=>{
+list.innerHTML+=`<div class="skill-card"><div class="icon"><img src="${s.img}" onerror="this.style.background='#1a1a1e';this.src='data:image/svg+xml,[STRIPPED]'"></div><div><div class="sname">${s.name} <span class="badge">${s.badge}</span></div><div class="sdesc">${s.desc}</div><div class="smeta">${s.meta}</div></div></div>`;
 });
 </script>
 </body>
