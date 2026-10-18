@@ -1,80 +1,33 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>VOLAND CHRONICLES</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VOLAND</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%}
-body{
-  background:#0d131e;
-  color:#e6e0cc;
-  font-family:Inter,system-ui,sans-serif;
-  min-height:100vh;
-  overflow-x:hidden;
-}
-/* ОРИГИНАЛ ФОН - голубо-серый + замок + битва */
-.bg{
-  position:fixed;inset:0;z-index:0;pointer-events:none;
-  background:
-    radial-gradient(ellipse at 72% 18%, rgba(90,110,140,.35) 0%, rgba(60,80,110,.15) 25%, transparent 55%),
-    radial-gradient(ellipse at 15% 75%, rgba(70,90,120,.20) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 45%, rgba(100,120,150,.12) 0%, transparent 60%),
-    linear-gradient(180deg, #1a2638 0%, #14202f 22%, #101a27 48%, #0a1018 100%);
-}
-.bg::before{
-  content:"";
-  position:absolute;left:0;right:0;top:0;height:42%;
-  background:
-    linear-gradient(90deg, transparent 0%, rgba(180,200,220,.06) 50%, transparent 100%),
-    linear-gradient(180deg, rgba(20,30,50,.4) 0%, transparent 100%);
-  filter:blur(1px);
-}
-.bg::after{
-  content:"";
-  position:absolute;left:0;right:0;bottom:0;height:55%;
-  background:
-    radial-gradient(ellipse at 30% 100%, rgba(80,90,100,.15) 0%, transparent 60%),
-    radial-gradient(ellipse at 80% 100%, rgba(60,70,90,.12) 0%, transparent 50%),
-    linear-gradient(0deg, rgba(0,0,0,.6) 0%, transparent 100%);
-}
-/* туман битвы внизу */
-.fog-battle{
-  position:fixed;left:0;right:0;bottom:0;height:38%;z-index:1;pointer-events:none;
-  background:linear-gradient(0deg, rgba(120,130,140,.18) 0%, rgba(80,90,110,.08) 35%, transparent 100%);
-  filter:blur(12px);
-  opacity:.7;
-}
-.main{position:relative;z-index:2;max-width:1280px;margin:0 auto;padding:64px 24px 48px;min-height:100vh}
-h1{font-family:Cinzel,Georgia,serif;text-align:center;font-size:26px;letter-spacing:.32em;color:#c9a96e;margin-bottom:56px;text-shadow:0 2px 16px rgba(0,0,0,.8),0 0 24px rgba(201,169,110,.15)}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:32px 28px}
-@media(max-width:1024px){.grid{grid-template-columns:repeat(2,1fr);gap:28px}}
-@media(max-width:560px){.grid{grid-template-columns:1fr}}
-.card{background:transparent;border:0;overflow:visible;transition:all .35s;cursor:pointer}
-.card:hover{transform:translateY(-6px) scale(1.03)}
-.img{aspect-ratio:3/4;width:100%;background:transparent;overflow:visible;display:flex;align-items:flex-end;justify-content:center;position:relative}
-.img img{width:100%;height:100%;object-fit:contain;object-position:bottom center;display:block;filter:drop-shadow(0 12px 28px rgba(0,0,0,.85)) drop-shadow(0 0 12px rgba(120,150,180,.15));transition:filter .35s}
-.card:hover .img img{filter:drop-shadow(0 18px 36px rgba(0,0,0,.9)) drop-shadow(0 0 20px rgba(201,169,110,.25)) brightness(1.08)}
-footer{margin-top:72px;text-align:center;font-size:11px;letter-spacing:.18em;color:rgba(180,190,210,.35);text-shadow:0 1px 8px rgba(0,0,0,.8)}
+body{background:#0e151f}
+.bg{position:fixed;inset:0;background:linear-gradient(180deg,rgba(10,18,30,.2),rgba(5,10,18,.6)),url('assets/bg-battlefield.webp') center/cover no-repeat;filter:brightness(1.2)}
+.main{position:relative;z-index:2;max-width:1280px;margin:0 auto;padding:60px 20px}
+h1{text-align:center;color:#c9a96e;letter-spacing:.3em;font:600 26px Cinzel,serif;margin-bottom:50px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:30px}
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
+.card{background:transparent;border:0}
+.img{aspect-ratio:3/4;display:flex;align-items:end}
+.img img{width:100%;height:100%;object-fit:contain;object-position:bottom;display:block;filter:drop-shadow(0 12px 24px #000)}
 </style>
 </head>
 <body>
 <div class="bg"></div>
-<div class="fog-battle"></div>
 <div class="main">
 <h1>VOLAND CHRONICLES</h1>
 <div class="grid">
-<article class="card"><div class="img"><img src="assets/heroes/archer-m.webp" alt="DARK RANGER"></div></article>
-<article class="card"><div class="img"><img src="assets/heroes/warrior-m.webp" alt="LION WARDEN"></div></article>
-<article class="card"><div class="img"><img src="assets/heroes/archmage-m.webp" alt="AZURE SAGE"></div></article>
-<article class="card"><div class="img"><img src="assets/heroes/necro-m.webp" alt="GRAVELORD"></div></article>
-<article class="card"><div class="img"><img src="assets/heroes/archer-f.webp" alt="WILD PATH"></div></article>
-<article class="card"><div class="img"><img src="assets/heroes/warrior-f.webp" alt="IRON VOW"></div></article>
-<article class="card"><div class="img"><img src="assets/heroes/mage-f-new.webp" alt="VOLCANIC"></div></article>
-<article class="card"><div class="img"><img src="assets/heroes/necro-f-new.webp" alt="AMETHYST"></div></article>
-</div>
-<footer>VOLAND © 2026 — BATTLEFIELD EDITION</footer>
-</div>
-</body>
-</html>
+<div class="card"><div class="img"><img src="assets/heroes/archer-m.webp"></div></div>
+<div class="card"><div class="img"><img src="assets/heroes/warrior-m.webp"></div></div>
+<div class="card"><div class="img"><img src="assets/heroes/archmage-m.webp"></div></div>
+<div class="card"><div class="img"><img src="assets/heroes/necro-m.webp"></div></div>
+<div class="card"><div class="img"><img src="assets/heroes/archer-f.webp"></div></div>
+<div class="card"><div class="img"><img src="assets/heroes/warrior-f.webp"></div></div>
+<div class="card"><div class="img"><img src="assets/heroes/mage-f-new.webp"></div></div>
+<div class="card"><div class="img"><img src="assets/heroes/necro-f-new.webp"></div></div>
+</div></div></body></html>
