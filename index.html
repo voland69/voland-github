@@ -7,37 +7,31 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#070709;color:#e6e0cc;font-family:Inter,system-ui,sans-serif;min-height:100vh}
-.fog{position:fixed;inset:0;pointer-events:none}
-.fog::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% -10%, rgba(201,169,110,.08), transparent 60%)}
-.main{position:relative;max-width:1200px;margin:0 auto;padding:64px 24px 48px;min-height:100vh}
+.main{max-width:1200px;margin:0 auto;padding:64px 24px 48px;min-height:100vh}
 h1{font-family:Cinzel,Georgia,serif;text-align:center;font-size:26px;letter-spacing:.32em;color:#c9a96e;margin-bottom:56px}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:28px}
 @media(max-width:1024px){.grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:560px){.grid{grid-template-columns:1fr}}
-.card{border:1px solid #1e1e24;background:#121214;border-radius:12px;overflow:hidden;transition:all .3s}
-.card:hover{transform:translateY(-2px);border-color:rgba(201,169,110,.6);box-shadow:0 0 0 1px rgba(201,169,110,.15),0 8px 32px rgba(0,0,0,.6)}
-.img{aspect-ratio:3/4;width:100%;background:linear-gradient(180deg,#15151a 0%,#0e0e10 100%);display:flex;align-items:flex-end;justify-content:center;overflow:hidden}
-.img img{width:100%;height:100%;object-fit:contain;object-position:bottom center;display:block}
-.name{padding:14px 12px;background:#121214;text-align:center;border-top:1px solid #1e1e24}
-.name h2{font-size:13px;letter-spacing:.14em;font-weight:700}
-.line{margin:10px auto 0;width:32px;height:1px;background:rgba(201,169,110,.2)}
-.card:hover .line{width:48px;background:rgba(201,169,110,.4)}
+.card{background:transparent;border:0;overflow:visible;transition:all .3s}
+.card:hover{transform:translateY(-4px) scale(1.02)}
+.img{aspect-ratio:3/4;width:100%;background:transparent;overflow:visible;display:flex;align-items:flex-end;justify-content:center}
+.img img{width:100%;height:100%;object-fit:contain;object-position:bottom center;display:block;border-radius:12px;filter:drop-shadow(0 8px 24px rgba(0,0,0,.8))}
+.name{display:none}
 footer{margin-top:64px;text-align:center;font-size:11px;letter-spacing:.18em;color:rgba(138,134,120,.6)}
 </style>
 </head>
 <body>
-<div class="fog"></div>
 <div class="main">
 <h1>VOLAND CHRONICLES</h1>
 <div class="grid">
-<article class="card"><div class="img"><img src="assets/heroes/archer-m.webp" alt="DARK RANGER"></div><div class="name"><h2>DARK RANGER</h2><div class="line"></div></div></article>
-<article class="card"><div class="img"><img src="assets/heroes/warrior-m.webp" alt="LION WARDEN"></div><div class="name"><h2>LION WARDEN</h2><div class="line"></div></div></article>
-<article class="card"><div class="img"><img src="assets/heroes/archmage-m.webp" alt="AZURE SAGE"></div><div class="name"><h2>AZURE SAGE</h2><div class="line"></div></div></article>
-<article class="card"><div class="img"><img src="assets/heroes/necro-m.webp" alt="GRAVELORD"></div><div class="name"><h2>GRAVELORD</h2><div class="line"></div></div></article>
-<article class="card"><div class="img"><img src="assets/heroes/archer-f.webp" alt="WILD PATH"></div><div class="name"><h2>WILD PATH</h2><div class="line"></div></div></article>
-<article class="card"><div class="img"><img src="assets/heroes/warrior-f.webp" alt="IRON VOW"></div><div class="name"><h2>IRON VOW</h2><div class="line"></div></div></article>
-<article class="card"><div class="img"><img src="assets/heroes/mage-f-new.webp" alt="VOLCANIC"></div><div class="name"><h2>VOLCANIC</h2><div class="line"></div></div></article>
-<article class="card"><div class="img"><img src="assets/heroes/necro-f-new.webp" alt="AMETHYST"></div><div class="name"><h2>AMETHYST</h2><div class="line"></div></div></article>
+<article class="card"><div class="img"><img src="assets/heroes/archer-m.webp" alt="DARK RANGER"></div></article>
+<article class="card"><div class="img"><img src="assets/heroes/warrior-m.webp" alt="LION WARDEN"></div></article>
+<article class="card"><div class="img"><img src="assets/heroes/archmage-m.webp" alt="AZURE SAGE"></div></article>
+<article class="card"><div class="img"><img src="assets/heroes/necro-m.webp" alt="GRAVELORD"></div></article>
+<article class="card"><div class="img"><img src="assets/heroes/archer-f.webp" alt="WILD PATH"></div></article>
+<article class="card"><div class="img"><img src="assets/heroes/warrior-f.webp" alt="IRON VOW"></div></article>
+<article class="card"><div class="img"><img src="assets/heroes/mage-f-new.webp" alt="VOLCANIC"></div></article>
+<article class="card"><div class="img"><img src="assets/heroes/necro-f-new.webp" alt="AMETHYST"></div></article>
 </div>
 <footer>VOLAND © 2026</footer>
 </div>
