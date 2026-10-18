@@ -46,43 +46,4 @@ body{background:#0f1a29 url('assets/heroes/bg-battlefield.webp') no-repeat fixed
 <div class="card" data-g="male" data-id="archer-m"><img src="assets/heroes/archer-m.webp"><div class="fade"></div><div class="info"><div class="name">DARK RANGER</div><div class="meta">ARCHER - MALE</div></div></div>
 <div class="card" data-g="male" data-id="warrior-m"><img src="assets/heroes/warrior-m.webp"><div class="fade"></div><div class="info"><div class="name">LION WARDEN</div><div class="meta">WARRIOR - MALE</div></div></div>
 <div class="card" data-g="male" data-id="archmage-m"><img src="assets/heroes/archmage-m.webp"><div class="fade"></div><div class="info"><div class="name">AZURE SAGE</div><div class="meta">ARCHMAGE - MALE</div></div></div>
-<div class="card" data-g="male" data-id="necro-m"><img src="assets/heroes/necro-m.webp"><div class="fade"></div><div class="info"><div class="name">GRAVELORD</div><div class="meta">NECROMANCER - MALE</div></div></div>
-<div class="card" data-g="female" data-id="archer-f"><img src="assets/heroes/archer-f.webp"><div class="fade"></div><div class="info"><div class="name">WILD PATH</div><div class="meta">ARCHER - FEMALE</div></div></div>
-<div class="card" data-g="female" data-id="warrior-f"><img src="assets/heroes/warrior-f.webp"><div class="fade"></div><div class="info"><div class="name">IRON VOW</div><div class="meta">WARRIOR - FEMALE</div></div></div>
-<div class="card" data-g="female" data-id="mage-f-new"><img src="assets/heroes/mage-f-new.webp"><div class="fade"></div><div class="info"><div class="name">VOLCANIC</div><div class="meta">MAGE - FEMALE</div></div></div>
-<div class="card" data-g="female" data-id="necro-f-new"><img src="assets/heroes/necro-f-new.webp"><div class="fade"></div><div class="info"><div class="name">AMETHYST</div><div class="meta">NECROMANCER - FEMALE</div></div></div>
-</div>
-</div>
-<div class="modal" id="modal"><div class="box"><div class="close" id="close">✕ CLOSE</div><div id="mcontent"></div></div></div>
-<script>
-const heroes={
-"archer-m":{n:"DARK RANGER",d:[["Метка Тени PASSIVE","Каждая 2-я атака накладывает Метку Тени на 3 раунда. +200% урона. Убийство +15 маны."],["Беглый выстрел 1","200% урона. КД 3 Мана 5"],["Шаг в Ничто 2","Инвиз 3 раунда, след. атака крит. КД 20"],["Призрачная Стрела 3","140% урона, стан 33%. До 3 целей."],["Залп Бездны ULT","7 стрел по 100%, в 1 цель 700%."]]},
-"archer-f":{n:"WILD PATH",d:[["Тропы Зверя PASSIVE","При уклонении след. удар 100% крит."],["Двойной Выстрел 1","2 стрелы по 100%, в 1 цель кровотечение."],["Ядовитая Лиана 2","Стан 1 + яд 100% 3 раунда."],["Глаз Ястреба 3","+25% крит 4 раунда, видит инвиз."],["Буря Стрел ULT","12 стрел по 80% + стан."]]},
-"archmage-m":{n:"AZURE SAGE",d:[["Искривление Времени PASSIVE","+10% урона за заклинание, 5 стаков +50%."],["Ледяное Копье 1","+250% урона -20% защиты."],["Сфера Бури 2","3 раунда по 3 целям 160%."],["Лавина 3","+300% всем."],["Аннигиляция Времени ULT","Стан 3 раунда + 350% всем."]]},
-"necro-m":{n:"GRAVELORD",d:[["Костяной Легион PASSIVE","1 скелет/раунд макс 3, 50% урона."],["Костяное Копье 1","+150% +25% урон саммонов."],["Костяной Щит 2","Щит 20% HP взрыв 300% AOE."],["Поднять Мертвых 3","2 подрывника 200% и 300% AOE."],["Армия Погибели ULT","5 скелетов 3 раунда."]]},
-"warrior-f":{n:"IRON VOW",d:[["Клятва Стаи PASSIVE","При HP<30% +50% урона +30% лайфстил."],["Рассекающий Волк 1","2 удара по 110%."],["Щит Волчьего Вожака 2","Блок 50% 4 раунда контратака 350%."],["Зов Стаи 3","Стан 1, остальные 200% AOE."],["Альфа Хищник ULT","Волк 5 раундов +50% HP +30% урона."]]},
-"mage-f-new":{n:"VOLCANIC",d:[["Сердце Кальдеры PASSIVE","Каждое 4 заклинание 100% AOE 2 раунда."],["Огненный Шар 1","150% + поджог 20% 2 раунда."],["Извержение 2","200% AOE + лава 50%/раунд."],["Метеор 3","500% + 300% волна."],["Судный День ULT","4 метеора по 200% + 400% + поджог."]]},
-"necro-f-new":{n:"AMETHYST",d:[["Шепот Аметиста PASSIVE","Каждое 3-е — дух 100% +5 маны/раунд."],["Проклятие Душ 1","200% + кража 5 маны -15% урона."],["Аметистовая Тюрьма 2","Стан всех 1 раунд взрыв 300%."],["Похищение Жизни 3","Связь 4 раунда 30% отражение 30% хил."],["Аметистовый Закат ULT","5 душ по 200% + стан."]]},
-"warrior-m":{n:"LION WARDEN",d:[["Клятва Льва PASSIVE","+20% защиты союзникам."],["Удар Льва 1","250% + стан."],["Щит Льва 2","Блок 60% 3 раунда."],["Рев 3","AOE страх 1 раунд."],["Аватар Льва ULT","+50% HP и урона 5 раундов."]]}
-};
-const grid=document.getElementById('grid'),modal=document.getElementById('modal'),mc=document.getElementById('mcontent');
-document.getElementById('filters').onclick=e=>{
-if(e.target.tagName!=='BUTTON')return;
-document.querySelectorAll('#filters button').forEach(b=>b.classList.remove('active'));
-e.target.classList.add('active');
-const f=e.target.dataset.f;
-document.querySelectorAll('.card').forEach(c=>{
-if(f==='all'||c.dataset.g===f){c.style.display=''}else{c.style.display='none'}
-});
-};
-grid.addEventListener('click',e=>{
-const c=e.target.closest('.card');if(!c)return;
-const h=heroes[c.dataset.id];if(!h)return;
-mc.innerHTML=<h2 style="margin-bottom:12px">${h.n}</h2>+h.d.map(s=><div class="skill"><div><div class="sname">${s[0]}</div><div class="sdesc">${s[1]}</div></div></div>).join('');
-modal.classList.add('open');
-});
-document.getElementById('close').onclick=()=>modal.classList.remove('open');
-modal.onclick=e=>{if(e.target===modal)modal.classList.remove('open')};
-</script>
-</body>
-</html>
+<div class="card" data-g="male" data-id="necro-m"><img src="assets/heroes/necro-m.webp"><div class="fade"></div><div class="info"><div class="
