@@ -1,72 +1,85 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>VOLAND - HERO DETAIL</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DARK RANGER - Detail</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#0f1a29 url('assets/heroes/bg-battlefield.webp') no-repeat fixed center top;background-size:cover;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px;font-family:Inter,sans-serif}
-.frame{width:100%;max-width:1320px;background:rgba(10,15,24,.92);border:1px solid rgba(255,255,255,.08);display:grid;grid-template-columns:380px 1fr 360px;box-shadow:0 20px 70px rgba(0,0,0,.8)}
-.skills-panel{background:#121214;border-right:1px solid rgba(255,255,255,.06);padding:18px}
-.panel-title{font-size:8px;letter-spacing:.35em;color:#8a8678;text-align:center;display:flex;align-items:center;gap:10px;margin-bottom:14px}
-.panel-title::before,.panel-title::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.1)}
-.skill{background:#17171b;border:1px solid #222227;border-radius:12px;padding:12px;display:flex;gap:12px;margin-bottom:10px}
+body{background:#0a0e16 url('assets/heroes/bg-battlefield.webp') fixed center top/cover;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;font-family:Inter,sans-serif}
+.frame{width:100%;max-width:1280px;display:grid;grid-template-columns:380px 1fr 380px;gap:0;background:rgba(0,0,0,.4);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.08);box-shadow:0 30px 80px rgba(0,0,0,.9)}
+/* LEFT - SKILLS */
+.left{background:#121214;padding:20px;border-right:1px solid rgba(255,255,255,.06)}
+.left-title{font-size:9px;letter-spacing:.3em;color:#6b6875;text-align:center;margin-bottom:16px}
+.skill{background:#17171b;border:1px solid #23232a;border-radius:12px;padding:12px;display:flex;gap:12px;margin-bottom:10px}
 .skill .icon{width:64px;height:64px;background:#1e1e22;border:1px solid #2a2a32;border-radius:12px;overflow:hidden;flex-shrink:0}
-.skill .icon img{width:100%;height:100%;object-fit:cover;display:block}
+.skill .icon img{width:100%;height:100%;object-fit:cover}
 .sname{font-size:12px;font-weight:700;color:#e6e0cc}
-.badge{font-size:7px;background:#1e1e22;border:1px solid #2a2a32;padding:2px 6px;border-radius:4px;margin-left:6px;color:#8a8678}
-.sdesc{font-size:10.5px;color:#8b8b95;line-height:1.45;margin-top:4px}
-.smeta{font-size:8px;color:#5e5e68;margin-top:6px;background:#1a1a1e;border:1px solid #222227;padding:3px 7px;border-radius:99px;display:inline-block}
-.center{position:relative;background:#0a0f18;display:flex;align-items:flex-end;justify-content:center;overflow:hidden}
-.center img.hero{width:100%;height:100%;min-height:760px;object-fit:cover;object-position:top center;display:block}
-.topbar{position:absolute;top:0;left:0;right:0;padding:14px 16px;display:flex;justify-content:space-between;align-items:flex-start;background:linear-gradient(180deg,rgba(0,0,0,.7),transparent)}
-.hero-title{font-family:Cinzel;color:#e8dcc0;font-size:22px;letter-spacing:.15em}
-.hero-sub{font-size:7px;color:#8a8678;letter-spacing:.25em;margin-top:2px}
-.close{width:28px;height:28px;border-radius:50%;border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;color:#8a8678;cursor:pointer}
-.right{background:#13131a;border-left:1px solid rgba(255,255,255,.06);padding:18px;display:flex;flex-direction:column;gap:14px}
-.stat-box{background:#17171b;border:1px solid #222227;border-radius:10px;padding:12px}
-.stat-box h4{font-size:8px;letter-spacing:.2em;color:#8a8678;margin-bottom:8px}
-.row{display:flex;justify-content:space-between;font-size:11px;color:#a8a5a0;margin:4px 0}
-.row b{color:#e6e0cc}
+.badge{font-size:7px;background:#1e1e22;border:1px solid #2a2a32;padding:2px 6px;border-radius:4px;color:#8a8678;margin-left:6px}
+.sdesc{font-size:10px;color:#8b8b95;line-height:1.4;margin-top:4px}
+.smeta{font-size:8px;color:#5e5e68;margin-top:6px}
+/* CENTER - HERO IMAGE */
+.center{position:relative;background:#0c1218;overflow:hidden}
+.center img.hero{width:100%;height:100%;min-height:780px;object-fit:cover;object-position:top center;display:block}
+/* RIGHT - EXACT LIKE SCREENSHOT */
+.right{background:rgba(18,18,22,.92);padding:0;display:flex;flex-direction:column}
+.right-header{background:#1a1a1e;padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;align-items:flex-start}
+.right-header h1{font-family:Cinzel;font-size:20px;letter-spacing:.15em;color:#e8dcc0;line-height:1}
+.right-header .sub{font-size:7px;letter-spacing:.25em;color:#8a8678;margin-top:6px}
+.close{width:26px;height:26px;border-radius:50%;border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;color:#6b6875;cursor:pointer;font-size:12px}
+.name-block{background:#2a2a2e;border:1px solid #3a3a42;margin:16px;padding:12px}
+.name-block label{font-size:8px;letter-spacing:.2em;color:#8a8678;display:block;margin-bottom:8px}
+.name-block .input{width:100%;background:#0e0e10;border:1px solid #3a3a42;color:#e8dcc0;padding:8px 10px;font-size:11px;letter-spacing:.1em;display:flex;justify-content:space-between;align-items:center}
+.stats{padding:0 18px}
+.stats-title{font-size:8px;letter-spacing:.3em;color:#6b6875;text-align:center;display:flex;align-items:center;gap:10px;margin:8px 0 12px}
+.stats-title::before,.stats-title::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.08)}
+.stat-row{display:flex;justify-content:space-between;align-items:center;margin:10px 0}
+.stat-row .label{font-size:9px;color:#8a8678;letter-spacing:.1em}
+.stat-row .val{font-size:10px;color:#e6d5a0;font-weight:600}
+.bar{height:2px;background:rgba(255,255,255,.08);margin-top:4px;position:relative;grid-column:1/-1;width:100%}
+.bar-fill{height:100%;background:#e6d5a0;display:block}
+.archetype{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);margin:16px;padding:12px}
+.archetype .small{font-size:7px;letter-spacing:.2em;color:#6b6875}
+.archetype h3{font-size:11px;color:#e6e0cc;letter-spacing:.1em;margin:4px 0}
+.archetype p{font-size:9.5px;color:#8b8b95;line-height:1.5}
+.lore{padding:0 18px;font-size:8px;color:#5a5a62;line-height:1.6}
+.lore b{color:#6b6875;letter-spacing:.15em}
+.confirm{margin:18px;padding:10px;background:rgba(40,35,25,.6);border:1px solid rgba(230,213,160,.15);text-align:center;font-size:8px;letter-spacing:.25em;color:#6b6875;cursor:pointer}
+.esc{font-size:7px;color:#4a4a52;text-align:center;padding-bottom:12px;letter-spacing:.15em}
 </style>
 </head>
 <body>
 <div class="frame">
-<div class="skills-panel"><div class="panel-title">SKILLS — REAL</div><div id="skillsList"></div></div>
-<div class="center"><img class="hero" id="heroImg"><div class="topbar"><div><div class="hero-title" id="heroName"></div><div class="hero-sub" id="heroSub"></div></div><div class="close" onclick="location.href='index.html'">✕</div></div></div>
-<div class="right" id="rightPanel"></div>
+<div class="left"><div class="left-title">SKILLS</div><div id="skillsList"></div></div>
+<div class="center"><img class="hero" id="heroImg" src="assets/heroes/archer-m.webp"></div>
+<div class="right">
+<div class="right-header"><div><h1 id="rName">DARK RANGER</h1><div class="sub">SHADOW RANGER • ARCHER • MALE</div></div><div class="close" onclick="location.href='index.html'">✕</div></div>
+<div class="name-block"><label>ENTER YOUR NAME</label><div class="input"><span>VOLAND 1337</span><span style="font-size:8px">◀</span></div></div>
+<div class="stats"><div class="stats-title">STATS</div>
+<div class="stat-row"><span class="label">HP</span><span class="val">928</span><div class="bar"><span class="bar-fill" style="width:72%"></span></div></div>
+<div class="stat-row"><span class="label">DEF</span><span class="val">115</span><div class="bar"><span class="bar-fill" style="width:48%"></span></div></div>
+<div class="stat-row"><span class="label">DAMAGE</span><span class="val">185</span><div class="bar"><span class="bar-fill" style="width:68%"></span></div></div>
+<div class="stat-row"><span class="label">CRIT</span><span class="val">26%</span><div class="bar"><span class="bar-fill" style="width:62%"></span></div></div>
+<div class="stat-row"><span class="label">DODGE</span><span class="val">19%</span><div class="bar"><span class="bar-fill" style="width:88%"></span></div></div>
+<div class="stat-row"><span class="label">MANA</span><span class="val">210</span><div class="bar"><span class="bar-fill" style="width:55%"></span></div></div>
+</div>
+<div class="archetype"><div class="small">CLASS ARCHETYPE</div><h3>SHADOW RANGER</h3><p>Precision eliminator. High crit & dodge, mid survivability. Cursed arrows bypass armor.</p><div style="margin-top:12px" class="small">LORE</div><p>Silent hunter of the Gloomwood. Arrows cursed with winter.</p></div>
+<div class="confirm">CONFIRM CHAMPION — ENTER NAME</div>
+<div class="esc">ESC TO CLOSE • CLICK OUTSIDE TO DISMISS</div>
+</div>
 </div>
 <script>
-const heroes={
-"archer-m":{
-name:"DARK RANGER", sub:"SHADOW HUNTER • archer-m", img:"assets/heroes/archer-m.webp",
-skills:[
-{img:"heroes/icon_metka_teni.jpg", name:"Метка Тени", badge:"PASSIVE", desc:"Каждая 2-я атака накладывает Метку Тени на 3 раунда. Отмеченные цели получают +200% урона от твоих стрел. Убийство отмеченной цели восстанавливает 15 маны.", meta:"КД: — • Мана: 0"},
-{img:"heroes/icon_begliy_vistrel.jpg", name:"Беглый выстрел", badge:"1", desc:"Стреляет по ближайшему врагу, нанося 200% урона.", meta:"КД: 3 раунда • Мана: 5 • Урон: 200%"},
-{img:"heroes/icon_shag_v_nichto.jpg", name:"Шаг в Ничто", badge:"2", desc:"Становится невидимым на 3 раунда. Следующая атака в инвизе критует гарантированно и снимает эффект инвиза.", meta:"КД: 20 раундов • Мана: 25"},
-{img:"heroes/icon_prizrachnaya_strela.jpg", name:"Призрачная Стрела", badge:"3", desc:"Выпускает стрелу, проходящую сквозь врагов. Наносит +140% урона и оглушает на 1 раунд с вероятностью 33%. Пронзает до 3 целей.", meta:"КД: 5 раундов • Мана: 20 • Урон: 185×1.4"},
-{img:"heroes/icon_zalp_bezdny.jpg", name:"Залп Бездны", badge:"4", desc:"ULTIMATE: Выпускает 7 стрел. Каждая стрела наносит +100% урона одному противнику. Если цель одна — весь урон попадает в неё +700% урона.", meta:"КД: 25 раундов • Мана: 40 • Урон: +700% в одну цель"}
-],
-stats:{rarity:"Legendary", class:"Archer", role:"Assassin", atk:"185", def:"72", hp:"1120", spd:"124"}
-}
-};
-function getId(){return new URLSearchParams(location.search).get('hero')||localStorage.getItem('voland_hero')||'archer-m'}
-const id=getId();const h=heroes[id]||heroes['archer-m'];
-document.getElementById('heroName').innerText=h.name;
-document.getElementById('heroSub').innerText=h.sub;
-document.getElementById('heroImg').src=h.img;
+const skills=[
+{img:"heroes/icon_metka_teni.jpg",name:"Метка Тени",badge:"PASSIVE",desc:"Каждая 2-я атака накладывает Метку Тени на 3 раунда. Отмеченные цели получают +200% урона от твоих стрел. Убийство отмеченной цели восстанавливает 15 маны.",meta:"КД: — • Мана: 0"},
+{img:"heroes/icon_begliy_vistrel.jpg",name:"Беглый выстрел",badge:"1",desc:"Стреляет по ближайшему врагу, нанося 200% урона.",meta:"КД: 3 раунда • Мана: 5 • Урон: 200%"},
+{img:"heroes/icon_shag_v_nichto.jpg",name:"Шаг в Ничто",badge:"2",desc:"Становится невидимым на 3 раунда. Следующая атака в инвизе критует гарантированно и снимает эффект инвиза.",meta:"КД: 20 раундов • Мана: 25"},
+{img:"heroes/icon_prizrachnaya_strela.jpg",name:"Призрачная Стрела",badge:"3",desc:"Выпускает стрелу, проходящую сквозь врагов. Наносит +140% урона и оглушает на 1 раунд с вероятностью 33%. Пронзает до 3 целей.",meta:"КД: 5 раундов • Мана: 20 • Урон: 185×1.4"},
+{img:"heroes/icon_zalp_bezdny.jpg",name:"Залп Бездны",badge:"4",desc:"ULTIMATE: Выпускает 7 стрел. Каждая стрела наносит +100% урона одному противнику. Если цель одна — весь урон попадает в неё +700% урона.",meta:"КД: 25 раундов • Мана: 40 • Урон: +700% в одну цель"}
+];
 const list=document.getElementById('skillsList');
-h.skills.forEach(s=>{
-list.innerHTML+=`<div class="skill"><div class="icon"><img src="${s.img}" onerror="this.src='assets/heroes/archer-m.webp'"></div><div><div class="sname">${s.name} <span class="badge">${s.badge}</span></div><div class="sdesc">${s.desc}</div><div class="smeta">${s.meta}</div></div></div>`;
+skills.forEach(s=>{
+list.innerHTML+=`<div class="skill"><div class="icon"><img src="${s.img}"></div><div><div class="sname">${s.name} <span class="badge">${s.badge}</span></div><div class="sdesc">${s.desc}</div><div class="smeta">${s.meta}</div></div></div>`;
 });
-const right=document.getElementById('rightPanel');
-right.innerHTML=`
-<div class="stat-box"><h4>CLASS INFO</h4><div class="row"><span>Rarity</span><b>${h.stats.rarity}</b></div><div class="row"><span>Class</span><b>${h.stats.class}</b></div><div class="row"><span>Role</span><b>${h.stats.role}</b></div></div>
-<div class="stat-box"><h4>BASE STATS</h4><div class="row"><span>ATK</span><b>${h.stats.atk}</b></div><div class="row"><span>DEF</span><b>${h.stats.def}</b></div><div class="row"><span>HP</span><b>${h.stats.hp}</b></div><div class="row"><span>SPD</span><b>${h.stats.spd}</b></div></div>
-<div class="stat-box"><h4>LORE</h4><div style="font-size:10px;color:#8b8b95;line-height:1.5">Тень, что охотится из Бездны. Каждая метка — приговор.</div></div>
-`;
 </script>
 </body>
 </html>
