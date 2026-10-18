@@ -2,68 +2,61 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>DARK RANGER - Detail</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<title>DARK RANGER</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#0a0e16 url('assets/heroes/bg-battlefield.webp') fixed center top/cover;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;font-family:Inter,sans-serif}
-.frame{width:100%;max-width:1280px;display:grid;grid-template-columns:380px 1fr 380px;gap:0;background:rgba(0,0,0,.4);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.08);box-shadow:0 30px 80px rgba(0,0,0,.9)}
-/* LEFT - SKILLS */
-.left{background:#121214;padding:20px;border-right:1px solid rgba(255,255,255,.06)}
-.left-title{font-size:9px;letter-spacing:.3em;color:#6b6875;text-align:center;margin-bottom:16px}
-.skill{background:#17171b;border:1px solid #23232a;border-radius:12px;padding:12px;display:flex;gap:12px;margin-bottom:10px}
-.skill .icon{width:64px;height:64px;background:#1e1e22;border:1px solid #2a2a32;border-radius:12px;overflow:hidden;flex-shrink:0}
+body{background:#0a0e16 url('assets/heroes/bg-battlefield.webp') fixed center/cover;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;font-family:Inter,sans-serif}
+.frame{width:100%;max-width:1280px;display:grid;grid-template-columns:380px 1fr 380px;background:rgba(0,0,0,.4);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.08)}
+.left{background:#121214;padding:18px;border-right:1px solid rgba(255,255,255,.06)}
+.skill{background:#17171b;border:1px solid #23232a;border-radius:12px;padding:11px;display:flex;gap:11px;margin-bottom:10px}
+.skill .icon{width:64px;height:64px;border-radius:12px;overflow:hidden;flex-shrink:0;background:#1e1e22;border:1px solid #2a2a32}
 .skill .icon img{width:100%;height:100%;object-fit:cover}
-.sname{font-size:12px;font-weight:700;color:#e6e0cc}
-.badge{font-size:7px;background:#1e1e22;border:1px solid #2a2a32;padding:2px 6px;border-radius:4px;color:#8a8678;margin-left:6px}
-.sdesc{font-size:10px;color:#8b8b95;line-height:1.4;margin-top:4px}
-.smeta{font-size:8px;color:#5e5e68;margin-top:6px}
-/* CENTER - HERO IMAGE */
+.sname{font-size:12px;font-weight:700;color:#e6e0cc}.badge{font-size:7px;background:#1e1e22;border:1px solid #2a2a32;padding:2px 5px;border-radius:4px;color:#8a8678;margin-left:6px}
+.sdesc{font-size:10px;color:#8b8b95;line-height:1.4;margin-top:3px}.smeta{font-size:7.5px;color:#5e5e68;margin-top:5px}
 .center{position:relative;background:#0c1218;overflow:hidden}
 .center img.hero{width:100%;height:100%;min-height:780px;object-fit:cover;object-position:top center;display:block}
-/* RIGHT - EXACT LIKE SCREENSHOT */
-.right{background:rgba(18,18,22,.92);padding:0;display:flex;flex-direction:column}
-.right-header{background:#1a1a1e;padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;align-items:flex-start}
-.right-header h1{font-family:Cinzel;font-size:20px;letter-spacing:.15em;color:#e8dcc0;line-height:1}
-.right-header .sub{font-size:7px;letter-spacing:.25em;color:#8a8678;margin-top:6px}
-.close{width:26px;height:26px;border-radius:50%;border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;color:#6b6875;cursor:pointer;font-size:12px}
-.name-block{background:#2a2a2e;border:1px solid #3a3a42;margin:16px;padding:12px}
-.name-block label{font-size:8px;letter-spacing:.2em;color:#8a8678;display:block;margin-bottom:8px}
-.name-block .input{width:100%;background:#0e0e10;border:1px solid #3a3a42;color:#e8dcc0;padding:8px 10px;font-size:11px;letter-spacing:.1em;display:flex;justify-content:space-between;align-items:center}
+.right{background:rgba(18,18,22,.96);padding:0}
+.right-header{background:#1a1a1e;padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between}
+.right-header h1{font-family:Cinzel;font-size:20px;color:#e8dcc0;letter-spacing:.15em;line-height:1}
+.right-header .sub{font-size:7px;color:#8a8678;letter-spacing:.25em;margin-top:6px}
+.close{width:26px;height:26px;border-radius:50%;border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;color:#6b6875;cursor:pointer}
+.name-block{background:#2a2a2e;border:1px solid #3a3a42;margin:16px;padding:10px}
+.name-block label{font-size:8px;letter-spacing:.2em;color:#8a8678;display:block;margin-bottom:6px}
+.name-block input{width:100%;background:#0e0e10;border:1px solid #3a3a42;color:#e8dcc0;padding:8px 10px;font-size:11px;outline:none;font-family:Inter}
 .stats{padding:0 18px}
-.stats-title{font-size:8px;letter-spacing:.3em;color:#6b6875;text-align:center;display:flex;align-items:center;gap:10px;margin:8px 0 12px}
+.stats-title{font-size:8px;letter-spacing:.3em;color:#6b6875;text-align:center;display:flex;align-items:center;gap:10px;margin:10px 0}
 .stats-title::before,.stats-title::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.08)}
-.stat-row{display:flex;justify-content:space-between;align-items:center;margin:10px 0}
-.stat-row .label{font-size:9px;color:#8a8678;letter-spacing:.1em}
-.stat-row .val{font-size:10px;color:#e6d5a0;font-weight:600}
-.bar{height:2px;background:rgba(255,255,255,.08);margin-top:4px;position:relative;grid-column:1/-1;width:100%}
+.stat{margin:14px 0}
+.stat-head{display:flex;justify-content:space-between;align-items:center}
+.stat-head .label{font-size:9px;color:#8a8678;letter-spacing:.1em}
+.stat-head .val{font-size:10px;color:#e6d5a0;font-weight:600}
+.bar{height:2px;background:rgba(255,255,255,.08);margin-top:5px}
 .bar-fill{height:100%;background:#e6d5a0;display:block}
 .archetype{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);margin:16px;padding:12px}
-.archetype .small{font-size:7px;letter-spacing:.2em;color:#6b6875}
-.archetype h3{font-size:11px;color:#e6e0cc;letter-spacing:.1em;margin:4px 0}
+.archetype .small{font-size:7px;color:#6b6875;letter-spacing:.2em}
+.archetype h3{font-size:11px;color:#e6e0cc;margin:4px 0}
 .archetype p{font-size:9.5px;color:#8b8b95;line-height:1.5}
-.lore{padding:0 18px;font-size:8px;color:#5a5a62;line-height:1.6}
-.lore b{color:#6b6875;letter-spacing:.15em}
-.confirm{margin:18px;padding:10px;background:rgba(40,35,25,.6);border:1px solid rgba(230,213,160,.15);text-align:center;font-size:8px;letter-spacing:.25em;color:#6b6875;cursor:pointer}
+.confirm{margin:18px;padding:11px;background:rgba(40,35,25,.6);border:1px solid rgba(230,213,160,.15);text-align:center;font-size:8px;letter-spacing:.25em;color:#6b6875;cursor:pointer}
 .esc{font-size:7px;color:#4a4a52;text-align:center;padding-bottom:12px;letter-spacing:.15em}
 </style>
 </head>
 <body>
 <div class="frame">
-<div class="left"><div class="left-title">SKILLS</div><div id="skillsList"></div></div>
+<div class="left"><div style="font-size:9px;letter-spacing:.3em;color:#6b6875;text-align:center;margin-bottom:14px">SKILLS</div><div id="skillsList"></div></div>
 <div class="center"><img class="hero" id="heroImg" src="assets/heroes/archer-m.webp"></div>
 <div class="right">
-<div class="right-header"><div><h1 id="rName">DARK RANGER</h1><div class="sub">SHADOW RANGER • ARCHER • MALE</div></div><div class="close" onclick="location.href='index.html'">✕</div></div>
-<div class="name-block"><label>ENTER YOUR NAME</label><div class="input"><span>VOLAND 1337</span><span style="font-size:8px">◀</span></div></div>
+<div class="right-header"><div><h1>DARK RANGER</h1><div class="sub">SHADOW RANGER • ARCHER • MALE</div></div><div class="close" onclick="location.href='index.html'">✕</div></div>
+<div class="name-block"><label>ENTER YOUR NAME</label><input id="nameInput" type="text" value="VOLAND 1337" placeholder="Type your name..."></div>
 <div class="stats"><div class="stats-title">STATS</div>
-<div class="stat-row"><span class="label">HP</span><span class="val">928</span><div class="bar"><span class="bar-fill" style="width:72%"></span></div></div>
-<div class="stat-row"><span class="label">DEF</span><span class="val">115</span><div class="bar"><span class="bar-fill" style="width:48%"></span></div></div>
-<div class="stat-row"><span class="label">DAMAGE</span><span class="val">185</span><div class="bar"><span class="bar-fill" style="width:68%"></span></div></div>
-<div class="stat-row"><span class="label">CRIT</span><span class="val">26%</span><div class="bar"><span class="bar-fill" style="width:62%"></span></div></div>
-<div class="stat-row"><span class="label">DODGE</span><span class="val">19%</span><div class="bar"><span class="bar-fill" style="width:88%"></span></div></div>
-<div class="stat-row"><span class="label">MANA</span><span class="val">210</span><div class="bar"><span class="bar-fill" style="width:55%"></span></div></div>
+<div class="stat"><div class="stat-head"><span class="label">HP</span><span class="val">928</span></div><div class="bar"><span class="bar-fill" style="width:72%"></span></div></div>
+<div class="stat"><div class="stat-head"><span class="label">DEF</span><span class="val">115</span></div><div class="bar"><span class="bar-fill" style="width:38%"></span></div></div>
+<div class="stat"><div class="stat-head"><span class="label">DAMAGE</span><span class="val">185</span></div><div class="bar"><span class="bar-fill" style="width:65%"></span></div></div>
+<div class="stat"><div class="stat-head"><span class="label">CRIT</span><span class="val">26%</span></div><div class="bar"><span class="bar-fill" style="width:60%"></span></div></div>
+<div class="stat"><div class="stat-head"><span class="label">DODGE</span><span class="val">19%</span></div><div class="bar"><span class="bar-fill" style="width:85%"></span></div></div>
+<div class="stat"><div class="stat-head"><span class="label">MANA</span><span class="val">210</span></div><div class="bar"><span class="bar-fill" style="width:52%"></span></div></div>
 </div>
-<div class="archetype"><div class="small">CLASS ARCHETYPE</div><h3>SHADOW RANGER</h3><p>Precision eliminator. High crit & dodge, mid survivability. Cursed arrows bypass armor.</p><div style="margin-top:12px" class="small">LORE</div><p>Silent hunter of the Gloomwood. Arrows cursed with winter.</p></div>
+<div class="archetype"><div class="small">CLASS ARCHETYPE</div><h3>SHADOW RANGER</h3><p>Precision eliminator. High crit & dodge, mid survivability. Cursed arrows bypass armor.</p><div class="small" style="margin-top:12px">LORE</div><p>Silent hunter of the Gloomwood. Arrows cursed with winter.</p></div>
 <div class="confirm">CONFIRM CHAMPION — ENTER NAME</div>
 <div class="esc">ESC TO CLOSE • CLICK OUTSIDE TO DISMISS</div>
 </div>
@@ -77,9 +70,8 @@ const skills=[
 {img:"heroes/icon_zalp_bezdny.jpg",name:"Залп Бездны",badge:"4",desc:"ULTIMATE: Выпускает 7 стрел. Каждая стрела наносит +100% урона одному противнику. Если цель одна — весь урон попадает в неё +700% урона.",meta:"КД: 25 раундов • Мана: 40 • Урон: +700% в одну цель"}
 ];
 const list=document.getElementById('skillsList');
-skills.forEach(s=>{
-list.innerHTML+=`<div class="skill"><div class="icon"><img src="${s.img}"></div><div><div class="sname">${s.name} <span class="badge">${s.badge}</span></div><div class="sdesc">${s.desc}</div><div class="smeta">${s.meta}</div></div></div>`;
-});
+skills.forEach(s=>{list.innerHTML+=`<div class="skill"><div class="icon"><img src="${s.img}"></div><div><div class="sname">${s.name} <span class="badge">${s.badge}</span></div><div class="sdesc">${s.desc}</div><div class="smeta">${s.meta}</div></div></div>`});
+document.getElementById('nameInput').focus();
 </script>
 </body>
 </html>
