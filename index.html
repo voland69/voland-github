@@ -7,8 +7,9 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#0e151f}
-.bg{position:fixed;inset:0;background:url('assets/bg-battlefield.webp') center top / cover no-repeat}
-h1{text-align:center;color:#c9a96e;letter-spacing:.3em;font:600 26px Cinzel,serif;margin-bottom:50px}
+.bg{position:fixed;inset:0;background:url('assets/bg-battlefield.webp') center top / cover no-repeat;filter:brightness(1.4)}
+.main{position:relative;z-index:2;max-width:1280px;margin:0 auto;padding:60px 20px}
+h1{text-align:center;color:#c9a96e;letter-spacing:.3em;font:600 26px Cinzel,serif;margin-bottom:50px;text-shadow:0 2px 12px #000}
 .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:30px}
 @media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
 .card{background:transparent;border:0}
@@ -30,3 +31,4 @@ h1{text-align:center;color:#c9a96e;letter-spacing:.3em;font:600 26px Cinzel,seri
 <div class="card"><div class="img"><img src="assets/heroes/mage-f-new.webp"></div></div>
 <div class="card"><div class="img"><img src="assets/heroes/necro-f-new.webp"></div></div>
 </div></div></body></html>
+
