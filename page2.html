@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LION WARDEN - VOLAND</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0f1a29 url('assets/heroes/bg-battlefield.webp') no-repeat fixed center top;background-size:cover;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;font-family:Inter,sans-serif}
+.frame{width:100%;max-width:1080px;background:rgba(10,15,24,.88);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.08);display:grid;grid-template-columns:1.1fr .9fr;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.7)}
+@media(max-width:900px){.frame{grid-template-columns:1fr}}
+.left{position:relative;min-height:720px;background:#0a0f18}
+.left img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block}
+.left::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent 60%,rgba(10,15,24,.6) 100%);pointer-events:none}
+.right{background:linear-gradient(180deg,#121214 0%,#0e0e10 100%);padding:18px 20px 14px;display:flex;flex-direction:column;gap:14px;border-left:1px solid rgba(255,255,255,.06)}
+.rhead{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;border-bottom:1px solid rgba(255,255,255,.08);padding-bottom:12px}
+.rhead h1{font-family:Cinzel,serif;font-size:22px;letter-spacing:.18em;color:#e8dcc0;font-weight:400}
+.rhead .sub{font-size:8px;letter-spacing:.25em;color:#8a8678;margin-top:4px}
+.close{width:24px;height:24px;border-radius:50%;border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;color:#8a8678;cursor:pointer;font-size:12px}
+.namebox{background:#1a1a1a;border:1px solid #2a2a2a;padding:10px 12px}
+.namebox .label{font-size:8px;letter-spacing:.25em;color:#8a8678;display:flex;justify-content:space-between;margin-bottom:6px}
+.namebox input{width:100%;background:#0e0e0e;border:1px solid #2a2a2a;color:#e6e0cc;padding:8px 10px;font-size:12px;letter-spacing:.1em;outline:none}
+.namebox .hint{font-size:7px;letter-spacing:.15em;color:#5a5a5a;margin-top:6px}
+.stats{margin-top:2px}
+.stats-title{font-size:8px;letter-spacing:.35em;color:#8a8678;text-align:center;display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.stats-title::before,.stats-title::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.1)}
+.stat{margin-bottom:10px}
+.stat-top{display:flex;justify-content:space-between;font-size:8px;letter-spacing:.2em;margin-bottom:4px}
+.stat-top span:first-child{color:#8a8678}
+.stat-top span:last-child{color:#d9b77a}
+.bar{height:2px;background:rgba(255,255,255,.08);position:relative}
+.bar-fill{height:100%;background:#d9b77a;box-shadow:0 0 6px rgba(217,183,122,.4)}
+.arch{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);padding:10px 12px;display:flex;justify-content:space-between;gap:12px}
+.arch small{font-size:7px;letter-spacing:.25em;color:#5a5a5a;display:block;margin-bottom:4px}
+.arch b{font-size:10px;letter-spacing:.15em;color:#e8dcc0;display:block}
+.arch p{font-size:9px;line-height:1.4;color:#8b8b95;margin-top:6px;max-width:220px}
+.arch .icon{width:28px;height:28px;border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:12px}
+.lore small{font-size:7px;letter-spacing:.25em;color:#5a5a5a}
+.lore p{font-size:8px;line-height:1.5;color:#6a6a6a;margin-top:4px;font-family:monospace}
+.bottom{margin-top:auto;display:grid;grid-template-columns:1fr 1fr;gap:0;border-top:1px solid rgba(255,255,255,.08)}
+.bottom button{background:transparent;border:0;padding:12px;font-size:8px;letter-spacing:.25em;cursor:pointer}
+.bottom button:first-child{color:#8a8678}
+.bottom button:last-child{color:#d9b77a;background:rgba(217,183,122,.08);border-left:1px solid rgba(255,255,255,.08)}
+</style>
+</head>
+<body>
+<div class="frame">
+<div class="left"><img id="heroImg" src="assets/heroes/warrior-m.webp" alt=""></div>
+<div class="right">
+<div class="rhead"><div><h1 id="heroName">LION WARDEN</h1><div class="sub" id="heroSub">IMPERIAL TANK • WARRIOR • MALE</div></div><div class="close" onclick="history.back()">✕</div></div>
+<div class="namebox"><div class="label"><span>ENTER YOUR NAME</span><span id="counter">0/16</span></div><div style="display:flex;gap:6px"><input id="nameInput" maxlength="16" placeholder="VOLAND 1337"><button style="background:#1e1e22;border:1px solid #2a2a32;color:#8a8678;padding:0 10px;font-size:10px">↲</button></div><div class="hint">• THIS NAME WILL BE VISIBLE TO OTHER PLAYERS</div></div>
+<div class="stats"><div class="stats-title">STATS</div>
+<div id="statsList"></div>
+</div>
+<div class="arch"><div><small>CLASS ARCHETYPE</small><b id="archName">IMPERIAL TANK</b><p id="archDesc">Unbreakable frontline. Highest HP & DEF. Holds line while allies strike.</p><div class="lore" style="margin-top:10px"><small>LORE</small><p id="loreText">Oathbound to the golden lion. Unbreakable line.</p></div></div><div class="icon">♔</div></div>
+<div class="bottom"><button>CONFIRM CHAMPION</button><button>ENTER NAME</button></div>
+</div>
+</div>
+<script>
+var heroes={
+"warrior-m":{name:"LION WARDEN",sub:"IMPERIAL TANK • WARRIOR • MALE",arch:"IMPERIAL TANK",desc:"Unbreakable frontline. Highest HP & DEF. Holds line while allies strike.",lore:"Oathbound to the golden lion. Unbreakable line.",img:"assets/heroes/warrior-m.webp",stats:{HP:1550,DEF:320,DAMAGE:145,CRIT:"10%",DODGE:"5%",MANA:80}},
+"archer-m":{name:"DARK RANGER",sub:"SHADOW HUNTER • ARCHER • MALE",arch:"SHADOW HUNTER",desc:"High burst, mark and execute. Vanishes into nothing.",lore:"Marked by shadow, hunts from void.",img:"assets/heroes/archer-m.webp",stats:{HP:980,DEF:180,DAMAGE:210,CRIT:"28%",DODGE:"18%",MANA:100}},
+"archmage-m":{name:"AZURE SAGE",sub:"CHRONOMANCER • ARCHMAGE • MALE",arch:"CHRONOMANCER",desc:"Controls time and ice. Freezes battlefield then annihilates.",lore:"Time bends to his will.",img:"assets/heroes/archmage-m.webp",stats:{HP:1100,DEF:200,DAMAGE:190,CRIT:"15%",DODGE:"8%",MANA:140}},
+"necro-m":{name:"GRAVELORD",sub:"BONE LEGION • NECROMANCER • MALE",arch:"BONE LEGION",desc:"Summons immortal skeletons. Army that never dies.",lore:"Legion rises with every fallen foe.",img:"assets/heroes/necro-m.webp",stats:{HP:1250,DEF:250,DAMAGE:160,CRIT:"8%",DODGE:"4%",MANA:120}},
+"archer-f":{name:"WILD PATH",sub:"BEAST TRACKER • ARCHER • FEMALE",arch:"BEAST TRACKER",desc:"Evasive, critical, poisons with vines.",lore:"Forest is her arrow.",img:"assets/heroes/archer-f.webp",stats:{HP:950,DEF:170,DAMAGE:205,CRIT:"30%",DODGE:"22%",MANA:95}},
+"warrior-f":{name:"IRON VOW",sub:"ALPHA PREDATOR • WARRIOR • FEMALE",arch:"ALPHA PREDATOR",desc:"Pack oath. Becomes wolf, lifesteals when wounded.",lore:"Pack never breaks.",img:"assets/heroes/warrior-f.webp",stats:{HP:1400,DEF:300,DAMAGE:155,CRIT:"12%",DODGE:"10%",MANA:85}},
+"mage-f-new":{name:"VOLCANIC",sub:"CALDERA HEART • MAGE • FEMALE",arch:"CALDERA HEART",desc:"Burns earth, meteors fall. Judgement Day.",lore:"Born in volcano.",img:"assets/heroes/mage-f-new.webp",stats:{HP:1050,DEF:190,DAMAGE:230,CRIT:"18%",DODGE:"6%",MANA:150}},
+"necro-f-new":{name:"AMETHYST",sub:"SOUL CURSE • NECROMANCER • FEMALE",arch:"SOUL CURSE",desc:"Steals mana, imprisons souls in amethyst.",lore:"Whisper of amethyst spirits.",img:"assets/heroes/necro-f-new.webp",stats:{HP:1150,DEF:210,DAMAGE:175,CRIT:"14%",DODGE:"9%",MANA:135}}
+};
+function getHeroId(){var p=new URLSearchParams(location.search);return p.get('hero')||localStorage.getItem('voland_hero')||'warrior-m'}
+var id=getHeroId();
+var h=heroes[id]||heroes['warrior-m'];
+document.getElementById('heroName').innerText=h.name;
+document.getElementById('heroSub').innerText=h.sub;
+document.getElementById('archName').innerText=h.arch;
+document.getElementById('archDesc').innerText=h.desc;
+document.getElementById('loreText').innerText=h.lore;
+document.getElementById('heroImg').src=h.img;
+document.getElementById('heroImg').onerror=function(){this.onerror=null;this.src=this.src.replace('.webp','.jpg')};
+var max={HP:2000,DEF:400,DAMAGE:250,MANA:160};
+var list=document.getElementById('statsList');
+var order=['HP','DEF','DAMAGE','CRIT','DODGE','MANA'];
+order.forEach(function(k){
+  var v=h.stats[k];
+  var num=parseInt(v);
+  var pct=k==='CRIT'||k==='DODGE'?parseInt(v):(max[k]?Math.round(num/max[k]*100):50);
+  if(k==='CRIT'||k==='DODGE')pct=Math.min(100,parseInt(v)*2);
+  list.innerHTML+='<div class="stat"><div class="stat-top"><span>'+k+'</span><span>'+v+'</span></div><div class="bar"><div class="bar-fill" style="width:'+pct+'%"></div></div></div>';
+});
+document.getElementById('nameInput').addEventListener('input',function(){document.getElementById('counter').innerText=this.value.length+'/16'});
+</script>
+</body>
+</html>
