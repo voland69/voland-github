@@ -42,7 +42,7 @@ body{background:#0a0e16 url('assets/heroes/bg-battlefield.webp') fixed center/co
 </style>
 </head>
 <body>
-<div class="frame">
+<div class="confirm">
 <div class="left"><div style="font-size:9px;letter-spacing:.3em;color:#6b6875;text-align:center;margin-bottom:14px">SKILLS</div><div id="skillsList"></div></div>
 <div class="center"><img class="hero" id="heroImg" src="assets/heroes/archer-m.webp"></div>
 <div class="right">
@@ -61,7 +61,61 @@ body{background:#0a0e16 url('assets/heroes/bg-battlefield.webp') fixed center/co
 <div class="esc">ESC TO CLOSE • CLICK OUTSIDE TO DISMISS</div>
 </div>
 </div>
+<<div class="name-block">
+  <label>ENTER YOUR NAME</label>
+  <input id="nameInput" type="text" value="VOLAND 1337" placeholder="Type your name..." maxlength="16">
+</div>
+
+<!-- ... stats ... -->
+
+<div id="confirmBtn" class="confirm disabled">CONFIRM CHAMPION — ENTER NAME</div>
+
+<style>
+.confirm{margin:18px;padding:11px;background:rgba(40,35,25,.3);border:1px solid rgba(255,255,255,.08);text-align:center;font-size:8px;letter-spacing:.25em;color:#4a4a52;cursor:not-allowed;transition:.2s}
+.confirm.active{background:rgba(230,213,160,.12);border-color:#e6d5a0;color:#e6d5a0;cursor:pointer;box-shadow:0 0 15px rgba(230,213,160,.2)}
+.confirm.active:hover{background:rgba(230,213,160,.2)}
+</style>
+
 <script>
+const nameInput = document.getElementById('nameInput');
+const confirmBtn = document.getElementById('confirmBtn');
+
+function checkName(){
+  const val = nameInput.value.trim();
+  if(val.length >= 3){
+    confirmBtn.classList.add('active');
+    confirmBtn.classList.remove('disabled');
+    confirmBtn.textContent = `CONFIRM CHAMPION — SAVE AS ${val.toUpperCase()}`;
+  } else {
+    confirmBtn.classList.remove('active');
+    confirmBtn.classList.add('disabled');
+    confirmBtn.textContent = 'CONFIRM CHAMPION — ENTER NAME';
+  }
+}
+
+nameInput.addEventListener('input', checkName);
+nameInput.addEventListener('keydown', (e)=>{
+  if(e.key==='Enter' && confirmBtn.classList.contains('active')){
+    confirmBtn.click();
+  }
+});
+
+confirmBtn.addEventListener('click', ()=>{
+  if(!confirmBtn.classList.contains('active')) return;
+  const name = nameInput.value.trim();
+  localStorage.setItem('voland_player_name', name);
+  localStorage.setItem('voland_hero', 'archer-m');
+  confirmBtn.textContent = `✓ SAVED — WELCOME ${name.toUpperCase()}`;
+  confirmBtn.style.background = 'rgba(80,180,80,.15)';
+  confirmBtn.style.borderColor = '#50b450';
+  confirmBtn.style.color = '#8fdc8f';
+  setTimeout(()=>{ location.href='index.html'; }, 800);
+});
+
+// начальная проверка
+checkName();
+nameInput.focus();
+</script>>
 const skills=[
 {img:"heroes/icon_metka_teni.jpg",name:"Метка Тени",badge:"PASSIVE",desc:"Каждая 2-я атака накладывает Метку Тени на 3 раунда. Отмеченные цели получают +200% урона от твоих стрел. Убийство отмеченной цели восстанавливает 15 маны.",meta:"КД: — • Мана: 0"},
 {img:"heroes/icon_begliy_vistrel.jpg",name:"Беглый выстрел",badge:"1",desc:"Стреляет по ближайшему врагу, нанося 200% урона.",meta:"КД: 3 раунда • Мана: 5 • Урон: 200%"},
