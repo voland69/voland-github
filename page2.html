@@ -6,24 +6,25 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#0a0e16 url('assets/heroes/bg-battlefield.webp') fixed center/cover;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;font-family:Inter,sans-serif}
-.frame{width:100%;max-width:1280px;display:grid;grid-template-columns:380px 1fr 380px;background:rgba(0,0,0,.45);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.08);box-shadow:0 30px 80px rgba(0,0,0,.9)}
+body{background:#0e0e10;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;font-family:Inter,sans-serif;color:#e6e0cc}
+.frame{width:100%;max-width:1280px;display:grid;grid-template-columns:380px 1fr 380px;background:#121214;border:1px solid #23232a;min-height:780px}
 .left{background:#121214;padding:18px;border-right:1px solid rgba(255,255,255,.06)}
 .skill{background:#17171b;border:1px solid #23232a;border-radius:12px;padding:11px;display:flex;gap:11px;margin-bottom:10px}
 .skill .icon{width:64px;height:64px;border-radius:12px;overflow:hidden;flex-shrink:0;background:#1e1e22;border:1px solid #2a2a32}
 .skill .icon img{width:100%;height:100%;object-fit:cover;display:block}
 .sname{font-size:12px;font-weight:700;color:#e6e0cc}.badge{font-size:7px;background:#1e1e22;border:1px solid #2a2a32;padding:2px 5px;border-radius:4px;color:#8a8678;margin-left:6px}
 .sdesc{font-size:10px;color:#8b8b95;line-height:1.4;margin-top:3px}.smeta{font-size:7.5px;color:#5e5e68;margin-top:5px}
-.center{position:relative;background:#0c1218;overflow:hidden}
-.center img.hero{width:100%;height:100%;min-height:780px;object-fit:cover;object-position:top center;display:block}
-.right{background:rgba(18,18,22,.96);padding:0;display:flex;flex-direction:column}
-.right-header{background:#1a1a1e;padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;align-items:flex-start}
+.center{position:relative;background:#0c1218;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.center img.hero{width:100%;height:100%;object-fit:cover;object-position:top center;display:block}
+.center-fallback{position:absolute;inset:0;display:none;align-items:center;justify-content:center;flex-direction:column;background:#0c1218;color:#5e5e68;font-size:10px;text-align:center;padding:20px}
+.right{background:#17171b;padding:0;display:flex;flex-direction:column;border-left:1px solid rgba(255,255,255,.06)}
+.right-header{background:#1a1a1e;padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between}
 .right-header h1{font-family:Cinzel;font-size:20px;color:#e8dcc0;letter-spacing:.15em;line-height:1}
 .right-header .sub{font-size:7px;color:#8a8678;letter-spacing:.25em;margin-top:6px}
-.close{width:26px;height:26px;border-radius:50%;border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;color:#6b6875;cursor:pointer;font-size:12px}
+.close{width:26px;height:26px;border-radius:50%;border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;color:#6b6875;cursor:pointer}
 .name-block{background:#2a2a2e;border:1px solid #3a3a42;margin:16px;padding:10px}
 .name-block label{font-size:8px;letter-spacing:.2em;color:#8a8678;display:block;margin-bottom:6px}
-.name-block input{width:100%;background:#0e0e10;border:1px solid #3a3a42;color:#e8dcc0;padding:9px 10px;font-size:11px;outline:none;font-family:Inter}
+.name-block input{width:100%;background:#0e0e10;border:1px solid #3a3a42;color:#e8dcc0;padding:9px 10px;font-size:11px;outline:none}
 .name-block input:focus{border-color:#e6d5a0}
 .stats{padding:0 18px}
 .stats-title{font-size:8px;letter-spacing:.3em;color:#6b6875;text-align:center;display:flex;align-items:center;gap:10px;margin:10px 0}
@@ -35,22 +36,21 @@ body{background:#0a0e16 url('assets/heroes/bg-battlefield.webp') fixed center/co
 .bar{height:2px;background:rgba(255,255,255,.08);margin-top:5px}
 .bar-fill{height:100%;background:#e6d5a0;display:block}
 .archetype{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);margin:16px;padding:12px}
-.archetype .small{font-size:7px;color:#6b6875;letter-spacing:.2em}
-.archetype h3{font-size:11px;color:#e6e0cc;margin:4px 0}
-.archetype p{font-size:9.5px;color:#8b8b95;line-height:1.5}
 .confirm{margin:18px;padding:11px;background:rgba(40,35,25,.3);border:1px solid rgba(255,255,255,.08);text-align:center;font-size:8px;letter-spacing:.25em;color:#4a4a52;cursor:not-allowed;transition:.2s}
-.confirm.active{background:rgba(230,213,160,.12);border-color:#e6d5a0;color:#e6d5a0;cursor:pointer;box-shadow:0 0 15px rgba(230,213,160,.2)}
-.confirm.active:hover{background:rgba(230,213,160,.2)}
+.confirm.active{background:rgba(230,213,160,.12);border-color:#e6d5a0;color:#e6d5a0;cursor:pointer}
 .esc{font-size:7px;color:#4a4a52;text-align:center;padding-bottom:12px;letter-spacing:.15em}
 </style>
 </head>
 <body>
 <div class="frame">
-<div class="left"><div style="font-size:9px;letter-spacing:.3em;color:#6b6875;text-align:center;margin-bottom:14px">SKILLS</div><div id="skillsList"></div></div>
-<div class="center"><img class="hero" id="heroImg" src=""></div>
+<div class="left"><div style="font-size:9px;letter-spacing:.3em;color:#6b6875;text-align:center;margin-bottom:14px">SKILLS</div><div id="skillsList">Загрузка...</div></div>
+<div class="center" id="centerBox">
+<img class="hero" id="heroImg" src="" alt="">
+<div class="center-fallback" id="fallback"><div style="font-size:48px;margin-bottom:10px">🦁</div>Картинка героя не найдена<br><span id="fallbackPath" style="font-size:8px;color:#3a3a42"></span><br><br>Скилы слева работают из папки heroes/</div>
+</div>
 <div class="right">
-<div class="right-header"><div><h1 id="rName">DARK RANGER</h1><div class="sub" id="rSub">SHADOW RANGER • ARCHER • MALE</div></div><div class="close" onclick="location.href='index.html'">✕</div></div>
-<div class="name-block"><label>ENTER YOUR NAME</label><input id="nameInput" type="text" value="VOLAND 1337" placeholder="Type your name..." maxlength="16"></div>
+<div class="right-header"><div><h1 id="rName">HERO</h1><div class="sub" id="rSub">LOADING...</div></div><div class="close" onclick="location.href='index.html'">✕</div></div>
+<div class="name-block"><label>ENTER YOUR NAME</label><input id="nameInput" type="text" value="VOLAND 1337" placeholder="Type your name..."></div>
 <div class="stats"><div class="stats-title">STATS</div>
 <div class="stat"><div class="stat-head"><span class="label">HP</span><span class="val" id="vHP">928</span></div><div class="bar"><span class="bar-fill" id="bHP" style="width:72%"></span></div></div>
 <div class="stat"><div class="stat-head"><span class="label">DEF</span><span class="val" id="vDEF">115</span></div><div class="bar"><span class="bar-fill" id="bDEF" style="width:38%"></span></div></div>
@@ -59,27 +59,12 @@ body{background:#0a0e16 url('assets/heroes/bg-battlefield.webp') fixed center/co
 <div class="stat"><div class="stat-head"><span class="label">DODGE</span><span class="val" id="vDODGE">19%</span></div><div class="bar"><span class="bar-fill" id="bDODGE" style="width:85%"></span></div></div>
 <div class="stat"><div class="stat-head"><span class="label">MANA</span><span class="val" id="vMANA">210</span></div><div class="bar"><span class="bar-fill" id="bMANA" style="width:52%"></span></div></div>
 </div>
-<div class="archetype"><div class="small">CLASS ARCHETYPE</div><h3 id="archName">SHADOW RANGER</h3><p id="archDesc">Precision eliminator. High crit & dodge, mid survivability. Cursed arrows bypass armor.</p><div class="small" style="margin-top:12px">LORE</div><p id="archLore">Silent hunter of the Gloomwood. Arrows cursed with winter.</p></div>
+<div class="archetype"><div style="font-size:7px;color:#6b6875;letter-spacing:.2em">CLASS ARCHETYPE</div><h3 id="archName" style="font-size:11px;color:#e6e0cc;margin:4px 0">ARCHETYPE</h3><p id="archDesc" style="font-size:9.5px;color:#8b8b95;line-height:1.5">Desc</p><div style="font-size:7px;color:#6b6875;letter-spacing:.2em;margin-top:12px">LORE</div><p id="archLore" style="font-size:9.5px;color:#8b8b95;line-height:1.5">Lore</p></div>
 <div id="confirmBtn" class="confirm">CONFIRM CHAMPION — ENTER NAME</div>
-<div class="esc">ESC TO CLOSE • CLICK OUTSIDE TO DISMISS</div>
+<div class="esc">ESC TO CLOSE</div>
 </div>
 </div>
 <script>
 const HEROES = {
-"archer-m":{name:"DARK RANGER",sub:"SHADOW RANGER • ARCHER • MALE",img:"assets/heroes/archer-m.webp",arch:"SHADOW RANGER",archDesc:"Precision eliminator. High crit & dodge, mid survivability. Cursed arrows bypass armor.",lore:"Silent hunter of the Gloomwood. Arrows cursed with winter.",stats:{HP:928,DEF:115,DMG:185,CRIT:"26%",DODGE:"19%",MANA:210,bars:[72,38,65,60,85,52]},skills:[
-{img:"heroes/icon_metka_teni.jpg",name:"Метка Тени",badge:"PASSIVE",desc:"Каждая 2-я атака накладывает Метку Тени на 3 раунда. Отмеченные цели получают +200% урона от твоих стрел. Убийство отмеченной цели восстанавливает 15 маны.",meta:"КД: — • Мана: 0"},
-{img:"heroes/icon_begliy_vistrel.jpg",name:"Беглый выстрел",badge:"1",desc:"Стреляет по ближайшему врагу, нанося 200% урона.",meta:"КД: 3 раунда • Мана: 5 • Урон: 200%"},
-{img:"heroes/icon_shag_v_nichto.jpg",name:"Шаг в Ничто",badge:"2",desc:"Становится невидимым на 3 раунда. Следующая атака в инвизе критует гарантированно и снимает эффект инвиза.",meta:"КД: 20 раундов • Мана: 25"},
-{img:"heroes/icon_prizrachnaya_strela.jpg",name:"Призрачная Стрела",badge:"3",desc:"Выпускает стрелу, проходящую сквозь врагов. Наносит +140% урона и оглушает на 1 раунд с вероятностью 33%. Пронзает до 3 целей.",meta:"КД: 5 раундов • Мана: 20 • Урон: 185×1.4"},
-{img:"heroes/icon_zalp_bezdny.jpg",name:"Залп Бездны",badge:"4",desc:"ULTIMATE: Выпускает 7 стрел. Каждая стрела наносит +100% урона одному противнику. Если цель одна — весь урон попадает в неё +700% урона.",meta:"КД: 25 раундов • Мана: 40 • Урон: +700% в одну цель"}
-]},
-"archer-f":{name:"WILD PATH",sub:"BEAST RANGER • ARCHER • FEMALE",img:"assets/heroes/archer-f.webp",arch:"WILD PATH",archDesc:"Evasion specialist. Bleed and poison, scouts invisible enemies.",lore:"Daughter of the forest, pact with beasts.",stats:{HP:890,DEF:98,DMG:178,CRIT:"28%",DODGE:"25%",MANA:200,bars:[68,32,60,68,92,48]},skills:[
-{img:"heroes/icon_tropy_zverya.jpg",name:"Тропы Зверя",badge:"PASSIVE",desc:"При уклонении, следующий удар 100% критический.",meta:"КД: — • Мана: 0"},
-{img:"heroes/icon_dvoynoy_vystrel.jpg",name:"Двойной Выстрел",badge:"1",desc:"Выстреливает 2 стрелы по 100% урона каждая. Если обе попали в одну цель — кровотечение 25% урона на 4 раунда.",meta:"КД: 3 раунда • Мана: 5 • Урон: 200% + дот"},
-{img:"heroes/icon_yadovitaya_liana.jpg",name:"Ядовитая Лиана",badge:"2",desc:"Бросает лиану в ближайшего врага. Враг оглушается на 1 раунд и отравляется на 3 раунда.",meta:"КД: 10 раундов • Мана: 15"},
-{img:"heroes/icon_glaz_yastreba.jpg",name:"Глаз Ястреба",badge:"3",desc:"На 4 раунда видит всех врагов в радиусе (даже в инвизе) и получает +25% крит шанс.",meta:"КД: 20 раундов • Мана: 20 • Крит: +25%"},
-{img:"heroes/icon_burya_strel.jpg",name:"Буря Стрел",badge:"4",desc:"ULTIMATE: Прыжок в воздух, 12 стрел за 3 раунда по области. Каждая 80% урона + 25% шанс стана.",meta:"КД: 25 раундов • Мана: 30"}
-]},
-"archmage-m":{name:"AZURE SAGE",sub:"TIME MAGE • MAGE • MALE",img:"assets/heroes/archmage-m.webp",arch:"AZURE SAGE",archDesc:"Time bender. Stacks damage, freezes time.",lore:"Keeper of Azure Library.",stats:{HP:820,DEF:105,DMG:235,CRIT:"22%",DODGE:"12%",MANA:340,bars:[58,36,82,52,38,88]},skills:[
-{img:"heroes/icon_iskrivlenie_vremeni.jpg",name:"Искривление Времени",badge:"PASSIVE",desc:"Каждое заклинание увеличивает базовый урон на 10%, стакается 5 раундов. При 5 стаках всё следующее заклинание кастуется +50% урона.",meta:"Стаки: 5 раундов • Бонус: +50%"},
-{img:"heroes/icon_ledyanoe_kopye.jpg",name:"Ледяное Копье",badge:"1",desc:"Бросает ледяное копье в спину врага, нанося +250% урона и уменьшает его защиту на 20%.",meta:"КД: 3
+"archer-m":{name:"DARK RANGER",sub:"SHADOW RANGER • ARCHER • MALE",img:"assets/heroes/archer-m.webp",arch:"SHADOW RANGER",desc:"Precision eliminator. High crit & dodge.",lore:"Silent hunter of the Gloomwood.",stats:{HP:928,DEF:115,DMG:185,CRIT:"26%",DODGE:"19%",MANA:210,bars:[72,38,65,60,85,52]},skills:[
+{img:"heroes/icon_metka_teni.jpg",name:"Метка Тени",b:"PASSIVE",d:"Каждая 2-я
