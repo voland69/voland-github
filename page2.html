@@ -1,105 +1,43 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>VOLAND CHRONICLES - REFERENCE PAGE 1</title>
+<title>LION WARDEN</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{
-  background:#0f1a29 url('assets/heroes/bg-battlefield.webp') no-repeat fixed center top;
-  background-size:cover;
-  min-height:100vh;color:#e6e0cc;font-family:Inter,sans-serif
-}
-.main{max-width:1280px;margin:0 auto;padding:40px 24px 60px}
-.top{text-align:center;margin-bottom:24px}
-.era{font-size:10px;letter-spacing:.35em;color:#8a8678}
-.top h1{font-family:Cinzel,serif;font-size:38px;letter-spacing:.22em;color:#d9b77a;text-shadow:0 2px 14px #000;margin-top:6px}
-.sub{font-size:10px;letter-spacing:.3em;color:#0a2050;margin-top:10px;font-weight:700}
-.filters{display:flex;justify-content:center;gap:8px;margin:24px auto;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.08);border-radius:24px;padding:6px;width:fit-content}
-.filters button{background:transparent;border:0;color:#8a8678;padding:8px 18px;border-radius:18px;font-size:10px;letter-spacing:.15em;cursor:pointer}
-.filters button.active{background:#e8dcc0;color:#1a1a1a;font-weight:700}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
-@media(max-width:1000px){.grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:560px){.grid{grid-template-columns:1fr}}
-.card{position:relative;height:460px;overflow:hidden;border-radius:8px;cursor:pointer;background:#0a0f18;box-shadow:0 8px 24px rgba(0,0,0,.6);transition:.25s}
-.card:hover{transform:translateY(-4px)}
-.card img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block}
-.card .fade{position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.85) 0%,rgba(0,0,0,.15) 50%,transparent 70%);pointer-events:none}
-.card .info{position:absolute;left:0;right:0;bottom:0;padding:12px;pointer-events:none}
-.card .name{font-size:11px;letter-spacing:.15em;font-weight:700}
-.card .meta{font-size:8px;letter-spacing:.15em;color:#c9a96e;margin-top:2px}
-.modal{display:none;position:fixed;inset:0;z-index:999;background:rgba(7,11,18,.92);padding:20px;overflow:auto}
-.modal.open{display:block}
-.box{max-width:540px;margin:30px auto;background:#121214;border:1px solid #1e1e24;border-radius:12px;padding:18px}
-.close{cursor:pointer;text-align:right;font-size:12px;color:#8a8678;margin-bottom:10px}
-.skill{background:#17171b;border:1px solid #222227;border-radius:10px;padding:12px;margin-bottom:10px;display:flex;gap:10px}
-.sname{font-size:12px;font-weight:600}
-.sdesc{font-size:10px;color:#8b8b95;margin-top:4px;line-height:1.4}
+html,body{width:100%;height:100%;background:#0e0e10;overflow:hidden;font-family:Inter,Arial,sans-serif;color:#e6e0cc}
+.bg{position:fixed;inset:0;z-index:0}
+.bg img{width:100%;height:100%;object-fit:cover;object-position:top center}
+.bg:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#0e0e10 0%,rgba(14,14,16,.35) 30%,rgba(14,14,16,.35) 70%,#0e0e10 100%)}
+.top{position:fixed;top:0;left:0;right:0;height:56px;background:rgba(18,18,20,.9);border-bottom:1px solid #23232a;display:flex;align-items:center;justify-content:space-between;padding:0 16px;z-index:10}
+.top h1{font-size:16px;color:#e8dcc0;letter-spacing:.2em}
+.left{position:fixed;left:0;top:56px;bottom:0;width:360px;background:rgba(18,18,20,.9);border-right:1px solid #23232a;padding:10px;overflow:auto;z-index:5}
+.right{position:fixed;right:0;top:56px;bottom:0;width:340px;background:rgba(23,23,27,.9);border-left:1px solid #23232a;padding:10px;overflow:auto;z-index:5}
+.skill{display:flex;gap:8px;background:#17171b;border:1px solid #23232a;border-radius:10px;padding:8px;margin-bottom:8px}
+.icon{width:54px;height:54px;border-radius:8px;overflow:hidden;background:#1e1e22;flex-shrink:0}
+.icon img{width:100%;height:100%;object-fit:cover;display:block}
+.sname{font-size:11px;font-weight:700}.badge{font-size:6px;background:#1e1e22;border:1px solid #2a2a32;padding:1px 4px;border-radius:3px;margin-left:4px;color:#8a8678}
+.sdesc{font-size:9px;color:#8b8b95;line-height:1.3;margin-top:2px}.smeta{font-size:7px;color:#5e5e68;margin-top:2px}
+.btn{margin-top:10px;padding:10px;background:rgba(230,213,160,.12);border:1px solid #e6d5a0;color:#e6d5a0;text-align:center;font-size:8px;letter-spacing:.2em;cursor:pointer}
 </style>
 </head>
 <body>
-<div class="main">
-<div class="top"><div class="era">EST. VOLAND ERA</div><h1>VOLAND<br>CHRONICLES</h1><div class="sub">CHOOSE YOUR CHAMPION — 8 HEROES</div></div>
-<div class="filters" id="filters">
-<button class="active" data-f="all">ALL 08</button>
-<button data-f="male">MALE 04</button>
-<button data-f="female">FEMALE 04</button>
+<div class="bg"><img src="heroes/lion-warden.jpg"></div>
+<div class="top"><h1>LION WARDEN</h1><div onclick="location.href='index.html'" style="cursor:pointer">✕</div></div>
+<div class="left">
+<div class="skill"><div class="icon"><img src="heroes/icon_nepokolebimaya_stena.jpg"></div><div><div class="sname">Непоколебимая Стена <span class="badge">PASSIVE</span></div><div class="sdesc">Каждый блок +5% DEF до 25%</div><div class="smeta">Мана: 0</div></div></div>
+<div class="skill"><div class="icon"><img src="heroes/icon_udar_lva.jpg"></div><div><div class="sname">Удар Льва <span class="badge">1</span></div><div class="sdesc">Стан 1 раунд, 150% урона, игнор 30% брони</div><div class="smeta">КД: 4 • Мана: 10</div></div></div>
+<div class="skill"><div class="icon"><img src="heroes/icon_imperskiy_bastion.jpg"></div><div><div class="sname">Имперский Бастион <span class="badge">2</span></div><div class="sdesc">3 раунда блок стрел, 50% отражение</div><div class="smeta">КД: 12 • Мана: 30</div></div></div>
+<div class="skill"><div class="icon"><img src="heroes/icon_rassekayushchiy_udar.jpg"></div><div><div class="sname">Рассекающий удар <span class="badge">3</span></div><div class="sdesc">220% AOE, 5% HP за хит</div><div class="smeta">КД: 6 • Мана: 5</div></div></div>
+<div class="skill"><div class="icon"><img src="heroes/icon_avatar_imperii.jpg"></div><div><div class="sname">Аватар Империи <span class="badge">4</span></div><div class="sdesc">4 льва духа 120% + щит 15% HP</div><div class="smeta">КД: 25 • Мана: 50</div></div></div>
 </div>
-<div class="grid" id="grid">
-<div class="card" data-g="male" data-id="archer-m"><img src="assets/heroes/archer-m.webp" onerror="this.src='assets/heroes/archer-m.jpg'"><div class="fade"></div><div class="info"><div class="name">DARK RANGER</div><div class="meta">ARCHER - MALE</div></div></div>
-<div class="card" data-g="male" data-id="warrior-m"><img src="assets/heroes/warrior-m.webp" onerror="this.src='assets/heroes/warrior-m.jpg'"><div class="fade"></div><div class="info"><div class="name">LION WARDEN</div><div class="meta">WARRIOR - MALE</div></div></div>
-<div class="card" data-g="male" data-id="archmage-m"><img src="assets/heroes/archmage-m.webp" onerror="this.src='assets/heroes/archmage-m.jpg'"><div class="fade"></div><div class="info"><div class="name">AZURE SAGE</div><div class="meta">ARCHMAGE - MALE</div></div></div>
-<div class="card" data-g="male" data-id="necro-m"><img src="assets/heroes/necro-m.webp" onerror="this.src='assets/heroes/necro-m.jpg'"><div class="fade"></div><div class="info"><div class="name">GRAVELORD</div><div class="meta">NECROMANCER - MALE</div></div></div>
-<div class="card" data-g="female" data-id="archer-f"><img src="assets/heroes/archer-f.webp" onerror="this.src='assets/heroes/archer-f.jpg'"><div class="fade"></div><div class="info"><div class="name">WILD PATH</div><div class="meta">ARCHER - FEMALE</div></div></div>
-<div class="card" data-g="female" data-id="warrior-f"><img src="assets/heroes/warrior-f.webp" onerror="this.src='assets/heroes/warrior-f.jpg'"><div class="fade"></div><div class="info"><div class="name">IRON VOW</div><div class="meta">WARRIOR - FEMALE</div></div></div>
-<div class="card" data-g="female" data-id="mage-f-new"><img src="assets/heroes/mage-f-new.webp" onerror="this.onerror=null;this.src='assets/heroes/volcanic.webp'"><div class="fade"></div><div class="info"><div class="name">VOLCANIC</div><div class="meta">MAGE - FEMALE</div></div></div>
-<div class="card" data-g="female" data-id="necro-f-new"><img src="assets/heroes/necro-f-new.webp" onerror="this.onerror=null;this.src='assets/heroes/amethyst.webp'"><div class="fade"></div><div class="info"><div class="name">AMETHYST</div><div class="meta">NECROMANCER - FEMALE</div></div></div>
+<div class="right">
+<input id="name" value="VOLAND 1337" style="width:100%;padding:8px;background:#0e0e10;border:1px solid #3a3a42;color:#e8dcc0">
+<div class="btn" id="btn">CONFIRM CHAMPION</div>
 </div>
-</div>
-<div class="modal" id="modal"><div class="box"><div class="close" id="close">✕ CLOSE</div><div id="mcontent"></div></div></div>
 <script>
-document.addEventListener('DOMContentLoaded', function(){
-var heroes={
-"archer-m":{n:"DARK RANGER",d:["Метка Тени PASSIVE","Беглый выстрел 1","Шаг в Ничто 2","Призрачная Стрела 3","Залп Бездны ULT"]},
-"warrior-m":{n:"LION WARDEN",d:["Клятва Льва","Удар Льва","Щит Льва","Рев","Аватар Льва"]},
-"archmage-m":{n:"AZURE SAGE",d:["Искривление Времени","Ледяное Копье","Сфера Бури","Лавина","Аннигиляция"]},
-"necro-m":{n:"GRAVELORD",d:["Костяной Легион","Костяное Копье","Костяной Щит","Поднять Мертвых","Армия Погибели"]},
-"archer-f":{n:"WILD PATH",d:["Тропы Зверя","Двойной Выстрел","Ядовитая Лиана","Глаз Ястреба","Буря Стрел"]},
-"warrior-f":{n:"IRON VOW",d:["Клятва Стаи","Рассекающий Волк","Щит Вожака","Зов Стаи","Альфа Хищник"]},
-"mage-f-new":{n:"VOLCANIC",d:["Сердце Кальдеры","Огненный Шар","Извержение","Метеор","Судный День"]},
-"necro-f-new":{n:"AMETHYST",d:["Шепот Аметиста","Проклятие Душ","Тюрьма","Похищение Жизни","Аметистовый Закат"]}
-};
-var grid=document.getElementById('grid');
-var modal=document.getElementById('modal');
-var mc=document.getElementById('mcontent');
-var filters=document.getElementById('filters');
-function showHero(id){
-var h=heroes[id]; if(!h) return;
-var html='<h2 style="margin-bottom:12px">'+h.n+'</h2>';
-for(var i=0;i<h.d.length;i++){html+='<div class="skill"><div>'+h.d[i]+'</div></div>'}
-mc.innerHTML=html;
-modal.classList.add('open');
-}
-filters.onclick=function(e){
-if(e.target.tagName!=='BUTTON')return;
-var btns=filters.querySelectorAll('button');
-for(var i=0;i<btns.length;i++)btns[i].classList.remove('active');
-e.target.classList.add('active');
-var f=e.target.getAttribute('data-f');
-var cards=document.querySelectorAll('.card');
-for(var i=0;i<cards.length;i++){
-var g=cards[i].getAttribute('data-g');
-if(f==='all'||g===f){cards[i].style.display=''}else{cards[i].style.display='none'}
-}
-};
-grid.onclick=function(e){
-var c=e.target.closest('.card'); if(!c) return;
-showHero(c.getAttribute('data-id'));
-};
-document.getElementById('close').onclick=function(){modal.classList.remove('open')};
-modal.onclick=function(e){if(e.target===modal)modal.classList.remove('open')};
-});
+document.getElementById('btn').onclick=function(){var v=document.getElementById('name').value.trim();if(v.length<3)return;localStorage.setItem('voland_player_name',v);localStorage.setItem('voland_hero','lion-warden');location.href='index.html'}
 </script>
 </body>
 </html>
