@@ -3,41 +3,121 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>LION WARDEN</title>
+<title>CHAMPIONS - 8 HEROES</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{width:100%;height:100%;background:#0e0e10;overflow:hidden;font-family:Inter,Arial,sans-serif;color:#e6e0cc}
-.bg{position:fixed;inset:0;z-index:0}
-.bg img{width:100%;height:100%;object-fit:cover;object-position:top center}
-.bg:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#0e0e10 0%,rgba(14,14,16,.35) 30%,rgba(14,14,16,.35) 70%,#0e0e10 100%)}
-.top{position:fixed;top:0;left:0;right:0;height:56px;background:rgba(18,18,20,.9);border-bottom:1px solid #23232a;display:flex;align-items:center;justify-content:space-between;padding:0 16px;z-index:10}
-.top h1{font-size:16px;color:#e8dcc0;letter-spacing:.2em}
-.left{position:fixed;left:0;top:56px;bottom:0;width:360px;background:rgba(18,18,20,.9);border-right:1px solid #23232a;padding:10px;overflow:auto;z-index:5}
-.right{position:fixed;right:0;top:56px;bottom:0;width:340px;background:rgba(23,23,27,.9);border-left:1px solid #23232a;padding:10px;overflow:auto;z-index:5}
+.top{position:fixed;top:0;left:0;right:0;height:56px;background:rgba(18,18,20,.95);border-bottom:1px solid #23232a;display:flex;align-items:center;justify-content:space-between;padding:0 16px;z-index:10}
+.top h1{font-size:13px;letter-spacing:.25em;color:#e8dcc0}
+.left{position:fixed;left:0;top:56px;bottom:0;width:280px;background:rgba(18,18,20,.9);border-right:1px solid #23232a;overflow:auto;padding:8px;z-index:5}
+.hero-btn{display:flex;gap:8px;align-items:center;padding:8px;border:1px solid transparent;border-radius:8px;cursor:pointer;margin-bottom:4px}
+.hero-btn.active{border-color:#e6d5a0;background:rgba(230,213,160,.08)}
+.hero-btn img{width:36px;height:36px;border-radius:6px;object-fit:cover}
+.hero-btn span{font-size:10px}
+.center{position:fixed;left:280px;right:340px;top:56px;bottom:0;z-index:0;background:#0e0e10}
+.center img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block}
+.center:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(14,14,16,.8) 0%,rgba(14,14,16,.15) 30%,rgba(14,14,16,.15) 70%,rgba(14,14,16,.9) 100%)}
+.right{position:fixed;right:0;top:56px;bottom:0;width:340px;background:rgba(23,23,27,.92);border-left:1px solid #23232a;overflow:auto;padding:10px;z-index:5}
 .skill{display:flex;gap:8px;background:#17171b;border:1px solid #23232a;border-radius:10px;padding:8px;margin-bottom:8px}
-.icon{width:54px;height:54px;border-radius:8px;overflow:hidden;background:#1e1e22;flex-shrink:0}
+.icon{width:48px;height:48px;border-radius:8px;overflow:hidden;background:#1e1e22;flex-shrink:0}
 .icon img{width:100%;height:100%;object-fit:cover;display:block}
-.sname{font-size:11px;font-weight:700}.badge{font-size:6px;background:#1e1e22;border:1px solid #2a2a32;padding:1px 4px;border-radius:3px;margin-left:4px;color:#8a8678}
-.sdesc{font-size:9px;color:#8b8b95;line-height:1.3;margin-top:2px}.smeta{font-size:7px;color:#5e5e68;margin-top:2px}
-.btn{margin-top:10px;padding:10px;background:rgba(230,213,160,.12);border:1px solid #e6d5a0;color:#e6d5a0;text-align:center;font-size:8px;letter-spacing:.2em;cursor:pointer}
+.sname{font-size:10px;font-weight:700}.badge{font-size:5px;background:#1e1e22;border:1px solid #2a2a32;padding:1px 3px;border-radius:3px;margin-left:4px;color:#8a8678}
+.sdesc{font-size:8px;color:#8b8b95;margin-top:2px;line-height:1.3}.smeta{font-size:6px;color:#5e5e68;margin-top:2px}
 </style>
 </head>
 <body>
-<div class="bg"><img src="heroes/lion-warden.jpg"></div>
-<div class="top"><h1>LION WARDEN</h1><div onclick="location.href='index.html'" style="cursor:pointer">✕</div></div>
-<div class="left">
-<div class="skill"><div class="icon"><img src="heroes/icon_nepokolebimaya_stena.jpg"></div><div><div class="sname">Непоколебимая Стена <span class="badge">PASSIVE</span></div><div class="sdesc">Каждый блок +5% DEF до 25%</div><div class="smeta">Мана: 0</div></div></div>
-<div class="skill"><div class="icon"><img src="heroes/icon_udar_lva.jpg"></div><div><div class="sname">Удар Льва <span class="badge">1</span></div><div class="sdesc">Стан 1 раунд, 150% урона, игнор 30% брони</div><div class="smeta">КД: 4 • Мана: 10</div></div></div>
-<div class="skill"><div class="icon"><img src="heroes/icon_imperskiy_bastion.jpg"></div><div><div class="sname">Имперский Бастион <span class="badge">2</span></div><div class="sdesc">3 раунда блок стрел, 50% отражение</div><div class="smeta">КД: 12 • Мана: 30</div></div></div>
-<div class="skill"><div class="icon"><img src="heroes/icon_rassekayushchiy_udar.jpg"></div><div><div class="sname">Рассекающий удар <span class="badge">3</span></div><div class="sdesc">220% AOE, 5% HP за хит</div><div class="smeta">КД: 6 • Мана: 5</div></div></div>
-<div class="skill"><div class="icon"><img src="heroes/icon_avatar_imperii.jpg"></div><div><div class="sname">Аватар Империи <span class="badge">4</span></div><div class="sdesc">4 льва духа 120% + щит 15% HP</div><div class="smeta">КД: 25 • Мана: 50</div></div></div>
-</div>
-<div class="right">
-<input id="name" value="VOLAND 1337" style="width:100%;padding:8px;background:#0e0e10;border:1px solid #3a3a42;color:#e8dcc0">
-<div class="btn" id="btn">CONFIRM CHAMPION</div>
-</div>
+<div class="top"><h1>8 CHAMPIONS</h1><div onclick="location.href='index.html'" style="cursor:pointer;font-size:12px">✕</div></div>
+
+<div class="left" id="list"></div>
+<div class="center"><img id="heroImg" src="assets/heroes/warrior-m.webp"></div>
+<div class="right" id="skills"></div>
+
 <script>
-document.getElementById('btn').onclick=function(){var v=document.getElementById('name').value.trim();if(v.length<3)return;localStorage.setItem('voland_player_name',v);localStorage.setItem('voland_hero','lion-warden');location.href='index.html'}
+const heroes=[
+{id:'archer-f',name:'WILD PATH',img:'assets/heroes/archer-f.webp',skills:[
+{name:'Тропы Зверя',badge:'PASSIVE',icon:'heroes/icon_tropy_zverya.jpg',desc:'При уклонении след. удар 100% крит',meta:'Мана: 0'},
+{name:'Двойной Выстрел',badge:'1',icon:'heroes/icon_dvoynoy_vystrel.jpg',desc:'2 стрелы по 100% каждая',meta:'КД: 3 • Мана: 5'},
+{name:'Ядовитая Лиана',badge:'2',icon:'heroes/icon_yadovitaya_liana.jpg',desc:'Стан 1 раунд + яд 100% 3 раунда',meta:'КД: 10 • Мана: 15'},
+{name:'Глаз Ястреба',badge:'3',icon:'heroes/icon_glaz_yastreba.jpg',desc:'+25% крит, игнор 20% брони 4 раунда',meta:'КД: 20 • Мана: 20'},
+{name:'Буря Стрел',badge:'4',icon:'heroes/icon_burya_strel.jpg',desc:'12 стрел по 80% + 25% стан',meta:'КД: 25 • Мана: 30'}
+]},
+{id:'archer-m',name:'DARK RANGER',img:'assets/heroes/archer-m.webp',skills:[
+{name:'Метка Тени',badge:'PASSIVE',icon:'heroes/icon_metka_teni.jpg',desc:'+200% урона по метке',meta:'Мана: 0'},
+{name:'Беглый выстрел',badge:'1',icon:'heroes/icon_begliy_vystrel.jpg',desc:'200% урона ближайшему',meta:'КД: 3 • Мана: 5'},
+{name:'Шаг в Ничто',badge:'2',icon:'heroes/icon_shag_v_nichto.jpg',desc:'Инвиз 3 раунда, след. крит 100%',meta:'КД: 20 • Мана: 25'},
+{name:'Призрачная Стрела',badge:'3',icon:'heroes/icon_prizrachnaya_strela.jpg',desc:'140% + 33% стан, до 3 целей',meta:'КД: 5 • Мана: 20'},
+{name:'Залп Бездны',badge:'4',icon:'heroes/icon_zalp_bezdny.jpg',desc:'7 стрел по 100%, в 1 цель 700%',meta:'КД: 25 • Мана: 40'}
+]},
+{id:'archmage-m',name:'AZURE SAGE',img:'assets/heroes/archmage-m.webp',skills:[
+{name:'Искривление Времени',badge:'PASSIVE',icon:'heroes/icon_iskrivlenie_vremeni.jpg',desc:'Каждое заклинание +10% урона, 5 стаков = +50%',meta:'5 стаков'},
+{name:'Ледяное Копье',badge:'1',icon:'heroes/icon_ledyanoe_kopye.jpg',desc:'250% + -20% DEF',meta:'КД: 3 • Мана: 10'},
+{name:'Сфера Бури',badge:'2',icon:'heroes/icon_sfera_buri.jpg',desc:'3 раунда по 160% 3 цели',meta:'КД: 10 • Мана: 20'},
+{name:'Лавина',badge:'3',icon:'heroes/icon_lavina.jpg',desc:'300% всем',meta:'КД: 15 • Мана: 30'},
+{name:'Аннигиляция Времени',badge:'4',icon:'heroes/icon_annigilyatsiya_vremeni.jpg',desc:'Стан 3 раунда + 350% взрыв',meta:'КД: 25 • Мана: 50'}
+]},
+{id:'mage-f-new',name:'VOLCANIC',img:'assets/heroes/mage-f-new.webp',skills:[
+{name:'Сердце Кальдеры',badge:'PASSIVE',icon:'heroes/icon_serdtse_kaldery.jpg',desc:'Каждое 4 заклинание 100% AOE 2 раунда',meta:'Мана: 20'},
+{name:'Огненный Шар',badge:'1',icon:'heroes/icon_ognennyy_shar.jpg',desc:'150% + поджог 20% 2 раунда',meta:'КД: 4 • Мана: 15'},
+{name:'Извержение',badge:'2',icon:'heroes/icon_izverzhenie.jpg',desc:'200% AOE + лава 50% 3 раунда',meta:'КД: 12 • Мана: 25'},
+{name:'Метеор',badge:'3',icon:'heroes/icon_meteor.jpg',desc:'500% + 300% волной',meta:'КД: 20 • Мана: 50'},
+{name:'Судный День',badge:'4',icon:'heroes/icon_sudnyy_den.jpg',desc:'4 метеора 200% + финал 400%',meta:'КД: 25 • Мана: 100'}
+]},
+{id:'necro-f-new',name:'AMETHYST',img:'assets/heroes/necro-f-new.webp',skills:[
+{name:'Шепот Аметиста',badge:'PASSIVE',icon:'heroes/icon_shepot_ametista.jpg',desc:'Каждое 3-е призывает духа 100% 3 раунда',meta:'+5 маны/раунд'},
+{name:'Проклятие Душ',badge:'1',icon:'heroes/icon_proklyatie_dush.jpg',desc:'200% + кража 5 маны, -15% урона врага',meta:'КД: 3 • Мана: 10'},
+{name:'Аметистовая Тюрьма',badge:'2',icon:'heroes/icon_ametistovaya_tyurma.jpg',desc:'Стан AOE 1 раунд + 300% взрыв',meta:'КД: 10 • Мана: 15'},
+{name:'Похищение Жизни',badge:'3',icon:'heroes/icon_pokhishchenie_zhizni.jpg',desc:'Связь 4 раунда, 30% отражение и хил',meta:'КД: 18 • Мана: 30'},
+{name:'Аметистовый Закат',badge:'4',icon:'heroes/icon_ametistovyy_zakat.jpg',desc:'5 душ по 200% + стан, в 1 цель 1000%',meta:'КД: 25 • Мана: 100'}
+]},
+{id:'necro-m',name:'GRAVELORD',img:'assets/heroes/necro-m.webp',skills:[
+{name:'Костяной Легион',badge:'PASSIVE',icon:'heroes/icon_kostyanoy_legion.jpg',desc:'Каждый раунд 1 скелет 50%, макс 3',meta:'Бессмертны'},
+{name:'Костяное Копье',badge:'1',icon:'heroes/icon_kostyanoe_kopye.jpg',desc:'150% + +25% урон саммонов 2 раунда',meta:'КД: 4 • Мана: 15'},
+{name:'Костяной Щит',badge:'2',icon:'heroes/icon_kostyanoy_shchit.jpg',desc:'Щит 20% HP, взрыв 300% AOE',meta:'КД: 10 • Мана: 30'},
+{name:'Поднять Мертвых',badge:'3',icon:'heroes/icon_podnyat_mertvykh.jpg',desc:'2 скелета подрывника 200% и 300%',meta:'КД: 18 • Мана: 30'},
+{name:'Армия Погибели',badge:'4',icon:'heroes/icon_armiya_pogibeli.jpg',desc:'5 скелетов 50% на 3 раунда',meta:'КД: 25 • Мана: 100'}
+]},
+{id:'warrior-f',name:'IRON VOW',img:'assets/heroes/warrior-f.webp',skills:[
+{name:'Клятва Стаи',badge:'PASSIVE',icon:'heroes/icon_klyatva_stai.jpg',desc:'При HP <30% +50% урона и 30% лайфстил',meta:'Мана: 0'},
+{name:'Рассекающий Волк',badge:'1',icon:'heroes/icon_rassekayushchiy_volk.jpg',desc:'2 удара по 110%',meta:'КД: 3 • Мана: 5'},
+{name:'Щит Волчьего Вожака',badge:'2',icon:'heroes/icon_shchit_volchego_vozhaka.jpg',desc:'Блок 50% 4 раунда, контратака 350%',meta:'КД: 15 • Мана: 20'},
+{name:'Зов Стаи',badge:'3',icon:'heroes/icon_zov_stai.jpg',desc:'Стан 1 врага, остальным 200% AOE',meta:'КД: 15 • Мана: 20'},
+{name:'Альфа Хищник',badge:'4',icon:'heroes/icon_alfa_khishchnik.jpg',desc:'Волк 5 раундов +50% HP +30% урона',meta:'КД: 20 • Мана: 20'}
+]},
+{id:'warrior-m',name:'LION WARDEN',img:'assets/heroes/warrior-m.webp',skills:[
+{name:'Непоколебимая Стена',badge:'PASSIVE',icon:'heroes/icon_nepokolebimaya_stena.jpg',desc:'Каждый блок +5% DEF до 25%',meta:'Мана: 0'},
+{name:'Удар Льва',badge:'1',icon:'heroes/icon_udar_lva.jpg',desc:'Стан 1 раунд 150% игнор 30% брони',meta:'КД: 4 • Мана: 10'},
+{name:'Имперский Бастион',badge:'2',icon:'heroes/icon_imperskiy_bastion.jpg',desc:'3 раунда блок стрел 50% отражение',meta:'КД: 12 • Мана: 30'},
+{name:'Рассекающий удар',badge:'3',icon:'heroes/icon_rassekayushchiy_udar.jpg',desc:'220% AOE 5% HP за хит',meta:'КД: 6 • Мана: 5'},
+{name:'Аватар Империи',badge:'4',icon:'heroes/icon_avatar_imperii.jpg',desc:'4 льва духа 120% + щит 15% HP',meta:'КД: 25 • Мана: 50'}
+]}
+];
+
+const list=document.getElementById('list');
+const heroImg=document.getElementById('heroImg');
+const skillsBox=document.getElementById('skills');
+
+function renderList(){
+list.innerHTML='';
+heroes.forEach(h=>{
+const d=document.createElement('div');
+d.className='hero-btn';
+d.innerHTML=`<img src="${h.img}"><span>${h.name}</span>`;
+d.onclick=()=>selectHero(h.id);
+d.id='btn-'+h.id;
+list.appendChild(d);
+});
+}
+function selectHero(id){
+const h=heroes.find(x=>x.id===id);
+document.querySelectorAll('.hero-btn').forEach(b=>b.classList.remove('active'));
+document.getElementById('btn-'+id).classList.add('active');
+heroImg.src=h.img;
+skillsBox.innerHTML=`<div style="font-size:9px;letter-spacing:.3em;color:#6b6875;text-align:center;margin-bottom:8px">${h.name} — SKILLS</div>`+
+h.skills.map(s=>`<div class="skill"><div class="icon"><img src="${s.icon}"></div><div><div class="sname">${s.name} <span class="badge">${s.badge}</span></div><div class="sdesc">${s.desc}</div><div class="smeta">${s.meta}</div></div></div>`).join('');
+localStorage.setItem('voland_hero',id);
+}
+renderList();
+selectHero('archer-f');
 </script>
 </body>
 </html>
