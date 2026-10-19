@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>page2.html - EN ONLY - 100% SAFE</title>
+<title>page2 - ALL HEROES</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#0e0e10;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;font-family:Inter,sans-serif;color:#e6e0cc}
-.frame{width:100%;max-width:1280px;display:grid;grid-template-columns:380px 1fr 380px;background:#121214;border:1px solid #23232a;min-height:780px}
+.frame{width:100%;max-width:1280px;display:grid;grid-template-columns:380px 1fr 380px;background:#121214;border:1px solid #23232a;box-shadow:0 20px 60px rgba(0,0,0,.8);min-height:780px}
 .left{background:#121214;padding:18px;border-right:1px solid #23232a;overflow-y:auto;max-height:90vh}
 .center{position:relative;background:#0c1218;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .center img.hero{width:100%;height:100%;object-fit:cover;display:block}
@@ -16,7 +16,7 @@ body{background:#0e0e10;min-height:100vh;display:flex;align-items:center;justify
 .right-header h1{font-family:Cinzel;font-size:20px;color:#e8dcc0;letter-spacing:.15em}.sub{font-size:7px;color:#8a8678;letter-spacing:.25em;margin-top:6px}
 .close{width:26px;height:26px;border-radius:50%;border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;color:#6b6875;cursor:pointer}
 .skill{background:#17171b;border:1px solid #23232a;border-radius:12px;padding:11px;display:flex;gap:11px;margin-bottom:10px}
-.skill .icon{width:64px;height:64px;border-radius:12px;overflow:hidden;flex-shrink:0;background:#1e1e22;border:1px solid #2a2a32}.skill .icon img{width:100%;height:100%;object-fit:cover;display:block}
+.skill .icon{width:64px;height:64px;border-radius:12px;overflow:hidden;flex-shrink:0;background:#1e1e22;border:1px solid #2a2a32;display:flex;align-items:center;justify-content:center;font-size:20px}.skill .icon img{width:100%;height:100%;object-fit:cover;display:block}
 .sname{font-size:12px;font-weight:700;color:#e6e0cc}.badge{font-size:7px;background:#1e1e22;border:1px solid #2a2a32;padding:2px 5px;border-radius:4px;color:#8a8678;margin-left:6px}
 .sdesc{font-size:10px;color:#8b8b95;line-height:1.4;margin-top:3px}.smeta{font-size:7.5px;color:#5e5e68;margin-top:5px}
 .name-block{background:#2a2a2e;border:1px solid #3a3a42;margin:16px;padding:10px}.name-block label{font-size:8px;letter-spacing:.2em;color:#8a8678;display:block;margin-bottom:6px}.name-block input{width:100%;background:#0e0e10;border:1px solid #3a3a42;color:#e8dcc0;padding:9px 10px;font-size:11px;outline:none}
@@ -26,148 +26,96 @@ body{background:#0e0e10;min-height:100vh;display:flex;align-items:center;justify
 .hero-center{display:none;width:100%;height:100%}.hero-center.active{display:block}
 .hero-right{display:none}.hero-right.active{display:block}
 .nav{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1a1a1e;border:1px solid #2a2a32;border-radius:20px;padding:6px 10px;display:flex;gap:6px;z-index:100;flex-wrap:wrap;max-width:90vw;justify-content:center}
-.nav button{background:#121214;border:1px solid #2a2a32;color:#8a8678;padding:6px 10px;border-radius:12px;font-size:8px;cursor:pointer}
+.nav button{background:#121214;border:1px solid #2a2a32;color:#8a8678;padding:6px 10px;border-radius:12px;font-size:8px;cursor:pointer;letter-spacing:.1em}
 .nav button.active{background:#e6d5a0;color:#0e0e10;border-color:#e6d5a0}
 </style>
 </head>
 <body>
 <div class="frame">
 <div class="left">
-<div style="font-size:9px;letter-spacing:.3em;color:#6b6875;text-align:center;margin-bottom:14px" id="leftTitle">SKILLS — LION WARDEN</div>
+<div style="font-size:9px;letter-spacing:.3em;color:#6b6875;text-align:center;margin-bottom:14px" id="leftTitle">SKILLS</div>
 
-<div id="left-lion-warden" class="hero-panel active">
-<div class="skill"><div class="icon"><img src="heroes/icon_nepokolebimaya_stena.jpg"></div><div><div class="sname">Unbreakable Wall <span class="badge">PASSIVE</span></div><div class="sdesc">Each block +5% DEF stacks up to 25%. Holds as long as Empire stands.</div><div class="smeta">Mana: 0 • DEF Stacks</div></div></div>
-<div class="skill"><div class="icon"><img src="heroes/icon_udar_lva.jpg"></div><div><div class="sname">Lion Strike <span class="badge">1</span></div><div class="sdesc">Powerful shield bash, stun 1 round, 150% damage. Ignores 30% armor.</div><div class="smeta">CD: 4 • Mana: 10</div></div></div>
-<div class="skill"><div class="icon"><img src="heroes/icon_imperskiy_bastion.jpg"></div><div><div class="sname">Imperial Bastion <span class="badge">2</span></div><div class="sdesc">Deploys lion bastion for 3 rounds. Blocks all arrows, reflects 50% damage.</div><div class="smeta">CD: 12 • Mana: 30</div></div></div>
-<div class="skill"><div class="icon"><img src="heroes/icon_rassekayushchiy_udar.jpg"></div><div><div class="sname">Cleave <span class="badge">3</span></div><div class="sdesc">Circular lion sword slash 220% damage. Each hit restores 5% HP.</div><div class="smeta">CD: 6 • Mana: 5 • AOE</div></div></div>
-<div class="skill"><div class="icon"><img src="heroes/icon_avatar_imperii.jpg"></div><div><div class="sname">Avatar of Empire <span class="badge">4</span></div><div class="sdesc">ULTIMATE: Summons 4 golden lion spirits. Each 120% damage + 15% HP shield.</div><div class="smeta">CD: 25 • Mana: 50</div></div></div>
-</div>
-
-<div id="left-archer-m" class="hero-panel">
-<div class="skill"><div class="icon"><img src="heroes/icon_metka_teni.jpg"></div><div><div class="sname">Shadow Mark <span class="badge">PASSIVE</span></div><div class="sdesc">Every 2nd attack applies Shadow Mark for 3 rounds. Marked targets take +200% arrow damage. Kill restores 15 mana.</div><div class="smeta">CD: - • Mana: 0</div></div></div>
-<div class="skill"><div class="icon"><img src="heroes/icon_begliy_vistrel.jpg"></div><div><div class="sname">Quick Shot <span class="badge">1</span></div><div class="sdesc">Shoots nearest enemy for 200% damage.</div><div class="smeta">CD: 3 • Mana: 5 • 200%</div></div></div>
-<div class="skill"><div class="icon"><img src="heroes/icon_shag_v_nichto.jpg"></div><div><div class="sname">Step Into Nothing <span class="badge">2</span></div><div class="sdesc">Invisible for 3 rounds. Next attack in invis guaranteed crit and breaks invis.</div><div class="smeta">CD: 20 • Mana: 25</div></div></div>
-<div class="skill"><div class="icon"><img src="heroes/icon_prizrachnaya_strela.jpg"></div><div><div class="sname">Ghost Arrow <span class="badge">3</span></div><div class="sdesc">Piercing arrow through enemies. 140% damage, 33% stun 1 round. Pierces up to 3.</div><div class="smeta">CD: 5 • Mana: 20</div></div></div>
-<div class="skill"><div class="icon"><img src="heroes/icon_zalp_bezdny.jpg"></div><div><div class="sname">Abyss Volley <span class="badge">4</span></div><div class="sdesc">ULTIMATE: 7 arrows 100% each. If single target - all hit same target 700%.</div><div class="smeta">CD: 25 • Mana: 40</div></div></div>
+<div id="left-archer-m" class="hero-panel active">
+<div class="skill"><div class="icon">👁️</div><div><div class="sname">Метка Тени <span class="badge">PASSIVE</span></div><div class="sdesc">Каждая 2-я атака накладывает Метку Тени на 3 раунда. Отмеченные цели получают +200% урона от твоих стрел. Убийство отмеченной цели восстанавливает 15 маны.</div><div class="smeta">КД: — • Мана: 0</div></div></div>
+<div class="skill"><div class="icon">🏹</div><div><div class="sname">Беглый выстрел <span class="badge">1</span></div><div class="sdesc">Стреляет по ближайшему врагу, нанося 200% урона.</div><div class="smeta">КД: 3 раунда • Мана: 5 • Урон: 200%</div></div></div>
+<div class="skill"><div class="icon">🌑</div><div><div class="sname">Шаг в Ничто <span class="badge">2</span></div><div class="sdesc">Становится невидимым на 3 раунда. Следующая атака в инвизе критует гарантированно и снимает эффект инвиза.</div><div class="smeta">КД: 20 раундов • Мана: 25</div></div></div>
+<div class="skill"><div class="icon">💫</div><div><div class="sname">Призрачная Стрела <span class="badge">3</span></div><div class="sdesc">Выпускает стрелу, проходящую сквозь врагов. Наносит +140% урона и оглушает на 1 раунд с вероятностью 33%. Пронзает до 3 целей.</div><div class="smeta">КД: 5 раундов • Мана: 20 • Урон: 185×1.4</div></div></div>
+<div class="skill"><div class="icon">🌌</div><div><div class="sname">Залп Бездны <span class="badge">4</span></div><div class="sdesc">ULTIMATE: Выпускает 7 стрел. Каждая стрела наносит +100% урона одному противнику. Если цель одна — весь урон попадает в неё +700% урона.</div><div class="smeta">КД: 25 раундов • Мана: 40 • Урон: +700% в одну цель</div></div></div>
 </div>
 
 <div id="left-archer-f" class="hero-panel">
-<div class="skill"><div class="icon"><img src="heroes/icon_tropy_zverya.jpg"></div><div><div class="sname">Beast Trails <span class="badge">PASSIVE</span></div><div class="sdesc">On dodge, next hit 100% crit.</div><div class="smeta">CD: - • Mana: 0</div></div></div>
-<div class="skill"><div class="icon"><img src="heroes/icon_dvoynoy_vystrel.jpg"></div><div><div class="sname">Double Shot <span class="badge">1</span></div><div class="sdesc">2 arrows 100% each. If both hit same target - bleed 25% for 4 rounds.</div><div class="smeta">CD: 3 • Mana: 5</div></div></div>
-<div class="skill"><div class="icon"><img src="heroes/icon_yadovitaya_liana.jpg"></div><div><div class="sname">Poison Vine <span class="badge">2</span></div><div class="sdesc">Throws vine, stuns 1 round and poisons 3 rounds 100% damage.</div><div class="smeta">CD: 10 • Mana: 15</div></div></div>
-<div class="skill"><div class="icon"><img src="heroes/icon_glaz_yastreba.jpg"></div><div><div class="sname">Hawk Eye <span class="badge">3</span></div><div class="sdesc">4 rounds sees all enemies even in invis, +25% crit, attacks ignore 20% armor.</div><div class="smeta">CD: 20 • Mana: 20</div></div></div>
-<div class="skill"><div class="icon"><img src="heroes/icon_burya_strel.jpg"></div><div><div class="sname">Arrow Storm <span class="badge">4</span></div><div class="sdesc">ULTIMATE: Jump, 12 arrows over 3 rounds AOE, each 80% + 25% stun 1 round.</div><div class="smeta">CD: 25 • Mana: 30</div></div></div>
+<div class="skill"><div class="icon">🐾</div><div><div class="sname">Тропы Зверя <span class="badge">PASSIVE</span></div><div class="sdesc">При уклонении, следующий удар 100% критический.</div><div class="smeta">КД: — • Мана: 0</div></div></div>
+<div class="skill"><div class="icon">🎯</div><div><div class="sname">Двойной Выстрел <span class="badge">1</span></div><div class="sdesc">Выстреливает 2 стрелы по 100% урона каждая. Если обе попали в одну цель — кровотечение 25% урона на 4 раунда.</div><div class="smeta">КД: 3 раунда • Мана: 5 • Урон: 200% + дот</div></div></div>
+<div class="skill"><div class="icon">🌿</div><div><div class="sname">Ядовитая Лиана <span class="badge">2</span></div><div class="sdesc">Бросает лиану в ближайшего врага. Враг оглушается на 1 раунд и отравляется на 3 раунда. Отравленный враг получает 100% урона в течение 3 раундов.</div><div class="smeta">КД: 10 раундов • Мана: 15 • Стан 1 раунд + дот</div></div></div>
+<div class="skill"><div class="icon">🦅</div><div><div class="sname">Глаз Ястреба <span class="badge">3</span></div><div class="sdesc">На 4 раунда видит всех врагов в радиусе (даже в инвизе) и получает +25% крит шанс. Атаки игнорируют 20% брони.</div><div class="smeta">КД: 20 раундов • Мана: 20 • Крит: +25%</div></div></div>
+<div class="skill"><div class="icon">🌪️</div><div><div class="sname">Буря Стрел <span class="badge">4</span></div><div class="sdesc">ULTIMATE: Прыжок в воздух, 12 стрел за 3 раунда по области. Каждая 80% урона + 25% шанс стана на 1 раунд.</div><div class="smeta">КД: 25 раундов • Мана: 30 • Урон: до 960% + стан</div></div></div>
 </div>
 
 <div id="left-archmage-m" class="hero-panel">
-<div class="skill"><div class="icon"><img src="heroes/icon_iskrivlenie_vremeni.jpg"></div><div><div class="sname">Time Warp <span class="badge">PASSIVE</span></div><div class="sdesc">Each spell +10% base damage stacks 5 rounds. At 5 stacks next spell +50%.</div><div class="smeta">Stacks 5 • +50% bonus</div></div></div>
-<div class="skill"><div class="icon"><img src="heroes/icon_ledyanoe_kopye.jpg"></div><div><div class="sname">Ice Spear <span class="badge">1</span></div><div class="sdesc">250% damage and -20% DEF.</div><div class="smeta">CD: 3 • Mana: 10</div></div></div>
-<div class="skill"><div class="icon"><img src="heroes/icon_sfera_buri.jpg"></div><div><div class="sname">Storm Sphere <span class="badge">2</span></div><div class="sdesc">Sphere 3 rounds lightning 3 targets 160% each round.</div><div class="smeta">CD: 10 • Mana: 20</div></div></div>
-<div class="skill"><div class="icon"><img src="heroes/icon_lavina.jpg"></div><div><div class="sname">Avalanche <span class="badge">3</span></div><div class="sdesc">Avalanche all enemies 300% damage.</div><div class="smeta">CD: 15 • Mana: 30</div></div></div>
-<div class="skill"><div class="icon"><img src="heroes/icon_annigilyatsiya_vremeni.jpg"></div><div><div class="sname">Time Annihilation <span class="badge">4</span></div><div class="sdesc">ULTIMATE: Freeze time 3 rounds (stun), then explosion 350% all.</div><div class="smeta">CD: 25 • Mana: 50</div></div></div>
+<div class="skill"><div class="icon">⏳</div><div><div class="sname">Искривление Времени <span class="badge">PASSIVE</span></div><div class="sdesc">Каждое заклинание увеличивает базовый урон на 10%, стакается 5 раундов. При 5 стаках всё следующее заклинание кастуется +50% урона.</div><div class="smeta">Стаки: 5 раундов • Бонус: +50% базового урона</div></div></div>
+<div class="skill"><div class="icon">❄️</div><div><div class="sname">Ледяное Копье <span class="badge">1</span></div><div class="sdesc">Бросает ледяное копье в спину своего врага, нанося +250% урона и уменьшает его защиту на 20%.</div><div class="smeta">КД: 3 раундов • Мана: 10 • Урон: 235×2,5 • DEF -20%</div></div></div>
+<div class="skill"><div class="icon">⚡</div><div><div class="sname">Сфера Бури <span class="badge">2</span></div><div class="sdesc">Создает сферу, которая 3 раунда бьет молниями ближайших врагов (3 цели) по +160% урона каждый раунд.</div><div class="smeta">КД: 10 раундов • Мана: 20 • Тиков: 3×235×160%</div></div></div>
+<div class="skill"><div class="icon">🏔️</div><div><div class="sname">Лавина <span class="badge">3</span></div><div class="sdesc">Вызывает лавину, которая наносит всем врагам +300% урона.</div><div class="smeta">КД: 15 раундов • Мана: 30 • Урон: 235×3 всем врагам</div></div></div>
+<div class="skill"><div class="icon">🌌</div><div><div class="sname">Аннигиляция Времени <span class="badge">4</span></div><div class="sdesc">ULTIMATE: Замораживает время на 3 раунда (враги не могут двигаться/атаковать) (стан), затем взрыв на +350% урона всем.</div><div class="smeta">КД: 25 раундов • Мана: 50 • Урон: 350% + контроль 3 раундов</div></div></div>
 </div>
 
 <div id="left-mage-f-new" class="hero-panel">
-<div class="skill"><div class="icon"><img src="heroes/icon_serdtse_kaldery.jpg"></div><div><div class="sname">Caldera Heart <span class="badge">PASSIVE</span></div><div class="sdesc">Every 4th spell ignites ground 2 rounds 100% damage all enemies.</div><div class="smeta">CD: 4 • Mana: 20</div></div></div>
-<div class="skill"><div class="icon"><img src="heroes/icon_ognennyy_shar.jpg"></div><div><div class="sname">Fireball <span class="badge">1</span></div><div class="sdesc">150% damage + burn 20% 2 rounds. On crit - hits all.</div><div class="smeta">CD: 4 • Mana: 15</div></div></div>
-<div class="skill"><div class="icon"><img src="heroes/icon_izverzhenie.jpg"></div><div><div class="sname">Eruption <span class="badge">2</span></div><div class="sdesc">Explosion 200% AOE + lava 50% per round 3 rounds all.</div><div class="smeta">CD: 12 • Mana: 25</div></div></div>
-<div class="skill"><div class="icon"><img src="heroes/icon_meteor.jpg"></div><div><div class="sname">Meteor <span class="badge">3</span></div><div class="sdesc">500% all + shockwave 300% next round all.</div><div class="smeta">CD: 20 • Mana: 50</div></div></div>
-<div class="skill"><div class="icon"><img src="heroes/icon_sudnyy_den.jpg"></div><div><div class="sname">Doomsday <span class="badge">4</span></div><div class="sdesc">ULTIMATE: 4 meteors over 4 rounds 200% each, last super-meteor 400% + burn 50% 2 rounds.</div><div class="smeta">CD: 25 • Mana: 100</div></div></div>
+<div class="skill"><div class="icon">🌋</div><div><div class="sname">Сердце Кальдеры <span class="badge">PASSIVE</span></div><div class="sdesc">Каждое 4 заклинание поджигает землю на 2 раунда нанося 100% урона всем врагам.</div><div class="smeta">КД: 4 • Мана: 20 • Урон: 100% 2 раунда</div></div></div>
+<div class="skill"><div class="icon">🔥</div><div><div class="sname">Огненный Шар <span class="badge">1</span></div><div class="sdesc">Огненный шар наносит 150% урона + поджог 20% урона на 2 раунда. При крите — все враги получают урон.</div><div class="smeta">КД: 4 раунда • Мана: 15 • Урон: 150% + 20% дот</div></div></div>
+<div class="skill"><div class="icon">💥</div><div><div class="sname">Извержение <span class="badge">2</span></div><div class="sdesc">Взрыв под ногами, отбрасывает всех врагов и наносит 200% урона. Оставляет лаву на 3 раунда: 50% урона за раунд всем врагам.</div><div class="smeta">КД: 12 раундов • Мана: 25 • Урон 200% AOE + дот</div></div></div>
+<div class="skill"><div class="icon">☄️</div><div><div class="sname">Метеор <span class="badge">3</span></div><div class="sdesc">Падает метеор нанося 500% урона всем врагам. В следующем раунде ударная волна наносит еще 300% урона всем врагам.</div><div class="smeta">КД: 20 раундов • Мана: 50 • Урон 500% + 300% AOE</div></div></div>
+<div class="skill"><div class="icon">🌋</div><div><div class="sname">Судный День <span class="badge">4</span></div><div class="sdesc">ULTIMATE: 4 метеора за 4 раунда по области, каждый 200% урона. Последний — суперметеор 400% + поджог земли 50% урона на 2 раунда.</div><div class="smeta">КД: 25 раундов • Мана: 100 • Урон: 1000% AOE + дот</div></div></div>
 </div>
 
 <div id="left-necro-f-new" class="hero-panel">
-<div class="skill"><div class="icon"><img src="heroes/icon_shepot_ametista.jpg"></div><div><div class="sname">Amethyst Whisper <span class="badge">PASSIVE</span></div><div class="sdesc">Every 3rd spell summons amethyst spirit 3 rounds, 100% damage, +5 mana per round while alive.</div><div class="smeta">Spirit 100% • +5 mana</div></div></div>
-<div class="skill"><div class="icon"><img src="heroes/icon_proklyatie_dush.jpg"></div><div><div class="sname">Soul Curse <span class="badge">1</span></div><div class="sdesc">Beam 200% + steals 5 mana, debuff -15% enemy damage 4 rounds.</div><div class="smeta">CD: 3 • Mana: 10</div></div></div>
-<div class="skill"><div class="icon"><img src="heroes/icon_ametistovaya_tyurma.jpg"></div><div><div class="sname">Amethyst Prison <span class="badge">2</span></div><div class="sdesc">Traps all enemies in cage 1 round, then explosion 300% all.</div><div class="smeta">CD: 10 • Mana: 15</div></div></div>
-<div class="skill"><div class="icon"><img src="heroes/icon_pokhishchenie_zhizni.jpg"></div><div><div class="sname">Life Drain <span class="badge">3</span></div><div class="sdesc">Link 4 rounds: 30% damage you take reflected to enemy, 30% enemy damage heals you.</div><div class="smeta">CD: 18 • Mana: 30</div></div></div>
-<div class="skill"><div class="icon"><img src="heroes/icon_ametistovyy_zakat.jpg"></div><div><div class="sname">Amethyst Sunset <span class="badge">4</span></div><div class="sdesc">ULTIMATE: 5 souls 200% each + stun 1 round. If single target - all 5 hit it.</div><div class="smeta">CD: 25 • Mana: 100</div></div></div>
+<div class="skill"><div class="icon">🔮</div><div><div class="sname">Шепот Аметиста <span class="badge">PASSIVE</span></div><div class="sdesc">Каждое 3-е заклинание призывает аметистового духа на 3 раунда. Дух бьет на 100% урона заклинателя и дает тебе +5 маны за раунд пока жив.</div><div class="smeta">Дух: 100% урона • Мана: +5 за раунд</div></div></div>
+<div class="skill"><div class="icon">💜</div><div><div class="sname">Проклятие Душ <span class="badge">1</span></div><div class="sdesc">Луч света наносит 200% урона + крадет 5 маны у врага и накладывает Страх Душ: -15% урона врага на 4 раунда.</div><div class="smeta">КД: 3 раундов • Мана: 10 • -15% урона врага</div></div></div>
+<div class="skill"><div class="icon">👻</div><div><div class="sname">Аметистовая Тюрьма <span class="badge">2</span></div><div class="sdesc">Призыватель заключает всех врагов в клетку на 1 раунд. В конце раунда клетка взрывается нанося всем 300% урона.</div><div class="smeta">КД: 10 раундов • Мана: 15 • Контроль: Стан AOE 1 раунд</div></div></div>
+<div class="skill"><div class="icon">💀</div><div><div class="sname">Похищение Жизни <span class="badge">3</span></div><div class="sdesc">Связь с врагом на 4 раунда: 30% урона, который ты получаешь, отражается в врага, и 30% урона врага хилит тебя.</div><div class="smeta">КД: 18 раундов • Мана: 30 • 30% получаемого урона - отдача 30% лайфстил</div></div></div>
+<div class="skill"><div class="icon">🌌</div><div><div class="sname">Аметистовый Закат <span class="badge">4</span></div><div class="sdesc">ULTIMATE: Выпускает 5 аметистовых душ, каждая ищет врага и наносит 200% урона + станит на 1 раунд. Если враг один — все 5 попадают в него.</div><div class="smeta">КД: 25 раундов • Мана: 100 • Урон: до 1000% + стан 1 раунд</div></div></div>
 </div>
 
 <div id="left-necro-m" class="hero-panel">
-<div class="skill"><div class="icon"><img src="heroes/icon_kostyanoy_legion.jpg"></div><div><div class="sname">Bone Legion <span class="badge">PASSIVE</span></div><div class="sdesc">Each round 1 skeleton max 3, 50% your damage, immortal till end.</div><div class="smeta">Max 3</div></div></div>
-<div class="skill"><div class="icon"><img src="heroes/icon_kostyanoe_kopye.jpg"></div><div><div class="sname">Bone Spear <span class="badge">1</span></div><div class="sdesc">150% damage + Bone Vulnerability +25% damage from summons 2 rounds.</div><div class="smeta">CD: 4 • Mana: 15</div></div></div>
-<div class="skill"><div class="icon"><img src="heroes/icon_kostyanoy_shchit.jpg"></div><div><div class="sname">Bone Shield <span class="badge">2</span></div><div class="sdesc">Shield 20% max HP, on break explosion 300% all enemies.</div><div class="smeta">CD: 10 • Mana: 30</div></div></div>
-<div class="skill"><div class="icon"><img src="heroes/icon_podnyat_mertvykh.jpg"></div><div><div class="sname">Raise Dead <span class="badge">3</span></div><div class="sdesc">2 bomber skeletons: 200% all round 1, 300% all round 2.</div><div class="smeta">CD: 18 • Mana: 30</div></div></div>
-<div class="skill"><div class="icon"><img src="heroes/icon_armiya_pogibeli.jpg"></div><div><div class="sname">Doom Army <span class="badge">4</span></div><div class="sdesc">ULTIMATE: 5 skeletons 3 rounds 50% damage each.</div><div class="smeta">CD: 25 • Mana: 100</div></div></div>
+<div class="skill"><div class="icon">🦴</div><div><div class="sname">Костяной Легион <span class="badge">PASSIVE</span></div><div class="sdesc">Каждый раунд призывается по 1 скелету помощнику (макс 3). Скелеты наследуют 50% твоего урона. Скелеты бессмертны и воюют до конца боя.</div><div class="smeta">Скелет 50% урона • Макс скелетов: 3</div></div></div>
+<div class="skill"><div class="icon">☠️</div><div><div class="sname">Костяное Копье <span class="badge">1</span></div><div class="sdesc">Бросает кость, наносит +150% урона и накладывает Уязвимость Костей: +25% урон от саммонов на 2 раунда.</div><div class="smeta">КД: 4 раунда • Мана: 15 • +25% урона от саммонов</div></div></div>
+<div class="skill"><div class="icon">🛡️</div><div><div class="sname">Костяной Щит <span class="badge">2</span></div><div class="sdesc">Призывает щит из костей: 20% макс HP. При разрушении взрывается, нанося +300% урона всем врагам.</div><div class="smeta">КД: 10 раундов • Мана: 30 • Щит: 20% HP • Урон +300% AOE</div></div></div>
+<div class="skill"><div class="icon">👥</div><div><div class="sname">Поднять Мертвых <span class="badge">3</span></div><div class="sdesc">Воскрешает 2 скелетов подрывников. В 1 раунде 1 скелет взрывается и наносит 200% урона всем. Второй скелет взрывается во 2 раунде и наносит 300% урона всем.</div><div class="smeta">КД: 18 раундов • Мана: 30 • Саммоны: 2</div></div></div>
+<div class="skill"><div class="icon">💀</div><div><div class="sname">Армия Погибели <span class="badge">4</span></div><div class="sdesc">ULTIMATE: Призывает 5 скелетов на 3 раунда. Каждый скелет имеет 50% урона призывателя.</div><div class="smeta">КД: 25 раундов • Мана: 100 • Длительность: 3 раунда</div></div></div>
 </div>
 
 <div id="left-warrior-f" class="hero-panel">
-<div class="skill"><div class="icon"><img src="heroes/icon_klyatva_stai.jpg"></div><div><div class="sname">Pack Oath <span class="badge">PASSIVE</span></div><div class="sdesc">At HP below 30% +50% damage and +30% lifesteal.</div><div class="smeta">Mana: 0</div></div></div>
-<div class="skill"><div class="icon"><img src="heroes/icon_rassekayushchiy_volk.jpg"></div><div><div class="sname">Rending Wolf <span class="badge">1</span></div><div class="sdesc">2 sword hits 110% each.</div><div class="smeta">CD: 3 • Mana: 5 • 220%</div></div></div>
-<div class="skill"><div class="icon"><img src="heroes/icon_shchit_volchego_vozhaka.jpg"></div><div><div class="sname">Alpha Shield <span class="badge">2</span></div><div class="sdesc">Shield with wolf 4 rounds, 50% block chance, successful block counter 350%.</div><div class="smeta">CD: 15 • Mana: 20</div></div></div>
-<div class="skill"><div class="icon"><img src="heroes/icon_zov_stai.jpg"></div><div><div class="sname">Pack Call <span class="badge">3</span></div><div class="sdesc">Wolf howl stuns 1 enemy, all others 200% damage, stunned takes double.</div><div class="smeta">CD: 15 • Mana: 20</div></div></div>
-<div class="skill"><div class="icon"><img src="heroes/icon_alfa_khishchnik.jpg"></div><div><div class="sname">Alpha Predator <span class="badge">4</span></div><div class="sdesc">ULTIMATE: Wolf form 5 rounds +50% max HP +30% damage + bleed 100%.</div><div class="smeta">CD: 20 • Mana: 20</div></div></div>
+<div class="skill"><div class="icon">🐺</div><div><div class="sname">Клятва Стаи <span class="badge">PASSIVE</span></div><div class="sdesc">При HP &lt;30% урон +50% и +30% лайфстил от нанесенного урона.</div><div class="smeta">КД: — • Мана: 0</div></div></div>
+<div class="skill"><div class="icon">🗡️</div><div><div class="sname">Рассекающий Волк <span class="badge">1</span></div><div class="sdesc">2 удара мечом по 110% урона каждый.</div><div class="smeta">КД: 3 раунда • Мана: 5 • Урон: 220%</div></div></div>
+<div class="skill"><div class="icon">🛡️</div><div><div class="sname">Щит Волчьего Вожака <span class="badge">2</span></div><div class="sdesc">Поднимает щит с волком на 4 раунда, блокирует урон с вероятностью 50%. Успешный блок дает контратаку на 350% урона.</div><div class="smeta">КД: 15 раундов • Мана: 20 • Блок: 50%</div></div></div>
+<div class="skill"><div class="icon">🐾</div><div><div class="sname">Зов Стаи <span class="badge">3</span></div><div class="sdesc">Издает зов волка, который станит 1 врага, все остальные враги получают 200% урона, оглушенный враг получает урон 2 раза.</div><div class="smeta">КД: 15 раундов • Мана: 20 • Волки: 200% AOE + стан</div></div></div>
+<div class="skill"><div class="icon">🌕</div><div><div class="sname">Альфа Хищник <span class="badge">4</span></div><div class="sdesc">ULTIMATE: Превращается в волка на 5 раундов: +50% макс HP, +30% урона, атаки наносят кровотечение 100% урона.</div><div class="smeta">КД: 20 раундов • Мана: 20 • +50% макс HP +30% урона + дот</div></div></div>
+</div>
+
+<div id="left-lion-warden" class="hero-panel">
+<div class="skill"><div class="icon">🛡️</div><div><div class="sname">Непоколебимая Стена <span class="badge">PASSIVE</span></div><div class="sdesc">Стена щитов: каждый блок +5% DEF стакается до 25%. Не падает пока стоит Империя.</div><div class="smeta">Мана: 0 • Стаки DEF</div></div></div>
+<div class="skill"><div class="icon">🦁</div><div><div class="sname">Удар Льва <span class="badge">1</span></div><div class="sdesc">Мощный удар щитом льва, оглушает на 1 раунд и наносит 150% урона. Игнорирует 30% брони.</div><div class="smeta">КД: 4 • Мана: 10</div></div></div>
+<div class="skill"><div class="icon">🏰</div><div><div class="sname">Имперский Бастион <span class="badge">2</span></div><div class="sdesc">Ставит бастион льва на 3 раунда. Блокирует все стрелы и отражает 50% урона.</div><div class="smeta">КД: 12 • Мана: 30</div></div></div>
+<div class="skill"><div class="icon">⚔️</div><div><div class="sname">Рассекающий удар <span class="badge">3</span></div><div class="sdesc">Рассекает врагов мечом льва по кругу на 220% урона. Каждый хит восстанавливает 5% HP.</div><div class="smeta">КД: 6 • Мана: 5 • AOE</div></div></div>
+<div class="skill"><div class="icon">👑</div><div><div class="sname">Аватар Империи <span class="badge">4</span></div><div class="sdesc">ULTIMATE: Призывает 4 золотых льва духа. Каждый лев бьет на 120% урона и дает щит 15% HP.</div><div class="smeta">КД: 25 • Мана: 50</div></div></div>
 </div>
 
 </div>
 
 <div class="center">
-<div id="center-lion-warden" class="hero-center active"><img class="hero" src="heroes/icon_avatar_imperii.jpg" alt="LION WARDEN"></div>
-<div id="center-archer-m" class="hero-center"><img class="hero" src="heroes/icon_metka_teni.jpg"></div>
+<div id="center-archer-m" class="hero-center active"><img class="hero" src="heroes/icon_metka_teni.jpg" alt="archer-m"></div>
 <div id="center-archer-f" class="hero-center"><img class="hero" src="heroes/icon_tropy_zverya.jpg"></div>
 <div id="center-archmage-m" class="hero-center"><img class="hero" src="heroes/icon_iskrivlenie_vremeni.jpg"></div>
 <div id="center-mage-f-new" class="hero-center"><img class="hero" src="heroes/icon_serdtse_kaldery.jpg"></div>
 <div id="center-necro-f-new" class="hero-center"><img class="hero" src="heroes/icon_shepot_ametista.jpg"></div>
 <div id="center-necro-m" class="hero-center"><img class="hero" src="heroes/icon_kostyanoy_legion.jpg"></div>
 <div id="center-warrior-f" class="hero-center"><img class="hero" src="heroes/icon_klyatva_stai.jpg"></div>
+<div id="center-lion-warden" class="hero-center"><img class="hero" src="heroes/icon_avatar_imperii.jpg"></div>
 </div>
 
 <div class="right">
-<div class="right-header"><div><h1 id="heroName">LION WARDEN</h1><div class="sub" id="heroSub">IMPERIAL GUARD • WARRIOR • MALE</div></div><div class="close" onclick="location.href='index.html'">X</div></div>
+<div class="right-header"><div><h1 id="heroName">DARK RANGER</h1><div class="sub" id="heroSub">SHADOW RANGER • ARCHER • MALE</div></div><div class="close" onclick="location.href='index.html'">✕</div></div>
 <div class="name-block"><label>ENTER YOUR NAME</label><input id="nameInput" type="text" value="VOLAND 1337"></div>
-<div id="right-lion-warden" class="hero-right active"><div class="stats"><div class="stat"><div class="stat-head"><span class="label">HP</span><span class="val">1250</span></div><div class="bar"><span class="bar-fill" style="width:95%"></span></div></div><div class="stat"><div class="stat-head"><span class="label">DEF</span><span class="val">180</span></div><div class="bar"><span class="bar-fill" style="width:88%"></span></div></div><div class="stat"><div class="stat-head"><span class="label">DAMAGE</span><span class="val">175</span></div><div class="bar"><span class="bar-fill" style="width:58%"></span></div></div><div class="stat"><div class="stat-head"><span class="label">CRIT</span><span class="val">12%</span></div><div class="bar"><span class="bar-fill" style="width:26%"></span></div></div><div class="stat"><div class="stat-head"><span class="label">DODGE</span><span class="val">6%</span></div><div class="bar"><span class="bar-fill" style="width:22%"></span></div></div><div class="stat"><div class="stat-head"><span class="label">MANA</span><span class="val">220</span></div><div class="bar"><span class="bar-fill" style="width:56%"></span></div></div></div></div>
-<div id="right-archer-m" class="hero-right"><div class="stats"><div class="stat"><div class="stat-head"><span class="label">HP</span><span class="val">928</span></div><div class="bar"><span class="bar-fill" style="width:72%"></span></div></div><div class="stat"><div class="stat-head"><span class="label">DEF</span><span class="val">115</span></div><div class="bar"><span class="bar-fill" style="width:38%"></span></div></div><div class="stat"><div class="stat-head"><span class="label">DAMAGE</span><span class="val">185</span></div><div class="bar"><span class="bar-fill" style="width:65%"></span></div></div><div class="stat"><div class="stat-head"><span class="label">CRIT</span><span class="val">26%</span></div><div class="bar"><span class="bar-fill" style="width:60%"></span></div></div><div class="stat"><div class="stat-head"><span class="label">DODGE</span><span class="val">19%</span></div><div class="bar"><span class="bar-fill" style="width:85%"></span></div></div><div class="stat"><div class="stat-head"><span class="label">MANA</span><span class="val">210</span></div><div class="bar"><span class="bar-fill" style="width:52%"></span></div></div></div></div>
+
+<div id="right-archer-m" class="hero-right active"><div class="stats"><div class="stat"><div class="stat-head"><span class="label">HP</span><span class="val">928</span></div><div class="bar"><span class="bar-fill" style="width:72%"></span></div></div><div class="stat"><div class="stat-head"><span class="label">DEF</span><span class="val">115</span></div><div class="bar"><span class="bar-fill" style="width:38%"></span></div></div><div class="stat"><div class="stat-head"><span class="label">DAMAGE</span><span class="val">185</span></div><div class="bar"><span class="bar-fill" style="width:65%"></span></div></div><div class="stat"><div class="stat-head"><span class="label">CRIT</span><span class="val">26%</span></div><div class="bar"><span class="bar-fill" style="width:60%"></span></div></div><div class="stat"><div class="stat-head"><span class="label">DODGE</span><span class="val">19%</span></div><div class="bar"><span class="bar-fill" style="width:85%"></span></div></div><div class="stat"><div class="stat-head"><span class="label">MANA</span><span class="val">210</span></div><div class="bar"><span class="bar-fill" style="width:52%"></span></div></div></div></div>
 <div id="right-archer-f" class="hero-right"><div class="stats"><div class="stat"><div class="stat-head"><span class="label">HP</span><span class="val">890</span></div><div class="bar"><span class="bar-fill" style="width:68%"></span></div></div><div class="stat"><div class="stat-head"><span class="label">DEF</span><span class="val">98</span></div><div class="bar"><span class="bar-fill" style="width:32%"></span></div></div><div class="stat"><div class="stat-head"><span class="label">DAMAGE</span><span class="val">178</span></div><div class="bar"><span class="bar-fill" style="width:60%"></span></div></div><div class="stat"><div class="stat-head"><span class="label">CRIT</span><span class="val">28%</span></div><div class="bar"><span class="bar-fill" style="width:68%"></span></div></div><div class="stat"><div class="stat-head"><span class="label">DODGE</span><span class="val">25%</span></div><div class="bar"><span class="bar-fill" style="width:92%"></span></div></div><div class="stat"><div class="stat-head"><span class="label">MANA</span><span class="val">200</span></div><div class="bar"><span class="bar-fill" style="width:48%"></span></div></div></div></div>
 <div id="right-archmage-m" class="hero-right"><div class="stats"><div class="stat"><div class="stat-head"><span class="label">HP</span><span class="val">820</span></div><div class="bar"><span class="bar-fill" style="width:58%"></span></div></div><div class="stat"><div class="stat-head"><span class="label">DEF</span><span class="val">105</span></div><div class="bar"><span class="bar-fill" style="width:36%"></span></div></div><div class="stat"><div class="stat-head"><span class="label">DAMAGE</span><span class="val">235</span></div><div class="bar"><span class="bar-fill" style="width:82%"></span></div></div><div class="stat"><div class="stat-head"><span class="label">CRIT</span><span class="val">22%</span></div><div class="bar"><span class="bar-fill" style="width:52%"></span></div></div><div class="stat"><div class="stat-head"><span class="label">DODGE</span><span class="val">12%</span></div><div class="bar"><span class="bar-fill" style="width:38%"></span></div></div><div class="stat"><div class="stat-head"><span class="label">MANA</span><span class="val">340</span></div><div class="bar"><span class="bar-fill" style="width:88%"></span></div></div></div></div>
-<div id="right-mage-f-new" class="hero-right"><div class="stats"><div class="stat"><div class="stat-head"><span class="label">HP</span><span class="val">850</span></div><div class="bar"><span class="bar-fill" style="width:62%"></span></div></div><div class="stat"><div class="stat-head"><span class="label">DEF</span><span class="val">92</span></div><div class="bar"><span class="bar-fill" style="width:28%"></span></div></div><div class="stat"><div class="stat-head"><span class="label">DAMAGE</span><span class="val">260</span></div><div class="bar"><span class="bar-fill" style="width:90%"></span></div></div><div class="stat"><div class="stat-head"><span class="label">CRIT</span><span class="val">24%</span></div><div class="bar"><span class="bar-fill" style="width:56%"></span></div></div><div class="stat"><div class="stat-head"><span class="label">DODGE</span><span class="val">10%</span></div><div class="bar"><span class="bar-fill" style="width:32%"></span></div></div><div class="stat"><div class="stat-head"><span class="label">MANA</span><span class="val">320</span></div><div class="bar"><span class="bar-fill" style="width:82%"></span></div></div></div></div>
-<div id="right-necro-f-new" class="hero-right"><div class="stats"><div class="stat"><div class="stat-head"><span class="label">HP</span><span class="val">880</span></div><div class="bar"><span class="bar-fill" style="width:66%"></span></div></div><div class="stat"><div class="stat-head"><span class="label">DEF</span><span class="val">100</span></div><div class="bar"><span class="bar-fill" style="width:34%"></span></div></div><div class="stat"><div class="stat-head"><span class="label">DAMAGE</span><span class="val">210</span></div><div class="bar"><span class="bar-fill" style="width:72%"></span></div></div><div class="stat"><div class="stat-head"><span class="label">CRIT</span><span class="val">20%</span></div><div class="bar"><span class="bar-fill" style="width:46%"></span></div></div><div class="stat"><div class="stat-head"><span class="label">DODGE</span><span class="val">14%</span></div><div class="bar"><span class="bar-fill" style="width:44%"></span></div></div><div class="stat"><div class="stat-head"><span class="label">MANA</span><span class="val">360</span></div><div class="bar"><span class="bar-fill" style="width:92%"></span></div></div></div></div>
-<div id="right-necro-m" class="hero-right"><div class="stats"><div class="stat"><div class="stat-head"><span class="label">HP</span><span class="val">950</span></div><div class="bar"><span class="bar-fill" style="width:76%"></span></div></div><div class="stat"><div class="stat-head"><span class="label">DEF</span><span class="val">120</span></div><div class="bar"><span class="bar-fill" style="width:42%"></span></div></div><div class="stat"><div class="stat-head"><span class="label">DAMAGE</span><span class="val">165</span></div><div class="bar"><span class="bar-fill" style="width:54%"></span></div></div><div class="stat"><div class="stat-head"><span class="label">CRIT</span><span class="val">15%</span></div><div class="bar"><span class="bar-fill" style="width:32%"></span></div></div><div class="stat"><div class="stat-head"><span class="label">DODGE</span><span class="val">8%</span></div><div class="bar"><span class="bar-fill" style="width:28%"></span></div></div><div class="stat"><div class="stat-head"><span class="label">MANA</span><span class="val">300</span></div><div class="bar"><span class="bar-fill" style="width:76%"></span></div></div></div></div>
-<div id="right-warrior-f" class="hero-right"><div class="stats"><div class="stat"><div class="stat-head"><span class="label">HP</span><span class="val">1100</span></div><div class="bar"><span class="bar-fill" style="width:88%"></span></div></div><div class="stat"><div class="stat-head"><span class="label">DEF</span><span class="val">145</span></div><div class="bar"><span class="bar-fill" style="width:68%"></span></div></div><div class="stat"><div class="stat-head"><span class="label">DAMAGE</span><span class="val">195</span></div><div class="bar"><span class="bar-fill" style="width:68%"></span></div></div><div class="stat"><div class="stat-head"><span class="label">CRIT</span><span class="val">18%</span></div><div class="bar"><span class="bar-fill" style="width:40%"></span></div></div><div class="stat"><div class="stat-head"><span class="label">DODGE</span><span class="val">16%</span></div><div class="bar"><span class="bar-fill" style="width:48%"></span></div></div><div class="stat"><div class="stat-head"><span class="label">MANA</span><span class="val">180</span></div><div class="bar"><span class="bar-fill" style="width:42%"></span></div></div></div></div>
-<div id="confirmBtn" class="confirm">CONFIRM CHAMPION — ENTER NAME</div>
-</div>
-</div>
-
-<div class="nav">
-<button data-hero="lion-warden" class="active">LION WARDEN</button>
-<button data-hero="archer-m">DARK RANGER</button>
-<button data-hero="archer-f">WILD PATH</button>
-<button data-hero="archmage-m">AZURE SAGE</button>
-<button data-hero="mage-f-new">VOLCANIC</button>
-<button data-hero="necro-f-new">AMETHYST</button>
-<button data-hero="necro-m">GRAVELORD</button>
-<button data-hero="warrior-f">IRON VOW</button>
-</div>
-
-<script>
-function showHero(key){
-  document.querySelectorAll('.hero-panel').forEach(function(el){el.classList.remove('active')});
-  document.querySelectorAll('.hero-center').forEach(function(el){el.classList.remove('active')});
-  document.querySelectorAll('.hero-right').forEach(function(el){el.classList.remove('active')});
-  document.querySelectorAll('.nav button').forEach(function(el){el.classList.remove('active')});
-  var left=document.getElementById('left-'+key);
-  var center=document.getElementById('center-'+key);
-  var right=document.getElementById('right-'+key);
-  if(left) left.classList.add('active');
-  if(center) center.classList.add('active');
-  if(right) right.classList.add('active');
-  var btn=document.querySelector('[data-hero="'+key+'"]');
-  if(btn) btn.classList.add('active');
-  var names={"archer-m":"DARK RANGER","archer-f":"WILD PATH","archmage-m":"AZURE SAGE","mage-f-new":"VOLCANIC","necro-f-new":"AMETHYST","necro-m":"GRAVELORD","warrior-f":"IRON VOW","lion-warden":"LION WARDEN"};
-  var subs={"archer-m":"SHADOW RANGER • ARCHER • MALE","archer-f":"BEAST RANGER • ARCHER • FEMALE","archmage-m":"TIME MAGE • MAGE • MALE","mage-f-new":"FIRE MAGE • MAGE • FEMALE","necro-f-new":"SOUL MAGE • NECRO • FEMALE","necro-m":"BONE LORD • NECRO • MALE","warrior-f":"WOLF GUARD • WARRIOR • FEMALE","lion-warden":"IMPERIAL GUARD • WARRIOR • MALE"};
-  document.getElementById('heroName').textContent=names[key]||"LION WARDEN";
-  document.getElementById('heroSub').textContent=subs[key]||"IMPERIAL GUARD • WARRIOR • MALE";
-  document.getElementById('leftTitle').textContent="SKILLS — "+(names[key]||"LION WARDEN");
-}
-document.querySelectorAll('.nav button').forEach(function(b){b.addEventListener('click',function(){showHero(b.getAttribute('data-hero'))})});
-var params=new URLSearchParams(location.search);
-var start=params.get('hero')||'lion-warden';
-showHero(start);
-var inp=document.getElementById('nameInput');
-var btn=document.getElementById('confirmBtn');
-function check(){var v=inp.value.trim();if(v.length>=3){btn.classList.add('active');btn.textContent='CONFIRM CHAMPION — SAVE AS '+v.toUpperCase()}else{btn.classList.remove('active');btn.textContent='CONFIRM CHAMPION — ENTER NAME'}}
-inp.addEventListener('input',check);
-btn.addEventListener('click',function(){if(!btn.classList.contains('active')) return;localStorage.setItem('voland_player_name',inp.value.trim());btn.textContent='OK SAVED';setTimeout(function(){location.href='index.html'},600)});
-check();
-</script>
-</body>
-</html>
