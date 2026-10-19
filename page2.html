@@ -5,76 +5,106 @@
 <title>HERO</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%;background:#0a0a0c;overflow:hidden;font-family:Inter,Arial,sans-serif;color:#e6e0cc}
-.bg{position:fixed;inset:0;z-index:0}.bg img{width:100%;height:100%;object-fit:cover}.bg:after{content:"";position:absolute;inset:0;background:rgba(8,8,10,.78)}
-.top{position:fixed;top:0;left:0;right:0;height:0;z-index:10;display:flex;justify-content:flex-end;padding:8px 12px}
-.top .close{cursor:pointer;font-size:20px;color:#8a8678;background:rgba(0,0,0,.6);width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:50%;border:1px solid #2a2a32}
-/* 3 зоны слитно без пробелов */
-.wrap{position:fixed;inset:0;top:0;display:flex;z-index:1;height:100vh}
-.left{width:380px;min-width:380px;background:rgba(12,12,14,.98);border-right:1px solid #23232a;overflow:auto;padding:12px}
-.center{flex:1;background:rgba(0,0,0,.4);display:flex;align-items:stretch;justify-content:center;overflow:hidden;border-right:1px solid #23232a;border-left:1px solid #23232a}
-.center img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  object-position:top center;
-  display:block;
-}
-.right{width:380px;min-width:380px;background:rgba(18,18,20,.98);overflow:auto;padding:14px;display:flex;flex-direction:column}
-/* титул теперь справа над статами */
-.hero-title-right{font-size:18px;letter-spacing:.32em;color:#e6d5a0;font-weight:800;margin-bottom:14px;text-align:left;border-bottom:1px solid #2a2a32;padding-bottom:10px}
-/* иконки в 2 раза больше - было 56px стало 112px */
-.skill{display:flex;gap:12px;background:#17171b;border:1px solid #23232a;border-radius:12px;padding:10px;margin-bottom:10px;align-items:center}
-.icon{width:112px;height:112px;min-width:112px;border-radius:12px;overflow:hidden;background:#1e1e22;flex-shrink:0;border:1px solid #2a2a32}
-.icon img{width:100%;height:100%;object-fit:cover;display:block}
-.sname{font-size:11px;font-weight:700}.badge{font-size:7px;background:#1e1e22;border:1px solid #2a2a32;padding:2px 5px;border-radius:4px;margin-left:6px;color:#8a8678}
-.sdesc{font-size:10px;color:#a0a0a8;margin-top:4px;line-height:1.35}.smeta{font-size:8px;color:#6e6e78;margin-top:4px}
-.stat-row{margin-bottom:12px}.stat{display:flex;justify-content:space-between;font-size:9px;letter-spacing:.1em;margin-bottom:4px}.val{color:#e6d5a0;font-weight:800}.bar{height:6px;background:rgba(255,255,255,.12);border-radius:3px;overflow:hidden}.bar-fill{height:100%;background:#e6d5a0;display:block}
-.input-box{margin-top:auto;background:#1e1e22;border:1px solid #2a2a32;padding:12px;border-radius:8px}.input-box label{font-size:7px;color:#8a8678;letter-spacing:.2em}.input-box input{width:100%;margin-top:6px;background:#0e0e10;border:1px solid #3a3a42;color:#e6e0cc;padding:10px;font-size:12px;border-radius:6px}
-.btn{margin-top:12px;padding:12px;border:1px solid #3a3a42;text-align:center;font-size:8px;letter-spacing:.25em;color:#666;border-radius:8px}.btn.active{background:#e6d5a0;color:#121214;border-color:#e6d5a0;font-weight:800;cursor:pointer}
+html,body{height:100%;background:#0a0a0c;color:#e6e0cc;font-family:Inter,Arial,sans-serif;overflow:hidden}
+.bg{position:fixed;inset:0;z-index:0}.bg img{width:100%;height:100%;object-fit:cover}.bg:after{content:"";position:absolute;inset:0;background:rgba(8,8,10,.82)}
+.wrap{position:fixed;inset:0;display:flex;z-index:2}
+.left{width:400px;background:#0e0e10;border-right:1px solid #2a2a32;overflow:auto;padding:10px}
+.center{flex:1;background:#000;overflow:hidden;display:flex}
+.center img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block}
+.right{width:400px;background:#121214;border-left:1px solid #2a2a32;overflow:auto;padding:14px;display:flex;flex-direction:column}
+.hero-right{font-size:18px;letter-spacing:.35em;color:#e6d5a0;font-weight:800;padding-bottom:10px;border-bottom:1px solid #2a2a32;margin-bottom:12px}
+.skill{display:flex;gap:10px;background:#17171b;border:1px solid #23232a;border-radius:10px;padding:8px;margin-bottom:8px;align-items:center}
+.icon{width:110px;height:110px;min-width:110px;border-radius:10px;background:#1e1e22;border:1px solid #2a2a32;overflow:hidden}
+.icon img{width:100%;height:100%;object-fit:cover}
+.sname{font-size:11px;font-weight:700}.badge{font-size:7px;background:#1e1e22;border:1px solid #2a2a32;padding:2px 4px;border-radius:3px;color:#8a8678;margin-left:4px}
+.sdesc{font-size:10px;color:#9a9aa0;margin-top:3px}.smeta{font-size:7px;color:#6a6a72;margin-top:2px}
+.stat-row{margin-bottom:10px}.stat{display:flex;justify-content:space-between;font-size:9px;margin-bottom:3px}.val{color:#e6d5a0;font-weight:800}.bar{height:6px;background:#222;border-radius:3px}.bar-fill{height:100%;background:#e6d5a0;display:block}
+.input-box{margin-top:auto;background:#1e1e22;border:1px solid #2a2a32;padding:10px;border-radius:8px}.input-box input{width:100%;margin-top:6px;background:#0e0e10;border:1px solid #3a3a42;color:#e6e0cc;padding:9px}
+.btn{margin-top:10px;padding:11px;border:1px solid #3a3a42;text-align:center;font-size:8px;letter-spacing:.2em;border-radius:6px}.btn.active{background:#e6d5a0;color:#121214;font-weight:800;cursor:pointer}
+.close{position:fixed;top:8px;right:8px;z-index:10;width:32px;height:32px;background:rgba(0,0,0,.7);border:1px solid #2a2a32;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer}
 </style>
 </head>
 <body>
 <div class="bg"><img src="assets/heroes/bg-battlefield.webp"></div>
-<div class="top"><div class="close" onclick="location.href='index.html'">✕</div></div>
+<div class="close" onclick="location.href='index.html'">✕</div>
 <div class="wrap">
   <div class="left" id="left"></div>
-  <div class="center"><img id="heroImg" src=""></div>
+  <div class="center"><img id="heroImg" src="assets/heroes/necro-f-new.webp"></div>
   <div class="right">
-    <div class="hero-title-right" id="heroTitleRight">AMETHYST</div>
+    <div class="hero-right" id="hr">AMETHYST</div>
     <div id="stats"></div>
-    <div class="input-box"><label>ENTER YOUR NAME</label><input id="nameIn" value="VOLAND 1337"></div>
-    <div id="btn" class="btn">CONFIRM — VOLAND 1337</div>
+    <div class="input-box"><div style="font-size:7px;letter-spacing:.2em;color:#8a8678">ENTER YOUR NAME</div><input id="nameIn" value="VOLAND 1337"></div>
+    <div id="btn" class="btn">CONFIRM</div>
   </div>
 </div>
 <script>
-const db={
-'archer-f':{name:'WILD PATH',img:'assets/heroes/archer-f.webp',s:{HP:980,DEF:90,DMG:210,MANA:200},sk:[
-['Тропы Зверя','PASSIVE','heroes/icon_tropy_zverya.jpg','Уклон -> 100% крит','КД —'],
-['Двойной Выстрел','1','heroes/icon_dvoynoy_vystrel.jpg','2x100% + кровотечение','КД 3 Мана 5'],
-['Ядовитая Лиана','2','heroes/icon_yadovitaya_liana.jpg','Стан 1 + яд 3р','КД 10 Мана 15'],
-['Глаз Ястреба','3','heroes/icon_glaz_yastreba.jpg','+25% крит 4р','КД 20 Мана 20'],
-['Буря Стрел','4','heroes/icon_burya_strel.jpg','12x80% + стан','КД 25 Мана 30']]},
-'archer-m':{name:'DARK RANGER',img:'assets/heroes/archer-m.webp',s:{HP:1020,DEF:95,DMG:230,MANA:210},sk:[
-['Метка Тени','PASSIVE','heroes/icon_metka_teni.jpg','Метка +200%','Мана 0'],
-['Беглый выстрел','1','heroes/icon_begliy_vystrel.jpg','200%','КД 3'],
-['Шаг в Ничто','2','heroes/icon_shag_v_nichto.jpg','Инвиз 3р крит','КД 20'],
-['Призрачная Стрела','3','heroes/icon_prizrachnaya_strela.jpg','140% стан 33%','КД 5'],
-['Залп Бездны','4','heroes/icon_zalp_bezdny.jpg','700% в 1 цель','КД 25']]},
-'archmage-m':{name:'AZURE SAGE',img:'assets/heroes/archmage-m.webp',s:{HP:900,DEF:80,DMG:260,MANA:320},sk:[
-['Искривление Времени','PASSIVE','heroes/icon_iskrivlenie_vremeni.jpg','+10% стак 5=+50%','5 стаков'],
-['Ледяное Копье','1','heroes/icon_ledyanoe_kopye.jpg','250% -20% DEF','КД 3'],
-['Сфера Бури','2','heroes/icon_sfera_buri.jpg','3р 160% 3 цели','КД 10'],
-['Лавина','3','heroes/icon_lavina.jpg','300% всем','КД 15'],
-['Аннигиляция Времени','4','heroes/icon_annigilyatsiya_vremeni.jpg','Стан 3р +350%','КД 25']]},
-'mage-f-new':{name:'VOLCANIC',img:'assets/heroes/mage-f-new.webp',s:{HP:950,DEF:85,DMG:280,MANA:300},sk:[
-['Сердце Кальдеры','PASSIVE','heroes/icon_serdtse_kaldery.jpg','Каждое 4-е 100% AOE','КД 4'],
-['Огненный Шар','1','heroes/icon_ognennyy_shar.jpg','150% + поджог','КД 4'],
-['Извержение','2','heroes/icon_izverzhenie.jpg','200% + лава','КД 12'],
-['Метеор','3','heroes/icon_meteor.jpg','500%+300%','КД 20'],
-['Судный День','4','heroes/icon_sudnyy_den.jpg','4 метеора','КД 25']]},
-'necro-f-new':{name:'AMETHYST',img:'assets/heroes/necro-f-new.webp',s:{HP:1000,DEF:100,DMG:240,MANA:280},sk:[
-['Шепот Аметиста','PASSIVE','heroes/icon_shepot_ametista.jpg','3-е дух 100%','Дух'],
-['Проклятие Душ','1','heroes/icon_proklyatie_dush.jpg','200% кража маны','КД 3'],
-['Аметистовая Тюрьма','2','heroes/icon_ametistovaya_tyurma.jpg','Стан AOE 300%','КД 10'],
-['Похищение
+// фиксированные пути с assets/
+const DB={
+'necro-f-new':{n:'AMETHYST',img:'assets/heroes/necro-f-new.webp',st:{HP:1000,DEF:100,DMG:240,MANA:280},sk:[
+['Шепот Аметиста','PASSIVE','assets/heroes/icon_shepot_ametista.jpg','3-е дух 100%','Дух'],
+['Проклятие Душ','1','assets/heroes/icon_proklyatie_dush.jpg','200% кража маны','КД 3'],
+['Аметистовая Тюрьма','2','assets/heroes/icon_ametistovaya_tyurma.jpg','Стан AOE 300%','КД 10'],
+['Похищение Жизни','3','assets/heroes/icon_pokhishchenie_zhizni.jpg','30% хил','КД 18'],
+['Аметистовый Закат','4','assets/heroes/icon_ametistovyy_zakat.jpg','5x200%','КД 25']]},
+'necro-m':{n:'GRAVELORD',img:'assets/heroes/necro-m.webp',st:{HP:1150,DEF:110,DMG:190,MANA:260},sk:[
+['Костяной Легион','PASSIVE','assets/heroes/icon_kostyanoy_legion.jpg','1 скелет/раунд','Бессмертны'],
+['Костяное Копье','1','assets/heroes/icon_kostyanoe_kopye.jpg','150% +25% саммонам','КД 4'],
+['Костяной Щит','2','assets/heroes/icon_kostyanoy_shchit.jpg','Щит 20% взрыв 300%','КД 10'],
+['Поднять Мертвых','3','assets/heroes/icon_podnyat_mertvykh.jpg','2 подрывника','КД 18'],
+['Армия Погибели','4','assets/heroes/icon_armiya_pogibeli.jpg','5 скелетов','КД 25']]},
+'archer-f':{n:'WILD PATH',img:'assets/heroes/archer-f.webp',st:{HP:980,DEF:90,DMG:210,MANA:200},sk:[
+['Тропы Зверя','PASSIVE','assets/heroes/icon_tropy_zverya.jpg','100% крит','КД —'],
+['Двойной Выстрел','1','assets/heroes/icon_dvoynoy_vystrel.jpg','2x100%','КД 3'],
+['Ядовитая Лиана','2','assets/heroes/icon_yadovitaya_liana.jpg','Стан 1 + яд','КД 10'],
+['Глаз Ястреба','3','assets/heroes/icon_glaz_yastreba.jpg','+25% крит','КД 20'],
+['Буря Стрел','4','assets/heroes/icon_burya_strel.jpg','12x80%','КД 25']]},
+'archer-m':{n:'DARK RANGER',img:'assets/heroes/archer-m.webp',st:{HP:1020,DEF:95,DMG:230,MANA:210},sk:[
+['Метка Тени','PASSIVE','assets/heroes/icon_metka_teni.jpg','+200%','0'],
+['Беглый выстрел','1','assets/heroes/icon_begliy_vystrel.jpg','200%','КД 3'],
+['Шаг в Ничто','2','assets/heroes/icon_shag_v_nichto.jpg','Инвиз','КД 20'],
+['Призрачная Стрела','3','assets/heroes/icon_prizrachnaya_strela.jpg','140% стан','КД 5'],
+['Залп Бездны','4','assets/heroes/icon_zalp_bezdny.jpg','700%','КД 25']]},
+'archmage-m':{n:'AZURE SAGE',img:'assets/heroes/archmage-m.webp',st:{HP:900,DEF:80,DMG:260,MANA:320},sk:[
+['Искривление Времени','PASSIVE','assets/heroes/icon_iskrivlenie_vremeni.jpg','+10% стак','5 стаков'],
+['Ледяное Копье','1','assets/heroes/icon_ledyanoe_kopye.jpg','250%','КД 3'],
+['Сфера Бури','2','assets/heroes/icon_sfera_buri.jpg','3р 160%','КД 10'],
+['Лавина','3','assets/heroes/icon_lavina.jpg','300%','КД 15'],
+['Аннигиляция','4','assets/heroes/icon_annigilyatsiya_vremeni.jpg','Стан 3р','КД 25']]},
+'mage-f-new':{n:'VOLCANIC',img:'assets/heroes/mage-f-new.webp',st:{HP:950,DEF:85,DMG:280,MANA:300},sk:[
+['Сердце Кальдеры','PASSIVE','assets/heroes/icon_serdtse_kaldery.jpg','100% AOE','КД 4'],
+['Огненный Шар','1','assets/heroes/icon_ognennyy_shar.jpg','150%','КД 4'],
+['Извержение','2','assets/heroes/icon_izverzhenie.jpg','200%','КД 12'],
+['Метеор','3','assets/heroes/icon_meteor.jpg','500%','КД 20'],
+['Судный День','4','assets/heroes/icon_sudnyy_den.jpg','4 метеора','КД 25']]},
+'warrior-f':{n:'IRON VOW',img:'assets/heroes/warrior-f.webp',st:{HP:1250,DEF:160,DMG:175,MANA:180},sk:[
+['Клятва Стаи','PASSIVE','assets/heroes/icon_klyatva_stai.jpg','<30% +50%','0'],
+['Рассекающий Волк','1','assets/heroes/icon_rassekayushchiy_volk.jpg','2x110%','КД 3'],
+['Щит Вожака','2','assets/heroes/icon_shchit_volchego_vozhaka.jpg','Блок 50%','КД 15'],
+['Зов Стаи','3','assets/heroes/icon_zov_stai.jpg','Стан 1','КД 15'],
+['Альфа Хищник','4','assets/heroes/icon_alfa_khishchnik.jpg','Волк 5р','КД 20']]},
+'warrior-m':{n:'LION WARDEN',img:'assets/heroes/warrior-m.webp',st:{HP:1300,DEF:180,DMG:180,MANA:220},sk:[
+['Непоколебимая Стена','PASSIVE','assets/heroes/icon_nepokolebimaya_stena.jpg','+DEF','30%'],
+['Удар Льва','1','assets/heroes/icon_udar_lva.jpg','200% стан','КД 8'],
+['Бастион','2','assets/heroes/icon_imperskiy_bastion.jpg','Блок 50%','КД 15'],
+['Рассекающий удар','3','assets/heroes/icon_rassekayushchiy_udar.jpg','200%','КД 3'],
+['Аватар','4','assets/heroes/icon_avatar_imperii.jpg','Неуязв 2р','КД 35']]}
+};
+let id=localStorage.getItem('voland_hero');
+if(!id||!DB[id]) id='necro-f-new';
+let h=DB[id];
+document.getElementById('hr').textContent=h.n;
+document.getElementById('heroImg').src=h.img;
+document.getElementById('left').innerHTML=h.sk.map(s=>`<div class="skill"><div class="icon"><img src="${s[2]}" onerror="this.src='assets/heroes/icon_shepot_ametista.jpg'"></div><div><div class="sname">${s[0]} <span class="badge">${s[1]}</span></div><div class="sdesc">${s[3]}</div><div class="smeta">${s[4]}</div></div></div>`).join('');
+function pct(v,m){return Math.min(100,Math.round(v/m*100))+'%'}
+let st=h.st;
+document.getElementById('stats').innerHTML=`
+<div class="stat-row"><div class="stat"><span>HP</span><span class="val">${st.HP}</span></div><div class="bar"><div class="bar-fill" style="width:${pct(st.HP,1300)}"></div></div></div>
+<div class="stat-row"><div class="stat"><span>DEF</span><span class="val">${st.DEF}</span></div><div class="bar"><div class="bar-fill" style="width:${pct(st.DEF,180)}"></div></div></div>
+<div class="stat-row"><div class="stat"><span>DMG</span><span class="val">${st.DMG}</span></div><div class="bar"><div class="bar-fill" style="width:${pct(st.DMG,280)}"></div></div></div>
+<div class="stat-row"><div class="stat"><span>MANA</span><span class="val">${st.MANA}</span></div><div class="bar"><div class="bar-fill" style="width:${pct(st.MANA,320)}"></div></div></div>`;
+let inp=document.getElementById('nameIn'),btn=document.getElementById('btn');
+function chk(){let v=inp.value.trim();if(v.length>=3){btn.classList.add('active');btn.textContent='CONFIRM — '+v.toUpperCase()}else{btn.classList.remove('active');btn.textContent='ENTER NAME'}}
+inp.addEventListener('input',chk);chk();
+</script>
+</body>
+</html>
