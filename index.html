@@ -2,37 +2,51 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>CHOOSE YOUR CHAMPION</title>
+<title>VOLAND CHRONICLES</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#0a0a0c;color:#e6e0cc;font-family:Inter,Arial,sans-serif;min-height:100vh;overflow:auto;position:relative}
-.bg{position:fixed;inset:0;z-index:-1}
-.bg img{width:100%;height:100%;object-fit:cover;display:block}
-.bg:after{content:"";position:absolute;inset:0;background:rgba(10,10,12,.55)}
-.top{text-align:center;padding:16px 10px 8px;position:relative;z-index:1}
-.top h1{font-size:11px;letter-spacing:.35em;color:#e6d5a0;text-shadow:0 1px 8px rgba(0,0,0,.8)}
-.filters{display:flex;justify-content:center;gap:8px;margin:10px auto 18px;background:rgba(30,30,34,.9);border:1px solid #2a2a32;border-radius:20px;padding:4px;width:fit-content;position:relative;z-index:1}
-.filters button{background:transparent;border:none;color:#8a8678;font-size:9px;letter-spacing:.15em;padding:6px 14px;border-radius:16px;cursor:pointer}
-.filters button.active{background:#e6d5a0;color:#121214}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;max-width:1180px;margin:0 auto;padding:0 12px 24px;position:relative;z-index:1}
-.card{border:1px solid #2a2a32;border-radius:10px;overflow:hidden;background:#121214;cursor:pointer;transition:.2s;box-shadow:0 4px 20px rgba(0,0,0,.6)}
-.card:hover{border-color:#e6d5a0;transform:translateY(-3px)}
-.card img{width:100%;height:280px;object-fit:cover;display:block;background:#0e0e10}
-.card .info{padding:8px 10px;background:linear-gradient(0deg,rgba(0,0,0,.9),rgba(0,0,0,.4));position:relative;margin-top:-40px}
-.card .name{font-size:9px;letter-spacing:.15em;color:#e8dcc0}
-.card .sub{font-size:7px;letter-spacing:.15em;color:#c9b896;margin-top:2px}
-@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
+body{background:#0a0a0c;color:#e6e0cc;font-family:Inter,Arial,sans-serif;min-height:100vh;overflow:auto}
+.bg{position:fixed;inset:0;z-index:-1}.bg img{width:100%;height:100%;object-fit:cover}.bg:after{content:"";position:absolute;inset:0;background:rgba(10,10,14,.62)}
+.top{text-align:center;padding:22px 10px 8px;position:relative;z-index:1}
+.voland{font-size:42px;letter-spacing:.18em;font-weight:800;color:#f5f0e0;line-height:1}
+.chron{font-size:38px;letter-spacing:.22em;font-weight:800;color:#e6c66a;line-height:1;margin-top:2px}
+.sub{font-size:9px;letter-spacing:.35em;color:#8a8678;margin-top:12px}
+.filters{display:flex;justify-content:center;gap:0;margin:18px auto;background:rgba(18,18,20,.95);border:1px solid #2a2a32;border-radius:24px;padding:4px;width:fit-content;position:relative;z-index:1}
+.filters button{background:transparent;border:none;color:#8a8678;font-size:9px;letter-spacing:.12em;padding:9px 22px;border-radius:18px;cursor:pointer}
+.filters button.active{background:#e6d5a0;color:#121214;font-weight:700}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;max-width:1320px;margin:0 auto;padding:0 16px 28px;position:relative;z-index:1}
+.card{border:1px solid #2a2a32;border-radius:12px;overflow:hidden;background:#0e0e10;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.6)}
+.card:hover{border-color:#e6d5a0;transform:translateY(-2px);transition:.2s}
+.card img{
+  width:100%;
+  height:520px; /* было 280px - резало головы и ноги */
+  object-fit:cover;
+  object-position:top center; /* голова всегда в кадре */
+  display:block;
+}
+.info{padding:10px 12px;background:linear-gradient(0deg,rgba(0,0,0,.92) 0%,rgba(0,0,0,.3) 100%);margin-top:-62px;position:relative}
+.name{font-size:10px;letter-spacing:.15em;color:#e8dcc0;font-weight:700}
+.sub2{font-size:7px;letter-spacing:.18em;color:#c9b896;margin-top:3px}
+@media(max-width:1000px){.grid{grid-template-columns:repeat(2,1fr)}.card img{height:480px}.voland{font-size:32px}.chron{font-size:28px}}
 </style>
 </head>
 <body>
 <div class="bg"><img src="assets/heroes/bg-battlefield.webp"></div>
-<div class="top"><h1>CHOOSE YOUR CHAMPION — 8 HEROES</h1></div>
+
+<div class="top">
+  <div class="voland">VOLAND</div>
+  <div class="chron">CHRONICLES</div>
+  <div class="sub">CHOOSE YOUR CHAMPION — 8 HEROES</div>
+</div>
+
 <div class="filters">
 <button class="active" data-f="all">ALL 08</button>
 <button data-f="male">MALE 04</button>
 <button data-f="female">FEMALE 04</button>
 </div>
+
 <div class="grid" id="grid"></div>
+
 <script>
 const heroes=[
 {id:'archer-f',name:'WILD PATH',sub:'ARCHER - FEMALE',gender:'female',img:'assets/heroes/archer-f.webp'},
@@ -49,15 +63,13 @@ function render(f){
 grid.innerHTML='';
 heroes.filter(h=>f==='all'||h.gender===f).forEach(h=>{
 const d=document.createElement('div');d.className='card';
-d.innerHTML=`<img src="${h.img}"><div class="info"><div class="name">${h.name}</div><div class="sub">${h.sub}</div></div>`;
-d.onclick=()=>{localStorage.setItem('voland_hero',h.id);localStorage.setItem('selectedHero',h.id);location.href='page2.html';};
+d.innerHTML=`<img src="${h.img}"><div class="info"><div class="name">${h.name}</div><div class="sub2">${h.sub}</div></div>`;
+d.onclick=()=>{localStorage.setItem('voland_hero',h.id);location.href='page2.html';};
 grid.appendChild(d);
 });
 }
 render('all');
-document.querySelectorAll('.filters button').forEach(b=>{
-b.onclick=()=>{document.querySelectorAll('.filters button').forEach(x=>x.classList.remove('active'));b.classList.add('active');render(b.dataset.f);};
-});
+document.querySelectorAll('.filters button').forEach(b=>{b.onclick=()=>{document.querySelectorAll('.filters button').forEach(x=>x.classList.remove('active'));b.classList.add('active');render(b.dataset.f);};});
 </script>
 </body>
 </html>
