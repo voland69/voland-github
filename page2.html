@@ -2,37 +2,107 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>HERO DETAIL</title>
+<title>GRAVELORD</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{width:100%;height:100%;background:#0a0a0c;overflow:hidden;font-family:Inter,Arial,sans-serif;color:#e6e0cc}
-.bg{position:fixed;inset:0;z-index:0}.bg img{width:100%;height:100%;object-fit:cover}.bg:after{content:"";position:absolute;inset:0;background:rgba(10,10,14,.72)}
-.top{position:fixed;top:0;left:0;right:0;height:58px;background:rgba(18,18,20,.96);border-bottom:1px solid #23232a;display:flex;align-items:center;justify-content:space-between;padding:0 18px;z-index:10}
-.top h1{font-size:16px;letter-spacing:.28em;color:#e6d5a0;font-weight:800}
-.left{position:fixed;left:0;top:58px;bottom:0;width:380px;background:rgba(16,16,18,.92);border-right:1px solid #23232a;overflow:auto;padding:12px;z-index:5}
-.center{position:fixed;left:380px;right:380px;top:58px;bottom:0;z-index:1;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.15)}
+body{background:#0a0a0c;color:#e6e0cc;font-family:Inter,Arial,sans-serif;overflow:hidden;height:100vh}
+.bg{position:fixed;inset:0;z-index:0}.bg img{width:100%;height:100%;object-fit:cover}.bg:after{content:"";position:absolute;inset:0;background:rgba(10,10,14,.7)}
+.top{position:fixed;top:0;left:0;right:0;height:50px;background:#121214;border-bottom:1px solid #2a2a32;display:flex;align-items:center;justify-content:space-between;padding:0 16px;z-index:10}
+.top h1{color:#e6d5a0;letter-spacing:.3em;font-size:14px}
+.left{position:fixed;left:0;top:50px;bottom:0;width:360px;background:rgba(16,16,18,.94);border-right:1px solid #2a2a32;overflow:auto;padding:10px;z-index:5}
+.center{position:fixed;left:360px;right:360px;top:50px;bottom:0;display:flex;align-items:center;justify-content:center;z-index:2}
 .center img{
   width:50%;
-  height:50%;
+  height:auto;
+  max-height:85vh;
   object-fit:contain;
-  object-position:center top;
   display:block;
-  /* уменьшена в 2 раза */
+  filter:drop-shadow(0 0 24px rgba(0,0,0,.9));
 }
-.right{position:fixed;right:0;top:58px;bottom:0;width:380px;background:rgba(20,20,24,.96);border-left:1px solid #23232a;overflow:auto;padding:16px;z-index:5}
-.skill{display:flex;gap:12px;background:#17171b;border:1px solid #23232a;border-radius:12px;padding:10px;margin-bottom:10px}
-.icon{width:62px;height:62px;border-radius:12px;overflow:hidden;background:#1e1e22;flex-shrink:0;border:1px solid #2a2a32}
-.icon img{width:100%;height:100%;object-fit:cover;display:block}
-.sname{font-size:12px;font-weight:700}.badge{font-size:7px;background:#1e1e22;border:1px solid #2a2a32;padding:2px 5px;border-radius:4px;margin-left:6px;color:#8a8678}
-.sdesc{font-size:10px;color:#a0a0a8;margin-top:4px;line-height:1.35}.smeta{font-size:8px;color:#6e6e78;margin-top:5px}
-.stat-row{margin-bottom:14px}.stat{display:flex;justify-content:space-between;font-size:10px;letter-spacing:.12em;margin-bottom:4px}.label{color:#8a8678}.val{color:#e6d5a0;font-weight:800}
-.bar{height:6px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden}.bar-fill{height:100%;background:linear-gradient(90deg,#e6d5a0,#c9b896);display:block;border-radius:3px}
-.input-box{background:#1e1e22;border:1px solid #2a2a32;padding:12px;margin-top:20px;border-radius:8px}.input-box label{font-size:8px;letter-spacing:.22em;color:#8a8678;display:block;margin-bottom:8px}.input-box input{width:100%;background:#0e0e10;border:1px solid #3a3a42;color:#e8dcc0;padding:11px;font-size:12px;outline:none;border-radius:6px}
-.btn{margin-top:16px;padding:13px;border:1px solid #3a3a42;text-align:center;font-size:9px;letter-spacing:.28em;color:#666;cursor:not-allowed;border-radius:8px}.btn.active{border-color:#e6d5a0;color:#121214;background:#e6d5a0;font-weight:800;cursor:pointer}
+.right{position:fixed;right:0;top:50px;bottom:0;width:360px;background:rgba(18,18,20,.96);border-left:1px solid #2a2a32;overflow:auto;padding:14px;z-index:5}
+.skill{display:flex;gap:10px;background:#17171b;border:1px solid #23232a;border-radius:10px;padding:9px;margin-bottom:9px}
+.icon{width:56px;height:56px;border-radius:8px;overflow:hidden;background:#1e1e22;flex-shrink:0;border:1px solid #2a2a32}
+.icon img{width:100%;height:100%;object-fit:cover}
+.sname{font-size:11px;font-weight:700}.badge{font-size:7px;background:#1e1e22;border:1px solid #2a2a32;padding:2px 4px;border-radius:3px;margin-left:5px;color:#8a8678}
+.sdesc{font-size:9px;color:#9a9aa0;margin-top:3px;line-height:1.3}.smeta{font-size:7px;color:#6a6a72;margin-top:3px}
+.stat-row{margin-bottom:12px}.stat{display:flex;justify-content:space-between;font-size:9px;letter-spacing:.1em;margin-bottom:3px}.val{color:#e6d5a0;font-weight:800}.bar{height:6px;background:rgba(255,255,255,.12);border-radius:3px}.bar-fill{height:100%;background:#e6d5a0;display:block;border-radius:3px}
+.input-box{margin-top:18px;background:#1e1e22;border:1px solid #2a2a32;padding:10px;border-radius:6px}.input-box label{font-size:7px;color:#8a8678;letter-spacing:.2em}.input-box input{width:100%;margin-top:6px;background:#0e0e10;border:1px solid #3a3a42;color:#e6e0cc;padding:9px;font-size:11px}
+.btn{margin-top:12px;padding:11px;border:1px solid #3a3a42;text-align:center;font-size:8px;letter-spacing:.25em;color:#666;border-radius:6px}.btn.active{background:#e6d5a0;color:#121214;border-color:#e6d5a0;font-weight:800;cursor:pointer}
 </style>
 </head>
 <body>
 <div class="bg"><img src="assets/heroes/bg-battlefield.webp"></div>
-<div class="top"><h1 id="heroTitle">GRAVELORD</h1><div onclick="location.href='index.html'" style="cursor:pointer;font-size:18px">✕</div></div>
-<div class="left" id="leftSkills"></div>
-<div class="center"><img id
+<div class="top"><h1 id="title">GRAVELORD</h1><div onclick="location.href='index.html'" style="cursor:pointer">✕</div></div>
+<div class="left" id="left"></div>
+<div class="center"><img id="heroImg" src="assets/heroes/necro-m.webp" alt="hero"></div>
+<div class="right"><div id="stats"></div><div class="input-box"><label>ENTER YOUR NAME</label><input id="nameIn" value="VOLAND 1337"></div><div id="btn" class="btn">CONFIRM</div></div>
+<script>
+const db={
+'archer-f':{name:'WILD PATH',img:'assets/heroes/archer-f.webp',s:{HP:980,DEF:90,DMG:210,MANA:200},sk:[
+['Тропы Зверя','PASSIVE','heroes/icon_tropy_zverya.jpg','Уклон -> 100% крит','КД —'],
+['Двойной Выстрел','1','heroes/icon_dvoynoy_vystrel.jpg','2x100% + кровотечение','КД 3 Мана 5'],
+['Ядовитая Лиана','2','heroes/icon_yadovitaya_liana.jpg','Стан 1 + яд 3р','КД 10 Мана 15'],
+['Глаз Ястреба','3','heroes/icon_glaz_yastreba.jpg','+25% крит 4р','КД 20 Мана 20'],
+['Буря Стрел','4','heroes/icon_burya_strel.jpg','12x80% + стан','КД 25 Мана 30']]},
+'archer-m':{name:'DARK RANGER',img:'assets/heroes/archer-m.webp',s:{HP:1020,DEF:95,DMG:230,MANA:210},sk:[
+['Метка Тени','PASSIVE','heroes/icon_metka_teni.jpg','Метка +200%','Мана 0'],
+['Беглый выстрел','1','heroes/icon_begliy_vystrel.jpg','200%','КД 3'],
+['Шаг в Ничто','2','heroes/icon_shag_v_nichto.jpg','Инвиз 3р крит','КД 20'],
+['Призрачная Стрела','3','heroes/icon_prizrachnaya_strela.jpg','140% стан 33%','КД 5'],
+['Залп Бездны','4','heroes/icon_zalp_bezdny.jpg','700% в 1 цель','КД 25']]},
+'archmage-m':{name:'AZURE SAGE',img:'assets/heroes/archmage-m.webp',s:{HP:900,DEF:80,DMG:260,MANA:320},sk:[
+['Искривление Времени','PASSIVE','heroes/icon_iskrivlenie_vremeni.jpg','+10% стак 5=+50%','5 стаков'],
+['Ледяное Копье','1','heroes/icon_ledyanoe_kopye.jpg','250% -20% DEF','КД 3'],
+['Сфера Бури','2','heroes/icon_sfera_buri.jpg','3р 160% 3 цели','КД 10'],
+['Лавина','3','heroes/icon_lavina.jpg','300% всем','КД 15'],
+['Аннигиляция Времени','4','heroes/icon_annigilyatsiya_vremeni.jpg','Стан 3р +350%','КД 25']]},
+'mage-f-new':{name:'VOLCANIC',img:'assets/heroes/mage-f-new.webp',s:{HP:950,DEF:85,DMG:280,MANA:300},sk:[
+['Сердце Кальдеры','PASSIVE','heroes/icon_serdtse_kaldery.jpg','Каждое 4-е 100% AOE','КД 4'],
+['Огненный Шар','1','heroes/icon_ognennyy_shar.jpg','150% + поджог','КД 4'],
+['Извержение','2','heroes/icon_izverzhenie.jpg','200% + лава','КД 12'],
+['Метеор','3','heroes/icon_meteor.jpg','500%+300%','КД 20'],
+['Судный День','4','heroes/icon_sudnyy_den.jpg','4 метеора','КД 25']]},
+'necro-f-new':{name:'AMETHYST',img:'assets/heroes/necro-f-new.webp',s:{HP:1000,DEF:100,DMG:240,MANA:280},sk:[
+['Шепот Аметиста','PASSIVE','heroes/icon_shepot_ametista.jpg','3-е дух 100%','Дух'],
+['Проклятие Душ','1','heroes/icon_proklyatie_dush.jpg','200% кража маны','КД 3'],
+['Аметистовая Тюрьма','2','heroes/icon_ametistovaya_tyurma.jpg','Стан AOE 300%','КД 10'],
+['Похищение Жизни','3','heroes/icon_pokhishchenie_zhizni.jpg','30% хил','КД 18'],
+['Аметистовый Закат','4','heroes/icon_ametistovyy_zakat.jpg','5x200%','КД 25']]},
+'necro-m':{name:'GRAVELORD',img:'assets/heroes/necro-m.webp',s:{HP:1150,DEF:110,DMG:190,MANA:260},sk:[
+['Костяной Легион','PASSIVE','heroes/icon_kostyanoy_legion.jpg','1 скелет/раунд 50% макс 3','Бессмертны'],
+['Костяное Копье','1','heroes/icon_kostyanoe_kopye.jpg','150% +25% саммонам','КД 4 Мана 15'],
+['Костяной Щит','2','heroes/icon_kostyanoy_shchit.jpg','Щит 20% взрыв 300%','КД 10 Мана 30'],
+['Поднять Мертвых','3','heroes/icon_podnyat_mertvykh.jpg','2 подрывника 200% 300%','КД 18 Мана 30'],
+['Армия Погибели','4','heroes/icon_armiya_pogibeli.jpg','5 скелетов 50% 3р','КД 25 Мана 100']]},
+'warrior-f':{name:'IRON VOW',img:'assets/heroes/warrior-f.webp',s:{HP:1250,DEF:160,DMG:175,MANA:180},sk:[
+['Клятва Стаи','PASSIVE','heroes/icon_klyatva_stai.jpg','<30% +50% +30% лайфстил','0'],
+['Рассекающий Волк','1','heroes/icon_rassekayushchiy_volk.jpg','2x110%','КД 3'],
+['Щит Волчьего Вожака','2','heroes/icon_shchit_volchego_vozhaka.jpg','Блок 50% контра 350%','КД 15'],
+['Зов Стаи','3','heroes/icon_zov_stai.jpg','Стан 1 +200%','КД 15'],
+['Альфа Хищник','4','heroes/icon_alfa_khishchnik.jpg','Волк 5р +50% HP','КД 20']]},
+'warrior-m':{name:'LION WARDEN',img:'assets/heroes/warrior-m.webp',s:{HP:1300,DEF:180,DMG:180,MANA:220},sk:[
+['Непоколебимая Стена','PASSIVE','heroes/icon_nepokolebimaya_stena.jpg','+3% DEF за 5% HP до 30%','DEF 30%'],
+['Удар Льва','1','heroes/icon_udar_lva.jpg','200% стан 1','КД 8'],
+['Имперский Бастион','2','heroes/icon_imperskiy_bastion.jpg','Блок 50% отраж 25%','КД 15'],
+['Рассекающий удар','3','heroes/icon_rassekayushchiy_udar.jpg','200%','КД 3'],
+['Аватар Империи','4','heroes/icon_avatar_imperii.jpg','Неуязв 2р +50% HP','КД 35']]}
+};
+let id=localStorage.getItem('voland_hero')||'necro-m';
+if(!db[id])id='necro-m';
+let h=db[id];
+document.getElementById('title').textContent=h.name;
+document.getElementById('heroImg').src=h.img;
+document.getElementById('left').innerHTML=h.sk.map(x=>`<div class="skill"><div class="icon"><img src="${x[2]}"></div><div><div class="sname">${x[0]} <span class="badge">${x[1]}</span></div><div class="sdesc">${x[3]}</div><div class="smeta">${x[4]}</div></div></div>`).join('');
+function p(v,m){return Math.min(100,Math.round(v/m*100))+'%'}
+document.getElementById('stats').innerHTML=`
+<div class="stat-row"><div class="stat"><span>HP</span><span class="val">${h.s.HP}</span></div><div class="bar"><div class="bar-fill" style="width:${p(h.s.HP,1300)}"></div></div></div>
+<div class="stat-row"><div class="stat"><span>DEF</span><span class="val">${h.s.DEF}</span></div><div class="bar"><div class="bar-fill" style="width:${p(h.s.DEF,180)}"></div></div></div>
+<div class="stat-row"><div class="stat"><span>DMG</span><span class="val">${h.s.DMG}</span></div><div class="bar"><div class="bar-fill" style="width:${p(h.s.DMG,280)}"></div></div></div>
+<div class="stat-row"><div class="stat"><span>MANA</span><span class="val">${h.s.MANA}</span></div><div class="bar"><div class="bar-fill" style="width:${p(h.s.MANA,320)}"></div></div></div>`;
+let inp=document.getElementById('nameIn'),btn=document.getElementById('btn');
+function chk(){let v=inp.value.trim();if(v.length>=3){btn.classList.add('active');btn.textContent='CONFIRM — '+v.toUpperCase()}else{btn.classList.remove('active');btn.textContent='ENTER NAME — MIN 3 CHARS'}}
+inp.addEventListener('input',chk);chk();
+btn.onclick=()=>{if(!btn.classList.contains('active'))return;localStorage.setItem('voland_player_name',inp.value.trim());btn.textContent='✓ SAVED';setTimeout(()=>location.href='index.html',500)}
+</script>
+</body>
+</html>
