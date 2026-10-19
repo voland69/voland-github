@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>DARK RANGER - VOLAND</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HERO DETAIL</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -48,54 +47,39 @@ body{background:#0a0e16 url('assets/heroes/bg-battlefield.webp') fixed center/co
 <body>
 <div class="frame">
 <div class="left"><div style="font-size:9px;letter-spacing:.3em;color:#6b6875;text-align:center;margin-bottom:14px">SKILLS</div><div id="skillsList"></div></div>
-<div class="center"><img class="hero" src="assets/heroes/archer-m.webp" alt="Dark Ranger"></div>
+<div class="center"><img class="hero" id="heroImg" src=""></div>
 <div class="right">
-<div class="right-header"><div><h1>DARK RANGER</h1><div class="sub">SHADOW RANGER • ARCHER • MALE</div></div><div class="close" onclick="location.href='index.html'">✕</div></div>
+<div class="right-header"><div><h1 id="rName">DARK RANGER</h1><div class="sub" id="rSub">SHADOW RANGER • ARCHER • MALE</div></div><div class="close" onclick="location.href='index.html'">✕</div></div>
 <div class="name-block"><label>ENTER YOUR NAME</label><input id="nameInput" type="text" value="VOLAND 1337" placeholder="Type your name..." maxlength="16"></div>
 <div class="stats"><div class="stats-title">STATS</div>
-<div class="stat"><div class="stat-head"><span class="label">HP</span><span class="val">928</span></div><div class="bar"><span class="bar-fill" style="width:72%"></span></div></div>
-<div class="stat"><div class="stat-head"><span class="label">DEF</span><span class="val">115</span></div><div class="bar"><span class="bar-fill" style="width:38%"></span></div></div>
-<div class="stat"><div class="stat-head"><span class="label">DAMAGE</span><span class="val">185</span></div><div class="bar"><span class="bar-fill" style="width:65%"></span></div></div>
-<div class="stat"><div class="stat-head"><span class="label">CRIT</span><span class="val">26%</span></div><div class="bar"><span class="bar-fill" style="width:60%"></span></div></div>
-<div class="stat"><div class="stat-head"><span class="label">DODGE</span><span class="val">19%</span></div><div class="bar"><span class="bar-fill" style="width:85%"></span></div></div>
-<div class="stat"><div class="stat-head"><span class="label">MANA</span><span class="val">210</span></div><div class="bar"><span class="bar-fill" style="width:52%"></span></div></div>
+<div class="stat"><div class="stat-head"><span class="label">HP</span><span class="val" id="vHP">928</span></div><div class="bar"><span class="bar-fill" id="bHP" style="width:72%"></span></div></div>
+<div class="stat"><div class="stat-head"><span class="label">DEF</span><span class="val" id="vDEF">115</span></div><div class="bar"><span class="bar-fill" id="bDEF" style="width:38%"></span></div></div>
+<div class="stat"><div class="stat-head"><span class="label">DAMAGE</span><span class="val" id="vDMG">185</span></div><div class="bar"><span class="bar-fill" id="bDMG" style="width:65%"></span></div></div>
+<div class="stat"><div class="stat-head"><span class="label">CRIT</span><span class="val" id="vCRIT">26%</span></div><div class="bar"><span class="bar-fill" id="bCRIT" style="width:60%"></span></div></div>
+<div class="stat"><div class="stat-head"><span class="label">DODGE</span><span class="val" id="vDODGE">19%</span></div><div class="bar"><span class="bar-fill" id="bDODGE" style="width:85%"></span></div></div>
+<div class="stat"><div class="stat-head"><span class="label">MANA</span><span class="val" id="vMANA">210</span></div><div class="bar"><span class="bar-fill" id="bMANA" style="width:52%"></span></div></div>
 </div>
-<div class="archetype"><div class="small">CLASS ARCHETYPE</div><h3>SHADOW RANGER</h3><p>Precision eliminator. High crit & dodge, mid survivability. Cursed arrows bypass armor.</p><div class="small" style="margin-top:12px">LORE</div><p>Silent hunter of the Gloomwood. Arrows cursed with winter.</p></div>
+<div class="archetype"><div class="small">CLASS ARCHETYPE</div><h3 id="archName">SHADOW RANGER</h3><p id="archDesc">Precision eliminator. High crit & dodge, mid survivability. Cursed arrows bypass armor.</p><div class="small" style="margin-top:12px">LORE</div><p id="archLore">Silent hunter of the Gloomwood. Arrows cursed with winter.</p></div>
 <div id="confirmBtn" class="confirm">CONFIRM CHAMPION — ENTER NAME</div>
 <div class="esc">ESC TO CLOSE • CLICK OUTSIDE TO DISMISS</div>
 </div>
 </div>
 <script>
-const skills=[
+const HEROES = {
+"archer-m":{name:"DARK RANGER",sub:"SHADOW RANGER • ARCHER • MALE",img:"assets/heroes/archer-m.webp",arch:"SHADOW RANGER",archDesc:"Precision eliminator. High crit & dodge, mid survivability. Cursed arrows bypass armor.",lore:"Silent hunter of the Gloomwood. Arrows cursed with winter.",stats:{HP:928,DEF:115,DMG:185,CRIT:"26%",DODGE:"19%",MANA:210,bars:[72,38,65,60,85,52]},skills:[
 {img:"heroes/icon_metka_teni.jpg",name:"Метка Тени",badge:"PASSIVE",desc:"Каждая 2-я атака накладывает Метку Тени на 3 раунда. Отмеченные цели получают +200% урона от твоих стрел. Убийство отмеченной цели восстанавливает 15 маны.",meta:"КД: — • Мана: 0"},
 {img:"heroes/icon_begliy_vistrel.jpg",name:"Беглый выстрел",badge:"1",desc:"Стреляет по ближайшему врагу, нанося 200% урона.",meta:"КД: 3 раунда • Мана: 5 • Урон: 200%"},
 {img:"heroes/icon_shag_v_nichto.jpg",name:"Шаг в Ничто",badge:"2",desc:"Становится невидимым на 3 раунда. Следующая атака в инвизе критует гарантированно и снимает эффект инвиза.",meta:"КД: 20 раундов • Мана: 25"},
 {img:"heroes/icon_prizrachnaya_strela.jpg",name:"Призрачная Стрела",badge:"3",desc:"Выпускает стрелу, проходящую сквозь врагов. Наносит +140% урона и оглушает на 1 раунд с вероятностью 33%. Пронзает до 3 целей.",meta:"КД: 5 раундов • Мана: 20 • Урон: 185×1.4"},
 {img:"heroes/icon_zalp_bezdny.jpg",name:"Залп Бездны",badge:"4",desc:"ULTIMATE: Выпускает 7 стрел. Каждая стрела наносит +100% урона одному противнику. Если цель одна — весь урон попадает в неё +700% урона.",meta:"КД: 25 раундов • Мана: 40 • Урон: +700% в одну цель"}
-];
-const list=document.getElementById('skillsList');
-skills.forEach(s=>{list.innerHTML+=`<div class="skill"><div class="icon"><img src="${s.img}" onerror="this.src='assets/heroes/archer-m.webp'"></div><div><div class="sname">${s.name} <span class="badge">${s.badge}</span></div><div class="sdesc">${s.desc}</div><div class="smeta">${s.meta}</div></div></div>`});
-const nameInput=document.getElementById('nameInput');
-const confirmBtn=document.getElementById('confirmBtn');
-function checkName(){
-  const v=nameInput.value.trim();
-  if(v.length>=3){confirmBtn.classList.add('active');confirmBtn.textContent=`CONFIRM CHAMPION — SAVE AS ${v.toUpperCase()}`;}
-  else{confirmBtn.classList.remove('active');confirmBtn.textContent='CONFIRM CHAMPION — ENTER NAME';}
-}
-nameInput.addEventListener('input',checkName);
-nameInput.addEventListener('keydown',e=>{if(e.key==='Enter'&&confirmBtn.classList.contains('active'))confirmBtn.click();});
-confirmBtn.addEventListener('click',()=>{
-  if(!confirmBtn.classList.contains('active'))return;
-  const name=nameInput.value.trim();
-  localStorage.setItem('voland_player_name',name);
-  localStorage.setItem('voland_hero','archer-m');
-  confirmBtn.textContent=`✓ SAVED — WELCOME ${name.toUpperCase()}`;
-  confirmBtn.style.background='rgba(80,180,80,.15)';confirmBtn.style.borderColor='#50b450';confirmBtn.style.color='#8fdc8f';
-  setTimeout(()=>location.href='index.html',800);
-});
-checkName();
-nameInput.focus();
-nameInput.select();
-</script>
-</body>
-</html>
+]},
+"archer-f":{name:"WILD PATH",sub:"BEAST RANGER • ARCHER • FEMALE",img:"assets/heroes/archer-f.webp",arch:"WILD PATH",archDesc:"Evasion specialist. Bleed and poison, scouts invisible enemies.",lore:"Daughter of the forest, pact with beasts.",stats:{HP:890,DEF:98,DMG:178,CRIT:"28%",DODGE:"25%",MANA:200,bars:[68,32,60,68,92,48]},skills:[
+{img:"heroes/icon_tropy_zverya.jpg",name:"Тропы Зверя",badge:"PASSIVE",desc:"При уклонении, следующий удар 100% критический.",meta:"КД: — • Мана: 0"},
+{img:"heroes/icon_dvoynoy_vystrel.jpg",name:"Двойной Выстрел",badge:"1",desc:"Выстреливает 2 стрелы по 100% урона каждая. Если обе попали в одну цель — кровотечение 25% урона на 4 раунда.",meta:"КД: 3 раунда • Мана: 5 • Урон: 200% + дот"},
+{img:"heroes/icon_yadovitaya_liana.jpg",name:"Ядовитая Лиана",badge:"2",desc:"Бросает лиану в ближайшего врага. Враг оглушается на 1 раунд и отравляется на 3 раунда.",meta:"КД: 10 раундов • Мана: 15"},
+{img:"heroes/icon_glaz_yastreba.jpg",name:"Глаз Ястреба",badge:"3",desc:"На 4 раунда видит всех врагов в радиусе (даже в инвизе) и получает +25% крит шанс.",meta:"КД: 20 раундов • Мана: 20 • Крит: +25%"},
+{img:"heroes/icon_burya_strel.jpg",name:"Буря Стрел",badge:"4",desc:"ULTIMATE: Прыжок в воздух, 12 стрел за 3 раунда по области. Каждая 80% урона + 25% шанс стана.",meta:"КД: 25 раундов • Мана: 30"}
+]},
+"archmage-m":{name:"AZURE SAGE",sub:"TIME MAGE • MAGE • MALE",img:"assets/heroes/archmage-m.webp",arch:"AZURE SAGE",archDesc:"Time bender. Stacks damage, freezes time.",lore:"Keeper of Azure Library.",stats:{HP:820,DEF:105,DMG:235,CRIT:"22%",DODGE:"12%",MANA:340,bars:[58,36,82,52,38,88]},skills:[
+{img:"heroes/icon_iskrivlenie_vremeni.jpg",name:"Искривление Времени",badge:"PASSIVE",desc:"Каждое заклинание увеличивает базовый урон на 10%, стакается 5 раундов. При 5 стаках всё следующее заклинание кастуется +50% урона.",meta:"Стаки: 5 раундов • Бонус: +50%"},
+{img:"heroes/icon_ledyanoe_kopye.jpg",name:"Ледяное Копье",badge:"1",desc:"Бросает ледяное копье в спину врага, нанося +250% урона и уменьшает его защиту на 20%.",meta:"КД: 3
