@@ -2,77 +2,51 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>LION WARDEN</title>
+<title>HERO DETAIL - ALL IN ONE</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#0e0e10;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;font-family:Inter,sans-serif}
-.frame{width:100%;max-width:1280px;display:grid;grid-template-columns:380px 1fr 380px;background:#121214;border:1px solid #23232a;box-shadow:0 20px 60px rgba(0,0,0,.8)}
-.left{background:#121214;padding:18px;border-right:1px solid #23232a}
+body{background:#0e0e10;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;font-family:Inter,sans-serif;color:#e6e0cc}
+.frame{width:100%;max-width:1280px;display:grid;grid-template-columns:380px 1fr 380px;background:#121214;border:1px solid #23232a;box-shadow:0 20px 60px rgba(0,0,0,.8);min-height:780px}
+.left{background:#121214;padding:18px;border-right:1px solid #23232a;overflow-y:auto;max-height:90vh}
+.center{position:relative;background:#0c1218;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.center img.hero{width:100%;height:100%;object-fit:cover;display:block}
+.right{background:#17171b;padding:0;display:flex;flex-direction:column;border-left:1px solid #23232a;overflow-y:auto;max-height:90vh}
+.right-header{background:#1a1a1e;padding:16px 18px;border-bottom:1px solid #23232a;display:flex;justify-content:space-between}
+.right-header h1{font-family:Cinzel;font-size:20px;color:#e8dcc0;letter-spacing:.15em}.sub{font-size:7px;color:#8a8678;letter-spacing:.25em;margin-top:6px}
+.close{width:26px;height:26px;border-radius:50%;border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;color:#6b6875;cursor:pointer}
 .skill{background:#17171b;border:1px solid #23232a;border-radius:12px;padding:11px;display:flex;gap:11px;margin-bottom:10px}
-.skill .icon{width:64px;height:64px;border-radius:12px;overflow:hidden;flex-shrink:0;background:#1e1e22;border:1px solid #2a2a32}
-.skill .icon img{width:100%;height:100%;object-fit:cover;display:block}
+.skill .icon{width:64px;height:64px;border-radius:12px;overflow:hidden;flex-shrink:0;background:#1e1e22;border:1px solid #2a2a32}.skill .icon img{width:100%;height:100%;object-fit:cover;display:block}
 .sname{font-size:12px;font-weight:700;color:#e6e0cc}.badge{font-size:7px;background:#1e1e22;border:1px solid #2a2a32;padding:2px 5px;border-radius:4px;color:#8a8678;margin-left:6px}
 .sdesc{font-size:10px;color:#8b8b95;line-height:1.4;margin-top:3px}.smeta{font-size:7.5px;color:#5e5e68;margin-top:5px}
-.center{position:relative;background:#0c1218;display:flex;align-items:center;justify-content:center;overflow:hidden;min-height:780px}
-.center img.hero{width:100%;height:100%;object-fit:cover;object-position:center;display:block}
-.right{background:#17171b;padding:0;display:flex;flex-direction:column;border-left:1px solid #23232a}
-.right-header{background:#1a1a1e;padding:16px 18px;border-bottom:1px solid #23232a;display:flex;justify-content:space-between}
-.right-header h1{font-family:Cinzel;font-size:20px;color:#e8dcc0;letter-spacing:.15em}
-.right-header .sub{font-size:7px;color:#8a8678;letter-spacing:.25em;margin-top:6px}
-.close{width:26px;height:26px;border-radius:50%;border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;color:#6b6875;cursor:pointer}
-.name-block{background:#2a2a2e;border:1px solid #3a3a42;margin:16px;padding:10px}
-.name-block label{font-size:8px;letter-spacing:.2em;color:#8a8678;display:block;margin-bottom:6px}
-.name-block input{width:100%;background:#0e0e10;border:1px solid #3a3a42;color:#e8dcc0;padding:9px 10px;font-size:11px;outline:none}
-.name-block input:focus{border-color:#e6d5a0}
-.stats{padding:0 18px}
-.stat{margin:14px 0}.stat-head{display:flex;justify-content:space-between}.label{font-size:9px;color:#8a8678}.val{font-size:10px;color:#e6d5a0;font-weight:600}
-.bar{height:2px;background:rgba(255,255,255,.08);margin-top:5px}.bar-fill{height:100%;background:#e6d5a0;display:block}
-.confirm{margin:18px;padding:11px;background:rgba(40,35,25,.3);border:1px solid rgba(255,255,255,.08);text-align:center;font-size:8px;letter-spacing:.25em;color:#4a4a52;cursor:not-allowed}
-.confirm.active{background:rgba(230,213,160,.12);border-color:#e6d5a0;color:#e6d5a0;cursor:pointer}
+.name-block{background:#2a2a2e;border:1px solid #3a3a42;margin:16px;padding:10px}.name-block label{font-size:8px;letter-spacing:.2em;color:#8a8678;display:block;margin-bottom:6px}.name-block input{width:100%;background:#0e0e10;border:1px solid #3a3a42;color:#e8dcc0;padding:9px 10px;font-size:11px;outline:none}
+.confirm{margin:18px;padding:11px;background:rgba(40,35,25,.3);border:1px solid rgba(255,255,255,.08);text-align:center;font-size:8px;letter-spacing:.25em;color:#4a4a52;cursor:not-allowed}.confirm.active{background:rgba(230,213,160,.12);border-color:#e6d5a0;color:#e6d5a0;cursor:pointer}
+.stats{padding:0 18px}.stat{margin:14px 0}.stat-head{display:flex;justify-content:space-between}.label{font-size:9px;color:#8a8678}.val{font-size:10px;color:#e6d5a0;font-weight:600}.bar{height:2px;background:rgba(255,255,255,.08);margin-top:5px}.bar-fill{height:100%;background:#e6d5a0;display:block}
+.hero-panel{display:none}.hero-panel.active{display:block}
+.hero-center{display:none;width:100%;height:100%}.hero-center.active{display:block}
+.hero-right{display:none}.hero-right.active{display:block}
+.nav{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1a1a1e;border:1px solid #2a2a32;border-radius:20px;padding:6px 10px;display:flex;gap:6px;z-index:100;flex-wrap:wrap;max-width:90vw;justify-content:center}
+.nav button{background:#121214;border:1px solid #2a2a32;color:#8a8678;padding:6px 10px;border-radius:12px;font-size:8px;cursor:pointer;letter-spacing:.1em}
+.nav button.active{background:#e6d5a0;color:#0e0e10;border-color:#e6d5a0}
 </style>
 </head>
 <body>
 <div class="frame">
-<div class="left">
-<div style="font-size:9px;letter-spacing:.3em;color:#6b6875;text-align:center;margin-bottom:14px">SKILLS — LION WARDEN</div>
+<div class="left" id="left">
+<div style="font-size:9px;letter-spacing:.3em;color:#6b6875;text-align:center;margin-bottom:14px" id="leftTitle">SKILLS</div>
 
-<div class="skill"><div class="icon"><img src="heroes/icon_nepokolebimaya_stena.jpg" onerror="this.src='heroes/icon_udar_lva.jpg'"></div><div><div class="sname">Непоколебимая Стена <span class="badge">PASSIVE</span></div><div class="sdesc">Стена щитов: каждый блок +5% DEF стакается до 25%. Не падает пока стоит Империя.</div><div class="smeta">Мана: 0 • Стаки DEF</div></div></div>
-
-<div class="skill"><div class="icon"><img src="heroes/icon_udar_lva.jpg"></div><div><div class="sname">Удар Льва <span class="badge">1</span></div><div class="sdesc">Мощный удар щитом льва, оглушает на 1 раунд и наносит 150% урона. Игнорирует 30% брони.</div><div class="smeta">КД: 4 раунда • Мана: 10</div></div></div>
-
-<div class="skill"><div class="icon"><img src="heroes/icon_imperskiy_bastion.jpg"></div><div><div class="sname">Имперский Бастион <span class="badge">2</span></div><div class="sdesc">Ставит бастион льва на 3 раунда. Блокирует все стрелы и отражает 50% урона обратно.</div><div class="smeta">КД: 12 раундов • Мана: 30</div></div></div>
-
-<div class="skill"><div class="icon"><img src="heroes/icon_rassekayushchiy_udar.jpg"></div><div><div class="sname">Рассекающий удар <span class="badge">3</span></div><div class="sdesc">Рассекает врагов мечом льва по кругу на 220% урона. Каждый хит восстанавливает 5% HP.</div><div class="smeta">КД: 6 раундов • Мана: 5 • AOE</div></div></div>
-
-<div class="skill"><div class="icon"><img src="heroes/icon_avatar_imperii.jpg"></div><div><div class="sname">Аватар Империи <span class="badge">4</span></div><div class="sdesc">ULTIMATE: Призывает 4 золотых льва духа. Каждый лев бьет на 120% урона и дает щит 15% HP.</div><div class="smeta">КД: 25 раундов • Мана: 50 • Духи: 4</div></div></div>
-
+<!-- ARCHER-M DARK RANGER -->
+<div id="left-archer-m" class="hero-panel">
+<div class="skill"><div class="icon"><img src="heroes/icon_metka_teni.jpg"></div><div><div class="sname">Метка Тени <span class="badge">PASSIVE</span></div><div class="sdesc">Каждая 2-я атака накладывает Метку Тени на 3 раунда. Отмеченные цели получают +200% урона от твоих стрел. Убийство отмеченной цели восстанавливает 15 маны.</div><div class="smeta">КД: — • Мана: 0</div></div></div>
+<div class="skill"><div class="icon"><img src="heroes/icon_begliy_vistrel.jpg"></div><div><div class="sname">Беглый выстрел <span class="badge">1</span></div><div class="sdesc">Стреляет по ближайшему врагу, нанося 200% урона.</div><div class="smeta">КД: 3 раунда • Мана: 5 • Урон: 200%</div></div></div>
+<div class="skill"><div class="icon"><img src="heroes/icon_shag_v_nichto.jpg"></div><div><div class="sname">Шаг в Ничто <span class="badge">2</span></div><div class="sdesc">Становится невидимым на 3 раунда. Следующая атака в инвизе критует гарантированно и снимает эффект инвиза.</div><div class="smeta">КД: 20 раундов • Мана: 25</div></div></div>
+<div class="skill"><div class="icon"><img src="heroes/icon_prizrachnaya_strela.jpg"></div><div><div class="sname">Призрачная Стрела <span class="badge">3</span></div><div class="sdesc">Выпускает стрелу, проходящую сквозь врагов. Наносит +140% урона и оглушает на 1 раунд с вероятностью 33%. Пронзает до 3 целей.</div><div class="smeta">КД: 5 раундов • Мана: 20 • Урон: 185×1.4</div></div></div>
+<div class="skill"><div class="icon"><img src="heroes/icon_zalp_bezdny.jpg"></div><div><div class="sname">Залп Бездны <span class="badge">4</span></div><div class="sdesc">ULTIMATE: Выпускает 7 стрел. Каждая стрела наносит +100% урона одному противнику. Если цель одна — весь урон попадает в неё +700% урона.</div><div class="smeta">КД: 25 раундов • Мана: 40 • Урон: +700% в одну цель</div></div></div>
 </div>
 
-<div class="center"><img class="hero" src="heroes/icon_avatar_imperii.jpg" alt="Lion Warden" onerror="this.src='heroes/icon_nepokolebimaya_stena.jpg'"></div>
-
-<div class="right">
-<div class="right-header"><div><h1>LION WARDEN</h1><div class="sub">IMPERIAL GUARD • WARRIOR • MALE</div></div><div class="close" onclick="location.href='index.html'">✕</div></div>
-<div class="name-block"><label>ENTER YOUR NAME</label><input id="nameInput" type="text" value="VOLAND 1337"></div>
-<div class="stats">
-<div class="stat"><div class="stat-head"><span class="label">HP</span><span class="val">1250</span></div><div class="bar"><span class="bar-fill" style="width:95%"></span></div></div>
-<div class="stat"><div class="stat-head"><span class="label">DEF</span><span class="val">180</span></div><div class="bar"><span class="bar-fill" style="width:88%"></span></div></div>
-<div class="stat"><div class="stat-head"><span class="label">DAMAGE</span><span class="val">175</span></div><div class="bar"><span class="bar-fill" style="width:58%"></span></div></div>
-<div class="stat"><div class="stat-head"><span class="label">CRIT</span><span class="val">12%</span></div><div class="bar"><span class="bar-fill" style="width:26%"></span></div></div>
-<div class="stat"><div class="stat-head"><span class="label">DODGE</span><span class="val">6%</span></div><div class="bar"><span class="bar-fill" style="width:22%"></span></div></div>
-<div class="stat"><div class="stat-head"><span class="label">MANA</span><span class="val">220</span></div><div class="bar"><span class="bar-fill" style="width:56%"></span></div></div>
-</div>
-<div style="margin:16px;padding:12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06)"><div style="font-size:7px;color:#6b6875">CLASS ARCHETYPE</div><div style="font-size:11px;color:#e6e0cc;margin:4px 0">LION WARDEN</div><div style="font-size:9.5px;color:#8b8b95;line-height:1.5">Unbreakable wall. Taunt and imperial roar. Last bastion of Empire.</div></div>
-<div id="confirmBtn" class="confirm">CONFIRM CHAMPION — ENTER NAME</div>
-</div>
-</div>
-<script>
-const inp=document.getElementById('nameInput');
-const btn=document.getElementById('confirmBtn');
-function check(){const v=inp.value.trim();if(v.length>=3){btn.classList.add('active');btn.textContent='CONFIRM CHAMPION — SAVE AS '+v.toUpperCase();}else{btn.classList.remove('active');btn.textContent='CONFIRM CHAMPION — ENTER NAME';}}
-inp.addEventListener('input',check);
-btn.addEventListener('click',()=>{if(!btn.classList.contains('active'))return;localStorage.setItem('voland_player_name',inp.value.trim());localStorage.setItem('voland_hero','lion-warden');btn.textContent='✓ SAVED — WELCOME '+inp.value.trim().toUpperCase();setTimeout(()=>location.href='index.html',700);});
-check();
-</script>
-</body>
-</html>
+<!-- ARCHER-F WILD PATH -->
+<div id="left-archer-f" class="hero-panel">
+<div class="skill"><div class="icon"><img src="heroes/icon_tropy_zverya.jpg"></div><div><div class="sname">Тропы Зверя <span class="badge">PASSIVE</span></div><div class="sdesc">При уклонении, следующий удар 100% критический.</div><div class="smeta">КД: — • Мана: 0</div></div></div>
+<div class="skill"><div class="icon"><img src="heroes/icon_dvoynoy_vystrel.jpg"></div><div><div class="sname">Двойной Выстрел <span class="badge">1</span></div><div class="sdesc">Выстреливает 2 стрелы по 100% урона каждая. Если обе попали в одну цель — кровотечение 25% урона на 4 раунда.</div><div class="smeta">КД: 3 раунда • Мана: 5 • Урон: 200% + дот</div></div></div>
+<div class="skill"><div class="icon"><img src="heroes/icon_yadovitaya_liana.jpg"></div><div><div class="sname">Ядовитая Лиана <span class="badge">2</span></div><div class="sdesc">Бросает лиану в ближайшего врага. Враг оглушается на 1 раунд и отравляется на 3 раунда.</div><div class="smeta">КД: 10 раундов • Мана: 15 • Стан 1 раунд + дот</div></div></div>
+<div class="skill"><div class="icon"><img src="heroes/icon_glaz_yastreba.jpg
