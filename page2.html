@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>HERO SELECT - REAL ICONS ONLY</title>
+<title>HERO SELECT - 112px FIX - FILLED</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&display=swap" rel="stylesheet">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
@@ -11,17 +11,18 @@
 html,body{height:100%;background:#0a0a0c;color:#e6e0cc;font-family:Inter,Arial,sans-serif;overflow:hidden}
 .bg{position:fixed;inset:0;z-index:0}.bg img{width:100%;height:100%;object-fit:cover}.bg:after{content:"";position:absolute;inset:0;background:rgba(8,8,10,.82)}
 .wrap{position:fixed;inset:0;display:flex;z-index:2}
-.left{width:440px;min-width:440px;background:#0e0e10;border-right:1px solid #23232a;padding:10px;display:flex;flex-direction:column;gap:10px;height:100vh;overflow:hidden}
-.skill{flex:1;display:flex;gap:14px;background:#17171b;border:1px solid #23232a;border-radius:12px;padding:10px;align-items:center;min-height:0}
-.icon{width:112px;height:112px;min-width:112px;border-radius:12px;background:#1a1a1e;border:1px solid #2a2a32;overflow:hidden;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.left{width:440px;min-width:440px;background:#0e0e10;border-right:1px solid #23232a;padding:10px;overflow-y:auto;overflow-x:hidden}
+.skill{display:flex;gap:14px;background:#17171b;border:1px solid #23232a;border-radius:12px;padding:10px;align-items:center;margin-bottom:10px;min-height:0}
+.icon{width:112px;height:112px;min-width:112px;border-radius:12px;background:#1e1e22;border:1px solid #2a2a32;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:48px;flex-shrink:0;position:relative}
 .icon img{width:100%;height:100%;object-fit:cover;display:block}
+.icon .fallback{position:absolute;inset:0;display:none;align-items:center;justify-content:center;font-size:42px;background:#1e1e22}
 .sinfo{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center}
 .sname{font-size:12px;font-weight:700;color:#e6d5a0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .badge{font-size:8px;background:#1e1e22;border:1px solid #2a2a32;padding:2px 5px;border-radius:3px;color:#8a8678;margin-left:5px}
 .sdesc{font-size:11px;color:#9a9aa0;margin-top:6px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
 .smeta{font-size:8px;color:#6a6a72;margin-top:5px}
 .center{flex:1;background:#000;display:flex;align-items:flex-end;justify-content:center;overflow:hidden;position:relative}
-.center img{max-height:78vh;max-width:92%;width:auto;height:auto;object-fit:contain;object-position:bottom center;display:block}
+.center img{max-height:78vh;max-width:92%;width:auto;height:auto;object-fit:contain;object-position:bottom center;display:block;filter: drop-shadow(0 0 20px rgba(0,0,0,.8))}
 .right{width:400px;min-width:400px;background:#121214;border-left:1px solid #23232a;overflow:auto;padding:14px;display:flex;flex-direction:column}
 .hero-right{font-family:'Cinzel Decorative',serif;font-size:20px;letter-spacing:.35em;color:#e6d5a0;font-weight:900;padding-bottom:18px;border-bottom:1px solid #2a2a32;margin-bottom:112px}
 .stat-row{margin-bottom:10px}
@@ -29,28 +30,4 @@ html,body{height:100%;background:#0a0a0c;color:#e6e0cc;font-family:Inter,Arial,s
 .val{color:#e6d5a0;font-weight:800}
 .bar{height:6px;background:#222;border-radius:3px;overflow:hidden}
 .bar-fill{height:100%;background:#e6d5a0;display:block}
-.input-box{margin-top:auto;background:#1e1e22;border:1px solid #2a2a32;padding:10px;border-radius:8px}
-.input-box .label{font-size:7px;letter-spacing:.2em;color:#8a8678}
-.input-box input{width:100%;margin-top:6px;background:#0e0e10;border:1px solid #3a3a42;color:#e6e0cc;padding:9px;border-radius:6px;font-size:12px}
-.btn{margin-top:10px;padding:11px;border:1px solid #3a3a42;text-align:center;font-size:8px;letter-spacing:.2em;border-radius:6px;transition:.2s}
-.btn.active{background:#e6d5a0;color:#121214;font-weight:800;cursor:pointer}
-.close{position:fixed;top:8px;right:8px;z-index:10;width:32px;height:32px;background:rgba(0,0,0,.7);border:1px solid #2a2a32;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#e6e0cc}
-</style>
-</head>
-<body>
-<div class="bg"><img src="assets/heroes/bg-battlefield.webp" onerror="this.style.display='none'"></div>
-<div class="close" onclick="location.href='index.html'">✕</div>
-<div class="wrap">
-<div class="left" id="left"></div>
-<div class="center"><img id="heroImg" src="assets/heroes/necro-f-new.webp" alt="hero"></div>
-<div class="right">
-<div class="hero-right" id="hr">HERO</div>
-<div id="stats"></div>
-<div class="input-box"><div class="label">ENTER YOUR NAME</div><input id="nameIn" value="VOLAND 1337"></div>
-<div id="btn" class="btn">CONFIRM</div>
-</div>
-</div>
-<script>
-const DB={
-'necro-f-new':{n:'AMETHYST',img:'assets/heroes/necro-f-new.webp',st:{HP:1000,DEF:100,DMG:240,MANA:280,CRIT:15,EVA:12},sk:[
-['Шепот Аметиста','PASSIVE',['heroes/icon_shepot_ametista.jpg'],'','Каждое 3-е заклинание призывает аметистового духа на
+.input-box{margin-top:auto
