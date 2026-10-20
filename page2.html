@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>HERO SELECT - FIXED</title>
+<title>HERO SELECT - 112px FIX</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&display=swap" rel="stylesheet">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
@@ -24,7 +24,7 @@ html,body{height:100%;background:#0a0a0c;color:#e6e0cc;font-family:Inter,Arial,s
 .center{flex:1;background:#000;display:flex;align-items:flex-end;justify-content:center;overflow:hidden;position:relative}
 .center img{max-height:88vh;max-width:100%;width:auto;height:auto;object-fit:contain;object-position:bottom center;display:block}
 .right{width:400px;min-width:400px;background:#121214;border-left:1px solid #23232a;overflow:auto;padding:14px;display:flex;flex-direction:column}
-.hero-right{font-family:'Cinzel Decorative',serif;font-size:20px;letter-spacing:.35em;color:#e6d5a0;font-weight:900;padding-bottom:18px;border-bottom:1px solid #2a2a32;margin-bottom:32px}
+.hero-right{font-family:'Cinzel Decorative',serif;font-size:20px;letter-spacing:.35em;color:#e6d5a0;font-weight:900;padding-bottom:18px;border-bottom:1px solid #2a2a32;margin-bottom:112px}
 .stat-row{margin-bottom:10px}
 .stat{display:flex;justify-content:space-between;font-size:9px;margin-bottom:3px;letter-spacing:.1em}
 .val{color:#e6d5a0;font-weight:800}
@@ -55,7 +55,7 @@ html,body{height:100%;background:#0a0a0c;color:#e6e0cc;font-family:Inter,Arial,s
 const DB={
 'necro-f-new':{n:'AMETHYST',img:'assets/heroes/necro-f-new.webp',st:{HP:1000,DEF:100,DMG:240,MANA:280,CRIT:15,EVA:12},sk:[
 ['Шепот Аметиста','PASSIVE',['heroes/icon_shepot_ametista.jpg'],'🔮','Каждое 3-е заклинание призывает аметистового духа на 3 раунда. Дух бьет на 100% урона заклинателя и дает тебе +5 маны за раунд пока жив.','Дух: 100% урона • Мана: +5 за раунд'],
-['Проклятие Душ','1',['heroes/icon_proklyatie_dush.jpg','heroes/icon_proklyatye_dush.jpg','heroes/icon_proklyatie_dush_1.jpg'],'💜','Луч света наносит 200% урона + крадет 5 маны у врага и накладывает Страх Душ: -15% урона врага на 4 раунда.','КД: 3 раундов • Мана: 10 • -15% урона врага'],
+['Проклятие Душ','1',['heroes/icon_proklyatie_dush.jpg','heroes/icon_proklyatye_dush.jpg'],'💜','Луч света наносит 200% урона + крадет 5 маны у врага и накладывает Страх Душ: -15% урона врага на 4 раунда.','КД: 3 раундов • Мана: 10 • -15% урона врага'],
 ['Аметистовая Тюрьма','2',['heroes/icon_ametistovaya_tyurma.jpg'],'👻','Призыватель заключает всех врагов в клетку на 1 раунд. В конце раунда клетка взрывается нанося всем 300% урона.','КД: 10 раундов • Мана: 15 • Контроль: Стан AOE 1 раунд'],
 ['Похищение Жизни','3',['heroes/icon_pokhishchenie_zhizni.jpg'],'💀','Связь с врагом на 4 раунда: 30% урона, который ты получаешь, отражается в врага, и 30% урона врага хилит тебя.','КД: 18 раундов • Мана: 30 • 30% получаемого урона - отдача 30% лайфстил'],
 ['Аметистовый Закат','4',['heroes/icon_ametistovyy_zakat.jpg'],'🌌','ULTIMATE: Выпускает 5 аметистовых душ, каждая ищет врага и наносит 200% урона + станит на 1 раунд. Если враг один — все 5 попадают в него.','КД: 25 раундов • Мана: 100 • Урон: до 1000% + стан 1 раунд']]},
@@ -73,7 +73,7 @@ const DB={
 ['Буря Стрел','4',['heroes/icon_burya_strel.jpg'],'🌪️','ULTIMATE: Прыжок в воздух, 12 стрел за 3 раунда по области. Каждая 80% урона + 25% шанс стана на 1 раунд.','КД: 25 раундов • Мана: 30 • Урон: до 960% + стан']]},
 'archer-m':{n:'DARK RANGER',img:'assets/heroes/archer-m.webp',st:{HP:1020,DEF:95,DMG:230,MANA:210,CRIT:20,EVA:18},sk:[
 ['Метка Тени','PASSIVE',['heroes/icon_metka_teni.jpg'],'👁️','Каждая 2-я атака накладывает Метку Тени на 3 раунда. Отмеченные цели получают +200% урона от твоих стрел. Убийство отмеченной цели восстанавливает 15 маны.','КД: — • Мана: 0'],
-['Беглый выстрел','1',['heroes/icon_begliy_vystrel.jpg'],'🏹','Стреляет по ближайшему врагу, нанося 200% урона.','КД: 3 раунда • Мана: 5 • Урон: 200%'],
+['Беглый выстрел','1',['heroes/icon_begliy_vistrel.jpg'],'🏹','Стреляет по ближайшему врагу, нанося 200% урона.','КД: 3 раунда • Мана: 5 • Урон: 200%'],
 ['Шаг в Ничто','2',['heroes/icon_shag_v_nichto.jpg'],'🌑','Становится невидимым на 3 раунда. Следующая атака в инвизе критует гарантированно и снимает эффект инвиза.','КД: 20 раундов • Мана: 25'],
 ['Призрачная Стрела','3',['heroes/icon_prizrachnaya_strela.jpg'],'💫','Выпускает стрелу, проходящую сквозь врагов. Наносит +140% урона и оглушает на 1 раунд с вероятностью 33%. Пронзает до 3 целей.','КД: 5 раундов • Мана: 20 • Урон: 185×1.4'],
 ['Залп Бездны','4',['heroes/icon_zalp_bezdny.jpg'],'🌌','ULTIMATE: Выпускает 7 стрел. Каждая стрела наносит +100% урона одному противнику. Если цель одна — весь урон попадает в неё +700% урона.','КД: 25 раундов • Мана: 40 • Урон: +700% в одну цель']]},
@@ -96,11 +96,11 @@ const DB={
 ['Зов Стаи','3',['heroes/icon_zov_stai.jpg'],'🐾','Издает зов волка, который станит 1 врага, все остальные враги получают 200% урона, оглушенный враг получает урон 2 раза.','КД: 15 раундов • Мана: 20 • Волки: 200% AOE + стан'],
 ['Альфа Хищник','4',['heroes/icon_alfa_khishchnik.jpg'],'🌕','ULTIMATE: Превращается в волка на 5 раундов: +50% макс HP, +30% урона, атаки наносят кровотечение 100% урона.','КД: 20 раундов • Мана: 20 • +50% макс HP +30% урона + дот']]},
 'warrior-m':{n:'LION WARDEN',img:'assets/heroes/warrior-m.webp',st:{HP:1300,DEF:180,DMG:180,MANA:220,CRIT:8,EVA:7},sk:[
-['Непоколебимая Стена','PASSIVE',['heroes/icon_nepokolebimaya_stena.jpg'],'🦁','Непоколебимая стена: +3% DEF за 5% потерянного HP до 30% + щит 15% при <30% HP','<30% HP'],
-['Удар Льва','1',['heroes/icon_udar_lva.jpg'],'⚔️','Удар Льва: 200% урона + стан щитом на 1 раунд','КД: 8'],
-['Имперский Бастион','2',['heroes/icon_imperskiy_bastion.jpg'],'🛡️','Имперский бастион: блок 50% + отражение 25% на 3 раунда','КД: 15'],
-['Рассекающий удар','3',['heroes/icon_rassekayushchiy_udar.jpg'],'📯','Рассекающий удар: 200% ближайшему врагу','КД: 3'],
-['Аватар Империи','4',['heroes/icon_avatar_imperii.jpg'],'👑','ULTIMATE: Аватар Империи — неуязвимость 2р +300% AOE 3р','КД: 35']]}
+['Непоколебимая Стена','PASSIVE',['heroes/icon_nepokolebimaya_stena.jpg'],'🦁','Пассивка: каждые потерянные 5% HP дают +3% защиты, стакается до 30% защиты. При падении ниже 30% HP автоматически создается щит 15% от макс HP.','Защита до +30% • Щит 15% HP при <30%'],
+['Удар Льва','1',['heroes/icon_udar_lva.jpg'],'⚔️','Бросает щит льва вперед, наносит 200% урона ближайшему врагу и оглушает его щитом на 1 раунд.','КД: 8 раундов • Мана: 15 • Урон: 200% + стан 1р'],
+['Имперский Бастион','2',['heroes/icon_imperskiy_bastion.jpg'],'🛡️','Поднимает имперский бастион на 3 раунда: блокирует 50% входящего урона и отражает 25% урона обратно во врагов.','КД: 15 раундов • Мана: 25 • Блок 50% • Отражение 25% • 3 раунда'],
+['Рассекающий удар','3',['heroes/icon_rassekayushchiy_udar.jpg'],'📯','Мощный рассекающий удар мечом по ближайшему врагу, наносит 200% урона и снижает его броню на 15% на 2 раунда.','КД: 3 раунда • Мана: 10 • Урон: 200% • -15% брони 2р'],
+['Аватар Империи','4',['heroes/icon_avatar_imperii.jpg'],'👑','ULTIMATE: Призывает Аватара Империи — становится неуязвимым на 2 раунда и наносит всем врагам в радиусе 300% урона в течение 3 раундов.','КД: 35 раундов • Мана: 50 • Неуязвимость 2р • Урон 300% AOE 3р']]}
 };
 function loadHero(id){
  if(!DB[id]) id='necro-f-new';
@@ -108,15 +108,8 @@ function loadHero(id){
  document.getElementById('hr').textContent=h.n;
  document.getElementById('heroImg').src=h.img;
  document.getElementById('left').innerHTML=h.sk.map(s=>{
-  let icons = s[2];
-  let first = icons[0];
-  return `<div class="skill">
-<div class="icon">
-<img src="${first}" data-fallbacks='${JSON.stringify(icons.slice(1))}' loading="lazy" onload="this.nextElementSibling.style.display='none'" onerror="let fb=JSON.parse(this.dataset.fallbacks||'[]'); if(fb.length){this.src=fb.shift(); this.dataset.fallbacks=JSON.stringify(fb);}else{this.style.display='none'; this.nextElementSibling.style.display='flex';}">
-<div class="fallback">${s[3]}</div>
-</div>
-<div class="sinfo"><div class="sname">${s[0]} <span class="badge">${s[1]}</span></div><div class="sdesc">${s[4]}</div><div class="smeta">${s[5]}</div></div>
-</div>`;
+  let icons=s[2]; let first=icons[0];
+  return `<div class="skill"><div class="icon"><img src="${first}" data-fallbacks='${JSON.stringify(icons.slice(1))}' loading="lazy" onload="this.nextElementSibling.style.display='none'" onerror="let fb=JSON.parse(this.dataset.fallbacks||'[]'); if(fb.length){this.src=fb.shift(); this.dataset.fallbacks=JSON.stringify(fb);}else{this.style.display='none'; this.nextElementSibling.style.display='flex';}"><div class="fallback">${s[3]}</div></div><div class="sinfo"><div class="sname">${s[0]} <span class="badge">${s[1]}</span></div><div class="sdesc">${s[4]}</div><div class="smeta">${s[5]}</div></div></div>`;
  }).join('');
  function pct(v,m){return Math.min(100,Math.round(v/m*100))+'%'}
  let st=h.st;
