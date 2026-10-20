@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>HERO SELECT - FINAL FIX</title>
+<title>HERO SELECT - CHECKED</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&display=swap" rel="stylesheet">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
@@ -12,36 +12,20 @@ html,body{height:100%;background:#0a0a0c;color:#e6e0cc;font-family:Inter,Arial,s
 .bg{position:fixed;inset:0;z-index:0}.bg img{width:100%;height:100%;object-fit:cover}.bg:after{content:"";position:absolute;inset:0;background:rgba(8,8,10,.82)}
 .wrap{position:fixed;inset:0;display:flex;z-index:2}
 .left{
-  width:440px;min-width:440px;
-  background:#0e0e10;border-right:1px solid #23232a;
-  padding:10px;
-  display:flex;flex-direction:column;gap:8px; /* растягиваем равномерно */
-  height:100%;overflow:hidden;
+  width:440px;min-width:440px;background:#0e0e10;border-right:1px solid #23232a;
+  padding:10px;display:grid;grid-template-rows:repeat(5,1fr);gap:10px;height:100%;overflow:hidden;
 }
-.skill{
-  display:flex;gap:10px;background:#17171b;border:1px solid #23232a;border-radius:10px;padding:8px;align-items:center;
-  flex:1 1 0; min-height:0; /* равномерно без искажений */
-}
+.skill{display:flex;gap:10px;background:#17171b;border:1px solid #23232a;border-radius:10px;padding:8px;align-items:center;min-height:0}
 .icon{width:88px;height:88px;min-width:88px;border-radius:10px;background:#1e1e22;border:1px solid #2a2a32;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:48px;flex-shrink:0;position:relative}
 .icon img{width:100%;height:100%;object-fit:cover;display:block}
 .icon .fallback{position:absolute;inset:0;display:none;align-items:center;justify-content:center;font-size:42px;background:#1e1e22}
-.sinfo{flex:1;min-width:0;padding-top:2px}
+.sinfo{flex:1;min-width:0}
 .sname{font-size:11px;font-weight:700;color:#e6d5a0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .badge{font-size:7px;background:#1e1e22;border:1px solid #2a2a32;padding:2px 4px;border-radius:3px;color:#8a8678;margin-left:4px}
-.sdesc{font-size:10px;color:#9a9aa0;margin-top:4px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;min-height:28px}
+.sdesc{font-size:10px;color:#9a9aa0;margin-top:4px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .smeta{font-size:7px;color:#6a6a72;margin-top:3px}
-.center{
-  flex:1;background:#000;
-  display:flex;align-items:center;justify-content:center; /* симметрично по центру */
-  overflow:hidden;position:relative;padding:12px;
-}
-.center img{
-  width:100%;height:100%;
-  max-width:100%;max-height:100%;
-  object-fit:contain; /* целиком с ногами и головой без обрезки */
-  object-position:center center;
-  display:block;
-}
+.center{flex:1;background:#000;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;padding:8px}
+.center img{width:100%;height:100%;max-width:100%;max-height:100%;object-fit:contain;object-position:center center;display:block}
 .right{width:400px;min-width:400px;background:#121214;border-left:1px solid #23232a;overflow:auto;padding:14px;display:flex;flex-direction:column}
 .hero-right{font-family:'Cinzel Decorative',serif;font-size:20px;letter-spacing:.35em;color:#e6d5a0;font-weight:900;padding-bottom:18px;border-bottom:1px solid #2a2a32;margin-bottom:112px}
 .stat-row{margin-bottom:10px}
@@ -72,4 +56,13 @@ html,body{height:100%;background:#0a0a0c;color:#e6e0cc;font-family:Inter,Arial,s
 </div>
 <script>
 const DB={
-'ne
+'necro-f-new':{n:'AMETHYST',img:'assets/heroes/necro-f-new.webp',st:{HP:1000,DEF:100,DMG:240,MANA:280,CRIT:15,EVA:12},sk:[
+['Шепот Аметиста','PASSIVE','heroes/icon_shepot_ametista.jpg','🔮','Каждое 3-е заклинание призывает аметистового духа на 3 раунда. Дух бьет на 100% урона заклинателя и дает тебе +5 маны за раунд пока жив.','Дух: 100% урона • Мана: +5 за раунд'],
+['Проклятие Душ','1','heroes/icon_proklyatie_dush.jpg','💜','Луч света наносит 200% урона + крадет 5 маны у врага и накладывает Страх Душ: -15% урона врага на 4 раунда.','КД: 3 раундов • Мана: 10 • -15% урона врага'],
+['Аметистовая Тюрьма','2','heroes/icon_ametistovaya_tyurma.jpg','👻','Призыватель заключает всех врагов в клетку на 1 раунд. В конце раунда клетка взрывается нанося всем 300% урона.','КД: 10 раундов • Мана: 15 • Контроль: Стан AOE 1 раунд'],
+['Похищение Жизни','3','heroes/icon_pokhishchenie_zhizni.jpg','💀','Связь с врагом на 4 раунда: 30% урона, который ты получаешь, отражается в врага, и 30% урона врага хилит тебя.','КД: 18 раундов • Мана: 30 • 30% получаемого урона - отдача 30% лайфстил'],
+['Аметистовый Закат','4','heroes/icon_ametistovyy_zakat.jpg','🌌','ULTIMATE: Выпускает 5 аметистовых душ, каждая ищет врага и наносит 200% урона + станит на 1 раунд. Если враг один — все 5 попадают в него.','КД: 25 раундов • Мана: 100 • Урон: до 1000% + стан 1 раунд']]},
+'necro-m':{n:'GRAVELORD',img:'assets/heroes/necro-m.webp',st:{HP:1150,DEF:110,DMG:190,MANA:260,CRIT:10,EVA:8},sk:[
+['Костяной Легион','PASSIVE','heroes/icon_kostyanoy_legion.jpg','🦴','Каждый раунд призывается по 1 скелету помощнику (макс 3). Скелеты наследуют 50% твоего урона. Скелеты бессмертны и воюют до конца боя.','Скелет 50% урона • Макс скелетов: 3'],
+['Костяное Копье','1','heroes/icon_kostyanoe_kopye.jpg','☠️','Бросает кость, наносит +150% урона и накладывает Уязвимость Костей: +25% урон от саммонов на 2 раунда.','КД: 4 раунда • Мана: 15 • +25% урона от саммонов'],
+['Костяной Щит','2','heroes/icon_kostyanoy_shchit.jpg','🛡️','Призывает щит из костей: 20% макс HP. При
