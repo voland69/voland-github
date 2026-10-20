@@ -9,7 +9,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,sans-serif;overflow:hidden}
-.bg{position:fixed;inset:0;z-index:0}.bg img{width:100%;height:100%;object-fit:cover;opacity:0.9}.bg:after{content:"";position:absolute;inset:0;background:rgba(10,14,20,.72)}
+.bg{position:fixed;inset:0;z-index:0;background:transparent}
+.bg img{width:100%;height:100%;object-fit:cover;opacity:0.08}
+.bg:after{content:"";position:absolute;inset:0;background:transparent}
 .wrap{position:fixed;inset:0;display:flex;z-index:2}
 .left-nav{width:68px;min-width:68px;background:#12181e;border-right:1px solid #1e2a32;display:flex;flex-direction:column;align-items:center;padding:12px 6px;gap:18px}
 .nav-item{width:48px;height:48px;background:#1a252f;border:1px solid #2a3a4a;border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0.6;transition:.2s;font-size:20px}
@@ -24,94 +26,4 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 .hero-role{margin-top:10px;font-size:8px;letter-spacing:.15em;color:#c9b47a;font-family:'JetBrains Mono',monospace;text-transform:uppercase}
 .main{flex:1;display:flex;flex-direction:column;background:rgba(16,22,30,.90);overflow:auto;padding:0}
 .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:14px;background:#131a22;border-bottom:1px solid #1e2a32}
-.stat-card{background:#1a242f;border:1px solid #2a3a4a;border-radius:8px;padding:14px 10px;text-align:center}
-.stat-label{font-size:8px;letter-spacing:.2em;color:#6a7a8a;font-family:'JetBrains Mono',monospace}
-.stat-value{margin-top:6px;font-size:22px;font-weight:800;color:#e6d5a0;font-family:'JetBrains Mono',monospace}
-.bars-panel{padding:18px 20px;background:#111821;display:flex;flex-direction:column;gap:14px;flex:1}
-.bar-row{display:flex;align-items:center;gap:12px}
-.bar-label{width:60px;font-size:9px;letter-spacing:.15em;color:#6a7a8a;text-align:right;font-family:'JetBrains Mono',monospace}
-.bar-track{flex:1;height:18px;background:#0a0e14;border-radius:3px;overflow:hidden;border:1px solid #1e2a32;position:relative}
-.bar-fill{height:100%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;font-family:'JetBrains Mono',monospace}
-.bar-fill.hp{background:linear-gradient(90deg,#b33030,#e05050);color:#fff}
-.bar-fill.mana{background:linear-gradient(90deg,#1a4a9a,#2a6ad0);color:#fff}
-.bar-fill.stamina{background:linear-gradient(90deg,#1a7a4a,#3ad080);color:#fff}
-.bar-fill.xp{background:linear-gradient(90deg,#8a6a1a,#d0b040);color:#fff}
-.stats-note{font-size:8px;letter-spacing:.15em;color:#4a5a6a;font-family:'JetBrains Mono',monospace;margin-top:8px;text-align:center}
-.right{width:200px;min-width:200px;background:#0e141a;border-left:1px solid #1e2a32;display:flex;flex-direction:column}
-.chat-header{padding:12px;border-bottom:1px solid #1e2a32;display:flex;align-items:center;gap:8px;background:#141c24}
-.dot{width:8px;height:8px;border-radius:50%;background:#3ad080;box-shadow:0 0 6px #3ad080}
-.chat-title{font-size:9px;letter-spacing:.2em;color:#6a7a8a;font-family:'JetBrains Mono',monospace}
-.chat-body{flex:1;padding:10px;overflow:auto;display:flex;flex-direction:column;gap:8px}
-.sys-msg{background:#1a242f;border-left:2px solid #d0b040;padding:8px;font-size:10px;color:#9a9a7a;line-height:1.4;border-radius:0 6px 6px 0}
-.chat-input{padding:8px;border-top:1px solid #1e2a32;display:flex;gap:6px;background:#12181e}
-.chat-input input{flex:1;background:#0a0e14;border:1px solid #1e2a32;border-radius:6px;padding:8px;font-size:11px;color:#d8d2b8;outline:none}
-.chat-input button{width:32px;background:#e6d5a0;border:none;border-radius:6px;cursor:pointer;font-weight:800;color:#12181e}
-</style>
-</head>
-<body>
-<div class="bg"><img id="bgBattlefield" src="assets/heroes/bg-battlefield.webp" onerror="this.style.display='none'"><div style="position:absolute;inset:0;background:radial-gradient(ellipse at center, #1a242f 0%, #0a0e14 100%)"></div></div>
-<div class="wrap">
-  <div class="left-nav">
-    <div><div class="nav-item active">👤</div><div class="nav-label">HERO</div></div>
-    <div><div class="nav-item" onclick="location.href='page2.html'">📜</div><div class="nav-label">QUESTS</div></div>
-    <div><div class="nav-item">⚔️</div><div class="nav-label">BATTLE</div></div>
-    <div><div class="nav-item">📖</div><div class="nav-label">MAP</div></div>
-    <div><div class="nav-item">🎒</div><div class="nav-label">INVENTORY</div></div>
-  </div>
-  <div class="hero-panel">
-    <div class="hero-img-wrap"><img id="heroImg" src="assets/heroes/warrior-m.webp" alt="hero" onerror="this.onerror=null; this.src='assets/heroes/warrior-f.webp'; this.onerror=function(){this.style.display='none'; document.getElementById('heroFallback').style.display='flex'}"><div id="heroFallback" style="display:none;width:100%;height:100%;align-items:center;justify-content:center;font-size:120px;background:#0a0e12">🛡️</div></div>
-    <div class="hero-info">
-      <div class="hero-name" id="heroName">DDDD</div>
-      <div class="hero-sub" id="heroSub">"dddd"</div>
-      <div class="hero-role" id="heroRole">LION WARDEN • IMPERIAL TANK • Warrior - Male</div>
-    </div>
-  </div>
-  <div class="main">
-    <div class="stats-grid" id="statsGrid"></div>
-    <div class="bars-panel" id="barsPanel"></div>
-  </div>
-  <div class="right">
-    <div class="chat-header"><div class="dot"></div><div class="chat-title">CHAT 200PX</div></div>
-    <div class="chat-body"><div class="sys-msg">Система: Лейаут обновлен — убраны зачеркнутые блоки</div></div>
-    <div class="chat-input"><input placeholder="..."><button>▶</button></div>
-  </div>
-</div>
-<script>
-const DB={
-'warrior-m':{n:'LION WARDEN',role:'LION WARDEN • IMPERIAL TANK • Warrior - Male',img:'assets/heroes/warrior-m.webp',st:{HP:1550,DEF:320,DMG:145,MANA:80,CRIT:10,DODGE:5},bars:{HP:[1550,1550],MANA:[80,400],STAMINA:[182,200],XP:[6420,10000]}},
-'warrior-f':{n:'IRON VOW',role:'IRON VOW • SHIELD TANK • Warrior - Female',img:'assets/heroes/warrior-f.webp',st:{HP:1420,DEF:290,DMG:152,MANA:110,CRIT:13,DODGE:8},bars:{HP:[1420,1550],MANA:[110,400],STAMINA:[182,200],XP:[6420,10000]}},
-'necro-f-new':{n:'AMETHYST',role:'AMETHYST • Necro - Female',img:'assets/heroes/necro-f-new.webp',st:{HP:1000,DEF:100,DMG:240,MANA:280,CRIT:15,EVA:12},bars:{HP:[1000,1550],MANA:[280,400],STAMINA:[182,200],XP:[6420,10000]}},
-'necro-m':{n:'GRAVELORD',role:'GRAVELORD • Necro - Male',img:'assets/heroes/necro-m.webp',st:{HP:1150,DEF:110,DMG:190,MANA:260,CRIT:10,EVA:8},bars:{HP:[1150,1550],MANA:[260,400],STAMINA:[182,200],XP:[6420,10000]}},
-'archer-f':{n:'WILD PATH',role:'WILD PATH • Archer - Female',img:'assets/heroes/archer-f.webp',st:{HP:980,DEF:90,DMG:210,MANA:200,CRIT:25,EVA:20},bars:{HP:[980,1550],MANA:[200,400],STAMINA:[182,200],XP:[6420,10000]}},
-'archer-m':{n:'DARK RANGER',role:'DARK RANGER • Archer - Male',img:'assets/heroes/archer-m.webp',st:{HP:1020,DEF:95,DMG:230,MANA:210,CRIT:20,EVA:18},bars:{HP:[1020,1550],MANA:[210,400],STAMINA:[182,200],XP:[6420,10000]}},
-'archmage-m':{n:'AZURE SAGE',role:'AZURE SAGE • Archmage - Male',img:'assets/heroes/archmage-m.webp',st:{HP:900,DEF:80,DMG:260,MANA:320,CRIT:18,EVA:10},bars:{HP:[900,1550],MANA:[320,400],STAMINA:[182,200],XP:[6420,10000]}},
-'mage-f-new':{n:'VOLCANIC',role:'VOLCANIC • Fire - Female',img:'assets/heroes/mage-f-new.webp',st:{HP:950,DEF:85,DMG:280,MANA:300,CRIT:22,EVA:11},bars:{HP:[950,1550],MANA:[300,400],STAMINA:[182,200],XP:[6420,10000]}},
-};
-let heroId = localStorage.getItem('voland_hero') || 'warrior-m';
-let heroName = localStorage.getItem('voland_name') || 'DDDD';
-if(!DB[heroId]) heroId='warrior-m';
-let h = DB[heroId];
-document.getElementById('heroImg').src = h.img;
-document.getElementById('heroName').textContent = heroName.toUpperCase();
-document.getElementById('heroSub').textContent = '"'+heroName.toLowerCase()+'"';
-document.getElementById('heroRole').textContent = h.role;
-const s = h.st;
-const b = h.bars;
-document.getElementById('statsGrid').innerHTML = `
-  <div class="stat-card"><div class="stat-label">HP</div><div class="stat-value">${s.HP}</div></div>
-  <div class="stat-card"><div class="stat-label">DEF</div><div class="stat-value">${s.DEF}</div></div>
-  <div class="stat-card"><div class="stat-label">DAMAGE</div><div class="stat-value">${s.DMG}</div></div>
-  <div class="stat-card"><div class="stat-label">MANA</div><div class="stat-value">${s.MANA}</div></div>
-  <div class="stat-card"><div class="stat-label">CRIT</div><div class="stat-value">${s.CRIT}%</div></div>
-  <div class="stat-card"><div class="stat-label">DODGE</div><div class="stat-value">${s.DODGE}%</div></div>
-`;
-document.getElementById('barsPanel').innerHTML = `
-  <div class="bar-row"><div class="bar-label">HP</div><div class="bar-track"><div class="bar-fill hp" style="width:${b.HP[0]/b.HP[1]*100}%">${b.HP[0]} / ${b.HP[1]}</div></div></div>
-  <div class="bar-row"><div class="bar-label">MANA</div><div class="bar-track"><div class="bar-fill mana" style="width:${b.MANA[0]/b.MANA[1]*100}%">${b.MANA[0]} / ${b.MANA[1]}</div></div></div>
-  <div class="bar-row"><div class="bar-label">STAMINA</div><div class="bar-track"><div class="bar-fill stamina" style="width:${b.STAMINA[0]/b.STAMINA[1]*100}%">${b.STAMINA[0]} / ${b.STAMINA[1]}</div></div></div>
-  <div class="bar-row"><div class="bar-label">XP</div><div class="bar-track"><div class="bar-fill xp" style="width:${b.XP[0]/b.XP[1]*100}%">LVL 7 - ${b.XP[0]} / ${b.XP[1]} XP</div></div></div>
-  <div class="stats-note">STATS FROM PAGE 2 • ${h.n.toUpperCase()} • HERO IMG: ${h.img} • BG: assets/heroes/bg-battlefield.webp</div>
-`;
-</script>
-</body>
-</html>
+.stat-card{background:#1a242f;border:1px solid #2a
