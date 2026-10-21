@@ -71,24 +71,24 @@ html,body{height:100%;background: url("assets/heroes/bg-battlefield.webp") cente
   </div>
   <div class="right">
     <div class="chat-header"><div class="dot"></div><div class="chat-title">CHAT 200PX</div></div>
-    <div class="chat-body"><div class="sys-msg">Система: Лейаут обновлен</div></div>
+    <div class="chat-body"><div class="sys-msg">Система: Статы как на PAGE2 - VOLCANIC 950/85/280/300/22/11</div></div>
     <div class="chat-input"><input id="chatIn" placeholder="..."><button id="chatBtn">▶</button></div>
   </div>
 </div>
 <script>
 const DB={
-'necro-f-new':{n:'AMETHYST',role:'MAGE • Necro - Female',img:'assets/heroes/necro-f-new.webp',st:{HP:1420,DEF:290,DMG:152,MANA:110,CRIT:13,DODGE:8}},
-'necro-m':{n:'GRAVELORD',role:'TANK • Necro - Male',img:'assets/heroes/necro-m.webp',st:{HP:1550,DEF:340,DMG:140,MANA:95,CRIT:8,DODGE:5}},
-'archer-f':{n:'WILD PATH',role:'RANGER • Archer - Female',img:'assets/heroes/archer-f.webp',st:{HP:1280,DEF:210,DMG:180,MANA:100,CRIT:22,DODGE:18}},
-'archer-m':{n:'DARK RANGER',role:'RANGER • Archer - Male',img:'assets/heroes/archer-m.webp',st:{HP:1320,DEF:230,DMG:195,MANA:105,CRIT:18,DODGE:15}},
-'archmage-m':{n:'AZURE SAGE',role:'MAGE • Archmage - Male',img:'assets/heroes/archmage-m.webp',st:{HP:1200,DEF:180,DMG:210,MANA:180,CRIT:15,DODGE:7}},
-'mage-f-new':{n:'VOLCANIC',role:'MAGE • Fire - Female',img:'assets/heroes/mage-f-new.webp',st:{HP:1350,DEF:200,DMG:230,MANA:160,CRIT:20,DODGE:9}},
-'warrior-f':{n:'IRON VOW',role:'SHIELD TANK • Warrior - Female',img:'assets/heroes/warrior-f.webp',st:{HP:1420,DEF:290,DMG:152,MANA:110,CRIT:13,DODGE:8}},
-'warrior-m':{n:'LION WARDEN',role:'SHIELD TANK • Warrior - Male',img:'assets/heroes/warrior-m.webp',st:{HP:1650,DEF:350,DMG:145,MANA:90,CRIT:10,DODGE:6}},
+'necro-f-new':{n:'AMETHYST',role:'MAGE • Necro - Female',img:'assets/heroes/necro-f-new.webp',st:{HP:1000,DEF:100,DMG:240,MANA:280,CRIT:15,DODGE:12}},
+'necro-m':{n:'GRAVELORD',role:'TANK • Necro - Male',img:'assets/heroes/necro-m.webp',st:{HP:1150,DEF:110,DMG:190,MANA:260,CRIT:10,DODGE:8}},
+'archer-f':{n:'WILD PATH',role:'RANGER • Archer - Female',img:'assets/heroes/archer-f.webp',st:{HP:980,DEF:90,DMG:210,MANA:200,CRIT:25,DODGE:20}},
+'archer-m':{n:'DARK RANGER',role:'RANGER • Archer - Male',img:'assets/heroes/archer-m.webp',st:{HP:1020,DEF:95,DMG:230,MANA:210,CRIT:20,DODGE:18}},
+'archmage-m':{n:'AZURE SAGE',role:'MAGE • Archmage - Male',img:'assets/heroes/archmage-m.webp',st:{HP:900,DEF:80,DMG:260,MANA:320,CRIT:18,DODGE:10}},
+'mage-f-new':{n:'VOLCANIC',role:'MAGE • Fire - Female',img:'assets/heroes/mage-f-new.webp',st:{HP:950,DEF:85,DMG:280,MANA:300,CRIT:22,DODGE:11}},
+'warrior-f':{n:'IRON VOW',role:'SHIELD TANK • Warrior - Female',img:'assets/heroes/warrior-f.webp',st:{HP:1250,DEF:160,DMG:175,MANA:180,CRIT:12,DODGE:9}},
+'warrior-m':{n:'LION WARDEN',role:'SHIELD TANK • Warrior - Male',img:'assets/heroes/warrior-m.webp',st:{HP:1300,DEF:180,DMG:180,MANA:220,CRIT:8,DODGE:7}},
 };
-let heroId = localStorage.getItem('voland_hero') || 'warrior-f';
+let heroId = localStorage.getItem('voland_hero') || 'mage-f-new';
 let heroName = localStorage.getItem('voland_name') || 'VOLAND 1337';
-if(!DB[heroId]) heroId='warrior-f';
+if(!DB[heroId]) heroId='mage-f-new';
 let h = DB[heroId];
 document.getElementById('heroImg').src = h.img;
 document.getElementById('heroName').textContent = heroName.toUpperCase();
