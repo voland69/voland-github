@@ -8,7 +8,7 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%;background: url("assets/heroes/bg-battlefield.webp") center/cover no-repeat fixed #0a0e14;color:#d8d2b8;font-family:Inter,Arial,sans-serif;overflow:hidden}
+html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") center/cover no-repeat fixed #0a0e14;color:#d8d2b8;font-family:Inter,Arial,sans-serif;overflow:hidden}
 .bg{position:fixed;inset:0;z-index:0}
 .bg img{width:100%;height:100%;object-fit:cover;opacity:.9}
 .wrap{position:fixed;inset:0;display:flex;z-index:2}
@@ -50,17 +50,17 @@ html,body{height:100%;background: url("assets/heroes/bg-battlefield.webp") cente
 </style>
 </head>
 <body>
-<div class="bg"><img src="assets/heroes/bg-battlefield.webp" onerror="this.style.display='none'"></div>
+<div class="bg"><img src="./assets/heroes/bg-battlefield.webp" onerror="this.style.display='none'"></div>
 <div class="wrap">
   <div class="left-nav">
     <div><div class="nav-item active">👤</div><div class="nav-label">HERO</div></div>
-    <div onclick="location.href='page4.html'" style="cursor:pointer"><div class="nav-item" style="opacity:1">🎒</div><div class="nav-label">BAG</div></div>
-    <div onclick="location.href='page5.html'" style="cursor:pointer"><div class="nav-item" style="opacity:1">📜</div><div class="nav-label">QUESTS</div></div>
-    <div onclick="location.href='page6.html'" style="cursor:pointer"><div class="nav-item" style="opacity:1">⚔️</div><div class="nav-label">BATTLE</div></div>
-    <div onclick="location.href='index.html'" style="cursor:pointer"><div class="nav-item" style="opacity:1">📖</div><div class="nav-label">MAP</div></div>
+    <div onclick="location.href='./page4.html'" style="cursor:pointer"><div class="nav-item" style="opacity:1">🎒</div><div class="nav-label">BAG</div></div>
+    <div onclick="location.href='./page5.html'" style="cursor:pointer"><div class="nav-item" style="opacity:1">📜</div><div class="nav-label">QUESTS</div></div>
+    <div onclick="location.href='./page6.html'" style="cursor:pointer"><div class="nav-item" style="opacity:1">⚔️</div><div class="nav-label">BATTLE</div></div>
+    <div onclick="location.href='./index.html'" style="cursor:pointer"><div class="nav-item" style="opacity:1">📖</div><div class="nav-label">MAP</div></div>
   </div>
   <div class="hero-panel">
-    <div class="hero-img-wrap"><img id="heroImg" src="assets/heroes/warrior-f.webp" alt="hero"></div>
+    <div class="hero-img-wrap"><img id="heroImg" src="./assets/heroes/warrior-f.webp" alt="hero"></div>
     <div class="hero-info">
       <div class="hero-name" id="heroName">VOLAND 1337</div>
       <div class="hero-class" id="heroClass">SHIELD TANK • Warrior - Female</div>
@@ -72,61 +72,44 @@ html,body{height:100%;background: url("assets/heroes/bg-battlefield.webp") cente
   </div>
   <div class="right">
     <div class="chat-header"><div class="dot"></div><div class="chat-title">CHAT 200PX</div></div>
-    <div class="chat-body" id="chatBody"><div class="sys-msg">Система: Статы = BASE 950/85/280/300/22/11 + шмот с PAGE4</div></div>
+    <div class="chat-body" id="chatBody"><div class="sys-msg">Система: Статы = BASE + шмот с PAGE4 • Сохранение стабильно (v1)</div></div>
     <div class="chat-input"><input id="chatIn" placeholder="..."><button id="chatBtn">▶</button></div>
   </div>
 </div>
+<script src="./assets/js/db.js"></script>
+<script src="./assets/js/storage.js"></script>
 <script>
-const DB={
-'necro-f-new':{n:'AMETHYST',role:'MAGE • Necro - Female',img:'assets/heroes/necro-f-new.webp',st:{HP:1000,DEF:100,DMG:240,MANA:280,CRIT:15,DODGE:12}},
-'necro-m':{n:'GRAVELORD',role:'TANK • Necro - Male',img:'assets/heroes/necro-m.webp',st:{HP:1150,DEF:110,DMG:190,MANA:260,CRIT:10,DODGE:8}},
-'archer-f':{n:'WILD PATH',role:'RANGER • Archer - Female',img:'assets/heroes/archer-f.webp',st:{HP:980,DEF:90,DMG:210,MANA:200,CRIT:25,DODGE:20}},
-'archer-m':{n:'DARK RANGER',role:'RANGER • Archer - Male',img:'assets/heroes/archer-m.webp',st:{HP:1020,DEF:95,DMG:230,MANA:210,CRIT:20,DODGE:18}},
-'archmage-m':{n:'AZURE SAGE',role:'MAGE • Archmage - Male',img:'assets/heroes/archmage-m.webp',st:{HP:900,DEF:80,DMG:260,MANA:320,CRIT:18,DODGE:10}},
-'mage-f-new':{n:'VOLCANIC',role:'MAGE • Fire - Female',img:'assets/heroes/mage-f-new.webp',st:{HP:950,DEF:85,DMG:280,MANA:300,CRIT:22,DODGE:11}},
-'warrior-f':{n:'IRON VOW',role:'SHIELD TANK • Warrior - Female',img:'assets/heroes/warrior-f.webp',st:{HP:1250,DEF:160,DMG:175,MANA:180,CRIT:12,DODGE:9}},
-'warrior-m':{n:'LION WARDEN',role:'SHIELD TANK • Warrior - Male',img:'assets/heroes/warrior-m.webp',st:{HP:1300,DEF:180,DMG:180,MANA:220,CRIT:8,DODGE:7}},
-};
-const ITEMS=[
- {id:'head',bonus:{DMG:20,DEF:10}},{id:'ear1',bonus:{CRIT:1,DMG:5}},{id:'ear2',bonus:{CRIT:1,DODGE:2}},
- {id:'amulet',bonus:{MANA:50,CRIT:2}},{id:'armor',bonus:{HP:100,DEF:30}},{id:'weapon',bonus:{DMG:40}},
- {id:'shield',bonus:{DEF:60,HP:50}},{id:'ring1',bonus:{DMG:15,CRIT:1}},{id:'ring2',bonus:{MANA:30,DODGE:1}},
- {id:'gloves',bonus:{DEF:15,DMG:10}},{id:'boots',bonus:{DEF:20,DODGE:2,HP:20}},
-];
-const GEAR_KEY='voland_equip';
-function getEquipped(){
- try{let s=JSON.parse(localStorage.getItem(GEAR_KEY)||'{}');let eq={};for(let k in s){let it=ITEMS.find(x=>x.id===s[k]);if(it) eq[k]=it;}return eq;}catch(e){return {};}
-}
-let heroId=localStorage.getItem('voland_hero')||'mage-f-new';
-let heroName=localStorage.getItem('voland_name')||'VOLAND 1337';
-if(!DB[heroId]) heroId='mage-f-new';
-let h=DB[heroId];
-document.getElementById('heroImg').src=h.img;
-document.getElementById('heroName').textContent=heroName.toUpperCase();
-document.getElementById('heroClass').textContent=h.role;
+// Guard - если нет сохранения, кидаем на page2
+if (!volandHasSave()){ location.href='./page2.html'; }
+
+let heroId = volandGetHeroId();
+let heroName = volandGetName();
+let h = VOLAND_HEROES[heroId] || VOLAND_HEROES['mage-f-new'];
+
+document.getElementById('heroImg').src = h.img;
+document.getElementById('heroName').textContent = heroName.toUpperCase();
+document.getElementById('heroClass').textContent = h.role;
+
 function render(){
- let eq=getEquipped();
- let base={...h.st};
- let cur={...base};
- let bonus={};
- for(let slot in eq){for(let k in eq[slot].bonus){cur[k]=(cur[k]||0)+eq[slot].bonus[k];bonus[k]=(bonus[k]||0)+eq[slot].bonus[k];}}
- document.getElementById('statsGrid').innerHTML=`
-  <div class="stat-card ${bonus.HP?'boosted':''}"><div class="stat-label">HP</div><div class="stat-value">${cur.HP}</div><div class="stat-bonus">${bonus.HP?`+${bonus.HP} от шмота`:''}</div></div>
-  <div class="stat-card ${bonus.DEF?'boosted':''}"><div class="stat-label">DEF</div><div class="stat-value">${cur.DEF}</div><div class="stat-bonus">${bonus.DEF?`+${bonus.DEF} от шмота`:''}</div></div>
-  <div class="stat-card ${bonus.DMG?'boosted':''}"><div class="stat-label">DAMAGE</div><div class="stat-value">${cur.DMG}</div><div class="stat-bonus">${bonus.DMG?`+${bonus.DMG} от шмота`:''}</div></div>
-  <div class="stat-card ${bonus.MANA?'boosted':''}"><div class="stat-label">MANA</div><div class="stat-value">${cur.MANA}</div><div class="stat-bonus">${bonus.MANA?`+${bonus.MANA} от шмота`:''}</div></div>
-  <div class="stat-card ${bonus.CRIT?'boosted':''}"><div class="stat-label">CRIT</div><div class="stat-value">${cur.CRIT}%</div><div class="stat-bonus">${bonus.CRIT?`+${bonus.CRIT}% от шмота`:''}</div></div>
-  <div class="stat-card ${bonus.DODGE?'boosted':''}"><div class="stat-label">DODGE</div><div class="stat-value">${cur.DODGE}%</div><div class="stat-bonus">${bonus.DODGE?`+${bonus.DODGE}% от шмота`:''}</div></div>
- `;
- document.getElementById('barsPanel').innerHTML=`
-  <div class="bar-row"><div class="bar-label">HP</div><div class="bar-track"><div class="bar-fill hp" style="width:100%">${cur.HP} / ${cur.HP}</div></div></div>
-  <div class="bar-row"><div class="bar-label">MANA</div><div class="bar-track"><div class="bar-fill mana" style="width:100%">${cur.MANA} / ${cur.MANA}</div></div></div>
-  <div class="bar-row"><div class="bar-label">STAMINA</div><div class="bar-track"><div class="bar-fill stamina" style="width:100%">100 / 100</div></div></div>
-  <div class="bar-row"><div class="bar-label">XP</div><div class="bar-track"><div class="bar-fill xp" style="width:100%">LVL 7 - MAX</div></div></div>
- `;
+  const {cur, bonus} = volandCalcStats();
+  document.getElementById('statsGrid').innerHTML = `
+    <div class="stat-card ${bonus.HP?'boosted':''}"><div class="stat-label">HP</div><div class="stat-value">${cur.HP}</div><div class="stat-bonus">${bonus.HP?`+${bonus.HP} от шмота`:''}</div></div>
+    <div class="stat-card ${bonus.DEF?'boosted':''}"><div class="stat-label">DEF</div><div class="stat-value">${cur.DEF}</div><div class="stat-bonus">${bonus.DEF?`+${bonus.DEF} от шмота`:''}</div></div>
+    <div class="stat-card ${bonus.DMG?'boosted':''}"><div class="stat-label">DAMAGE</div><div class="stat-value">${cur.DMG}</div><div class="stat-bonus">${bonus.DMG?`+${bonus.DMG} от шмота`:''}</div></div>
+    <div class="stat-card ${bonus.MANA?'boosted':''}"><div class="stat-label">MANA</div><div class="stat-value">${cur.MANA}</div><div class="stat-bonus">${bonus.MANA?`+${bonus.MANA} от шмота`:''}</div></div>
+    <div class="stat-card ${bonus.CRIT?'boosted':''}"><div class="stat-label">CRIT</div><div class="stat-value">${cur.CRIT}%</div><div class="stat-bonus">${bonus.CRIT?`+${bonus.CRIT}% от шмота`:''}</div></div>
+    <div class="stat-card ${bonus.DODGE?'boosted':''}"><div class="stat-label">DODGE</div><div class="stat-value">${cur.DODGE}%</div><div class="stat-bonus">${bonus.DODGE?`+${bonus.DODGE}% от шмота`:''}</div></div>
+  `;
+  document.getElementById('barsPanel').innerHTML = `
+    <div class="bar-row"><div class="bar-label">HP</div><div class="bar-track"><div class="bar-fill hp" style="width:100%">${cur.HP} / ${cur.HP}</div></div></div>
+    <div class="bar-row"><div class="bar-label">MANA</div><div class="bar-track"><div class="bar-fill mana" style="width:100%">${cur.MANA} / ${cur.MANA}</div></div></div>
+    <div class="bar-row"><div class="bar-label">STAMINA</div><div class="bar-track"><div class="bar-fill stamina" style="width:100%">100 / 100</div></div></div>
+    <div class="bar-row"><div class="bar-label">XP</div><div class="bar-track"><div class="bar-fill xp" style="width:100%">LVL 7 - START</div></div></div>
+  `;
 }
 render();
-setInterval(()=>{let curId=localStorage.getItem('voland_hero');let curName=localStorage.getItem('voland_name');if(curId&&curId!==heroId&&DB[curId]){heroId=curId;h=DB[heroId];document.getElementById('heroImg').src=h.img;document.getElementById('heroClass').textContent=h.role;}if(curName) document.getElementById('heroName').textContent=curName.toUpperCase();render();},500);
+setInterval(render, 1000);
+
 const chatBody=document.getElementById('chatBody');const chatIn=document.getElementById('chatIn');const chatBtn=document.getElementById('chatBtn');
 function addMsg(t){let d=document.createElement('div');d.className='sys-msg';d.style.cssText='background:#1e2f3e;border-left-color:#e6d5a0;color:#d8d2b8';d.textContent='Ты: '+t;chatBody.appendChild(d);chatBody.scrollTop=9999;}
 chatBtn.onclick=()=>{let v=chatIn.value.trim();if(!v) return;addMsg(v);chatIn.value='';};
