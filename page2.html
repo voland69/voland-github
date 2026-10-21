@@ -20,15 +20,15 @@ html,body{height:100%;background:#0a0a0c;color:#e6e0cc;font-family:Inter,Arial,s
 .main{flex:1;display:flex;overflow:hidden}
 .left{width:440px;min-width:440px;background:#0e0e10;border-right:1px solid #23232a;padding:10px;overflow-y:auto}
 .skill{display:flex;gap:12px;background:#17171b;border:1px solid #23232a;border-radius:10px;padding:12px;align-items:flex-start;margin-bottom:10px;min-height:110px}
-.icon{width:72px;height:72px;min-width:72px;border-radius:8px;background:#1e1e22;border:1px solid #2a2a32;overflow:hidden;display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative}
+.icon{width:72px;height:72px;min-width:72px;border-radius:8px;background:#1e1e22;border:1px solid #2a2a32;overflow:hidden;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .icon img{width:100%;height:100%;object-fit:cover;display:block}
 .sinfo{flex:1;min-width:0}
 .sname{font-size:11px;font-weight:700;color:#e6d5a0}
 .badge{font-size:7px;background:#1e1e22;border:1px solid #2a2a32;padding:2px 4px;border-radius:3px;color:#8a8678;margin-left:4px}
-.sdesc{font-size:11px;color:#c9c2b0;margin-top:6px;line-height:1.45;white-space:normal;word-break:break-word}
-.smeta{font-size:8px;color:#8a9a6a;margin-top:6px;line-height:1.4;font-family:'JetBrains Mono',monospace;white-space:normal}
-.center{flex:1;background:#000;display:flex;align-items:flex-end;justify-content:center;overflow:hidden;position:relative}
-.center img{max-height:80vh;max-width:94%;width:auto;height:auto;object-fit:contain;object-position:bottom center;display:block;filter: drop-shadow(0 0 20px rgba(0,0,0,.8))}
+.sdesc{font-size:11px;color:#c9c2b0;margin-top:6px;line-height:1.45}
+.smeta{font-size:8px;color:#8a9a6a;margin-top:6px;font-family:'JetBrains Mono',monospace}
+.center{flex:1;background:#000;display:flex;align-items:flex-end;justify-content:center;overflow:hidden}
+.center img{max-height:80vh;max-width:94%;object-fit:contain;object-position:bottom center;filter: drop-shadow(0 0 20px rgba(0,0,0,.8))}
 .right{width:380px;min-width:380px;background:#121214;border-left:1px solid #23232a;overflow:auto;padding:14px;display:flex;flex-direction:column}
 .hero-right{font-family:'Cinzel Decorative',serif;font-size:18px;letter-spacing:.3em;color:#e6d5a0;font-weight:900;padding-bottom:14px;border-bottom:1px solid #2a2a32;margin-bottom:12px}
 .stat-row{margin-bottom:8px}
@@ -41,8 +41,8 @@ html,body{height:100%;background:#0a0a0c;color:#e6e0cc;font-family:Inter,Arial,s
 .input-box input{width:100%;margin-top:6px;background:#0e0e10;border:1px solid #3a3a42;color:#e6e0cc;padding:9px;border-radius:6px;font-size:12px}
 .btn{margin-top:10px;padding:11px;border:1px solid #3a3a42;text-align:center;font-size:8px;letter-spacing:.2em;border-radius:6px;transition:.2s}
 .btn.active{background:#e6d5a0;color:#121214;font-weight:800;cursor:pointer}
-.btn.active:hover{box-shadow:0 0 12px rgba(230,213,160,.3)}
 .close{position:fixed;top:8px;right:8px;z-index:10;width:32px;height:32px;background:rgba(0,0,0,.7);border:1px solid #2a2a32;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#e6e0cc}
+.info{margin-top:8px;font-size:6px;color:#4a5a6a;font-family:'JetBrains Mono',monospace;text-align:center}
 </style>
 </head>
 <body>
@@ -58,23 +58,21 @@ html,body{height:100%;background:#0a0a0c;color:#e6e0cc;font-family:Inter,Arial,s
       <div id="stats"></div>
       <div class="input-box"><div class="label">ENTER YOUR NAME (3+ chars)</div><input id="nameIn" placeholder="VOLAND 1337" value="VOLAND 1337"></div>
       <div id="btn" class="btn">SELECT HERO FIRST</div>
-      <div style="margin-top:8px;font-size:6px;color:#4a5a6a;font-family:'JetBrains Mono',monospace;text-align:center">Выбери героя сверху → введи имя → SAVE → перейдешь на PAGE3</div>
+      <div class="info" id="slotInfo"></div>
     </div>
   </div>
 </div>
 <script src="./assets/js/db.js"></script>
 <script src="./assets/js/storage.js"></script>
 <script>
-let selectedHeroId = volandGetHeroId();
+let selectedHeroId = 'mage-f-new';
+try { selectedHeroId = volandGetHeroId(); } catch(e){}
 function renderBar(){
   const bar = document.getElementById('heroBar');
-  bar.innerHTML = Object.keys(VOLAND_HEROES).map(id=>{
+  bar.innerHTML = Object.keys(VOLAND_HEROES).map(function(id){
     const h = VOLAND_HEROES[id];
     const active = id===selectedHeroId ? 'active' : '';
-    return `<div class="hero-thumb ${active}" onclick="selectHero('${id}')" title="${h.n} - ${h.role}">
-      <img src="${h.thumb}" onerror="this.style.display='none'">
-      <div class="tname">${h.n}</div>
-    </div>`;
+    return '<div class="hero-thumb '+active+'" onclick="selectHero(\''+id+'\')"><img src="'+h.thumb+'"><div class="tname">'+h.n+'</div></div>';
   }).join('');
 }
 function loadHero(id){
@@ -83,63 +81,40 @@ function loadHero(id){
   const h = VOLAND_HEROES[id];
   document.getElementById('hr').textContent = h.n;
   document.getElementById('heroImg').src = h.img;
-  document.getElementById('left').innerHTML = h.sk.map(s=>{
+  document.getElementById('left').innerHTML = h.sk.map(function(s){
     const first = s[2][0];
-    return `<div class="skill"><div class="icon"><img src="${first}" loading="lazy" onerror="this.style.display='none';"></div><div class="sinfo"><div class="sname">${s[0]} <span class="badge">${s[1]}</span></div><div class="sdesc">${s[4]}</div><div class="smeta">${s[5]}</div></div></div>`;
+    return '<div class="skill"><div class="icon"><img src="'+first+'" onerror="this.style.display=\'none\'"></div><div class="sinfo"><div class="sname">'+s[0]+' <span class="badge">'+s[1]+'</span></div><div class="sdesc">'+s[4]+'</div><div class="smeta">'+s[5]+'</div></div></div>';
   }).join('');
   function pct(v,m){return Math.min(100,Math.round(v/m*100))+'%'}
-  let st = {...h.st};
-  try {
-    const raw = volandGetEquipRaw();
-    for (let slot in raw){
-      const itemId = raw[slot];
-      const bonus = VOLAND_ITEMS_MAP[itemId];
-      if (bonus){ for (let k in bonus){ st[k]=(st[k]||0)+bonus[k]; } }
-    }
-  } catch(e){}
-  document.getElementById('stats').innerHTML = `
-    <div class="stat-row"><div class="stat"><span>HP</span><span class="val">${st.HP}</span></div><div class="bar"><div class="bar-fill" style="width:${pct(st.HP,1500)}"></div></div></div>
-    <div class="stat-row"><div class="stat"><span>DEF</span><span class="val">${st.DEF}</span></div><div class="bar"><div class="bar-fill" style="width:${pct(st.DEF,300)}"></div></div></div>
-    <div class="stat-row"><div class="stat"><span>DMG</span><span class="val">${st.DMG}</span></div><div class="bar"><div class="bar-fill" style="width:${pct(st.DMG,400)}"></div></div></div>
-    <div class="stat-row"><div class="stat"><span>MANA</span><span class="val">${st.MANA}</span></div><div class="bar"><div class="bar-fill" style="width:${pct(st.MANA,400)}"></div></div></div>
-    <div class="stat-row"><div class="stat"><span>CRIT</span><span class="val">${st.CRIT}%</span></div><div class="bar"><div class="bar-fill" style="width:${st.CRIT*3}%"></div></div></div>
-    <div class="stat-row"><div class="stat"><span>DODGE</span><span class="val">${st.DODGE}%</span></div><div class="bar"><div class="bar-fill" style="width:${st.DODGE*4}%"></div></div></div>
-  `;
-  renderBar();
-  chk();
+  let st = h.st;
+  document.getElementById('stats').innerHTML = '<div class="stat-row"><div class="stat"><span>HP</span><span class="val">'+st.HP+'</span></div><div class="bar"><div class="bar-fill" style="width:'+pct(st.HP,1500)+'"></div></div></div><div class="stat-row"><div class="stat"><span>DEF</span><span class="val">'+st.DEF+'</span></div><div class="bar"><div class="bar-fill" style="width:'+pct(st.DEF,300)+'"></div></div></div><div class="stat-row"><div class="stat"><span>DMG</span><span class="val">'+st.DMG+'</span></div><div class="bar"><div class="bar-fill" style="width:'+pct(st.DMG,400)+'"></div></div></div><div class="stat-row"><div class="stat"><span>MANA</span><span class="val">'+st.MANA+'</span></div><div class="bar"><div class="bar-fill" style="width:'+pct(st.MANA,400)+'"></div></div></div><div class="stat-row"><div class="stat"><span>CRIT</span><span class="val">'+st.CRIT+'%</span></div><div class="bar"><div class="bar-fill" style="width:'+(st.CRIT*3)+'%"></div></div></div><div class="stat-row"><div class="stat"><span>DODGE</span><span class="val">'+st.DODGE+'%</span></div><div class="bar"><div class="bar-fill" style="width:'+(st.DODGE*4)+'%"></div></div></div>';
+  renderBar(); chk();
 }
-function selectHero(id){
-  loadHero(id);
-  try { localStorage.setItem(VOLAND_KEYS.hero, id); } catch(e){}
-}
+function selectHero(id){ loadHero(id); }
 let inp=document.getElementById('nameIn');
 let btn=document.getElementById('btn');
-try {
-  const savedName = volandGetName();
-  if (savedName) inp.value = savedName;
-} catch(e){}
+let slotInfo=document.getElementById('slotInfo');
 function chk(){
   const v = inp.value.trim();
+  let profiles=[]; try{profiles=volandGetProfiles()}catch(e){}
+  const canCreate = profiles.length<3;
   if (v.length>=3 && selectedHeroId){
-    btn.classList.add('active');
-    btn.textContent = 'SAVE → PAGE3 (START) — ' + v.toUpperCase();
-  } else {
-    btn.classList.remove('active');
-    if (!selectedHeroId) btn.textContent='SELECT HERO FIRST';
-    else btn.textContent='ENTER NAME (3+ chars)';
-  }
+    if (!canCreate){ btn.classList.remove('active'); btn.textContent='MAX 3 HEROES - DELETE ONE ON INDEX'; slotInfo.textContent='Слотов: '+profiles.length+'/3 - максимум'; }
+    else { btn.classList.add('active'); btn.textContent='SAVE → PAGE3 — '+v.toUpperCase()+' ('+(profiles.length+1)+'/3)'; slotInfo.textContent='Слотов: '+profiles.length+'/3 • Создастся и перейдет на PAGE3'; }
+  } else { btn.classList.remove('active'); btn.textContent='ENTER NAME (3+ chars)'; slotInfo.textContent='Слотов: '+profiles.length+'/3 • До 3 персонажей'; }
 }
-inp.addEventListener('input', chk);
-chk();
-btn.onclick=()=>{
+inp.addEventListener('input', chk); chk();
+btn.onclick=function(){
   if (!btn.classList.contains('active')) return;
   const name = inp.value.trim();
   if (name.length<3) return;
-  volandSet(VOLAND_KEYS.hero, selectedHeroId);
-  volandSet(VOLAND_KEYS.name, name);
-  volandSet(VOLAND_KEYS.created, String(Date.now()));
-  try { localStorage.setItem('voland_hero', selectedHeroId); localStorage.setItem('voland_name', name); } catch(e){}
-  location.href='./page3.html';
+  let profiles=[]; try{profiles=volandGetProfiles()}catch(e){}
+  if (profiles.length>=3){ alert('Максимум 3'); return; }
+  try{
+    const created = volandCreateProfile(selectedHeroId, name);
+    if (created){ location.href='./page3.html'; }
+    else { alert('Не удалось создать'); }
+  }catch(e){ alert('Ошибка: '+e.message); }
 };
 loadHero(selectedHeroId);
 </script>
