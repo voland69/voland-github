@@ -18,12 +18,11 @@ html,body{height:100%;background: url("assets/heroes/bg-battlefield.webp") cente
 .nav-item.active{background:#1e2f3e;border-color:#3a4a5a;opacity:1;box-shadow:0 0 12px rgba(230,213,160,.2)}
 .nav-label{font-size:7px;letter-spacing:.15em;color:#6a7a8a;margin-top:4px;text-align:center;font-family:'JetBrains Mono',monospace}
 .hero-panel{width:380px;min-width:380px;background:rgba(20,28,36,.45);border-right:1px solid rgba(30,42,50,.5);display:flex;flex-direction:column;overflow:hidden;backdrop-filter: blur(3px)}
-.hero-img-wrap{flex:1;background:#0a0e12;display:flex;align-items:center;justify-content:center;padding:0;position:relative;overflow:hidden}
-.hero-img-wrap img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block}
+.hero-img-wrap{flex:1;background:#0a0e12;display:flex;align-items:center;justify-content:center;padding:12px;position:relative;overflow:hidden}
+.hero-img-wrap img{width:100%;height:100%;object-fit:cover;object-position:top center;border-radius:4px;max-height:72vh}
 .hero-info{padding:18px 16px;background:#111821;border-top:1px solid #1e2a32;text-align:center}
 .hero-name{font-family:'Cinzel Decorative',serif;font-size:16px;letter-spacing:.3em;color:#e6d5a0;font-weight:900}
-.hero-sub{margin-top:6px;font-size:10px;letter-spacing:.15em;color:#8a9a6a;font-family:'JetBrains Mono',monospace;text-transform:uppercase}
-.hero-role{margin-top:10px;font-size:8px;letter-spacing:.15em;color:#c9b47a;font-family:'JetBrains Mono',monospace;text-transform:uppercase}
+.hero-class{margin-top:8px;font-size:10px;letter-spacing:.15em;color:#8a9a6a;font-family:'JetBrains Mono',monospace;text-transform:uppercase}
 .main{flex:1;display:flex;flex-direction:column;background:rgba(16,22,30,.35);overflow:auto;padding:0;backdrop-filter: blur(2px)}
 .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:14px;background:rgba(19,26,34,.45);border-bottom:1px solid rgba(30,42,50,.5)}
 .stat-card{background:#1a242f;border:1px solid #2a3a4a;border-radius:8px;padding:14px 10px;text-align:center}
@@ -38,8 +37,7 @@ html,body{height:100%;background: url("assets/heroes/bg-battlefield.webp") cente
 .bar-fill.mana{background:linear-gradient(90deg,#1a4a9a,#2a6ad0);color:#fff}
 .bar-fill.stamina{background:linear-gradient(90deg,#1a7a4a,#3ad080);color:#fff}
 .bar-fill.xp{background:linear-gradient(90deg,#8a6a1a,#d0b040);color:#fff}
-.stats-note{font-size:8px;letter-spacing:.15em;color:#4a5a6a;font-family:'JetBrains Mono',monospace;margin-top:8px;text-align:center}
-.right{width:200px;min-width:200px;background:rgba(14,20,26,1);border-left:1px solid rgba(30,42,50,.5);display:flex;flex-direction:column;backdrop-filter: blur(3px)}
+.right{width:200px;min-width:200px;background:rgba(14,20,26,.45);border-left:1px solid rgba(30,42,50,.5);display:flex;flex-direction:column;backdrop-filter: blur(3px)}
 .chat-header{padding:12px;border-bottom:1px solid #1e2a32;display:flex;align-items:center;gap:8px;background:#141c24}
 .dot{width:8px;height:8px;border-radius:50%;background:#3ad080;box-shadow:0 0 6px #3ad080}
 .chat-title{font-size:9px;letter-spacing:.2em;color:#6a7a8a;font-family:'JetBrains Mono',monospace}
@@ -55,17 +53,16 @@ html,body{height:100%;background: url("assets/heroes/bg-battlefield.webp") cente
 <div class="wrap">
   <div class="left-nav">
     <div><div class="nav-item active">👤</div><div class="nav-label">HERO</div></div>
-    <div><div class="nav-item" onclick="location.href='page2.html'">📜</div><div class="nav-label">QUESTS</div></div>
+    <div onclick="location.href='page4.html'" style="cursor:pointer"><div class="nav-item" style="opacity:1">🎒</div><div class="nav-label">BAG</div></div>
+    <div onclick="location.href='page5.html'" style="cursor:pointer"><div class="nav-item" style="opacity:1">📜</div><div class="nav-label">QUESTS</div></div>
     <div><div class="nav-item">⚔️</div><div class="nav-label">BATTLE</div></div>
     <div><div class="nav-item">📖</div><div class="nav-label">MAP</div></div>
-    <div><div class="nav-item">🎒</div><div class="nav-label">INVENTORY</div></div>
   </div>
   <div class="hero-panel">
-    <div class="hero-img-wrap"><img id="heroImg" src="assets/heroes/warrior-m.webp" alt="hero"><div id="heroFallback" style="display:none;width:100%;height:100%;align-items:center;justify-content:center;font-size:120px;background:#0a0e12">🛡️</div></div>
+    <div class="hero-img-wrap"><img id="heroImg" src="assets/heroes/warrior-f.webp" alt="hero"></div>
     <div class="hero-info">
-      <div class="hero-name" id="heroName">DDDD</div>
-      <div class="hero-sub" id="heroSub">"dddd"</div>
-      <div class="hero-role" id="heroRole">LION WARDEN • IMPERIAL TANK • Warrior - Male</div>
+      <div class="hero-name" id="heroName">VOLAND 1337</div>
+      <div class="hero-class" id="heroClass">SHIELD TANK • Warrior - Female</div>
     </div>
   </div>
   <div class="main">
@@ -80,25 +77,22 @@ html,body{height:100%;background: url("assets/heroes/bg-battlefield.webp") cente
 </div>
 <script>
 const DB={
-'warrior-m':{n:'LION WARDEN',role:'LION WARDEN • IMPERIAL TANK • Warrior - Male',img:'assets/heroes/warrior-m.webp',st:{HP:1550,DEF:320,DMG:145,MANA:80,CRIT:10,DODGE:5}},
-'warrior-f':{n:'IRON VOW',role:'IRON VOW • SHIELD TANK • Warrior - Female',img:'assets/heroes/warrior-f.webp',st:{HP:1420,DEF:290,DMG:152,MANA:110,CRIT:13,DODGE:8}},
-'necro-f-new':{n:'AMETHYST',role:'AMETHYST • Necro - Female',img:'assets/heroes/necro-f-new.webp',st:{HP:1000,DEF:100,DMG:240,MANA:280,CRIT:15,DODGE:12}},
-'necro-m':{n:'GRAVELORD',role:'GRAVELORD • NECRO - MALE',img:'assets/heroes/necro-m.webp',st:{HP:1150,DEF:110,DMG:190,MANA:260,CRIT:10,DODGE:8}},
-'archer-f':{n:'WILD PATH',role:'WILD PATH • Archer - Female',img:'assets/heroes/archer-f.webp',st:{HP:980,DEF:90,DMG:210,MANA:200,CRIT:25,DODGE:20}},
-'archer-m':{n:'DARK RANGER',role:'DARK RANGER • Archer - Male',img:'assets/heroes/archer-m.webp',st:{HP:1020,DEF:95,DMG:230,MANA:210,CRIT:20,DODGE:18}},
-'archmage-m':{n:'AZURE SAGE',role:'AZURE SAGE • Archmage - Male',img:'assets/heroes/archmage-m.webp',st:{HP:900,DEF:80,DMG:260,MANA:320,CRIT:18,DODGE:10}},
-'mage-f-new':{n:'VOLCANIC',role:'VOLCANIC • Fire - Female',img:'assets/heroes/mage-f-new.webp',st:{HP:950,DEF:85,DMG:280,MANA:300,CRIT:22,DODGE:11}},
+'necro-f-new':{n:'AMETHYST',role:'MAGE • Necro - Female',img:'assets/heroes/necro-f-new.webp',st:{HP:1420,DEF:290,DMG:152,MANA:110,CRIT:13,DODGE:8}},
+'necro-m':{n:'GRAVELORD',role:'TANK • Necro - Male',img:'assets/heroes/necro-m.webp',st:{HP:1550,DEF:340,DMG:140,MANA:95,CRIT:8,DODGE:5}},
+'archer-f':{n:'WILD PATH',role:'RANGER • Archer - Female',img:'assets/heroes/archer-f.webp',st:{HP:1280,DEF:210,DMG:180,MANA:100,CRIT:22,DODGE:18}},
+'archer-m':{n:'DARK RANGER',role:'RANGER • Archer - Male',img:'assets/heroes/archer-m.webp',st:{HP:1320,DEF:230,DMG:195,MANA:105,CRIT:18,DODGE:15}},
+'archmage-m':{n:'AZURE SAGE',role:'MAGE • Archmage - Male',img:'assets/heroes/archmage-m.webp',st:{HP:1200,DEF:180,DMG:210,MANA:180,CRIT:15,DODGE:7}},
+'mage-f-new':{n:'VOLCANIC',role:'MAGE • Fire - Female',img:'assets/heroes/mage-f-new.webp',st:{HP:1350,DEF:200,DMG:230,MANA:160,CRIT:20,DODGE:9}},
+'warrior-f':{n:'IRON VOW',role:'SHIELD TANK • Warrior - Female',img:'assets/heroes/warrior-f.webp',st:{HP:1420,DEF:290,DMG:152,MANA:110,CRIT:13,DODGE:8}},
+'warrior-m':{n:'LION WARDEN',role:'SHIELD TANK • Warrior - Male',img:'assets/heroes/warrior-m.webp',st:{HP:1650,DEF:350,DMG:145,MANA:90,CRIT:10,DODGE:6}},
 };
-let heroId = localStorage.getItem('voland_hero') || 'warrior-m';
-let heroName = localStorage.getItem('voland_name') || 'DDDD';
-if(!DB[heroId]) heroId='warrior-m';
+let heroId = localStorage.getItem('voland_hero') || 'warrior-f';
+let heroName = localStorage.getItem('voland_name') || 'VOLAND 1337';
 let h = DB[heroId];
 document.getElementById('heroImg').src = h.img;
 document.getElementById('heroName').textContent = heroName.toUpperCase();
-document.getElementById('heroSub').textContent = '"'+heroName.toLowerCase()+'"';
-document.getElementById('heroRole').textContent = h.role;
+document.getElementById('heroClass').textContent = h.role;
 const s = h.st;
-const bars = { HP:[s.HP,s.HP], MANA:[s.MANA,s.MANA], STAMINA:[100,100], XP:[6420,10000] };
 document.getElementById('statsGrid').innerHTML = `
   <div class="stat-card"><div class="stat-label">HP</div><div class="stat-value">${s.HP}</div></div>
   <div class="stat-card"><div class="stat-label">DEF</div><div class="stat-value">${s.DEF}</div></div>
@@ -108,12 +102,11 @@ document.getElementById('statsGrid').innerHTML = `
   <div class="stat-card"><div class="stat-label">DODGE</div><div class="stat-value">${s.DODGE}%</div></div>
 `;
 document.getElementById('barsPanel').innerHTML = `
-  <div class="bar-row"><div class="bar-label">HP</div><div class="bar-track"><div class="bar-fill hp" style="width:${bars.HP[0]/bars.HP[1]*100}%">${bars.HP[0]} / ${bars.HP[1]}</div></div></div>
-  <div class="bar-row"><div class="bar-label">MANA</div><div class="bar-track"><div class="bar-fill mana" style="width:${bars.MANA[0]/bars.MANA[1]*100}%">${bars.MANA[0]} / ${bars.MANA[1]}</div></div></div>
-  <div class="bar-row"><div class="bar-label">STAMINA</div><div class="bar-track"><div class="bar-fill stamina" style="width:${bars.STAMINA[0]/bars.STAMINA[1]*100}%">${bars.STAMINA[0]} / ${bars.STAMINA[1]}</div></div></div>
-  <div class="bar-row"><div class="bar-label">XP</div><div class="bar-track"><div class="bar-fill xp" style="width:${bars.XP[0]/bars.XP[1]*100}%">LVL 7 - ${bars.XP[0]} / ${bars.XP[1]} XP</div></div></div>
+  <div class="bar-row"><div class="bar-label">HP</div><div class="bar-track"><div class="bar-fill hp" style="width:${Math.min(100,s.HP/1550*100)}%">${s.HP} / 1550</div></div></div>
+  <div class="bar-row"><div class="bar-label">MANA</div><div class="bar-track"><div class="bar-fill mana" style="width:${s.MANA/400*100}%">${s.MANA} / 400</div></div></div>
+  <div class="bar-row"><div class="bar-label">STAMINA</div><div class="bar-track"><div class="bar-fill stamina" style="width:100%">100 / 100</div></div></div>
+  <div class="bar-row"><div class="bar-label">XP</div><div class="bar-track"><div class="bar-fill xp" style="width:64%">LVL 7 - 6420 / 10000 XP</div></div></div>
 `;
-// CHAT logic - fixed so you can write
 const chatBody = document.querySelector('.chat-body');
 const chatIn = document.getElementById('chatIn');
 const chatBtn = document.getElementById('chatBtn');
