@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>VOLAND - BAG - FINAL FIX</title>
+<title>VOLAND - BAG - PERSIST</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
@@ -115,7 +115,7 @@ html,body{height:100%;background: url("assets/heroes/bg-battlefield.webp") cente
   </div>
   <div class="right">
     <div class="chat-header"><div class="dot"></div><div class="chat-title">CHAT + ЛОГИ</div></div>
-    <div class="chat-body" id="chatBody"><div class="sys-msg">Система: Статы синхронизированы с PAGE2 - 950/85/280/300/22/11 + шмот</div></div>
+    <div class="chat-body" id="chatBody"><div class="sys-msg">Система: Шмот сохраняется между страницами (localStorage)</div></div>
     <div class="chat-input"><input id="chatIn" placeholder="..."><button id="chatBtn">▶</button></div>
   </div>
 </div>
@@ -130,9 +130,6 @@ const DB={
 'warrior-f':{st:{HP:1250,DEF:160,DMG:175,MANA:180,CRIT:12,DODGE:9}},
 'warrior-m':{st:{HP:1300,DEF:180,DMG:180,MANA:220,CRIT:8,DODGE:7}},
 };
-let heroId = localStorage.getItem('voland_hero') || 'mage-f-new';
-if(!DB[heroId]) heroId='mage-f-new';
-const BASE = {...DB[heroId].st};
 const ITEMS = [
   {id:'head', name:'Шлем Ярости', icon:'🪖', slot:'head', bonus:{ DMG:20, DEF:10 }, desc:'+20 урона'},
   {id:'ear1', name:'Серьга Крита', icon:'🔹', slot:'ear1', bonus:{ CRIT:1, DMG:5 }, desc:'+1% крита'},
@@ -146,13 +143,45 @@ const ITEMS = [
   {id:'gloves', name:'Перчатки Силы', icon:'🧤', slot:'gloves', bonus:{ DEF:15, DMG:10 }, desc:'+15 DEF'},
   {id:'boots', name:'Ботинки Ветра', icon:'👢', slot:'boots', bonus:{ DEF:20, DODGE:2, HP:20 }, desc:'+20 HP'},
 ];
-let equipped = {};
-let inv = [...ITEMS];
+
+const GEAR_KEY = 'voland_equip';
+let heroId = localStorage.getItem('voland_hero') || 'mage-f-new';
+if(!DB[heroId]) heroId='mage-f-new';
+let BASE = {...DB[heroId].st};
+
+function loadEquipped(){
+  let saved={};
+  try{ saved = JSON.parse(localStorage.getItem(GEAR_KEY) || '{}'); }catch(e){ saved={}; }
+  let eq={};
+  for(let slot in saved){
+    let id = saved[slot];
+    let item = ITEMS.find(i=>i.id===id);
+    if(item) eq[slot]=item;
+  }
+  return eq;
+}
+function saveEquipped(eq){
+  let toSave={};
+  for(let slot in eq){ toSave[slot]=eq[slot].id; }
+  localStorage.setItem(GEAR_KEY, JSON.stringify(toSave));
+}
+
+let equipped = loadEquipped();
+let inv = [];
+function rebuildInv(){
+  let equippedIds = new Set(Object.values(equipped).map(i=>i.id));
+  inv = [];
+  ITEMS.forEach(it=>{ if(!equippedIds.has(it.id)) inv.push(it); });
+  while(inv.length<50) inv.push(null);
+}
+rebuildInv();
+
 const invGrid = document.getElementById('invGrid');
 const statsPanel = document.getElementById('statsPanel');
 const barsPanel = document.getElementById('barsPanel');
 const equipCount = document.getElementById('equipCount');
 const chatBody = document.getElementById('chatBody');
+
 function calcStats(){
   let cur = {...BASE};
   for(let slot in equipped){ for(let k in equipped[slot].bonus){ cur[k] = (cur[k]||0) + equipped[slot].bonus[k]; } }
@@ -225,17 +254,28 @@ function renderEquip(){
 }
 function equipItem(item, invIndex){
   const slot = item.slot;
-  if(equipped[slot]){ const old=equipped[slot]; let emptyIdx=inv.findIndex(v=>v==null); if(emptyIdx===-1) emptyIdx=inv.length; inv[emptyIdx]=old; log(`Снято: ${old.name} → инвентарь`); }
-  equipped[slot]=item; inv[invIndex]=null;
+  if(equipped[slot]){ 
+    let old = equipped[slot];
+    let idx = inv.findIndex(v=>v==null);
+    if(idx===-1) idx = inv.length;
+    inv[idx]=old;
+    log(`Снято: ${old.name} → инвентарь`);
+  }
+  equipped[slot]=item;
+  inv[invIndex]=null;
+  // compact nulls to keep 50
+  rebuildInv();
+  saveEquipped(equipped);
   renderInventory(); renderEquip(); renderStats(); renderBars();
-  log(`Экипировано: ${item.name} ${item.desc} — статы выросли`);
+  log(`Экипировано: ${item.name} ${item.desc} — сохранено на всех страницах`);
 }
 function unequipSlot(slotEl){
   const slot=slotEl.dataset.slot; const item=equipped[slot]; if(!item) return;
-  let emptyIdx=inv.findIndex(v=>v==null); if(emptyIdx===-1){ for(let i=0;i<50;i++){ if(!inv[i]){ emptyIdx=i; break; } } if(emptyIdx===-1) emptyIdx=inv.length; }
-  inv[emptyIdx]=item; delete equipped[slot];
+  delete equipped[slot];
+  rebuildInv();
+  saveEquipped(equipped);
   renderInventory(); renderEquip(); renderStats(); renderBars();
-  log(`Снято: ${item.name}`);
+  log(`Снято: ${item.name} — снято на всех страницах`);
 }
 document.querySelectorAll('.equip-slot').forEach(el=>{ el.onclick=()=>unequipSlot(el); });
 renderInventory(); renderEquip(); renderStats(); renderBars();
