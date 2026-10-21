@@ -25,9 +25,11 @@ html,body{height:100%;background: url("assets/heroes/bg-battlefield.webp") cente
 .hero-class{margin-top:8px;font-size:10px;letter-spacing:.15em;color:#8a9a6a;font-family:'JetBrains Mono',monospace;text-transform:uppercase}
 .main{flex:1;display:flex;flex-direction:column;background:rgba(16,22,30,.25);overflow:auto;padding:0;backdrop-filter: blur(2px)}
 .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:14px;background:rgba(19,26,34,.35);border-bottom:1px solid rgba(30,42,50,.5)}
-.stat-card{background:#1a242f;border:1px solid #2a3a4a;border-radius:8px;padding:14px 10px;text-align:center}
+.stat-card{background:#1a242f;border:1px solid #2a3a4a;border-radius:8px;padding:14px 10px;text-align:center;transition:.2s}
+.stat-card.boosted{border-color:#3ad080;box-shadow:0 0 8px rgba(58,208,128,.2)}
 .stat-label{font-size:8px;letter-spacing:.2em;color:#6a7a8a;font-family:'JetBrains Mono',monospace}
 .stat-value{margin-top:6px;font-size:22px;font-weight:800;color:#e6d5a0;font-family:'JetBrains Mono',monospace}
+.stat-bonus{font-size:7px;color:#3ad080;margin-top:4px;min-height:10px;font-family:'JetBrains Mono',monospace}
 .bars-panel{padding:18px 20px;background:rgba(17,24,33,.25);display:flex;flex-direction:column;gap:14px;flex:1}
 .bar-row{display:flex;align-items:center;gap:12px}
 .bar-label{width:60px;font-size:9px;letter-spacing:.15em;color:#6a7a8a;text-align:right;font-family:'JetBrains Mono',monospace}
@@ -71,7 +73,7 @@ html,body{height:100%;background: url("assets/heroes/bg-battlefield.webp") cente
   </div>
   <div class="right">
     <div class="chat-header"><div class="dot"></div><div class="chat-title">CHAT 200PX</div></div>
-    <div class="chat-body"><div class="sys-msg">Система: Статы как на PAGE2 - VOLCANIC 950/85/280/300/22/11</div></div>
+    <div class="chat-body" id="chatBody"><div class="sys-msg">Система: Статы = BASE(PAGE2) + шмот с PAGE4</div></div>
     <div class="chat-input"><input id="chatIn" placeholder="..."><button id="chatBtn">▶</button></div>
   </div>
 </div>
@@ -86,6 +88,32 @@ const DB={
 'warrior-f':{n:'IRON VOW',role:'SHIELD TANK • Warrior - Female',img:'assets/heroes/warrior-f.webp',st:{HP:1250,DEF:160,DMG:175,MANA:180,CRIT:12,DODGE:9}},
 'warrior-m':{n:'LION WARDEN',role:'SHIELD TANK • Warrior - Male',img:'assets/heroes/warrior-m.webp',st:{HP:1300,DEF:180,DMG:180,MANA:220,CRIT:8,DODGE:7}},
 };
+const ITEMS = [
+  {id:'head', bonus:{ DMG:20, DEF:10 }},
+  {id:'ear1', bonus:{ CRIT:1, DMG:5 }},
+  {id:'ear2', bonus:{ CRIT:1, DODGE:2 }},
+  {id:'amulet', bonus:{ MANA:50, CRIT:2 }},
+  {id:'armor', bonus:{ HP:100, DEF:30 }},
+  {id:'weapon', bonus:{ DMG:40 }},
+  {id:'shield', bonus:{ DEF:60, HP:50 }},
+  {id:'ring1', bonus:{ DMG:15, CRIT:1 }},
+  {id:'ring2', bonus:{ MANA:30, DODGE:1 }},
+  {id:'gloves', bonus:{ DEF:15, DMG:10 }},
+  {id:'boots', bonus:{ DEF:20, DODGE:2, HP:20 }},
+];
+const GEAR_KEY='voland_equip';
+
+function getEquipped(){
+  let saved={};
+  try{ saved=JSON.parse(localStorage.getItem(GEAR_KEY)||'{}'); }catch(e){ saved={}; }
+  let eq={};
+  for(let slot in saved){
+    let item = ITEMS.find(i=>i.id===saved[slot]);
+    if(item) eq[slot]=item;
+  }
+  return eq;
+}
+
 let heroId = localStorage.getItem('voland_hero') || 'mage-f-new';
 let heroName = localStorage.getItem('voland_name') || 'VOLAND 1337';
 if(!DB[heroId]) heroId='mage-f-new';
@@ -93,21 +121,44 @@ let h = DB[heroId];
 document.getElementById('heroImg').src = h.img;
 document.getElementById('heroName').textContent = heroName.toUpperCase();
 document.getElementById('heroClass').textContent = h.role;
-const s = h.st;
-document.getElementById('statsGrid').innerHTML = `
-  <div class="stat-card"><div class="stat-label">HP</div><div class="stat-value">${s.HP}</div></div>
-  <div class="stat-card"><div class="stat-label">DEF</div><div class="stat-value">${s.DEF}</div></div>
-  <div class="stat-card"><div class="stat-label">DAMAGE</div><div class="stat-value">${s.DMG}</div></div>
-  <div class="stat-card"><div class="stat-label">MANA</div><div class="stat-value">${s.MANA}</div></div>
-  <div class="stat-card"><div class="stat-label">CRIT</div><div class="stat-value">${s.CRIT}%</div></div>
-  <div class="stat-card"><div class="stat-label">DODGE</div><div class="stat-value">${s.DODGE}%</div></div>
-`;
-document.getElementById('barsPanel').innerHTML = `
-  <div class="bar-row"><div class="bar-label">HP</div><div class="bar-track"><div class="bar-fill hp" style="width:100%">${s.HP} / ${s.HP}</div></div></div>
-  <div class="bar-row"><div class="bar-label">MANA</div><div class="bar-track"><div class="bar-fill mana" style="width:100%">${s.MANA} / ${s.MANA}</div></div></div>
-  <div class="bar-row"><div class="bar-label">STAMINA</div><div class="bar-track"><div class="bar-fill stamina" style="width:100%">100 / 100</div></div></div>
-  <div class="bar-row"><div class="bar-label">XP</div><div class="bar-track"><div class="bar-fill xp" style="width:100%">LVL 7 - MAX</div></div></div>
-`;
+
+function render(){
+  let equipped = getEquipped();
+  let base = {...h.st};
+  let cur = {...base};
+  let bonusSum={};
+  for(let slot in equipped){
+    for(let k in equipped[slot].bonus){
+      cur[k]=(cur[k]||0)+equipped[slot].bonus[k];
+      bonusSum[k]=(bonusSum[k]||0)+equipped[slot].bonus[k];
+    }
+  }
+  document.getElementById('statsGrid').innerHTML = `
+    <div class="stat-card ${bonusSum.HP?'boosted':''}"><div class="stat-label">HP</div><div class="stat-value">${cur.HP}</div><div class="stat-bonus">${bonusSum.HP?`+${bonusSum.HP} от шмота`:''}</div></div>
+    <div class="stat-card ${bonusSum.DEF?'boosted':''}"><div class="stat-label">DEF</div><div class="stat-value">${cur.DEF}</div><div class="stat-bonus">${bonusSum.DEF?`+${bonusSum.DEF} от шмота`:''}</div></div>
+    <div class="stat-card ${bonusSum.DMG?'boosted':''}"><div class="stat-label">DAMAGE</div><div class="stat-value">${cur.DMG}</div><div class="stat-bonus">${bonusSum.DMG?`+${bonusSum.DMG} от шмота`:''}</div></div>
+    <div class="stat-card ${bonusSum.MANA?'boosted':''}"><div class="stat-label">MANA</div><div class="stat-value">${cur.MANA}</div><div class="stat-bonus">${bonusSum.MANA?`+${bonusSum.MANA} от шмота`:''}</div></div>
+    <div class="stat-card ${bonusSum.CRIT?'boosted':''}"><div class="stat-label">CRIT</div><div class="stat-value">${cur.CRIT}%</div><div class="stat-bonus">${bonusSum.CRIT?`+${bonusSum.CRIT}% от шмота`:''}</div></div>
+    <div class="stat-card ${bonusSum.DODGE?'boosted':''}"><div class="stat-label">DODGE</div><div class="stat-value">${cur.DODGE}%</div><div class="stat-bonus">${bonusSum.DODGE?`+${bonusSum.DODGE}% от шмота`:''}</div></div>
+  `;
+  document.getElementById('barsPanel').innerHTML = `
+    <div class="bar-row"><div class="bar-label">HP</div><div class="bar-track"><div class="bar-fill hp" style="width:100%">${cur.HP} / ${cur.HP}</div></div></div>
+    <div class="bar-row"><div class="bar-label">MANA</div><div class="bar-track"><div class="bar-fill mana" style="width:100%">${cur.MANA} / ${cur.MANA}</div></div></div>
+    <div class="bar-row"><div class="bar-label">STAMINA</div><div class="bar-track"><div class="bar-fill stamina" style="width:100%">100 / 100</div></div></div>
+    <div class="bar-row"><div class="bar-label">XP</div><div class="bar-track"><div class="bar-fill xp" style="width:100%">LVL 7 - MAX</div></div></div>
+  `;
+}
+render();
+// автообновление если шмот поменяли на другой вкладке
+setInterval(()=>{
+  let curId = localStorage.getItem('voland_hero');
+  let curName = localStorage.getItem('voland_name');
+  let changed=false;
+  if(curId && curId!==heroId && DB[curId]){ heroId=curId; h=DB[heroId]; document.getElementById('heroImg').src=h.img; document.getElementById('heroClass').textContent=h.role; changed=true; }
+  if(curName && curName.toUpperCase()!==document.getElementById('heroName').textContent){ document.getElementById('heroName').textContent=curName.toUpperCase(); }
+  render();
+},500);
+
 const chatBody = document.querySelector('.chat-body');
 const chatIn = document.getElementById('chatIn');
 const chatBtn = document.getElementById('chatBtn');
