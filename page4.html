@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>VOLAND - BAG - PERSIST</title>
+<title>VOLAND - BAG</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
@@ -14,7 +14,7 @@ html,body{height:100%;background: url("assets/heroes/bg-battlefield.webp") cente
 .wrap{position:fixed;inset:0;display:flex;z-index:2}
 .left-nav{width:68px;min-width:68px;background:rgba(18,24,30,.35);border-right:1px solid rgba(30,42,50,.5);display:flex;flex-direction:column;align-items:center;padding:12px 6px;gap:18px;backdrop-filter: blur(2px)}
 .nav-item{width:48px;height:48px;background:#1a252f;border:1px solid #2a3a4a;border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0.6;transition:.2s;font-size:20px}
-.nav-item.active{background:#1e2f3e;border-color:#3a4a5a;opacity:1;box-shadow:0 0 12px rgba(230,213,160,.2)}
+.nav-item.active{background:#1e2f3e;border-color:#e6d5a0;opacity:1;box-shadow:0 0 12px rgba(230,213,160,.2)}
 .nav-label{font-size:7px;letter-spacing:.15em;color:#6a7a8a;margin-top:4px;text-align:center;font-family:'JetBrains Mono',monospace}
 .center-col{flex:1;display:flex;flex-direction:column;background:rgba(16,22,30,.25);overflow:hidden;backdrop-filter: blur(2px)}
 .top-row{flex:0 0 440px;display:flex;gap:16px;background:rgba(19,26,34,.35);border-bottom:1px solid rgba(30,42,50,.5);overflow:hidden}
@@ -22,17 +22,16 @@ html,body{height:100%;background: url("assets/heroes/bg-battlefield.webp") cente
 .bars-panel{width:250px;min-width:250px;max-width:250px;background:rgba(20,28,36,.45);border-left:1px solid rgba(30,42,50,.5);padding:24px 16px;display:flex;flex-direction:column;justify-content:center;gap:8px}
 .panel-title{font-size:7px;letter-spacing:.2em;color:#6a7a8a;font-family:'JetBrains Mono',monospace;text-align:center;margin-bottom:12px}
 .stats-grid-inner{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.stat-card{background:#1a242f;border:1px solid #2a3a4a;border-radius:6px;padding:10px 6px;text-align:center;transition:.2s;min-height:76px;display:flex;flex-direction:column;justify-content:center}
+.stat-card{background:#1a242f;border:1px solid #2a3a4a;border-radius:6px;padding:10px 6px;text-align:center;min-height:76px;display:flex;flex-direction:column;justify-content:center}
 .stat-card.boosted{border-color:#3ad080;box-shadow:0 0 8px rgba(58,208,128,.2)}
 .stat-label{font-size:7px;letter-spacing:.15em;color:#6a7a8a;font-family:'JetBrains Mono',monospace}
 .stat-value{margin-top:4px;font-size:15px;font-weight:800;color:#e6d5a0;font-family:'JetBrains Mono',monospace}
 .stat-bonus{font-size:6px;color:#3ad080;font-family:'JetBrains Mono',monospace;margin-top:3px;min-height:8px}
-.equip-zone{flex:1;padding:24px 16px;display:flex;flex-direction:column;align-items:center;overflow:hidden;justify-content:center;background:rgba(16,22,30,.15)}
+.equip-zone{flex:1;padding:24px 16px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(16,22,30,.15)}
 .equip-grid{width:100%;max-width:360px;display:grid;grid-template-columns:62px 1fr 62px;grid-template-rows:56px 34px 100px 42px 40px;gap:5px 8px;align-items:center;justify-items:center}
-.equip-slot{background:#1a242f;border:1px dashed #2a3a4a;border-radius:7px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:.2s;width:100%;height:100%}
-.equip-slot:hover{border-color:#4a5a6a}
+.equip-slot{background:#1a242f;border:1px dashed #2a3a4a;border-radius:7px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;width:100%;height:100%}
 .equip-slot.filled{border-style:solid;border-color:#e6d5a0;background:#1e2f3e;box-shadow:0 0 8px rgba(230,213,160,.2)}
-.equip-slot .slot-icon{font-size:16px;line-height:1}
+.equip-slot .slot-icon{font-size:16px}
 .equip-slot .slot-name{font-size:6px;letter-spacing:.1em;color:#8a9a8a;margin-top:2px;font-family:'JetBrains Mono',monospace;text-align:center;text-transform:uppercase}
 .equip-slot.filled .slot-name{color:#e6d5a0}
 .equip-slot .slot-empty{font-size:5px;color:#4a5a6a;margin-top:1px;font-family:'JetBrains Mono',monospace}
@@ -49,8 +48,8 @@ html,body{height:100%;background: url("assets/heroes/bg-battlefield.webp") cente
 .equip-slot.boots{grid-column:2;grid-row:5;width:100%;height:36px}
 .bar-row{display:flex;flex-direction:column;gap:5px}
 .bar-label{font-size:7px;letter-spacing:.15em;color:#6a7a8a;font-family:'JetBrains Mono',monospace;display:flex;justify-content:space-between}
-.bar-track{height:24px;background:#0a0e14;border-radius:5px;overflow:hidden;border:1px solid #1e2a32;position:relative}
-.bar-fill{height:100%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;font-family:'JetBrains Mono',monospace;transition:width .3s}
+.bar-track{height:24px;background:#0a0e14;border-radius:5px;overflow:hidden;border:1px solid #1e2a32}
+.bar-fill{height:100%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;font-family:'JetBrains Mono',monospace}
 .bar-fill.hp{background:linear-gradient(90deg,#b33030,#e05050);color:#fff}
 .bar-fill.mana{background:linear-gradient(90deg,#1a4a9a,#2a6ad0);color:#fff}
 .bar-fill.stamina{background:linear-gradient(90deg,#1a7a4a,#3ad080);color:#fff}
@@ -58,12 +57,11 @@ html,body{height:100%;background: url("assets/heroes/bg-battlefield.webp") cente
 .bars-inner{display:flex;flex-direction:column;gap:10px}
 .inventory-zone{flex:1;background:rgba(17,24,33,.25);padding:10px 14px;display:flex;flex-direction:column;overflow:auto}
 .inv-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;margin-top:6px}
-.inv-cell{aspect-ratio:1;background:#1a242f;border:1px solid #2a3a4a;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:.15s;min-height:38px}
-.inv-cell:hover{border-color:#4a5a6a;background:#1e2f3e}
+.inv-cell{aspect-ratio:1;background:#1a242f;border:1px solid #2a3a4a;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;min-height:38px}
 .inv-cell.has-item{background:#1e2a32;border-color:#3a4a5a}
 .inv-cell.has-item:hover{border-color:#e6d5a0}
 .inv-cell .item-icon{font-size:15px}
-.inv-cell .item-name{font-size:5px;color:#6a7a8a;margin-top:2px;font-family:'JetBrains Mono',monospace;text-align:center;line-height:1}
+.inv-cell .item-name{font-size:5px;color:#6a7a8a;margin-top:2px;font-family:'JetBrains Mono',monospace;text-align:center}
 .inv-cell .item-bonus{font-size:5px;color:#3ad080;margin-top:1px;font-family:'JetBrains Mono',monospace}
 .inv-cell.empty{opacity:.4}
 .right{width:200px;min-width:200px;background:rgba(14,20,26,1);border-left:1px solid rgba(30,42,50,.5);display:flex;flex-direction:column}
@@ -85,20 +83,20 @@ html,body{height:100%;background: url("assets/heroes/bg-battlefield.webp") cente
     <div><div class="nav-item active">🎒</div><div class="nav-label">BAG</div></div>
     <div onclick="location.href='page5.html'" style="cursor:pointer"><div class="nav-item" style="opacity:1">📜</div><div class="nav-label">QUESTS</div></div>
     <div onclick="location.href='page6.html'" style="cursor:pointer"><div class="nav-item" style="opacity:1">⚔️</div><div class="nav-label">BATTLE</div></div>
-    <div><div class="nav-item">📖</div><div class="nav-label">MAP</div></div>
+    <div onclick="location.href='index.html'" style="cursor:pointer"><div class="nav-item" style="opacity:1">📖</div><div class="nav-label">MAP</div></div>
   </div>
   <div class="center-col">
     <div class="top-row">
-      <div class="stats-panel" id="statsPanel"><div class="panel-title">СТАТЫ ГЕРОЯ [1] — 6 (2 колонки) A=B</div></div>
+      <div class="stats-panel" id="statsPanel"><div class="panel-title">СТАТЫ ГЕРОЯ — 6 (A=B)</div></div>
       <div class="equip-zone">
-        <div class="panel-title" style="width:100%;text-align:center">ЭКИПИРОВКА — 11</div>
+        <div class="panel-title">ЭКИПИРОВКА — 11</div>
         <div class="equip-grid" id="equipGrid">
           <div class="equip-slot ear-l" data-slot="ear1"><div class="slot-icon">👂</div><div class="slot-name">Серьга 1</div><div class="slot-empty">пусто</div></div>
           <div class="equip-slot head" data-slot="head"><div class="slot-icon">🪖</div><div class="slot-name">Шлем</div><div class="slot-empty">пусто</div></div>
           <div class="equip-slot ear-r" data-slot="ear2"><div class="slot-icon">👂</div><div class="slot-name">Серьга 2</div><div class="slot-empty">пусто</div></div>
           <div class="equip-slot amulet" data-slot="amulet"><div class="slot-icon">📿</div><div class="slot-name">Амулет</div><div class="slot-empty">пусто</div></div>
           <div class="equip-slot weapon" data-slot="weapon"><div class="slot-icon">⚔️</div><div class="slot-name">Оружие</div><div class="slot-empty">пусто</div></div>
-          <div class="equip-slot armor" data-slot="armor"><div class="slot-icon">🦺</div><div class="slot-name">Броня</div><div class="slot-empty">+100HP</div></div>
+          <div class="equip-slot armor" data-slot="armor"><div class="slot-icon">🦺</div><div class="slot-name">Броня</div><div class="slot-empty">пусто</div></div>
           <div class="equip-slot shield" data-slot="shield"><div class="slot-icon">🛡️</div><div class="slot-name">Щит</div><div class="slot-empty">пусто</div></div>
           <div class="equip-slot ring1" data-slot="ring1"><div class="slot-icon">💍</div><div class="slot-name">Кольцо 1</div><div class="slot-empty">пусто</div></div>
           <div class="equip-slot gloves" data-slot="gloves"><div class="slot-icon">🧤</div><div class="slot-name">Перчатки</div><div class="slot-empty">пусто</div></div>
@@ -106,16 +104,16 @@ html,body{height:100%;background: url("assets/heroes/bg-battlefield.webp") cente
           <div class="equip-slot boots" data-slot="boots"><div class="slot-icon">👢</div><div class="slot-name">Ботинки</div><div class="slot-empty">пусто</div></div>
         </div>
       </div>
-      <div class="bars-panel" id="barsPanel"><div class="panel-title">БАРЫ ГЕРОЯ [2] — 4 C=D</div></div>
+      <div class="bars-panel" id="barsPanel"><div class="panel-title">БАРЫ ГЕРОЯ — 4 (C=D)</div></div>
     </div>
     <div class="inventory-zone">
-      <div class="panel-title" style="display:flex;justify-content:space-between"><span>ИНВЕНТАРЬ — 50 (11 предметов с бонусами)</span><span id="equipCount">0/11</span></div>
+      <div class="panel-title" style="display:flex;justify-content:space-between"><span>ИНВЕНТАРЬ — 50 (11 предметов)</span><span id="equipCount">0/11</span></div>
       <div class="inv-grid" id="invGrid"></div>
     </div>
   </div>
   <div class="right">
     <div class="chat-header"><div class="dot"></div><div class="chat-title">CHAT + ЛОГИ</div></div>
-    <div class="chat-body" id="chatBody"><div class="sys-msg">Система: Шмот сохраняется между страницами (localStorage)</div></div>
+    <div class="chat-body" id="chatBody"><div class="sys-msg">Система: Шмот сохраняется между страницами</div></div>
     <div class="chat-input"><input id="chatIn" placeholder="..."><button id="chatBtn">▶</button></div>
   </div>
 </div>
@@ -130,155 +128,80 @@ const DB={
 'warrior-f':{st:{HP:1250,DEF:160,DMG:175,MANA:180,CRIT:12,DODGE:9}},
 'warrior-m':{st:{HP:1300,DEF:180,DMG:180,MANA:220,CRIT:8,DODGE:7}},
 };
-const ITEMS = [
-  {id:'head', name:'Шлем Ярости', icon:'🪖', slot:'head', bonus:{ DMG:20, DEF:10 }, desc:'+20 урона'},
-  {id:'ear1', name:'Серьга Крита', icon:'🔹', slot:'ear1', bonus:{ CRIT:1, DMG:5 }, desc:'+1% крита'},
-  {id:'ear2', name:'Серьга Тени', icon:'🔸', slot:'ear2', bonus:{ CRIT:1, DODGE:2 }, desc:'+1% крита'},
-  {id:'amulet', name:'Амулет Душ', icon:'📿', slot:'amulet', bonus:{ MANA:50, CRIT:2 }, desc:'+50 маны'},
-  {id:'armor', name:'Кольчуга Титана', icon:'🦺', slot:'armor', bonus:{ HP:100, DEF:30 }, desc:'+100 HP'},
-  {id:'weapon', name:'Меч Бури', icon:'⚔️', slot:'weapon', bonus:{ DMG:40 }, desc:'+40 урона'},
-  {id:'shield', name:'Щит Бастион', icon:'🛡️', slot:'shield', bonus:{ DEF:60, HP:50 }, desc:'+60 DEF'},
-  {id:'ring1', name:'Кольцо Крови', icon:'💍', slot:'ring1', bonus:{ DMG:15, CRIT:1 }, desc:'+15 урона'},
-  {id:'ring2', name:'Кольцо Маны', icon:'💍', slot:'ring2', bonus:{ MANA:30, DODGE:1 }, desc:'+30 маны'},
-  {id:'gloves', name:'Перчатки Силы', icon:'🧤', slot:'gloves', bonus:{ DEF:15, DMG:10 }, desc:'+15 DEF'},
-  {id:'boots', name:'Ботинки Ветра', icon:'👢', slot:'boots', bonus:{ DEF:20, DODGE:2, HP:20 }, desc:'+20 HP'},
+const ITEMS=[
+ {id:'head',name:'Шлем Ярости',icon:'🪖',slot:'head',bonus:{DMG:20,DEF:10},desc:'+20 урона'},
+ {id:'ear1',name:'Серьга Крита',icon:'🔹',slot:'ear1',bonus:{CRIT:1,DMG:5},desc:'+1% крита'},
+ {id:'ear2',name:'Серьга Тени',icon:'🔸',slot:'ear2',bonus:{CRIT:1,DODGE:2},desc:'+1% крита'},
+ {id:'amulet',name:'Амулет Душ',icon:'📿',slot:'amulet',bonus:{MANA:50,CRIT:2},desc:'+50 маны'},
+ {id:'armor',name:'Кольчуга Титана',icon:'🦺',slot:'armor',bonus:{HP:100,DEF:30},desc:'+100 HP'},
+ {id:'weapon',name:'Меч Бури',icon:'⚔️',slot:'weapon',bonus:{DMG:40},desc:'+40 урона'},
+ {id:'shield',name:'Щит Бастион',icon:'🛡️',slot:'shield',bonus:{DEF:60,HP:50},desc:'+60 DEF'},
+ {id:'ring1',name:'Кольцо Крови',icon:'💍',slot:'ring1',bonus:{DMG:15,CRIT:1},desc:'+15 урона'},
+ {id:'ring2',name:'Кольцо Маны',icon:'💍',slot:'ring2',bonus:{MANA:30,DODGE:1},desc:'+30 маны'},
+ {id:'gloves',name:'Перчатки Силы',icon:'🧤',slot:'gloves',bonus:{DEF:15,DMG:10},desc:'+15 DEF'},
+ {id:'boots',name:'Ботинки Ветра',icon:'👢',slot:'boots',bonus:{DEF:20,DODGE:2,HP:20},desc:'+20 HP'},
 ];
-
-const GEAR_KEY = 'voland_equip';
-let heroId = localStorage.getItem('voland_hero') || 'mage-f-new';
+const GEAR_KEY='voland_equip';
+let heroId=localStorage.getItem('voland_hero')||'mage-f-new';
 if(!DB[heroId]) heroId='mage-f-new';
-let BASE = {...DB[heroId].st};
-
-function loadEquipped(){
-  let saved={};
-  try{ saved = JSON.parse(localStorage.getItem(GEAR_KEY) || '{}'); }catch(e){ saved={}; }
-  let eq={};
-  for(let slot in saved){
-    let id = saved[slot];
-    let item = ITEMS.find(i=>i.id===id);
-    if(item) eq[slot]=item;
-  }
-  return eq;
-}
-function saveEquipped(eq){
-  let toSave={};
-  for(let slot in eq){ toSave[slot]=eq[slot].id; }
-  localStorage.setItem(GEAR_KEY, JSON.stringify(toSave));
-}
-
-let equipped = loadEquipped();
-let inv = [];
-function rebuildInv(){
-  let equippedIds = new Set(Object.values(equipped).map(i=>i.id));
-  inv = [];
-  ITEMS.forEach(it=>{ if(!equippedIds.has(it.id)) inv.push(it); });
-  while(inv.length<50) inv.push(null);
-}
+let BASE={...DB[heroId].st};
+function loadEquipped(){try{let s=JSON.parse(localStorage.getItem(GEAR_KEY)||'{}');let eq={};for(let k in s){let it=ITEMS.find(x=>x.id===s[k]);if(it) eq[k]=it;}return eq;}catch(e){return {};}}
+function saveEquipped(eq){let o={};for(let k in eq) o[k]=eq[k].id;localStorage.setItem(GEAR_KEY,JSON.stringify(o));}
+let equipped=loadEquipped();
+let inv=[];
+function rebuildInv(){let ids=new Set(Object.values(equipped).map(i=>i.id));inv=[];ITEMS.forEach(it=>{if(!ids.has(it.id)) inv.push(it);});while(inv.length<50) inv.push(null);}
 rebuildInv();
-
-const invGrid = document.getElementById('invGrid');
-const statsPanel = document.getElementById('statsPanel');
-const barsPanel = document.getElementById('barsPanel');
-const equipCount = document.getElementById('equipCount');
-const chatBody = document.getElementById('chatBody');
-
-function calcStats(){
-  let cur = {...BASE};
-  for(let slot in equipped){ for(let k in equipped[slot].bonus){ cur[k] = (cur[k]||0) + equipped[slot].bonus[k]; } }
-  return cur;
-}
+const invGrid=document.getElementById('invGrid');
+const statsPanel=document.getElementById('statsPanel');
+const barsPanel=document.getElementById('barsPanel');
+const equipCount=document.getElementById('equipCount');
+const chatBody=document.getElementById('chatBody');
+function calcStats(){let cur={...BASE};for(let s in equipped){for(let k in equipped[s].bonus){cur[k]=(cur[k]||0)+equipped[s].bonus[k];}}return cur;}
 function renderStats(){
-  const cur = calcStats();
-  const bonusSum = {};
-  for(let s in equipped){ for(let k in equipped[s].bonus){ bonusSum[k]=(bonusSum[k]||0)+equipped[s].bonus[k]; } }
-  const order = [
-    {key:'HP', label:'HP'},
-    {key:'MANA', label:'MANA'},
-    {key:'DEF', label:'DEF'},
-    {key:'CRIT', label:'CRIT', suffix:'%'},
-    {key:'DMG', label:'DAMAGE'},
-    {key:'DODGE', label:'DODGE', suffix:'%'},
-  ];
-  const title = statsPanel.querySelector('.panel-title');
-  statsPanel.innerHTML=''; statsPanel.appendChild(title);
-  const grid = document.createElement('div'); grid.className='stats-grid-inner';
-  order.forEach(o=>{
-    const total = cur[o.key];
-    const add = bonusSum[o.key]||0;
-    const div = document.createElement('div');
-    div.className='stat-card'+(add>0?' boosted':'');
-    const suffix = o.suffix||'';
-    div.innerHTML=`<div class="stat-label">${o.label}</div><div class="stat-value">${total}${suffix}</div><div class="stat-bonus">${add>0?`+${add}${suffix} от шмота`:''}</div>`;
-    grid.appendChild(div);
-  });
-  statsPanel.appendChild(grid);
+ let cur=calcStats();
+ let bonus={};for(let s in equipped){for(let k in equipped[s].bonus){bonus[k]=(bonus[k]||0)+equipped[s].bonus[k];}}
+ let order=[{key:'HP',label:'HP'},{key:'MANA',label:'MANA'},{key:'DEF',label:'DEF'},{key:'CRIT',label:'CRIT',suffix:'%'},{key:'DMG',label:'DAMAGE'},{key:'DODGE',label:'DODGE',suffix:'%'}];
+ let title=statsPanel.querySelector('.panel-title');
+ statsPanel.innerHTML='';statsPanel.appendChild(title);
+ let grid=document.createElement('div');grid.className='stats-grid-inner';
+ order.forEach(o=>{let total=cur[o.key];let add=bonus[o.key]||0;let div=document.createElement('div');div.className='stat-card'+(add>0?' boosted':'');let suf=o.suffix||'';div.innerHTML=`<div class="stat-label">${o.label}</div><div class="stat-value">${total}${suf}</div><div class="stat-bonus">${add>0?`+${add}${suf} от шмота`:''}</div>`;grid.appendChild(div);});
+ statsPanel.appendChild(grid);
 }
 function renderBars(){
-  const cur = calcStats();
-  const title = barsPanel.querySelector('.panel-title');
-  barsPanel.innerHTML=''; barsPanel.appendChild(title);
-  const inner = document.createElement('div'); inner.className='bars-inner';
-  const bars = [
-    {label:'HP', cls:'hp', max:cur.HP, cur:cur.HP},
-    {label:'MANA', cls:'mana', max:cur.MANA, cur:cur.MANA},
-    {label:'STAMINA', cls:'stamina', max:100, cur:100, txt:'100 / 100'},
-    {label:'XP', cls:'xp', max:100, cur:100, txt:'LVL 7'},
-  ];
-  bars.forEach(b=>{
-    const row=document.createElement('div'); row.className='bar-row';
-    const txt = b.txt || `${b.cur} / ${b.max}`;
-    row.innerHTML=`<div class="bar-label"><span>${b.label}</span><span>${b.max}</span></div><div class="bar-track"><div class="bar-fill ${b.cls}" style="width:100%">${txt}</div></div>`;
-    inner.appendChild(row);
-  });
-  barsPanel.appendChild(inner);
+ let cur=calcStats();
+ let title=barsPanel.querySelector('.panel-title');
+ barsPanel.innerHTML='';barsPanel.appendChild(title);
+ let inner=document.createElement('div');inner.className='bars-inner';
+ [{label:'HP',cls:'hp',cur:cur.HP,max:cur.HP},{label:'MANA',cls:'mana',cur:cur.MANA,max:cur.MANA},{label:'STAMINA',cls:'stamina',cur:100,max:100,txt:'100 / 100'},{label:'XP',cls:'xp',cur:100,max:100,txt:'LVL 7'}].forEach(b=>{
+  let row=document.createElement('div');row.className='bar-row';let txt=b.txt||`${b.cur} / ${b.max}`;row.innerHTML=`<div class="bar-label"><span>${b.label}</span><span>${b.max}</span></div><div class="bar-track"><div class="bar-fill ${b.cls}" style="width:100%">${txt}</div></div>`;inner.appendChild(row);
+ });
+ barsPanel.appendChild(inner);
 }
-function log(msg){ const d=document.createElement('div'); d.className='sys-msg'; d.textContent=msg; chatBody.appendChild(d); chatBody.scrollTop=chatBody.scrollHeight; }
-function renderInventory(){
-  invGrid.innerHTML='';
-  for(let i=0;i<50;i++){
-    const cell=document.createElement('div'); cell.className='inv-cell';
-    const item = inv[i];
-    if(item){ cell.classList.add('has-item'); cell.innerHTML=`<div class="item-icon">${item.icon}</div><div class="item-name">${item.name}</div><div class="item-bonus">${item.desc}</div>`; cell.title=`${item.name}: ${Object.entries(item.bonus).map(([k,v])=>`+${v} ${k}`).join(' ')}`; cell.onclick=()=>equipItem(item, i); }
-    else{ cell.classList.add('empty'); }
-    invGrid.appendChild(cell);
-  }
+function log(m){let d=document.createElement('div');d.className='sys-msg';d.textContent=m;chatBody.appendChild(d);chatBody.scrollTop=9999;}
+function renderInv(){
+ invGrid.innerHTML='';
+ for(let i=0;i<50;i++){let cell=document.createElement('div');cell.className='inv-cell';let it=inv[i];if(it){cell.classList.add('has-item');cell.innerHTML=`<div class="item-icon">${it.icon}</div><div class="item-name">${it.name}</div><div class="item-bonus">${it.desc}</div>`;cell.onclick=()=>equipItem(it,i);}else cell.classList.add('empty');invGrid.appendChild(cell);}
 }
 function renderEquip(){
-  document.querySelectorAll('.equip-slot').forEach(slotEl=>{
-    const slot = slotEl.dataset.slot; const item = equipped[slot];
-    const nameEl = slotEl.querySelector('.slot-name'); const iconEl = slotEl.querySelector('.slot-icon'); const emptyEl = slotEl.querySelector('.slot-empty');
-    if(item){ slotEl.classList.add('filled'); iconEl.textContent=item.icon; nameEl.textContent=item.name; emptyEl.textContent=item.desc; emptyEl.style.color='#3ad080'; }
-    else{ slotEl.classList.remove('filled'); const defaults={head:{icon:'🪖',name:'Шлем'},ear1:{icon:'👂',name:'Серьга 1'},ear2:{icon:'👂',name:'Серьга 2'},amulet:{icon:'📿',name:'Амулет'},armor:{icon:'🦺',name:'Броня'},weapon:{icon:'⚔️',name:'Оружие'},shield:{icon:'🛡️',name:'Щит'},ring1:{icon:'💍',name:'Кольцо 1'},ring2:{icon:'💍',name:'Кольцо 2'},gloves:{icon:'🧤',name:'Перчатки'},boots:{icon:'👢',name:'Ботинки'}}; const def=defaults[slot]; if(def){ iconEl.textContent=def.icon; nameEl.textContent=def.name; } emptyEl.textContent='пусто'; emptyEl.style.color=''; }
-  });
-  equipCount.textContent=Object.keys(equipped).length+'/11';
+ document.querySelectorAll('.equip-slot').forEach(el=>{
+  let slot=el.dataset.slot;let it=equipped[slot];
+  let nameEl=el.querySelector('.slot-name');let iconEl=el.querySelector('.slot-icon');let emptyEl=el.querySelector('.slot-empty');
+  if(it){el.classList.add('filled');iconEl.textContent=it.icon;nameEl.textContent=it.name;emptyEl.textContent=it.desc;emptyEl.style.color='#3ad080';}
+  else{el.classList.remove('filled');let defs={head:{icon:'🪖',name:'Шлем'},ear1:{icon:'👂',name:'Серьга 1'},ear2:{icon:'👂',name:'Серьга 2'},amulet:{icon:'📿',name:'Амулет'},armor:{icon:'🦺',name:'Броня'},weapon:{icon:'⚔️',name:'Оружие'},shield:{icon:'🛡️',name:'Щит'},ring1:{icon:'💍',name:'Кольцо 1'},ring2:{icon:'💍',name:'Кольцо 2'},gloves:{icon:'🧤',name:'Перчатки'},boots:{icon:'👢',name:'Ботинки'}};let def=defs[slot];if(def){iconEl.textContent=def.icon;nameEl.textContent=def.name;}emptyEl.textContent='пусто';emptyEl.style.color='';}
+ });
+ equipCount.textContent=Object.keys(equipped).length+'/11';
 }
-function equipItem(item, invIndex){
-  const slot = item.slot;
-  if(equipped[slot]){ 
-    let old = equipped[slot];
-    let idx = inv.findIndex(v=>v==null);
-    if(idx===-1) idx = inv.length;
-    inv[idx]=old;
-    log(`Снято: ${old.name} → инвентарь`);
-  }
-  equipped[slot]=item;
-  inv[invIndex]=null;
-  // compact nulls to keep 50
-  rebuildInv();
-  saveEquipped(equipped);
-  renderInventory(); renderEquip(); renderStats(); renderBars();
-  log(`Экипировано: ${item.name} ${item.desc} — сохранено на всех страницах`);
+function equipItem(item, idx){
+ let slot=item.slot;
+ if(equipped[slot]){let old=equipped[slot];let j=inv.findIndex(v=>v==null);if(j===-1) j=inv.length;inv[j]=old;log(`Снято: ${old.name}`);}
+ equipped[slot]=item;inv[idx]=null;rebuildInv();saveEquipped(equipped);renderInv();renderEquip();renderStats();renderBars();log(`Экипировано: ${item.name} ${item.desc}`);
 }
-function unequipSlot(slotEl){
-  const slot=slotEl.dataset.slot; const item=equipped[slot]; if(!item) return;
-  delete equipped[slot];
-  rebuildInv();
-  saveEquipped(equipped);
-  renderInventory(); renderEquip(); renderStats(); renderBars();
-  log(`Снято: ${item.name} — снято на всех страницах`);
-}
-document.querySelectorAll('.equip-slot').forEach(el=>{ el.onclick=()=>unequipSlot(el); });
-renderInventory(); renderEquip(); renderStats(); renderBars();
-const chatIn=document.getElementById('chatIn'); const chatBtn=document.getElementById('chatBtn');
-chatBtn.onclick=()=>{ const v=chatIn.value.trim(); if(!v) return; log('Ты: '+v); chatIn.value=''; };
-chatIn.addEventListener('key
+function unequipSlot(el){let slot=el.dataset.slot;let it=equipped[slot];if(!it) return;delete equipped[slot];rebuildInv();saveEquipped(equipped);renderInv();renderEquip();renderStats();renderBars();log(`Снято: ${it.name}`);}
+document.querySelectorAll('.equip-slot').forEach(el=>{el.onclick=()=>unequipSlot(el);});
+renderInv();renderEquip();renderStats();renderBars();
+const chatIn=document.getElementById('chatIn');const chatBtn=document.getElementById('chatBtn');
+chatBtn.onclick=()=>{let v=chatIn.value.trim();if(!v) return;log('Ты: '+v);chatIn.value='';};
+chatIn.addEventListener('keydown',e=>{if(e.key==='Enter') chatBtn.click();});
+</script>
+</body>
+</html>
