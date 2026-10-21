@@ -9,23 +9,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%;background: url("assets/heroes/bg-battlefield.webp") center/cover no-repeat fixed #0a0e14;color:#d8d2b8;font-family:Inter,Arial,sans-serif;overflow:hidden}
-.bg{position:fixed;inset:0;z-index:0;background: transparent}
-.bg img{display:block;width:100%;height:100%;object-fit:cover;opacity:1}
-.bg:after{content:"";position:absolute;inset:0;background:rgba(0,0,0,0)}
+.bg{position:fixed;inset:0;z-index:0}
+.bg img{width:100%;height:100%;object-fit:cover;opacity:.9}
 .wrap{position:fixed;inset:0;display:flex;z-index:2}
 .left-nav{width:68px;min-width:68px;background:rgba(18,24,30,.35);border-right:1px solid rgba(30,42,50,.5);display:flex;flex-direction:column;align-items:center;padding:12px 6px;gap:18px;backdrop-filter: blur(2px)}
 .nav-item{width:48px;height:48px;background:#1a252f;border:1px solid #2a3a4a;border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0.6;transition:.2s;font-size:20px}
-.nav-item.active{background:#1e2f3e;border-color:#3a4a5a;opacity:1;box-shadow:0 0 12px rgba(230,213,160,.2)}
+.nav-item.active{background:#1e2f3e;border-color:#e6d5a0;opacity:1;box-shadow:0 0 12px rgba(230,213,160,.2)}
 .nav-label{font-size:7px;letter-spacing:.15em;color:#6a7a8a;margin-top:4px;text-align:center;font-family:'JetBrains Mono',monospace}
 .hero-panel{width:380px;min-width:380px;background:rgba(20,28,36,.35);border-right:1px solid rgba(30,42,50,.5);display:flex;flex-direction:column;overflow:hidden;backdrop-filter: blur(2px)}
-.hero-img-wrap{flex:1;background:#141c24;display:flex;align-items:center;justify-content:center;padding:0;position:relative;overflow:hidden}
+.hero-img-wrap{flex:1;background:#141c24;display:flex;align-items:center;justify-content:center;padding:0;overflow:hidden}
 .hero-img-wrap img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block}
 .hero-info{padding:18px 16px;background:#111821;border-top:1px solid #1e2a32;text-align:center}
 .hero-name{font-family:'Cinzel Decorative',serif;font-size:16px;letter-spacing:.3em;color:#e6d5a0;font-weight:900}
 .hero-class{margin-top:8px;font-size:10px;letter-spacing:.15em;color:#8a9a6a;font-family:'JetBrains Mono',monospace;text-transform:uppercase}
 .main{flex:1;display:flex;flex-direction:column;background:rgba(16,22,30,.25);overflow:auto;padding:0;backdrop-filter: blur(2px)}
 .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:14px;background:rgba(19,26,34,.35);border-bottom:1px solid rgba(30,42,50,.5)}
-.stat-card{background:#1a242f;border:1px solid #2a3a4a;border-radius:8px;padding:14px 10px;text-align:center;transition:.2s}
+.stat-card{background:#1a242f;border:1px solid #2a3a4a;border-radius:8px;padding:14px 10px;text-align:center}
 .stat-card.boosted{border-color:#3ad080;box-shadow:0 0 8px rgba(58,208,128,.2)}
 .stat-label{font-size:8px;letter-spacing:.2em;color:#6a7a8a;font-family:'JetBrains Mono',monospace}
 .stat-value{margin-top:6px;font-size:22px;font-weight:800;color:#e6d5a0;font-family:'JetBrains Mono',monospace}
@@ -33,7 +32,7 @@ html,body{height:100%;background: url("assets/heroes/bg-battlefield.webp") cente
 .bars-panel{padding:18px 20px;background:rgba(17,24,33,.25);display:flex;flex-direction:column;gap:14px;flex:1}
 .bar-row{display:flex;align-items:center;gap:12px}
 .bar-label{width:60px;font-size:9px;letter-spacing:.15em;color:#6a7a8a;text-align:right;font-family:'JetBrains Mono',monospace}
-.bar-track{flex:1;height:18px;background:#0a0e14;border-radius:4px;overflow:hidden;border:1px solid #1e2a32;position:relative}
+.bar-track{flex:1;height:18px;background:#0a0e14;border-radius:4px;overflow:hidden;border:1px solid #1e2a32}
 .bar-fill{height:100%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;font-family:'JetBrains Mono',monospace}
 .bar-fill.hp{background:linear-gradient(90deg,#b33030,#e05050);color:#fff}
 .bar-fill.mana{background:linear-gradient(90deg,#1a4a9a,#2a6ad0);color:#fff}
@@ -58,7 +57,7 @@ html,body{height:100%;background: url("assets/heroes/bg-battlefield.webp") cente
     <div onclick="location.href='page4.html'" style="cursor:pointer"><div class="nav-item" style="opacity:1">🎒</div><div class="nav-label">BAG</div></div>
     <div onclick="location.href='page5.html'" style="cursor:pointer"><div class="nav-item" style="opacity:1">📜</div><div class="nav-label">QUESTS</div></div>
     <div onclick="location.href='page6.html'" style="cursor:pointer"><div class="nav-item" style="opacity:1">⚔️</div><div class="nav-label">BATTLE</div></div>
-    <div><div class="nav-item">📖</div><div class="nav-label">MAP</div></div>
+    <div onclick="location.href='index.html'" style="cursor:pointer"><div class="nav-item" style="opacity:1">📖</div><div class="nav-label">MAP</div></div>
   </div>
   <div class="hero-panel">
     <div class="hero-img-wrap"><img id="heroImg" src="assets/heroes/warrior-f.webp" alt="hero"></div>
@@ -73,7 +72,7 @@ html,body{height:100%;background: url("assets/heroes/bg-battlefield.webp") cente
   </div>
   <div class="right">
     <div class="chat-header"><div class="dot"></div><div class="chat-title">CHAT 200PX</div></div>
-    <div class="chat-body" id="chatBody"><div class="sys-msg">Система: Статы = BASE(PAGE2) + шмот с PAGE4</div></div>
+    <div class="chat-body" id="chatBody"><div class="sys-msg">Система: Статы = BASE 950/85/280/300/22/11 + шмот с PAGE4</div></div>
     <div class="chat-input"><input id="chatIn" placeholder="..."><button id="chatBtn">▶</button></div>
   </div>
 </div>
@@ -88,80 +87,50 @@ const DB={
 'warrior-f':{n:'IRON VOW',role:'SHIELD TANK • Warrior - Female',img:'assets/heroes/warrior-f.webp',st:{HP:1250,DEF:160,DMG:175,MANA:180,CRIT:12,DODGE:9}},
 'warrior-m':{n:'LION WARDEN',role:'SHIELD TANK • Warrior - Male',img:'assets/heroes/warrior-m.webp',st:{HP:1300,DEF:180,DMG:180,MANA:220,CRIT:8,DODGE:7}},
 };
-const ITEMS = [
-  {id:'head', bonus:{ DMG:20, DEF:10 }},
-  {id:'ear1', bonus:{ CRIT:1, DMG:5 }},
-  {id:'ear2', bonus:{ CRIT:1, DODGE:2 }},
-  {id:'amulet', bonus:{ MANA:50, CRIT:2 }},
-  {id:'armor', bonus:{ HP:100, DEF:30 }},
-  {id:'weapon', bonus:{ DMG:40 }},
-  {id:'shield', bonus:{ DEF:60, HP:50 }},
-  {id:'ring1', bonus:{ DMG:15, CRIT:1 }},
-  {id:'ring2', bonus:{ MANA:30, DODGE:1 }},
-  {id:'gloves', bonus:{ DEF:15, DMG:10 }},
-  {id:'boots', bonus:{ DEF:20, DODGE:2, HP:20 }},
+const ITEMS=[
+ {id:'head',bonus:{DMG:20,DEF:10}},{id:'ear1',bonus:{CRIT:1,DMG:5}},{id:'ear2',bonus:{CRIT:1,DODGE:2}},
+ {id:'amulet',bonus:{MANA:50,CRIT:2}},{id:'armor',bonus:{HP:100,DEF:30}},{id:'weapon',bonus:{DMG:40}},
+ {id:'shield',bonus:{DEF:60,HP:50}},{id:'ring1',bonus:{DMG:15,CRIT:1}},{id:'ring2',bonus:{MANA:30,DODGE:1}},
+ {id:'gloves',bonus:{DEF:15,DMG:10}},{id:'boots',bonus:{DEF:20,DODGE:2,HP:20}},
 ];
 const GEAR_KEY='voland_equip';
-
 function getEquipped(){
-  let saved={};
-  try{ saved=JSON.parse(localStorage.getItem(GEAR_KEY)||'{}'); }catch(e){ saved={}; }
-  let eq={};
-  for(let slot in saved){
-    let item = ITEMS.find(i=>i.id===saved[slot]);
-    if(item) eq[slot]=item;
-  }
-  return eq;
+ try{let s=JSON.parse(localStorage.getItem(GEAR_KEY)||'{}');let eq={};for(let k in s){let it=ITEMS.find(x=>x.id===s[k]);if(it) eq[k]=it;}return eq;}catch(e){return {};}
 }
-
-let heroId = localStorage.getItem('voland_hero') || 'mage-f-new';
-let heroName = localStorage.getItem('voland_name') || 'VOLAND 1337';
+let heroId=localStorage.getItem('voland_hero')||'mage-f-new';
+let heroName=localStorage.getItem('voland_name')||'VOLAND 1337';
 if(!DB[heroId]) heroId='mage-f-new';
-let h = DB[heroId];
-document.getElementById('heroImg').src = h.img;
-document.getElementById('heroName').textContent = heroName.toUpperCase();
-document.getElementById('heroClass').textContent = h.role;
-
+let h=DB[heroId];
+document.getElementById('heroImg').src=h.img;
+document.getElementById('heroName').textContent=heroName.toUpperCase();
+document.getElementById('heroClass').textContent=h.role;
 function render(){
-  let equipped = getEquipped();
-  let base = {...h.st};
-  let cur = {...base};
-  let bonusSum={};
-  for(let slot in equipped){
-    for(let k in equipped[slot].bonus){
-      cur[k]=(cur[k]||0)+equipped[slot].bonus[k];
-      bonusSum[k]=(bonusSum[k]||0)+equipped[slot].bonus[k];
-    }
-  }
-  document.getElementById('statsGrid').innerHTML = `
-    <div class="stat-card ${bonusSum.HP?'boosted':''}"><div class="stat-label">HP</div><div class="stat-value">${cur.HP}</div><div class="stat-bonus">${bonusSum.HP?`+${bonusSum.HP} от шмота`:''}</div></div>
-    <div class="stat-card ${bonusSum.DEF?'boosted':''}"><div class="stat-label">DEF</div><div class="stat-value">${cur.DEF}</div><div class="stat-bonus">${bonusSum.DEF?`+${bonusSum.DEF} от шмота`:''}</div></div>
-    <div class="stat-card ${bonusSum.DMG?'boosted':''}"><div class="stat-label">DAMAGE</div><div class="stat-value">${cur.DMG}</div><div class="stat-bonus">${bonusSum.DMG?`+${bonusSum.DMG} от шмота`:''}</div></div>
-    <div class="stat-card ${bonusSum.MANA?'boosted':''}"><div class="stat-label">MANA</div><div class="stat-value">${cur.MANA}</div><div class="stat-bonus">${bonusSum.MANA?`+${bonusSum.MANA} от шмота`:''}</div></div>
-    <div class="stat-card ${bonusSum.CRIT?'boosted':''}"><div class="stat-label">CRIT</div><div class="stat-value">${cur.CRIT}%</div><div class="stat-bonus">${bonusSum.CRIT?`+${bonusSum.CRIT}% от шмота`:''}</div></div>
-    <div class="stat-card ${bonusSum.DODGE?'boosted':''}"><div class="stat-label">DODGE</div><div class="stat-value">${cur.DODGE}%</div><div class="stat-bonus">${bonusSum.DODGE?`+${bonusSum.DODGE}% от шмота`:''}</div></div>
-  `;
-  document.getElementById('barsPanel').innerHTML = `
-    <div class="bar-row"><div class="bar-label">HP</div><div class="bar-track"><div class="bar-fill hp" style="width:100%">${cur.HP} / ${cur.HP}</div></div></div>
-    <div class="bar-row"><div class="bar-label">MANA</div><div class="bar-track"><div class="bar-fill mana" style="width:100%">${cur.MANA} / ${cur.MANA}</div></div></div>
-    <div class="bar-row"><div class="bar-label">STAMINA</div><div class="bar-track"><div class="bar-fill stamina" style="width:100%">100 / 100</div></div></div>
-    <div class="bar-row"><div class="bar-label">XP</div><div class="bar-track"><div class="bar-fill xp" style="width:100%">LVL 7 - MAX</div></div></div>
-  `;
+ let eq=getEquipped();
+ let base={...h.st};
+ let cur={...base};
+ let bonus={};
+ for(let slot in eq){for(let k in eq[slot].bonus){cur[k]=(cur[k]||0)+eq[slot].bonus[k];bonus[k]=(bonus[k]||0)+eq[slot].bonus[k];}}
+ document.getElementById('statsGrid').innerHTML=`
+  <div class="stat-card ${bonus.HP?'boosted':''}"><div class="stat-label">HP</div><div class="stat-value">${cur.HP}</div><div class="stat-bonus">${bonus.HP?`+${bonus.HP} от шмота`:''}</div></div>
+  <div class="stat-card ${bonus.DEF?'boosted':''}"><div class="stat-label">DEF</div><div class="stat-value">${cur.DEF}</div><div class="stat-bonus">${bonus.DEF?`+${bonus.DEF} от шмота`:''}</div></div>
+  <div class="stat-card ${bonus.DMG?'boosted':''}"><div class="stat-label">DAMAGE</div><div class="stat-value">${cur.DMG}</div><div class="stat-bonus">${bonus.DMG?`+${bonus.DMG} от шмота`:''}</div></div>
+  <div class="stat-card ${bonus.MANA?'boosted':''}"><div class="stat-label">MANA</div><div class="stat-value">${cur.MANA}</div><div class="stat-bonus">${bonus.MANA?`+${bonus.MANA} от шмота`:''}</div></div>
+  <div class="stat-card ${bonus.CRIT?'boosted':''}"><div class="stat-label">CRIT</div><div class="stat-value">${cur.CRIT}%</div><div class="stat-bonus">${bonus.CRIT?`+${bonus.CRIT}% от шмота`:''}</div></div>
+  <div class="stat-card ${bonus.DODGE?'boosted':''}"><div class="stat-label">DODGE</div><div class="stat-value">${cur.DODGE}%</div><div class="stat-bonus">${bonus.DODGE?`+${bonus.DODGE}% от шмота`:''}</div></div>
+ `;
+ document.getElementById('barsPanel').innerHTML=`
+  <div class="bar-row"><div class="bar-label">HP</div><div class="bar-track"><div class="bar-fill hp" style="width:100%">${cur.HP} / ${cur.HP}</div></div></div>
+  <div class="bar-row"><div class="bar-label">MANA</div><div class="bar-track"><div class="bar-fill mana" style="width:100%">${cur.MANA} / ${cur.MANA}</div></div></div>
+  <div class="bar-row"><div class="bar-label">STAMINA</div><div class="bar-track"><div class="bar-fill stamina" style="width:100%">100 / 100</div></div></div>
+  <div class="bar-row"><div class="bar-label">XP</div><div class="bar-track"><div class="bar-fill xp" style="width:100%">LVL 7 - MAX</div></div></div>
+ `;
 }
 render();
-// автообновление если шмот поменяли на другой вкладке
-setInterval(()=>{
-  let curId = localStorage.getItem('voland_hero');
-  let curName = localStorage.getItem('voland_name');
-  let changed=false;
-  if(curId && curId!==heroId && DB[curId]){ heroId=curId; h=DB[heroId]; document.getElementById('heroImg').src=h.img; document.getElementById('heroClass').textContent=h.role; changed=true; }
-  if(curName && curName.toUpperCase()!==document.getElementById('heroName').textContent){ document.getElementById('heroName').textContent=curName.toUpperCase(); }
-  render();
-},500);
-
-const chatBody = document.querySelector('.chat-body');
-const chatIn = document.getElementById('chatIn');
-const chatBtn = document.getElementById('chatBtn');
-function addMsg(t){const d=document.createElement('div');d.className='sys-msg';d.style.cssText='background:#1e2f3e;border-left-color:#e6d5a0;color:#d8d2b8';d.textContent='Ты: '+t;chatBody.appendChild(d);chatBody.scrollTop=chatBody.scrollHeight;}
-function sendChat(){const v=chatIn.value.trim();if(!v)return;addMsg(v);chatIn.value='';}
-chatBtn.onclick=sendChat;chatIn.addEventListe
+setInterval(()=>{let curId=localStorage.getItem('voland_hero');let curName=localStorage.getItem('voland_name');if(curId&&curId!==heroId&&DB[curId]){heroId=curId;h=DB[heroId];document.getElementById('heroImg').src=h.img;document.getElementById('heroClass').textContent=h.role;}if(curName) document.getElementById('heroName').textContent=curName.toUpperCase();render();},500);
+const chatBody=document.getElementById('chatBody');const chatIn=document.getElementById('chatIn');const chatBtn=document.getElementById('chatBtn');
+function addMsg(t){let d=document.createElement('div');d.className='sys-msg';d.style.cssText='background:#1e2f3e;border-left-color:#e6d5a0;color:#d8d2b8';d.textContent='Ты: '+t;chatBody.appendChild(d);chatBody.scrollTop=9999;}
+chatBtn.onclick=()=>{let v=chatIn.value.trim();if(!v) return;addMsg(v);chatIn.value='';};
+chatIn.addEventListener('keydown',e=>{if(e.key==='Enter') chatBtn.click();});
+</script>
+</body>
+</html>
