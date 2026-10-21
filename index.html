@@ -18,10 +18,11 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 .hero-preview{display:flex;gap:16px;align-items:center;background:rgba(20,28,36,.7);border:1px solid #2a3a4a;border-radius:12px;padding:16px 20px;backdrop-filter:blur(4px);margin-bottom:12px;position:relative}
 .hero-preview img{width:80px;height:80px;border-radius:10px;object-fit:cover;border:1px solid #2a3a4a;flex-shrink:0}
 .hero-info{line-height:1.5;flex:1;min-width:0}
-.hero-name{font-family:'Cinzel Decorative',serif;color:#e6d5a0;font-size:14px;letter-spacing:.15em}
+.hero-name{font-family:'Cinzel Decorative',serif;color:#e6d5a0;font-size:14px;letter-spacing:.15em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .hero-stats{font-size:8px;color:#8a9a6a;font-family:'JetBrains Mono',monospace;margin-top:4px;line-height:1.6}
 .hero-actions{display:flex;gap:8px;margin-top:8px}
 .btn{padding:10px 18px;border:1px solid #3a4a5a;background:#1a252f;color:#e6d5a0;font-size:9px;letter-spacing:.2em;font-family:'JetBrains Mono',monospace;border-radius:8px;cursor:pointer;transition:.2s;text-align:center}
+.btn:hover{border-color:#e6d5a0;box-shadow:0 0 12px rgba(230,213,160,.2)}
 .btn.primary{background:#e6d5a0;color:#121214;font-weight:800;border-color:#e6d5a0;flex:1}
 .btn.secondary{background:rgba(20,28,36,.6);flex:1}
 .empty-slot{border:1px dashed #2a3a4a;background:rgba(20,28,36,.3);border-radius:12px;padding:20px;text-align:center;color:#5a6a7a;font-family:'JetBrains Mono',monospace;font-size:8px;margin-bottom:12px}
@@ -45,38 +46,26 @@ function render(){
   const c = document.getElementById('content');
   if (profiles.length>0){
     let html = '';
-    profiles.forEach(p=>{
+    for (let i=0;i<profiles.length;i++){
+      const p = profiles[i];
       const hero = VOLAND_HEROES[p.heroId];
-      if (!hero) return;
-      let curStats = {...hero.st};
+      if (!hero) continue;
+      let curStats = Object.assign({}, hero.st);
       try {
         const equipRaw = JSON.parse(localStorage.getItem(VOLAND_KEYS.equip_prefix + p.id) || '{}');
         for (let slot in equipRaw){
-          const item = VOLAND_ITEMS.find(x=>x.id===equipRaw[slot]);
+          const item = VOLAND_ITEMS.find(function(x){return x.id===equipRaw[slot]});
           if (item){ for (let k in item.bonus){ curStats[k]=(curStats[k]||0)+item.bonus[k]; } }
         }
       } catch(e){}
-      html += `
-        <div class="hero-preview">
-          <img src="${hero.img}" onerror="this.src='./assets/heroes/warrior-f.webp'">
-          <div class="hero-info">
-            <div class="hero-name">${p.name.toUpperCase()}</div>
-            <div class="hero-stats">${hero.n} • ${hero.role}<br>HP ${curStats.HP} • DMG ${curStats.DMG} • DEF ${curStats.DEF} • MANA ${curStats.MANA}<br>CRIT ${curStats.CRIT}% • DODGE ${curStats.DODGE}%</div>
-            <div class="hero-actions">
-              <div class="btn primary" onclick="continueWith('${p.id}')">CONTINUE → HERO</div>
-              <div class="btn secondary" onclick="newGame()">NEW GAME</div>
-            </div>
-          </div>
-          <div class="delete-btn" onclick="deleteProfile('${p.id}','${p.name.replace(/'/g,"&#39;")}')" title="Удалить">✕</div>
-        </div>
-      `;
-    });
-    for (let i=profiles.length;i<3;i++){
-      html += `<div class="empty-slot">EMPTY SLOT ${i+1} • Свободный слот<br><br><div class="btn secondary" style="display:inline-block;padding:10px 20px" onclick="newGame()">+ CREATE NEW HERO</div></div>`;
+      html += '<div class="hero-preview"><img src="'+hero.img+'" onerror="this.src=\'./assets/heroes/warrior-f.webp\'"><div class="hero-info"><div class="hero-name">'+p.name.toUpperCase()+'</div><div class="hero-stats">'+hero.n+' • '+hero.role+'<br>HP '+curStats.HP+' • DMG '+curStats.DMG+' • DEF '+curStats.DEF+' • MANA '+curStats.MANA+'<br>CRIT '+curStats.CRIT+'% • DODGE '+curStats.DODGE+'%</div><div class="hero-actions"><div class="btn primary" onclick="continueWith(\''+p.id+'\')">CONTINUE → HERO</div><div class="btn secondary" onclick="newGame()">NEW GAME</div></div></div><div class="delete-btn" onclick="deleteProfile(\''+p.id+'\')" title="Удалить">✕</div></div>';
+    }
+    for (let j=profiles.length;j<3;j++){
+      html += '<div class="empty-slot">EMPTY SLOT '+(j+1)+' • Свободный слот<br><br><div class="btn secondary" style="display:inline-block;padding:10px 20px" onclick="newGame()">+ CREATE NEW HERO</div></div>';
     }
     c.innerHTML = html;
   } else {
-    c.innerHTML = `<div style="margin-top:20px;text-align:center;background:rgba(20,28,36,.5);border:1px solid #2a3a4a;border-radius:12px;padding:20px"><div style="font-size:11px;color:#9a9a7a;line-height:1.6;font-family:'JetBrains Mono',monospace">Добро пожаловать в VOLAND.<br>Можно сохранить до 3 персонажей.<br>Играй любым в любое время.</div></div><div style="display:flex;gap:12px;margin-top:16px;justify-content:center"><div class="btn primary" onclick="location.href='./page2.html'">START ADVENTURE → SELECT HERO</div></div>`;
+    c.innerHTML = '<div style="margin-top:20px;text-align:center;background:rgba(20,28,36,.5);border:1px solid #2a3a4a;border-radius:12px;padding:20px"><div style="font-size:11px;color:#9a9a7a;line-height:1.6;font-family:JetBrains Mono,monospace">Добро пожаловать в VOLAND.<br>Можно сохранить до 3 персонажей.<br>Играй любым в любое время.</div></div><div style="display:flex;gap:12px;margin-top:16px;justify-content:center"><div class="btn primary" onclick="location.href=\'./page2.html\'">START ADVENTURE → SELECT HERO</div></div>';
   }
 }
 function continueWith(id){ if (volandSwitchToProfile(id)){ location.href='./page3.html'; } }
@@ -85,8 +74,11 @@ function newGame(){
   if (profiles.length>=3){ alert('Максимум 3 персонажа. Удали одного.'); return; }
   location.href='./page2.html';
 }
-function deleteProfile(id, name){
-  if (confirm('Удалить персонажа "'+name+'"?')){ volandDeleteProfile(id); render(); }
+function deleteProfile(id){
+  if (confirm('Удалить персонажа?')){
+    volandDeleteProfile(id);
+    render();
+  }
 }
 render();
 </script>
