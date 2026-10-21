@@ -84,7 +84,7 @@ html,body{height:100%;background: url("assets/heroes/bg-battlefield.webp") cente
     <div onclick="location.href='page3.html'" style="cursor:pointer"><div class="nav-item" style="opacity:1">👤</div><div class="nav-label">HERO</div></div>
     <div><div class="nav-item active">🎒</div><div class="nav-label">BAG</div></div>
     <div onclick="location.href='page5.html'" style="cursor:pointer"><div class="nav-item" style="opacity:1">📜</div><div class="nav-label">QUESTS</div></div>
-    <div><div class="nav-item">⚔️</div><div class="nav-label">BATTLE</div></div>
+    <div onclick="location.href='page6.html'" style="cursor:pointer"><div class="nav-item" style="opacity:1">⚔️</div><div class="nav-label">BATTLE</div></div>
     <div><div class="nav-item">📖</div><div class="nav-label">MAP</div></div>
   </div>
   <div class="center-col">
@@ -281,7 +281,4 @@ document.querySelectorAll('.equip-slot').forEach(el=>{ el.onclick=()=>unequipSlo
 renderInventory(); renderEquip(); renderStats(); renderBars();
 const chatIn=document.getElementById('chatIn'); const chatBtn=document.getElementById('chatBtn');
 chatBtn.onclick=()=>{ const v=chatIn.value.trim(); if(!v) return; log('Ты: '+v); chatIn.value=''; };
-chatIn.addEventListener('keydown',e=>{ if(e.key==='Enter') chatBtn.click(); });
-</script>
-</body>
-</html>
+chatIn.addEventListener('key
