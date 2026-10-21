@@ -57,7 +57,7 @@ html,body{height:100%;background: url("assets/heroes/bg-battlefield.webp") cente
     <div><div class="nav-item active">👤</div><div class="nav-label">HERO</div></div>
     <div onclick="location.href='page4.html'" style="cursor:pointer"><div class="nav-item" style="opacity:1">🎒</div><div class="nav-label">BAG</div></div>
     <div onclick="location.href='page5.html'" style="cursor:pointer"><div class="nav-item" style="opacity:1">📜</div><div class="nav-label">QUESTS</div></div>
-    <div><div class="nav-item">⚔️</div><div class="nav-label">BATTLE</div></div>
+    <div onclick="location.href='page6.html'" style="cursor:pointer"><div class="nav-item" style="opacity:1">⚔️</div><div class="nav-label">BATTLE</div></div>
     <div><div class="nav-item">📖</div><div class="nav-label">MAP</div></div>
   </div>
   <div class="hero-panel">
@@ -164,7 +164,4 @@ const chatIn = document.getElementById('chatIn');
 const chatBtn = document.getElementById('chatBtn');
 function addMsg(t){const d=document.createElement('div');d.className='sys-msg';d.style.cssText='background:#1e2f3e;border-left-color:#e6d5a0;color:#d8d2b8';d.textContent='Ты: '+t;chatBody.appendChild(d);chatBody.scrollTop=chatBody.scrollHeight;}
 function sendChat(){const v=chatIn.value.trim();if(!v)return;addMsg(v);chatIn.value='';}
-chatBtn.onclick=sendChat;chatIn.addEventListener('keydown',e=>{if(e.key==='Enter')sendChat();});
-</script>
-</body>
-</html>
+chatBtn.onclick=sendChat;chatIn.addEventListe
