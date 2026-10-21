@@ -79,17 +79,13 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
 <script src="./assets/js/db.js"></script>
 <script src="./assets/js/storage.js"></script>
 <script>
-// Guard - если нет сохранения, кидаем на page2
 if (!volandHasSave()){ location.href='./page2.html'; }
-
 let heroId = volandGetHeroId();
 let heroName = volandGetName();
 let h = VOLAND_HEROES[heroId] || VOLAND_HEROES['mage-f-new'];
-
 document.getElementById('heroImg').src = h.img;
 document.getElementById('heroName').textContent = heroName.toUpperCase();
 document.getElementById('heroClass').textContent = h.role;
-
 function render(){
   const {cur, bonus} = volandCalcStats();
   document.getElementById('statsGrid').innerHTML = `
@@ -109,7 +105,6 @@ function render(){
 }
 render();
 setInterval(render, 1000);
-
 const chatBody=document.getElementById('chatBody');const chatIn=document.getElementById('chatIn');const chatBtn=document.getElementById('chatBtn');
 function addMsg(t){let d=document.createElement('div');d.className='sys-msg';d.style.cssText='background:#1e2f3e;border-left-color:#e6d5a0;color:#d8d2b8';d.textContent='Ты: '+t;chatBody.appendChild(d);chatBody.scrollTop=9999;}
 chatBtn.onclick=()=>{let v=chatIn.value.trim();if(!v) return;addMsg(v);chatIn.value='';};
