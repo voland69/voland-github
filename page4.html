@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>VOLAND - BAG - A=B C=D FIX</title>
+<title>VOLAND - BAG - FINAL FIX</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
@@ -18,7 +17,7 @@ html,body{height:100%;background: url("assets/heroes/bg-battlefield.webp") cente
 .nav-item.active{background:#1e2f3e;border-color:#3a4a5a;opacity:1;box-shadow:0 0 12px rgba(230,213,160,.2)}
 .nav-label{font-size:7px;letter-spacing:.15em;color:#6a7a8a;margin-top:4px;text-align:center;font-family:'JetBrains Mono',monospace}
 .center-col{flex:1;display:flex;flex-direction:column;background:rgba(16,22,30,.25);overflow:hidden;backdrop-filter: blur(2px)}
-.top-row{flex:0 0 440px;display:flex;gap:16px;background:rgba(19,26,34,.35);border-bottom:1px solid rgba(30,42,50,.5);overflow:hidden;padding:0}
+.top-row{flex:0 0 440px;display:flex;gap:16px;background:rgba(19,26,34,.35);border-bottom:1px solid rgba(30,42,50,.5);overflow:hidden}
 .stats-panel{width:250px;min-width:250px;max-width:250px;background:rgba(20,28,36,.45);border-right:1px solid rgba(30,42,50,.5);padding:24px 16px;display:flex;flex-direction:column;justify-content:center;gap:8px}
 .bars-panel{width:250px;min-width:250px;max-width:250px;background:rgba(20,28,36,.45);border-left:1px solid rgba(30,42,50,.5);padding:24px 16px;display:flex;flex-direction:column;justify-content:center;gap:8px}
 .panel-title{font-size:7px;letter-spacing:.2em;color:#6a7a8a;font-family:'JetBrains Mono',monospace;text-align:center;margin-bottom:12px}
@@ -90,7 +89,7 @@ html,body{height:100%;background: url("assets/heroes/bg-battlefield.webp") cente
   </div>
   <div class="center-col">
     <div class="top-row">
-      <div class="stats-panel" id="statsPanel"><div class="panel-title">СТАТЫ ГЕРОЯ [1] — A=B симметрично</div></div>
+      <div class="stats-panel" id="statsPanel"><div class="panel-title">СТАТЫ ГЕРОЯ [1] — 6 (2 колонки) A=B</div></div>
       <div class="equip-zone">
         <div class="panel-title" style="width:100%;text-align:center">ЭКИПИРОВКА — 11</div>
         <div class="equip-grid" id="equipGrid">
@@ -107,7 +106,7 @@ html,body{height:100%;background: url("assets/heroes/bg-battlefield.webp") cente
           <div class="equip-slot boots" data-slot="boots"><div class="slot-icon">👢</div><div class="slot-name">Ботинки</div><div class="slot-empty">пусто</div></div>
         </div>
       </div>
-      <div class="bars-panel" id="barsPanel"><div class="panel-title">БАРЫ ГЕРОЯ [2] — C=D симметрично</div></div>
+      <div class="bars-panel" id="barsPanel"><div class="panel-title">БАРЫ ГЕРОЯ [2] — 4 C=D</div></div>
     </div>
     <div class="inventory-zone">
       <div class="panel-title" style="display:flex;justify-content:space-between"><span>ИНВЕНТАРЬ — 50 (11 предметов с бонусами)</span><span id="equipCount">0/11</span></div>
@@ -116,7 +115,7 @@ html,body{height:100%;background: url("assets/heroes/bg-battlefield.webp") cente
   </div>
   <div class="right">
     <div class="chat-header"><div class="dot"></div><div class="chat-title">CHAT + ЛОГИ</div></div>
-    <div class="chat-body" id="chatBody"><div class="sys-msg">Система: A=B (верх=низ) и C=D (лево=право) — оба окна симметричны</div></div>
+    <div class="chat-body" id="chatBody"><div class="sys-msg">Система: Вернул статы, бары и инвентарь — симметрия A=B C=D сохранена</div></div>
     <div class="chat-input"><input id="chatIn" placeholder="..."><button id="chatBtn">▶</button></div>
   </div>
 </div>
@@ -168,4 +167,69 @@ function renderStats(){
     const div = document.createElement('div');
     div.className='stat-card'+(add>0?' boosted':'');
     const suffix = o.suffix||'';
-    div.innerHTML=`<div class="stat-label">${o.label}</div><div class="stat-value">${total}${suffix}</div><div class="stat-bonus">${add>0?`+${add}${suffix} от шмота
+    div.innerHTML=`<div class="stat-label">${o.label}</div><div class="stat-value">${total}${suffix}</div><div class="stat-bonus">${add>0?`+${add}${suffix} от шмота`:''}</div>`;
+    grid.appendChild(div);
+  });
+  statsPanel.appendChild(grid);
+}
+function renderBars(){
+  const cur = calcStats();
+  const title = barsPanel.querySelector('.panel-title');
+  barsPanel.innerHTML=''; barsPanel.appendChild(title);
+  const inner = document.createElement('div'); inner.className='bars-inner';
+  const bars = [
+    {label:'HP', cls:'hp', max:cur.HP, cur:cur.HP},
+    {label:'MANA', cls:'mana', max:cur.MANA, cur:cur.MANA},
+    {label:'STAMINA', cls:'stamina', max:100, cur:100, txt:'100 / 100'},
+    {label:'XP', cls:'xp', max:100, cur:100, txt:'LVL 7'},
+  ];
+  bars.forEach(b=>{
+    const row=document.createElement('div'); row.className='bar-row';
+    const txt = b.txt || `${b.cur} / ${b.max}`;
+    row.innerHTML=`<div class="bar-label"><span>${b.label}</span><span>${b.max}</span></div><div class="bar-track"><div class="bar-fill ${b.cls}" style="width:100%">${txt}</div></div>`;
+    inner.appendChild(row);
+  });
+  barsPanel.appendChild(inner);
+}
+function log(msg){ const d=document.createElement('div'); d.className='sys-msg'; d.textContent=msg; chatBody.appendChild(d); chatBody.scrollTop=chatBody.scrollHeight; }
+function renderInventory(){
+  invGrid.innerHTML='';
+  for(let i=0;i<50;i++){
+    const cell=document.createElement('div'); cell.className='inv-cell';
+    const item = inv[i];
+    if(item){ cell.classList.add('has-item'); cell.innerHTML=`<div class="item-icon">${item.icon}</div><div class="item-name">${item.name}</div><div class="item-bonus">${item.desc}</div>`; cell.title=`${item.name}: ${Object.entries(item.bonus).map(([k,v])=>`+${v} ${k}`).join(' ')}`; cell.onclick=()=>equipItem(item, i); }
+    else{ cell.classList.add('empty'); }
+    invGrid.appendChild(cell);
+  }
+}
+function renderEquip(){
+  document.querySelectorAll('.equip-slot').forEach(slotEl=>{
+    const slot = slotEl.dataset.slot; const item = equipped[slot];
+    const nameEl = slotEl.querySelector('.slot-name'); const iconEl = slotEl.querySelector('.slot-icon'); const emptyEl = slotEl.querySelector('.slot-empty');
+    if(item){ slotEl.classList.add('filled'); iconEl.textContent=item.icon; nameEl.textContent=item.name; emptyEl.textContent=item.desc; emptyEl.style.color='#3ad080'; }
+    else{ slotEl.classList.remove('filled'); const defaults={head:{icon:'🪖',name:'Шлем'},ear1:{icon:'👂',name:'Серьга 1'},ear2:{icon:'👂',name:'Серьга 2'},amulet:{icon:'📿',name:'Амулет'},armor:{icon:'🦺',name:'Броня'},weapon:{icon:'⚔️',name:'Оружие'},shield:{icon:'🛡️',name:'Щит'},ring1:{icon:'💍',name:'Кольцо 1'},ring2:{icon:'💍',name:'Кольцо 2'},gloves:{icon:'🧤',name:'Перчатки'},boots:{icon:'👢',name:'Ботинки'}}; const def=defaults[slot]; if(def){ iconEl.textContent=def.icon; nameEl.textContent=def.name; } emptyEl.textContent='пусто'; emptyEl.style.color=''; }
+  });
+  equipCount.textContent=Object.keys(equipped).length+'/11';
+}
+function equipItem(item, invIndex){
+  const slot = item.slot;
+  if(equipped[slot]){ const old=equipped[slot]; let emptyIdx=inv.findIndex(v=>v==null); if(emptyIdx===-1) emptyIdx=inv.length; inv[emptyIdx]=old; log(`Снято: ${old.name} → инвентарь`); }
+  equipped[slot]=item; inv[invIndex]=null;
+  renderInventory(); renderEquip(); renderStats(); renderBars();
+  log(`Экипировано: ${item.name} ${item.desc} — статы выросли`);
+}
+function unequipSlot(slotEl){
+  const slot=slotEl.dataset.slot; const item=equipped[slot]; if(!item) return;
+  let emptyIdx=inv.findIndex(v=>v==null); if(emptyIdx===-1){ for(let i=0;i<50;i++){ if(!inv[i]){ emptyIdx=i; break; } } if(emptyIdx===-1) emptyIdx=inv.length; }
+  inv[emptyIdx]=item; delete equipped[slot];
+  renderInventory(); renderEquip(); renderStats(); renderBars();
+  log(`Снято: ${item.name}`);
+}
+document.querySelectorAll('.equip-slot').forEach(el=>{ el.onclick=()=>unequipSlot(el); });
+renderInventory(); renderEquip(); renderStats(); renderBars();
+const chatIn=document.getElementById('chatIn'); const chatBtn=document.getElementById('chatBtn');
+chatBtn.onclick=()=>{ const v=chatIn.value.trim(); if(!v) return; log('Ты: '+v); chatIn.value=''; };
+chatIn.addEventListener('keydown',e=>{ if(e.key==='Enter') chatBtn.click(); });
+</script>
+</body>
+</html>
