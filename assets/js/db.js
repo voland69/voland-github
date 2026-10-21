@@ -1,4 +1,4 @@
-// VOLAND DB v1.1 - фикс иконок + полные описания
+// VOLAND DB v1.1 
 const VOLAND_HEROES = {
 'necro-f-new': {
   n:'AMETHYST', role:'MAGE • Necro - Female',
