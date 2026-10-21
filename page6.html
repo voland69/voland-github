@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VOLAND - BATTLEFIELD</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;background: url("assets/heroes/bg-battlefield.webp") center/cover no-repeat fixed #0a0e14;color:#d8d2b8;font-family:Inter,Arial,sans-serif;overflow:hidden}
+.bg{position:fixed;inset:0;z-index:0}
+.bg img{width:100%;height:100%;object-fit:cover}
+.bg:after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.2)}
+.wrap{position:fixed;inset:0;display:flex;z-index:2}
+.left-nav{width:68px;min-width:68px;background:rgba(18,24,30,.35);border-right:1px solid rgba(30,42,50,.5);display:flex;flex-direction:column;align-items:center;padding:12px 6px;gap:18px;backdrop-filter: blur(2px)}
+.nav-item{width:48px;height:48px;background:#1a252f;border:1px solid #2a3a4a;border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0.6;transition:.2s;font-size:20px}
+.nav-item.active{background:#1e2f3e;border-color:#e6d5a0;opacity:1;box-shadow:0 0 12px rgba(230,213,160,.3)}
+.nav-label{font-size:7px;letter-spacing:.15em;color:#6a7a8a;margin-top:4px;text-align:center;font-family:'JetBrains Mono',monospace}
+.main{flex:1;display:flex;flex-direction:column;background:rgba(16,22,30,.25);backdrop-filter: blur(2px);overflow:auto;padding:22px 26px;align-items:center}
+.bf-header{width:100%;max-width:920px;display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;border-bottom:1px solid rgba(42,58,74,.5);padding-bottom:12px}
+.bf-title{font-family:'Cinzel Decorative',serif;font-size:20px;letter-spacing:.35em;color:#e6d5a0;font-weight:900}
+.bf-sub{font-size:7px;letter-spacing:.2em;color:#6a7a8a;font-family:'JetBrains Mono',monospace;margin-top:6px}
+.bf-stats{font-size:7px;color:#8a9a6a;font-family:'JetBrains Mono',monospace;text-align:right;line-height:1.6}
+.bf-grid{width:100%;max-width:920px;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(2,160px);gap:14px}
+.loc-card{background:rgba(26,36,47,.88);border:1px solid #2a3a4a;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:.2s;position:relative;overflow:hidden}
+.loc-card:hover{border-color:#e6d5a0;background:rgba(30,47,62,.92);box-shadow:0 0 16px rgba(230,213,160,.15);transform:translateY(-2px)}
+.loc-card.locked{opacity:.4;cursor:not-allowed}
+.loc-card.locked:hover{transform:none;box-shadow:none;border-color:#2a3a4a}
+.loc-card.active{border-color:#3ad080}
+.card-num{position:absolute;top:8px;left:10px;font-size:8px;font-family:'JetBrains Mono',monospace;color:#4a5a6a}
+.card-icon{font-size:34px;margin-bottom:6px}
+.card-name{font-size:11px;letter-spacing:.18em;color:#e6d5a0;font-family:'JetBrains Mono',monospace;font-weight:700}
+.card-type{margin-top:4px;font-size:6px;letter-spacing:.15em;color:#6a7a8a;font-family:'JetBrains Mono',monospace;background:#0a0e14;border:1px solid #1e2a32;padding:3px 7px;border-radius:10px}
+.card-soon{margin-top:8px;font-size:8px;letter-spacing:.25em;color:#8a6a3a;font-family:'JetBrains Mono',monospace}
+
+/* DETAIL VIEW - Desert style */
+.detail-view{width:100%;max-width:920px;display:none;flex-direction:column;gap:14px}
+.detail-header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #2a3a4a;padding-bottom:12px}
+.detail-title{font-family:'Cinzel Decorative',serif;font-size:22px;letter-spacing:.3em;color:#e6d5a0;font-weight:900}
+.detail-back{background:#1a242f;border:1px solid #2a3a4a;border-radius:6px;padding:8px 14px;font-size:8px;letter-spacing:.15em;color:#8a9a6a;font-family:'JetBrains Mono',monospace;cursor:pointer;transition:.2s}
+.detail-back:hover{border-color:#e6d5a0;color:#e6d5a0}
+.detail-body{display:flex;gap:20px;margin-top:8px}
+.stages-col{width:110px;display:flex;flex-direction:column;gap:10px}
+.stage-box{background:#1a242f;border:1px solid #2a3a4a;border-radius:8px;height:92px;display:flex;align-items:center;justify-content:center;flex-direction:column;cursor:pointer;transition:.2s;position:relative}
+.stage-box:hover{border-color:#e6d5a0;box-shadow:0 0 10px rgba(230,213,160,.15)}
+.stage-box.active{border-color:#3ad080;background:#1e2f3e;box-shadow:0 0 12px rgba(58,208,128,.2)}
+.stage-num{font-size:28px;font-weight:900;color:#e6d5a0;font-family:'JetBrains Mono',monospace}
+.stage-label{font-size:6px;letter-spacing:.15em;color:#6a7a8a;font-family:'JetBrains Mono',monospace;margin-top:4px}
+.stage-check{position:absolute;top:6px;right:8px;font-size:10px;color:#3ad080}
+.mid-lines{flex:1;display:flex;flex-direction:column;gap:10px;justify-content:space-around;padding:10px 0}
+.line-row{height:92px;display:flex;align-items:center;position:relative}
+.line{height:1px;background:linear-gradient(90deg,#2a3a4a,#3a4a5a,#2a3a4a);flex:1;position:relative}
+.line:after{content:"";position:absolute;right:-1px;top:50%;transform:translateY(-50%);width:0;height:0;border-left:6px solid #3a4a5a;border-top:4px solid transparent;border-bottom:4px solid transparent}
+.enemies-col{width:340px;display:flex;flex-direction:column;gap:10px}
+.enemy-card{background:rgba(20,28,36,.8);border:1px solid #2a3a4a;border-radius:8px;height:92px;display:flex;align-items:center;gap:12px;padding:12px 14px;transition:.2s;position:relative;overflow:hidden}
+.enemy-card:hover{border-color:#4a5a6a;background:rgba(26,36,47,.9)}
+.enemy-card.boss{border-color:#8a6a1a;background:linear-gradient(90deg,rgba(26,36,47,.9),rgba(40,30,15,.6));box-shadow:inset 0 0 20px rgba(208,176,64,.08)}
+.enemy-card.boss:hover{border-color:#d0b040}
+.enemy-icon{width:52px;height:52px;background:#0a0e14;border:1px solid #1e2a32;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+.enemy-info{flex:1}
+.enemy-name{font-size:11px;letter-spacing:.12em;color:#e6d5a0;font-family:'JetBrains Mono',monospace;font-weight:700}
+.enemy-desc{font-size:7px;color:#8a9a6a;font-family:'JetBrains Mono',monospace;margin-top:3px;line-height:1.4}
+.enemy-lvl{position:absolute;top:8px;right:10px;font-size:6px;color:#6a7a8a;font-family:'JetBrains Mono',monospace;background:#0a0e14;border:1px solid #1e2a32;padding:2px 6px;border-radius:8px}
+.enemy-hp{margin-top:6px;height:3px;background:#0a0e14;border-radius:2px;overflow:hidden;border:1px solid #1e2a32}
+.enemy-hp-fill{height:100%;background:linear-gradient(90deg,#b33030,#e05050)}
+.right{width:200px;min-width:200px;background:rgba(14,20,26,1);border-left:1px solid rgba(30,42,50,.5);display:flex;flex-direction:column}
+.chat-header{padding:12px;border-bottom:1px solid #1e2a32;display:flex;align-items:center;gap:8px;background:#141c24}
+.dot{width:8px;height:8px;border-radius:50%;background:#3ad080;box-shadow:0 0 6px #3ad080}
+.chat-title{font-size:9px;letter-spacing:.2em;color:#6a7a8a;font-family:'JetBrains Mono',monospace}
+.chat-body{flex:1;padding:10px;overflow:auto;display:flex;flex-direction:column;gap:8px}
+.sys-msg{background:#1a242f;border-left:2px solid #d0b040;padding:8px;font-size:9px;color:#9a9a7a;line-height:1.3;border-radius:0 6px 6px 0}
+.chat-input{padding:8px;border-top:1px solid #1e2a32;display:flex;gap:6px;background:#12181e}
+.chat-input input{flex:1;background:#0a0e14;border:1px solid #1e2a32;border-radius:6px;padding:8px;font-size:11px;color:#d8d2b8;outline:none}
+.chat-input button{width:32px;background:#e6d5a0;border:none;border-radius:6px;cursor:pointer;font-weight:800;color:#12181e}
+</style>
+</head>
+<body>
+<div class="bg"><img src="assets/heroes/bg-battlefield.webp" onerror="this.style.display='none'"></div>
+<div class="wrap">
+  <div class="left-nav">
+    <div onclick="location.href='page3.html'" style="cursor:pointer"><div class="nav-item" style="opacity:1">👤</div><div class="nav-label">HERO</div></div>
+    <div onclick="location.href='page4.html'" style="cursor:pointer"><div class="nav-item" style="opacity:1">🎒</div><div class="nav-label">BAG</div></div>
+    <div onclick="location.href='page5.html'" style="cursor:pointer"><div class="nav-item" style="opacity:1">📜</div><div class="nav-label">QUESTS</div></div>
+    <div><div class="nav-item active">⚔️</div><div class="nav-label">BATTLE</div></div>
+    <div onclick="location.href='index.html'" style="cursor:pointer"><div class="nav-item" style="opacity:1">📖</div><div class="nav-label">MAP</div></div>
+  </div>
+
+  <div class="main" id="mainView">
+    <!-- BATTLEFIELD GRID -->
+    <div id="gridView" style="width:100%;max-width:920px;display:flex;flex-direction:column;align-items:center">
+      <div class="bf-header">
+        <div><div class="bf-title">BATTLEFIELD</div><div class="bf-sub">8 ЛОКАЦИЙ — ПЕРВЫЕ 3 ОТКРЫТЫ — СТАТЫ = BASE(PAGE2) + ШМОТ</div></div>
+        <div class="bf-stats" id="heroStats">LOADING...</div>
+      </div>
+      <div class="bf-grid" id="bfGrid"></div>
+    </div>
+
+    <!-- DETAIL VIEW -->
+    <div class="detail-view" id="detailView">
+      <div class="detail-header">
+        <div class="detail-title" id="detailTitle">DESERT</div>
+        <div class="detail-back" onclick="closeDetail()">← НАЗАД К ЛОКАЦИЯМ</div>
+      </div>
+      <div class="detail-body">
+        <div class="stages-col" id="stagesCol"></div>
+        <div class="mid-lines" id="midLines"></div>
+        <div class="enemies-col" id="enemiesCol"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="right">
+    <div class="chat-header"><div class="dot"></div><div class="chat-title">CHAT 200PX</div></div>
+    <div class="chat-body" id="chatBody"><div class="sys-msg">Система: Выбери локацию — 1 Пустыня, 2 Темный Лес, 3 Ледяные Земли — остальные SOON</div></div>
+    <div class="chat-input"><input id="chatIn" placeholder="..."><button id="chatBtn">▶</button></div>
+  </div>
+</div>
+
+<script>
+const DB={
+'necro-f-new':{n:'AMETHYST',st:{HP:1000,DEF:100,DMG:240,MANA:280,CRIT:15,DODGE:12}},
+'necro-m':{n:'GRAVELORD',st:{HP:1150,DEF:110,DMG:190,MANA:260,CRIT:10,DODGE:8}},
+'archer-f':{n:'WILD PATH',st:{HP:980,DEF:90,DMG:210,MANA:200,CRIT:25,DODGE:20}},
+'archer-m':{n:'DARK RANGER',st:{HP:1020,DEF:95,DMG:230,MANA:210,CRIT:20,DODGE:18}},
+'archmage-m':{n:'AZURE SAGE',st:{HP:900,DEF:80,DMG:260,MANA:320,CRIT:18,DODGE:10}},
+'mage-f-new':{n:'VOLCANIC',st:{HP:950,DEF:85,DMG:280,MANA:300,CRIT:22,DODGE:11}},
+'warrior-f':{n:'IRON VOW',st:{HP:1250,DEF:160,DMG:175,MANA:180,CRIT:12,DODGE:9}},
+'warrior-m':{n:'LION WARDEN',st:{HP:1300,DEF:180,DMG:180,MANA:220,CRIT:8,DODGE:7}},
+};
+const ITEMS=[
+ {id:'head', bonus:{DMG:20,DEF:10}}, {id:'ear1', bonus:{CRIT:1,DMG:5}}, {id:'ear2', bonus:{CRIT:1,DODGE:2}},
+ {id:'amulet', bonus:{MANA:50,CRIT:2}}, {id:'armor', bonus:{HP:100,DEF:30}}, {id:'weapon', bonus:{DMG:40}},
+ {id:'shield', bonus:{DEF:60,HP:50}}, {id:'ring1', bonus:{DMG:15,CRIT:1}}, {id:'ring2', bonus:{MANA:30,DODGE:1}},
+ {id:'gloves', bonus:{DEF:15,DMG:10}}, {id:'boots', bonus:{DEF:20,DODGE:2,HP:20}},
+];
+const GEAR_KEY='voland_equip';
+function getEquipped(){ try{ let s=JSON.parse(localStorage.getItem(GEAR_KEY)||'{}'); let eq={}; for(let k in s){ let it=ITEMS.find(x=>x.id===s[k]); if(it) eq[k]=it; } return eq; }catch(e){ return {}; } }
+function calcStats(){
+  let heroId=localStorage.getItem('voland_hero')||'mage-f-new';
+  if(!DB[heroId]) heroId='mage-f-new';
+  let cur={...DB[heroId].st};
+  let eq=getEquipped();
+  for(let slot in eq){ for(let k in eq[slot].bonus){ cur[k]=(cur[k]||0)+eq[slot].bonus[k]; } }
+  return {cur, heroId, heroName: DB[heroId].n};
+}
+
+const LOCATIONS=[
+ {id:1, name:'ПУСТЫНЯ', eng:'DESERT', icon:'🏜️', type:'Жара • Песок', active:true},
+ {id:2, name:'ТЕМНЫЙ ЛЕС', eng:'DARK FOREST', icon:'🌲', type:'Тень • Яд', active:true},
+ {id:3, name:'ЛЕДЯНЫЕ ЗЕМЛИ', eng:'FROSTLANDS', icon:'❄️', type:'Холод • Лед', active:true},
+ {id:4, name:'БОЛОТО', eng:'SWAMP', icon:'🐊', type:'SOON', active:false},
+ {id:5, name:'ВУЛКАН', eng:'VOLCANO', icon:'🌋', type:'SOON', active:false},
+ {id:6, name:'РУИНЫ', eng:'RUINS', icon:'🏛️', type:'SOON', active:false},
+ {id:7, name:'НЕБЕСА', eng:'SKY ISLANDS', icon:'☁️', type:'SOON', active:false},
+ {id:8, name:'БЕЗДНА', eng:'ABYSS', icon:'🕳️', type:'SOON', active:false},
+];
+
+const ENEMIES_DB={
+ 1: [ // DESERT - from harmless to deadly
+   {stage:1, name:'ПЕСЧАНАЯ МЫШЬ', eng:'Sand Gerbil', icon:'🐭', desc:'Безобидный грызун, ворует крошки. Урон 10%', lvl:'LVL 1', hp:40, hpColor:'#3ad080'},
+   {stage:2, name:'ПУСТЫННЫЙ СКОРПИОН', eng:'Desert Scorpion', icon:'🦂', desc:'Ядовитое жало, стан 20% шанс. Урон 60%', lvl:'LVL 3', hp:65, hpColor:'#d0b040'},
+   {stage:3, name:'ДЕТЕНЫШ ЧЕРВЯ', eng:'Sandworm Cub', icon:'🐛', desc:'Глотает целиком, игнор 15% брони. Урон 140%', lvl:'LVL 5', hp:85, hpColor:'#e05050'},
+   {stage:4, name:'ТИТАН ДЮН', eng:'Dune Tyrant - BOSS', icon:'👹', desc:'Босс Пустыни: Песчаная буря + оглушение AOE. Урон 300%', lvl:'BOSS LVL 7', hp:100, hpColor:'#e6d5a0', boss:true},
+ ],
+ 2: [ // DARK FOREST
+   {stage:1, name:'ЛЕСНОЙ ЗАЯЦ', eng:'Forest Hare', icon:'🐰', desc:'Быстрый, уворот +10%. Почти не бьет', lvl:'LVL 2', hp:45, hpColor:'#3ad080'},
+   {stage:2, name:'ТЕНЕВОЙ ВОЛК', eng:'Shadow Wolf', icon:'🐺', desc:'Прыжок из тени, крит +15%', lvl:'LVL 4', hp:70, hpColor:'#d0b040'},
+   {stage:3, name:'ШИПАСТЫЙ МЕДВЕДЬ', eng:'Thorn Bear', icon:'🐻', desc:'Колючая шкура, отражает 20% урона', lvl:'LVL 6', hp:88, hpColor:'#e05050'},
+   {stage:4, name:'ДРЕВНИЙ ЭНТ', eng:'Ancient Ent - BOSS', icon:'🌳', desc:'Босс Леса: Корни + реген. Хил 5% в раунд', lvl:'BOSS LVL 8', hp:100, hpColor:'#e6d5a0', boss:true},
+ ],
+ 3: [ // FROSTLANDS
+   {stage:1, name:'СНЕЖНЫЙ КРОЛИК', eng:'Snow Bunny', icon:'❄️🐰', desc:'Милый, но кусает за палец', lvl:'LVL 3', hp:50, hpColor:'#3ad080'},
+   {stage:2, name:'ЛЕДЯНОЙ ВОЛК', eng:'Ice Wolf', icon:'🐺', desc:'Заморозка: -20% скорости на 2 раунда', lvl:'LVL 5', hp:72, hpColor:'#6ab0ff'},
+   {stage:3, name:'ЙЕТИ', eng:'Frost Yeti', icon:'🦧', desc:'Морозный рев: -15% урона врага', lvl:'LVL 7', hp:90, hpColor:'#e05050'},
+   {stage:4, name:'ЛЕДЯНОЙ ДРАКОН', eng:'Frost Dragon - BOSS', icon:'🐉', desc:'Босс Льда: Дыхание льда AOE 250% + заморозка', lvl:'BOSS LVL 10', hp:100, hpColor:'#e6d5a0', boss:true},
+ ],
+};
+
+function renderStats(){
+  let {cur, heroName, heroId}=calcStats();
+  document.getElementById('heroStats').innerHTML=`${heroName}<br>${heroId.toUpperCase()}<br>HP ${cur.HP} • DMG ${cur.DMG} • DEF ${cur.DEF}<br>CRIT ${cur.CRIT}% • DODGE ${cur.DODGE}%`;
+}
+function renderGrid(){
+  let grid=document.getElementById('bfGrid');
+  grid.innerHTML=LOCATIONS.map(l=>`
+    <div class="loc-card ${l.active?'':'locked'}" data-id="${l.id}" onclick="openLocation(${l.id})">
+      <div class="card-num">0${l.id}</div>
+      <div class="card-icon">${l.icon}</div>
+      <div class="card-name">${l.name}</div>
+      <div class="card-type">${l.type}</div>
+      ${!l.active?'<div class="card-soon">SOON</div>':''}
+    </div>
+  `).join('');
+}
+
+function openLocation(id){
+  let loc=LOCATIONS.find(x=>x.id===id);
+  if(!loc.active){ log(`Локация ${loc.name} — SOON, скоро откроем`); return; }
+  let enemies = ENEMIES_DB[id];
+  if(!enemies){ log(`Локация ${loc.name} — в разработке`); return; }
+  document.getElementById('gridView').style.display='none';
+  document.getElementById('detailView').style.display='flex';
+  document.getElementById('detailTitle').textContent=loc.eng.toUpperCase();
+  
+  // stages 1-4
+  document.getElementById('stagesCol').innerHTML=enemies.map(e=>`
+    <div class="stage-box ${e.stage===1?'active':''}" data-stage="${e.stage}" onclick="selectStage(${e.stage})">
+      <div class="stage-num">${e.stage}</div>
+      <div class="stage-label">STAGE ${e.stage}</div>
+      ${e.stage===1?'<div class="stage-check">●</div>':''}
+    </div>
+  `).join('');
+  document.getElementById('midLines').innerHTML=enemies.map(()=>`<div class="line-row"><div class="line"></div></div>`).join('');
+  document.getElementById('enemiesCol').innerHTML=enemies.map(e=>`
+    <div class="enemy-card ${e.boss?'boss':''}" data-stage="${e.stage}" onclick="fightEnemy(${e.stage}, ${id})">
+      <div class="enemy-icon">${e.icon}</div>
+      <div class="enemy-info">
+        <div class="enemy-name">${e.name}</div>
+        <div class="enemy-desc">${e.eng} • ${e.desc}</div>
+        <div class="enemy-hp"><div class="enemy-hp-fill" style="width:${e.hp}%;background:${e.boss?'linear-gradient(90deg,#8a6a1a,#d0b040)':''};background-color:${e.hpColor}"></div></div>
+      </div>
+      <div class="enemy-lvl">${e.lvl}</div>
+    </div>
+  `).join('');
+  log(`Открыта локация ${loc.name} — ${loc.eng}: 4 врага от безобидного до босса`);
+  if(id===1) log(`Пустыня: Песчаная Мышь → Скорпион → Детеныш Червя → Титан Дюн BOSS`);
+}
+function closeDetail(){
+  document.getElementById('detailView').style.display='none';
+  document.getElementById('gridView').style.display='flex';
+  log('Возврат к выбору локаций');
+}
+function selectStage(stage){
+  document.querySelectorAll('.stage-box').forEach(b=>b.classList.remove('active'));
+  let el=document.querySelector(`.stage-box[data-stage="${stage}"]`);
+  if(el) el.classList.add('active');
+  log(`Выбран Stage ${stage}`);
+}
+function fightEnemy(stage, locId){
+  let enemies=ENEMIES_DB[locId];
+  let e=enemies.find(x=>x.stage===stage);
+  let {cur}=calcStats();
+  log(`Бой: Stage ${stage} vs ${e.name} (${e.eng}) — твои статы HP ${cur.HP} DMG ${cur.DMG} DEF ${cur.DEF}`);
+  selectStage(stage);
+}
+
+function log(msg){ const d=document.createElement('div'); d.className='sys-msg'; d.textContent=msg; document.getElementById('chatBody').appendChild(d); document.getElementById('chatBody').scrollTop=9999; }
+
+renderStats(); renderGrid();
+setInterval(renderStats, 1000);
+const chatIn=document.getElementById('chatIn'); const chatBtn=document.getElementById('chatBtn');
+chatBtn.onclick=()=>{ const v=chatIn.value.trim(); if(!v) return; log('Ты: '+v); chatIn.value=''; };
+chatIn.addEventListener('keydown',e=>{ if(e.key==='Enter') chatBtn.click(); });
+</script>
+</body>
+</html>
