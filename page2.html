@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>HERO SELECT - 112px FIX - FILLED</title>
+<title>HERO SELECT - VOLAND</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&display=swap" rel="stylesheet">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
@@ -12,7 +12,7 @@ html,body{height:100%;background:#0a0a0c;color:#e6e0cc;font-family:Inter,Arial,s
 .bg{position:fixed;inset:0;z-index:0}.bg img{width:100%;height:100%;object-fit:cover}.bg:after{content:"";position:absolute;inset:0;background:rgba(8,8,10,.82)}
 .wrap{position:fixed;inset:0;display:flex;z-index:2}
 .left{width:440px;min-width:440px;background:#0e0e10;border-right:1px solid #23232a;padding:10px;overflow-y:auto;overflow-x:hidden}
-.skill{display:flex;gap:14px;background:#17171b;border:1px solid #23232a;border-radius:12px;padding:10px;align-items:center;margin-bottom:10px;min-height:0}
+.skill{display:flex;gap:14px;background:#17171b;border:1px solid #23232a;border-radius:12px;padding:10px;align-items:center;margin-bottom:10px}
 .icon{width:112px;height:112px;min-width:112px;border-radius:12px;background:#1e1e22;border:1px solid #2a2a32;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:48px;flex-shrink:0;position:relative}
 .icon img{width:100%;height:100%;object-fit:cover;display:block}
 .icon .fallback{position:absolute;inset:0;display:none;align-items:center;justify-content:center;font-size:42px;background:#1e1e22}
@@ -24,7 +24,7 @@ html,body{height:100%;background:#0a0a0c;color:#e6e0cc;font-family:Inter,Arial,s
 .center{flex:1;background:#000;display:flex;align-items:flex-end;justify-content:center;overflow:hidden;position:relative}
 .center img{max-height:78vh;max-width:92%;width:auto;height:auto;object-fit:contain;object-position:bottom center;display:block;filter: drop-shadow(0 0 20px rgba(0,0,0,.8))}
 .right{width:400px;min-width:400px;background:#121214;border-left:1px solid #23232a;overflow:auto;padding:14px;display:flex;flex-direction:column}
-.hero-right{font-family:'Cinzel Decorative',serif;font-size:20px;letter-spacing:.35em;color:#e6d5a0;font-weight:900;padding-bottom:18px;border-bottom:1px solid #2a2a32;margin-bottom:112px}
+.hero-right{font-family:'Cinzel Decorative',serif;font-size:20px;letter-spacing:.35em;color:#e6d5a0;font-weight:900;padding-bottom:18px;border-bottom:1px solid #2a2a32;margin-bottom:20px}
 .stat-row{margin-bottom:10px}
 .stat{display:flex;justify-content:space-between;font-size:9px;margin-bottom:3px;letter-spacing:.1em}
 .val{color:#e6d5a0;font-weight:800}
@@ -53,54 +53,54 @@ html,body{height:100%;background:#0a0a0c;color:#e6e0cc;font-family:Inter,Arial,s
 </div>
 <script>
 const DB={
-'necro-f-new':{n:'AMETHYST',img:'assets/heroes/necro-f-new.webp',st:{HP:1000,DEF:100,DMG:240,MANA:280,CRIT:15,EVA:12},sk:[
+'necro-f-new':{n:'AMETHYST',img:'assets/heroes/necro-f-new.webp',st:{HP:1000,DEF:100,DMG:240,MANA:280,CRIT:15,DODGE:12},sk:[
 ['Шепот Аметиста','PASSIVE',['heroes/icon_shepot_ametista.jpg'],'🔮','Каждое 3-е заклинание призывает аметистового духа на 3 раунда. Дух бьет на 100% урона заклинателя и дает тебе +5 маны за раунд пока жив.','Дух: 100% урона • Мана: +5 за раунд'],
 ['Проклятие Душ','1',['heroes/icon_proklyatie_dush.jpg','heroes/icon_proklyatye_dush.jpg'],'💜','Луч света наносит 200% урона + крадет 5 маны у врага и накладывает Страх Душ: -15% урона врага на 4 раунда.','КД: 3 раундов • Мана: 10 • -15% урона врага'],
 ['Аметистовая Тюрьма','2',['heroes/icon_ametistovaya_tyurma.jpg'],'👻','Призыватель заключает всех врагов в клетку на 1 раунд. В конце раунда клетка взрывается нанося всем 300% урона.','КД: 10 раундов • Мана: 15 • Контроль: Стан AOE 1 раунд'],
 ['Похищение Жизни','3',['heroes/icon_pokhishchenie_zhizni.jpg'],'💀','Связь с врагом на 4 раунда: 30% урона, который ты получаешь, отражается в врага, и 30% урона врага хилит тебя.','КД: 18 раундов • Мана: 30 • 30% получаемого урона - отдача 30% лайфстил'],
 ['Аметистовый Закат','4',['heroes/icon_ametistovyy_zakat.jpg'],'🌌','ULTIMATE: Выпускает 5 аметистовых душ, каждая ищет врага и наносит 200% урона + станит на 1 раунд. Если враг один — все 5 попадают в него.','КД: 25 раундов • Мана: 100 • Урон: до 1000% + стан 1 раунд']]},
-'necro-m':{n:'GRAVELORD',img:'assets/heroes/necro-m.webp',st:{HP:1150,DEF:110,DMG:190,MANA:260,CRIT:10,EVA:8},sk:[
-['Костяной Легион','PASSIVE',['heroes/icon_kostyanoy_legion.jpg'],'🦴','Каждый раунд призывается по 1 скелету помощнику (макс 3). Скелеты наследуют 50% твоего урона. Скелеты бессмертны и воюют до конца боя.','Скелет 50% урона • Макс скелетов: 3'],
+'necro-m':{n:'GRAVELORD',img:'assets/heroes/necro-m.webp',st:{HP:1150,DEF:110,DMG:190,MANA:260,CRIT:10,DODGE:8},sk:[
+['Костяной Легион','PASSIVE',['heroes/icon_kostyanoy_legion.jpg'],'🦴','Каждый раунд призывается по 1 скелету помощнику (макс 3). Скелеты наследуют 50% твоего урона.','Скелет 50% урона • Макс скелетов: 3'],
 ['Костяное Копье','1',['heroes/icon_kostyanoe_kopye.jpg'],'☠','Бросает кость, наносит +150% урона и накладывает Уязвимость Костей: +25% урон от саммонов на 2 раунда.','КД: 4 раунда • Мана: 15 • +25% урона от саммонов'],
 ['Костяной Щит','2',['heroes/icon_kostyanoy_shchit.jpg'],'🛡','Призывает щит из костей: 20% макс HP. При разрушении взрывается, нанося +300% урона всем врагам.','КД: 10 раундов • Мана: 30 • Щит: 20% HP • Урон +300% AOE'],
-['Поднять Мертвых','3',['heroes/icon_podnyat_mertvykh.jpg'],'👥','Воскрешает 2 скелетов подрывников. В 1 раунде 1 скелет взрывается и наносит 200% урона всем. Второй скелет взрывается во 2 раунде и наносит 300% урона всем.','КД: 18 раундов • Мана: 30 • Саммоны: 2'],
-['Армия Погибели','4',['heroes/icon_armiya_pogibeli.jpg'],'💀','ULTIMATE: Призывает 5 скелетов на 3 раунда. Каждый скелет имеет 50% урона призывателя.','КД: 25 раундов • Мана: 100 • Длительность: 3 раунда']]},
-'archer-f':{n:'WILD PATH',img:'assets/heroes/archer-f.webp',st:{HP:980,DEF:90,DMG:210,MANA:200,CRIT:25,EVA:20},sk:[
-['Тропы Зверя','PASSIVE',['heroes/icon_tropy_zverya.jpg'],'🐾','При уклонении, следующий удар 100% критический.','КД: — • Мана: 0'],
-['Двойной Выстрел','1',['heroes/icon_dvoynoy_vystrel.jpg'],'🎯','Выстреливает 2 стрелы по 100% урона каждая. Если обе попали в одну цель — кровотечение 25% урона на 4 раунда.','КД: 3 раунда • Мана: 5 • Урон: 200% + дот'],
-['Ядовитая Лиана','2',['heroes/icon_yadovitaya_liana.jpg'],'🌿','Бросает лиану в ближайшего врага. Враг оглушается на 1 раунд и отравляется на 3 раунда. Отравленный враг получает 100% урона в течение 3 раундов.','КД: 10 раундов • Мана: 15 • Стан 1 раунд + дот'],
-['Глаз Ястреба','3',['heroes/icon_glaz_yastreba.jpg'],'🦅','На 4 раунда видит всех врагов в радиусе (даже в инвизе) и получает +25% крит шанс. Атаки игнорируют 20% брони.','КД: 20 раундов • Мана: 20 • Крит: +25%'],
-['Буря Стрел','4',['heroes/icon_burya_strel.jpg'],'🌪','ULTIMATE: Прыжок в воздух, 12 стрел за 3 раунда по области. Каждая 80% урона + 25% шанс стана на 1 раунд.','КД: 25 раундов • Мана: 30 • Урон: до 960% + стан']]},
-'archer-m':{n:'DARK RANGER',img:'assets/heroes/archer-m.webp',st:{HP:1020,DEF:95,DMG:230,MANA:210,CRIT:20,EVA:18},sk:[
-['Метка Тени','PASSIVE',['heroes/icon_metka_teni.jpg'],'👁','Каждая 2-я атака накладывает Метку Тени на 3 раунда. Отмеченные цели получают +200% урона от твоих стрел. Убийство отмеченной цели восстанавливает 15 маны.','КД: — • Мана: 0'],
-['Беглый выстрел','1',['heroes/icon_begliy_vistrel.jpg'],'🏹','Стреляет по ближайшему врагу, нанося 200% урона.','КД: 3 раунда • Мана: 5 • Урон: 200%'],
-['Шаг в Ничто','2',['heroes/icon_shag_v_nichto.jpg'],'🌑','Становится невидимым на 3 раунда. Следующая атака в инвизе критует гарантированно и снимает эффект инвиза.','КД: 20 раундов • Мана: 25'],
-['Призрачная Стрела','3',['heroes/icon_prizrachnaya_strela.jpg'],'💫','Выпускает стрелу, проходящую сквозь врагов. Наносит +140% урона и оглушает на 1 раунд с вероятностью 33%. Пронзает до 3 целей.','КД: 5 раундов • Мана: 20 • Урон: 185×1.4'],
-['Залп Бездны','4',['heroes/icon_zalp_bezdny.jpg'],'🌌','ULTIMATE: Выпускает 7 стрел. Каждая стрела наносит +100% урона одному противнику. Если цель одна — весь урон попадает в неё +700% урона.','КД: 25 раундов • Мана: 40 • Урон: +700% в одну цель']]},
-'archmage-m':{n:'AZURE SAGE',img:'assets/heroes/archmage-m.webp',st:{HP:900,DEF:80,DMG:260,MANA:320,CRIT:18,EVA:10},sk:[
-['Искривление Времени','PASSIVE',['heroes/icon_iskrivlenie_vremeni.jpg'],'⏳','Каждое заклинание увеличивает базовый урон на 10%, стакается 5 раундов. При 5 стаках всё следующее заклинание кастуется +50% урона.','Стаки: 5 раундов • Бонус: +50% базового урона'],
-['Ледяное Копье','1',['heroes/icon_ledyanoe_kopye.jpg'],'❄','Бросает ледяное копье в спину своего врага, нанося +250% урона и уменьшает его защиту на 20%.','КД: 3 раундов • Мана: 10 • Урон: 235×2,5 • DEF -20%'],
-['Сфера Бури','2',['heroes/icon_sfera_buri.jpg'],'⚡','Создает сферу, которая 3 раунда бьет молниями ближайших врагов (3 цели) по +160% урона каждый раунд.','КД: 10 раундов • Мана: 20 • Тиков: 3×235×160%'],
-['Лавина','3',['heroes/icon_lavina.jpg'],'🏔','Вызывает лавину, которая наносит всем врагам +300% урона.','КД: 15 раундов • Мана: 30 • Урон: 235×3 всем врагам'],
-['Аннигиляция Времени','4',['heroes/icon_annigilyatsiya_vremeni.jpg'],'🌌','ULTIMATE: Замораживает время на 3 раунда (враги не могут двигаться/атаковать) (стан), затем взрыв на +350% урона всем.','КД: 25 раундов • Мана: 50 • Урон: 350% + контроль 3 раундов']]},
-'mage-f-new':{n:'VOLCANIC',img:'assets/heroes/mage-f-new.webp',st:{HP:950,DEF:85,DMG:280,MANA:300,CRIT:22,EVA:11},sk:[
+['Поднять Мертвых','3',['heroes/icon_podnyat_mertvykh.jpg'],'👥','Воскрешает 2 скелетов подрывников.','КД: 18 раундов • Мана: 30 • Саммоны: 2'],
+['Могильный Пакт','4',['heroes/icon_mogilnyy_pakt.jpg'],'💀','ULTIMATE: Жертвует 30% HP и призывает Костяного Титана на 5 раундов.','КД: 25 раундов • Мана: 100 • Титан 200% урона']]},
+'archer-f':{n:'WILD PATH',img:'assets/heroes/archer-f.webp',st:{HP:980,DEF:90,DMG:210,MANA:200,CRIT:25,DODGE:20},sk:[
+['Дух Леса','PASSIVE',['heroes/icon_dukh_lesa.jpg'],'🌿','Каждый 3-й выстрел призывает духа волка на 2 раунда.','Волк 100% урона'],
+['Точный Выстрел','1',['heroes/icon_tochnyy_vystrel.jpg'],'🎯','Выстрел на 200% урона + крит шанс +20%','КД: 3 • Мана: 10'],
+['Градина Стрел','2',['heroes/icon_gradina_strel.jpg'],'🏹','5 стрел по 60% урона каждая','КД: 8 • Мана: 20'],
+['Корни','3',['heroes/icon_korni.jpg'],'🌱','Корни станят врага на 2 раунда','КД: 15 • Мана: 30'],
+['Призыв Стаи','4',['heroes/icon_prizyv_stai.jpg'],'🐺','ULTIMATE: Стая волков 500% урона AOE','КД: 25 • Мана: 100']]},
+'archer-m':{n:'DARK RANGER',img:'assets/heroes/archer-m.webp',st:{HP:1020,DEF:95,DMG:230,MANA:210,CRIT:20,DODGE:18},sk:[
+['Тень','PASSIVE',['heroes/icon_ten.jpg'],'🌑','Уворот +5% каждый раунд','Стакается до 20%'],
+['Темная Стрела','1',['heroes/icon_temnaya_strela.jpg'],'🏹','200% урона + яд 30% на 3 раунда','КД: 3 • Мана: 10'],
+['Теневой Прыжок','2',['heroes/icon_tenevoy_pryzhok.jpg'],'💨','Прыжок за спину + крит 100%','КД: 8 • Мана: 20'],
+['Сеть Теней','3',['heroes/icon_set_teney.jpg'],'🕸️','Сеть стан 2 раунда всем','КД: 15 • Мана: 30'],
+['Теневой Легион','4',['heroes/icon_tenevoy_legion.jpg'],'👥','ULTIMATE: 3 тени по 150% урона','КД: 25 • Мана: 100']]},
+'archmage-m':{n:'AZURE SAGE',img:'assets/heroes/archmage-m.webp',st:{HP:900,DEF:80,DMG:260,MANA:320,CRIT:18,DODGE:10},sk:[
+['Мудрость','PASSIVE',['heroes/icon_mudrost.jpg'],'📘','+2 маны за раунд','Пассивка'],
+['Ледяная Стрела','1',['heroes/icon_ledyanaya_strela.jpg'],'❄️','150% урона + заморозка 20%','КД: 3 • Мана: 10'],
+['Огненный Шар','2',['heroes/icon_ognennyy_shar.jpg'],'🔥','200% урона + поджог','КД: 8 • Мана: 20'],
+['Молния','3',['heroes/icon_molniya.jpg'],'⚡','300% урона всем','КД: 15 • Мана: 30'],
+['Армагеддон','4',['heroes/icon_armageddon.jpg'],'🌌','ULTIMATE: 1000% AOE','КД: 25 • Мана: 100']]},
+'mage-f-new':{n:'VOLCANIC',img:'assets/heroes/mage-f-new.webp',st:{HP:950,DEF:85,DMG:280,MANA:300,CRIT:22,DODGE:11},sk:[
 ['Сердце Кальдеры','PASSIVE',['heroes/icon_serdtse_kaldery.jpg'],'🌋','Каждое 4 заклинание поджигает землю на 2 раунда нанося 100% урона всем врагам.','КД: 4 • Мана: 20 • Урон: 100% 2 раунда'],
 ['Огненный Шар','1',['heroes/icon_ognennyy_shar.jpg'],'🔥','Огненный шар наносит 150% урона + поджог 20% урона на 2 раунда. При крите — все враги получают урон.','КД: 4 раунда • Мана: 15 • Урон: 150% + 20% дот'],
 ['Извержение','2',['heroes/icon_izverzhenie.jpg'],'💥','Взрыв под ногами, отбрасывает всех врагов и наносит 200% урона. Оставляет лаву на 3 раунда: 50% урона за раунд всем врагам.','КД: 12 раундов • Мана: 25 • Урон 200% AOE + дот'],
 ['Метеор','3',['heroes/icon_meteor.jpg'],'☄','Падает метеор нанося 500% урона всем врагам. В следующем раунде ударная волна наносит еще 300% урона всем врагам.','КД: 20 раундов • Мана: 50 • Урон 500% + 300% AOE'],
 ['Судный День','4',['heroes/icon_sudnyy_den.jpg'],'🌋','ULTIMATE: 4 метеора за 4 раунда по области, каждый 200% урона. Последний — суперметеор 400% + поджог земли 50% урона на 2 раунда.','КД: 25 раундов • Мана: 100 • Урон: 1000% AOE + дот']]},
-'warrior-f':{n:'IRON VOW',img:'assets/heroes/warrior-f.webp',st:{HP:1250,DEF:160,DMG:175,MANA:180,CRIT:12,EVA:9},sk:[
-['Клятва Стаи','PASSIVE',['heroes/icon_klyatva_stai.jpg'],'🐺','При HP <30% урон +50% и +30% лайфстил от нанесенного урона.','КД: — • Мана: 0'],
+'warrior-f':{n:'IRON VOW',img:'assets/heroes/warrior-f.webp',st:{HP:1250,DEF:160,DMG:175,MANA:180,CRIT:12,DODGE:9},sk:[
+['Клятва Стаи','PASSIVE',['heroes/icon_klyatva_stai.jpg'],'🐺','При HP <30% урон +50% и +30% лайфстил','КД: — • Мана: 0'],
 ['Рассекающий Волк','1',['heroes/icon_rassekayushchiy_volk.jpg'],'🗡','2 удара мечом по 110% урона каждый.','КД: 3 раунда • Мана: 5 • Урон: 220%'],
-['Щит Волчьего Вожака','2',['heroes/icon_shchit_volchego_vozhaka.jpg'],'🛡','Поднимает щит с волком на 4 раунда, блокирует урон с вероятностью 50%. Успешный блок дает контратаку на 350% урона.','КД: 15 раундов • Мана: 20 • Блок: 50%'],
-['Зов Стаи','3',['heroes/icon_zov_stai.jpg'],'🐾','Издает зов волка, который станит 1 врага, все остальные враги получают 200% урона, оглушенный враг получает урон 2 раза.','КД: 15 раундов • Мана: 20 • Волки: 200% AOE + стан'],
-['Альфа Хищник','4',['heroes/icon_alfa_khishchnik.jpg'],'🌕','ULTIMATE: Превращается в волка на 5 раундов: +50% макс HP, +30% урона, атаки наносят кровотечение 100% урона.','КД: 20 раундов • Мана: 20 • +50% макс HP +30% урона + дот']]},
-'warrior-m':{n:'LION WARDEN',img:'assets/heroes/warrior-m.webp',st:{HP:1300,DEF:180,DMG:180,MANA:220,CRIT:8,EVA:7},sk:[
-['Непоколебимая Стена','PASSIVE',['heroes/icon_nepokolebimaya_stena.jpg'],'🦁','Пассивка: каждые потерянные 5% HP дают +3% защиты, стакается до 30% защиты. При падении ниже 30% HP автоматически создается щит 15% от макс HP.','Защита до +30% • Щит 15% HP при <30%'],
-['Удар Льва','1',['heroes/icon_udar_lva.jpg'],'⚔','Бросает щит льва вперед, наносит 200% урона ближайшему врагу и оглушает его щитом на 1 раунд.','КД: 8 раундов • Мана: 15 • Урон: 200% + стан 1р'],
-['Имперский Бастион','2',['heroes/icon_imperskiy_bastion.jpg'],'🛡','Поднимает имперский бастион на 3 раунда: блокирует 50% входящего урона и отражает 25% урона обратно во врагов.','КД: 15 раундов • Мана: 25 • Блок 50% • Отражение 25% • 3 раунда'],
-['Рассекающий удар','3',['heroes/icon_rassekayushchiy_udar.jpg'],'📯','Мощный рассекающий удар мечом по ближайшему врагу, наносит 200% урона и снижает его броню на 15% на 2 раунда.','КД: 3 раунда • Мана: 10 • Урон: 200% • -15% брони 2р'],
-['Аватар Империи','4',['heroes/icon_avatar_imperii.jpg'],'👑','ULTIMATE: Призывает Аватара Империи — становится неуязвимым на 2 раунда и наносит всем врагам в радиусе 300% урона в течение 3 раундов.','КД: 35 раундов • Мана: 50 • Неуязвимость 2р • Урон 300% AOE 3р']]}
+['Щит Волчьего Вожака','2',['heroes/icon_shchit_volchego_vozhaka.jpg'],'🛡','Поднимает щит с волком на 4 раунда, блокирует урон с вероятностью 50%.','КД: 15 раундов • Мана: 20 • Блок: 50%'],
+['Зов Стаи','3',['heroes/icon_zov_stai.jpg'],'🐾','Издает зов волка, который станит 1 врага, все остальные враги получают 200% урона','КД: 15 раундов • Мана: 20 • Волки: 200% AOE + стан'],
+['Альфа Хищник','4',['heroes/icon_alfa_khishchnik.jpg'],'🌕','ULTIMATE: Превращается в волка на 5 раундов','КД: 20 раундов • Мана: 20']]},
+'warrior-m':{n:'LION WARDEN',img:'assets/heroes/warrior-m.webp',st:{HP:1300,DEF:180,DMG:180,MANA:220,CRIT:8,DODGE:7},sk:[
+['Непоколебимая Стена','PASSIVE',['heroes/icon_nepokolebimaya_stena.jpg'],'🦁','Каждые потерянные 5% HP дают +3% защиты','Защита до +30%'],
+['Удар Льва','1',['heroes/icon_udar_lva.jpg'],'⚔','Бросает щит льва вперед, наносит 200% урона','КД: 8 • Мана: 15'],
+['Имперский Бастион','2',['heroes/icon_imperskiy_bastion.jpg'],'🛡','Поднимает имперский бастион на 3 раунда: блокирует 50% урона','КД: 15 • Мана: 25'],
+['Рассекающий удар','3',['heroes/icon_rassekayushchiy_udar.jpg'],'📯','Мощный рассекающий удар 200% урона','КД: 3 • Мана: 10'],
+['Аватар Империи','4',['heroes/icon_avatar_imperii.jpg'],'👑','ULTIMATE: Неуязвимость 2р + 300% AOE 3р','КД: 35 • Мана: 50']]},
 };
 function loadHero(id){
  if(!DB[id]) id='necro-f-new';
@@ -113,13 +113,28 @@ function loadHero(id){
  }).join('');
  function pct(v,m){return Math.min(100,Math.round(v/m*100))+'%'}
  let st=h.st;
- document.getElementById('stats').innerHTML=`
+ // gear bonuses
+ try{
+  let gear=JSON.parse(localStorage.getItem('voland_equip')||'{}');
+  let bonus={HP:0,DEF:0,DMG:0,MANA:0,CRIT:0,DODGE:0};
+  const MAP={head:{DMG:20,DEF:10},ear1:{CRIT:1,DMG:5},ear2:{CRIT:1,DODGE:2},amulet:{MANA:50,CRIT:2},armor:{HP:100,DEF:30},weapon:{DMG:40},shield:{DEF:60,HP:50},ring1:{DMG:15,CRIT:1},ring2:{MANA:30,DODGE:1},gloves:{DEF:15,DMG:10},boots:{DEF:20,DODGE:2,HP:20}};
+  for(let slot in gear){let id=gear[slot];if(MAP[id]){for(let k in MAP[id]){st[k]+=MAP[id][k];bonus[k]+=MAP[id][k];}}}
+  document.getElementById('stats').innerHTML=`
+<div class="stat-row"><div class="stat"><span>HP</span><span class="val">${st.HP} ${bonus.HP?`(+${bonus.HP})`:''}</span></div><div class="bar"><div class="bar-fill" style="width:${pct(st.HP,1500)}"></div></div></div>
+<div class="stat-row"><div class="stat"><span>DEF</span><span class="val">${st.DEF} ${bonus.DEF?`(+${bonus.DEF})`:''}</span></div><div class="bar"><div class="bar-fill" style="width:${pct(st.DEF,300)}"></div></div></div>
+<div class="stat-row"><div class="stat"><span>DMG</span><span class="val">${st.DMG} ${bonus.DMG?`(+${bonus.DMG})`:''}</span></div><div class="bar"><div class="bar-fill" style="width:${pct(st.DMG,400)}"></div></div></div>
+<div class="stat-row"><div class="stat"><span>MANA</span><span class="val">${st.MANA} ${bonus.MANA?`(+${bonus.MANA})`:''}</span></div><div class="bar"><div class="bar-fill" style="width:${pct(st.MANA,400)}"></div></div></div>
+<div class="stat-row"><div class="stat"><span>CRIT CHANCE</span><span class="val">${st.CRIT}% ${bonus.CRIT?`(+${bonus.CRIT}%)`:''}</span></div><div class="bar"><div class="bar-fill" style="width:${st.CRIT*3}%"></div></div></div>
+<div class="stat-row"><div class="stat"><span>EVASION</span><span class="val">${st.DODGE}% ${bonus.DODGE?`(+${bonus.DODGE}%)`:''}</span></div><div class="bar"><div class="bar-fill" style="width:${st.DODGE*4}%"></div></div></div>`;
+ }catch(e){
+  document.getElementById('stats').innerHTML=`
 <div class="stat-row"><div class="stat"><span>HP</span><span class="val">${st.HP}</span></div><div class="bar"><div class="bar-fill" style="width:${pct(st.HP,1300)}"></div></div></div>
 <div class="stat-row"><div class="stat"><span>DEF</span><span class="val">${st.DEF}</span></div><div class="bar"><div class="bar-fill" style="width:${pct(st.DEF,180)}"></div></div></div>
 <div class="stat-row"><div class="stat"><span>DMG</span><span class="val">${st.DMG}</span></div><div class="bar"><div class="bar-fill" style="width:${pct(st.DMG,280)}"></div></div></div>
 <div class="stat-row"><div class="stat"><span>MANA</span><span class="val">${st.MANA}</span></div><div class="bar"><div class="bar-fill" style="width:${pct(st.MANA,320)}"></div></div></div>
 <div class="stat-row"><div class="stat"><span>CRIT CHANCE</span><span class="val">${st.CRIT}%</span></div><div class="bar"><div class="bar-fill" style="width:${st.CRIT*3}%"></div></div></div>
-<div class="stat-row"><div class="stat"><span>EVASION</span><span class="val">${st.EVA}%</span></div><div class="bar"><div class="bar-fill" style="width:${st.EVA*4}%"></div></div></div>`;
+<div class="stat-row"><div class="stat"><span>EVASION</span><span class="val">${st.DODGE}%</span></div><div class="bar"><div class="bar-fill" style="width:${st.DODGE*4}%"></div></div></div>`;
+ }
 }
 let startId=localStorage.getItem('voland_hero'); if(!startId||!DB[startId]) startId='necro-f-new';
 loadHero(startId);
@@ -127,7 +142,7 @@ setInterval(()=>{let cur=localStorage.getItem('voland_hero'); if(cur&&cur!==star
 let inp=document.getElementById('nameIn'),btn=document.getElementById('btn');
 function chk(){let v=inp.value.trim();if(v.length>=3){btn.classList.add('active');btn.textContent='CONFIRM — '+v.toUpperCase()}else{btn.classList.remove('active');btn.textContent='ENTER NAME'}}
 inp.addEventListener('input',chk);chk();
-btn.onclick=()=>{if(btn.classList.contains('active')){localStorage.setItem('voland_name',inp.value.trim());localStorage.setItem('voland_hero',startId);location.href='page3.html';}};
+btn.onclick=()=>{if(btn.classList.contains('active')){localStorage.setItem('voland_name',inp.value.trim());location.href='index.html';}};
 </script>
 </body>
 </html>
