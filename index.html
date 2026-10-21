@@ -1,66 +1,75 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>VOLAND CHRONICLES - LOCAL</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VOLAND - ENTRY</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#0a0a0c;color:#e6e0cc;font-family:Inter,Arial,sans-serif;min-height:100vh;overflow:auto}
-.bg{position:fixed;inset:0;z-index:-1}.bg img{width:100%;height:100%;object-fit:cover}.bg:after{content:"";position:absolute;inset:0;background:rgba(10,10,14,.62)}
-.top{text-align:center;padding:22px 10px 8px;position:relative;z-index:1}
-.voland{font-family:'Cinzel Decorative',serif;font-size:52px;letter-spacing:.08em;font-weight:900;color:#f5f0e0;line-height:1;text-shadow:0 2px 20px rgba(230,213,160,.5)}
-.chron{font-family:'Cinzel Decorative',serif;font-size:40px;letter-spacing:.22em;font-weight:900;color:#e6c66a;line-height:1;margin-top:4px;text-shadow:0 2px 16px rgba(230,198,106,.4)}
-.sub{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.35em;color:#8a8678;margin-top:14px}
-.filters{display:flex;justify-content:center;gap:0;margin:18px auto;background:rgba(18,18,20,.95);border:1px solid #2a2a32;border-radius:24px;padding:4px;width:fit-content;position:relative;z-index:1}
-.filters button{background:transparent;border:none;color:#8a8678;font-size:9px;letter-spacing:.12em;padding:9px 22px;border-radius:18px;cursor:pointer}
-.filters button.active{background:#e6d5a0;color:#121214;font-weight:700}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;max-width:1320px;margin:0 auto;padding:0 16px 28px;position:relative;z-index:1}
-.card{border:1px solid #2a2a32;border-radius:12px;overflow:hidden;background:#0e0e10;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.6)}
-.card:hover{border-color:#e6d5a0;transform:translateY(-2px);transition:.2s}
-.card img{width:100%;height:520px;object-fit:cover;object-position:top center;display:block}
-.info{padding:10px 12px;background:linear-gradient(0deg,rgba(0,0,0,.92) 0%,rgba(0,0,0,.3) 100%);margin-top:-62px;position:relative}
-.name{font-size:10px;letter-spacing:.15em;color:#e8dcc0;font-weight:700}
-.sub2{font-size:7px;letter-spacing:.18em;color:#c9b896;margin-top:3px}
-@media(max-width:1000px){.grid{grid-template-columns:repeat(2,1fr)}.card img{height:480px}.voland{font-size:36px}.chron{font-size:28px}}
+html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,sans-serif;overflow:hidden}
+.bg{position:fixed;inset:0;z-index:0}
+.bg img{width:100%;height:100%;object-fit:cover}
+.bg:after{content:"";position:absolute;inset:0;background:rgba(8,8,10,.78)}
+.wrap{position:fixed;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:20px}
+.logo{font-family:'Cinzel Decorative',serif;font-size:48px;letter-spacing:.4em;color:#e6d5a0;font-weight:900;text-shadow:0 0 20px rgba(230,213,160,.4)}
+.sub{margin-top:12px;font-size:9px;letter-spacing:.3em;color:#6a7a8a;font-family:'JetBrains Mono',monospace}
+.hero-preview{margin-top:30px;display:flex;gap:20px;align-items:center;background:rgba(20,28,36,.6);border:1px solid #2a3a4a;border-radius:12px;padding:18px 24px;backdrop-filter:blur(4px)}
+.hero-preview img{width:80px;height:80px;border-radius:10px;object-fit:cover;border:1px solid #2a3a4a}
+.hero-info{line-height:1.6}
+.hero-name{font-family:'Cinzel Decorative',serif;color:#e6d5a0;font-size:16px;letter-spacing:.2em}
+.hero-stats{font-size:9px;color:#8a9a6a;font-family:'JetBrains Mono',monospace;margin-top:4px}
+.btn{margin-top:20px;padding:14px 28px;border:1px solid #3a4a5a;background:#1a252f;color:#e6d5a0;font-size:10px;letter-spacing:.25em;font-family:'JetBrains Mono',monospace;border-radius:8px;cursor:pointer;transition:.2s}
+.btn:hover{border-color:#e6d5a0;box-shadow:0 0 16px rgba(230,213,160,.2);transform:translateY(-1px)}
+.btn.primary{background:#e6d5a0;color:#121214;font-weight:800;border-color:#e6d5a0}
+.btn.danger{background:transparent;border-color:#5a2a2a;color:#8a5a5a}
+.btns{display:flex;gap:12px;margin-top:10px}
+.note{margin-top:24px;font-size:7px;color:#4a5a6a;font-family:'JetBrains Mono',monospace;letter-spacing:.1em;text-align:center}
 </style>
 </head>
 <body>
-<div class="bg"><img src="assets/heroes/bg-battlefield.webp" onerror="this.style.display='none'"></div>
-<div class="top">
-  <div class="voland">VOLAND</div>
-  <div class="chron">CHRONICLES</div>
-  <div class="sub">CHOOSE YOUR CHAMPION — 8 HEROES</div>
+<div class="bg"><img src="./assets/heroes/bg-battlefield.webp" onerror="this.style.display='none'"></div>
+<div class="wrap">
+  <div class="logo">VOLAND</div>
+  <div class="sub">DARK FANTASY • RPG • v1.0 STABLE</div>
+  <div id="content"></div>
+  <div class="note">Сохранение хранится в браузере (localStorage) • Работает всегда • ./assets/</div>
 </div>
-<div class="filters">
-<button class="active" data-f="all">ALL 08</button>
-<button data-f="male">MALE 04</button>
-<button data-f="female">FEMALE 04</button>
-</div>
-<div class="grid" id="grid"></div>
+<script src="./assets/js/db.js"></script>
+<script src="./assets/js/storage.js"></script>
 <script>
-const heroes=[
-{id:'archer-f',name:'WILD PATH',sub:'ARCHER - FEMALE',gender:'female',img:'assets/heroes/archer-f.webp'},
-{id:'archer-m',name:'DARK RANGER',sub:'ARCHER - MALE',gender:'male',img:'assets/heroes/archer-m.webp'},
-{id:'archmage-m',name:'AZURE SAGE',sub:'ARCHMAGE - MALE',gender:'male',img:'assets/heroes/archmage-m.webp'},
-{id:'mage-f-new',name:'VOLCANIC',sub:'MAGE - FEMALE',gender:'female',img:'assets/heroes/mage-f-new.webp'},
-{id:'necro-f-new',name:'AMETHYST',sub:'NECROMANCER - FEMALE',gender:'female',img:'assets/heroes/necro-f-new.webp'},
-{id:'necro-m',name:'GRAVELORD',sub:'NECROMANCER - MALE',gender:'male',img:'assets/heroes/necro-m.webp'},
-{id:'warrior-f',name:'IRON VOW',sub:'WARRIOR - FEMALE',gender:'female',img:'assets/heroes/warrior-f.webp'},
-{id:'warrior-m',name:'LION WARDEN',sub:'WARRIOR - MALE',gender:'male',img:'assets/heroes/warrior-m.webp'}
-];
-const grid=document.getElementById('grid');
-function render(f){
-grid.innerHTML='';
-heroes.filter(h=>f==='all'||h.gender===f).forEach(h=>{
-const d=document.createElement('div');d.className='card';
-d.innerHTML=`<img src="${h.img}" onerror="this.src='assets/heroes/necro-f-new.webp'"><div class="info"><div class="name">${h.name}</div><div class="sub2">${h.sub}</div></div>`;
-d.onclick=()=>{localStorage.setItem('voland_hero',h.id);location.href='page2.html';};
-grid.appendChild(d);
-});
+function render(){
+  const has = volandHasSave();
+  const c = document.getElementById('content');
+  if (has){
+    const {cur, heroId, hero} = volandCalcStats();
+    const name = volandGetName();
+    c.innerHTML = `
+      <div class="hero-preview">
+        <img src="${hero.img}" onerror="this.src='./assets/heroes/warrior-f.webp'">
+        <div class="hero-info">
+          <div class="hero-name">${name.toUpperCase()}</div>
+          <div class="hero-stats">${hero.n} • ${hero.role}<br>HP ${cur.HP} • DMG ${cur.DMG} • DEF ${cur.DEF} • MANA ${cur.MANA}<br>CRIT ${cur.CRIT}% • DODGE ${cur.DODGE}%</div>
+        </div>
+      </div>
+      <div class="btns">
+        <div class="btn primary" onclick="location.href='./page3.html'">CONTINUE → HERO</div>
+        <div class="btn" onclick="location.href='./page6.html'">BATTLEFIELD</div>
+      </div>
+      <div class="btns">
+        <div class="btn danger" onclick="if(confirm('Точно начать заново? Прогресс шмота сотрется!')){localStorage.clear(); location.href='./page2.html';}">NEW GAME (WIPE)</div>
+      </div>
+    `;
+  } else {
+    c.innerHTML = `
+      <div style="margin-top:30px;text-align:center;max-width:420px;background:rgba(20,28,36,.5);border:1px solid #2a3a4a;border-radius:12px;padding:20px">
+        <div style="font-size:11px;color:#9a9a7a;line-height:1.6;font-family:'JetBrains Mono',monospace">Добро пожаловать в VOLAND.<br>Твоя история начинается с выбора героя.<br>1 раз выберешь — дальше всегда стартуешь с HERO.</div>
+      </div>
+      <div class="btn primary" onclick="location.href='./page2.html'">START ADVENTURE → SELECT HERO</div>
+    `;
+  }
 }
-render('all');
-document.querySelectorAll('.filters button').forEach(b=>{b.onclick=()=>{document.querySelectorAll('.filters button').forEach(x=>x.classList.remove('active'));b.classList.add('active');render(b.dataset.f);};});
+render();
 </script>
 </body>
 </html>
