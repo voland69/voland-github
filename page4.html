@@ -115,12 +115,24 @@ html,body{height:100%;background: url("assets/heroes/bg-battlefield.webp") cente
   </div>
   <div class="right">
     <div class="chat-header"><div class="dot"></div><div class="chat-title">CHAT + ЛОГИ</div></div>
-    <div class="chat-body" id="chatBody"><div class="sys-msg">Система: Вернул статы, бары и инвентарь — симметрия A=B C=D сохранена</div></div>
+    <div class="chat-body" id="chatBody"><div class="sys-msg">Система: Статы синхронизированы с PAGE2 - 950/85/280/300/22/11 + шмот</div></div>
     <div class="chat-input"><input id="chatIn" placeholder="..."><button id="chatBtn">▶</button></div>
   </div>
 </div>
 <script>
-const BASE = { HP:1000, DEF:100, DMG:150, MANA:100, CRIT:5, DODGE:5 };
+const DB={
+'necro-f-new':{st:{HP:1000,DEF:100,DMG:240,MANA:280,CRIT:15,DODGE:12}},
+'necro-m':{st:{HP:1150,DEF:110,DMG:190,MANA:260,CRIT:10,DODGE:8}},
+'archer-f':{st:{HP:980,DEF:90,DMG:210,MANA:200,CRIT:25,DODGE:20}},
+'archer-m':{st:{HP:1020,DEF:95,DMG:230,MANA:210,CRIT:20,DODGE:18}},
+'archmage-m':{st:{HP:900,DEF:80,DMG:260,MANA:320,CRIT:18,DODGE:10}},
+'mage-f-new':{st:{HP:950,DEF:85,DMG:280,MANA:300,CRIT:22,DODGE:11}},
+'warrior-f':{st:{HP:1250,DEF:160,DMG:175,MANA:180,CRIT:12,DODGE:9}},
+'warrior-m':{st:{HP:1300,DEF:180,DMG:180,MANA:220,CRIT:8,DODGE:7}},
+};
+let heroId = localStorage.getItem('voland_hero') || 'mage-f-new';
+if(!DB[heroId]) heroId='mage-f-new';
+const BASE = {...DB[heroId].st};
 const ITEMS = [
   {id:'head', name:'Шлем Ярости', icon:'🪖', slot:'head', bonus:{ DMG:20, DEF:10 }, desc:'+20 урона'},
   {id:'ear1', name:'Серьга Крита', icon:'🔹', slot:'ear1', bonus:{ CRIT:1, DMG:5 }, desc:'+1% крита'},
