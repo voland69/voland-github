@@ -1,6 +1,5 @@
 // VOLAND DB v1 - единый источник данных для всех страниц
-// Пути все с ./assets/ чтобы работало на GitHub Pages в подпапке
-// TRUE SKILLS from user HTML files - no invention
+// TRUE SKILLS from user HTML files - no invention - restored for punk4
 
 const VOLAND_HEROES = {
 'necro-f-new': {
@@ -38,7 +37,7 @@ const VOLAND_HEROES = {
     ['Тропы Зверя','PASSIVE',['./assets/heroes/icon_dukh_lesa.jpg','./assets/heroes/icon_tropy_zverya.jpg'],'🐾','При уклонении, следующий удар 100% критический.','КД: — • Мана: 0'],
     ['Двойной Выстрел','1',['./assets/heroes/icon_tochnyy_vystrel.jpg','./assets/heroes/icon_dvoynoy_vystrel.jpg'],'🎯','Выстреливает 2 стрелы по 100% урона каждая. Если обе попали в одну цель — кровотечение 25% урона на 4 раунда.','КД: 3 раунда • Мана: 5 • Урон: 200% + дот'],
     ['Ядовитая Лиана','2',['./assets/heroes/icon_gradina_strel.jpg','./assets/heroes/icon_yadovitaya_liana.jpg','./assets/heroes/icon_korni.jpg'],'🌿','Бросает лиану в ближайшего врага. Враг оглушается на 1 раунд и отравляется на 3 раунда. Отравленный враг получает 100% урона в течение 3 раундов.','КД: 10 раундов • Мана: 15 • Стан 1 раунд + дот'],
-    ['Глаз Ястреба','3',['./assets/heroes/icon_korni.jpg','./assets/heroes/icon_glaz_yastreba.jpg','./assets/heroes/icon_dukh_lesa.jpg'],'🦅','На 4 раунда видит всех врагов в радиусе (даже в инвизе) и получает +25% крит шанс. Атаки игнорируют 20% брони.','КД: 20 раундов • Мана: 20 • Крит: +25%'],
+    ['Глаз Ястреба','3',['./assets/heroes/icon_korni.jpg','./assets/heroes/icon_glaz_yastreba.jpg'],'🦅','На 4 раунда видит всех врагов в радиусе (даже в инвизе) и получает +25% крит шанс. Атаки игнорируют 20% брони.','КД: 20 раундов • Мана: 20 • Крит: +25%'],
     ['Буря Стрел','4',['./assets/heroes/icon_prizyv_stai.jpg','./assets/heroes/icon_burya_strel.jpg'],'🌪️','ULTIMATE: Прыжок в воздух, 12 стрел за 3 раунда по области. Каждая 80% урона + 25% шанс стана на 1 раунд.','КД: 25 раундов • Мана: 30 • Урон: до 960% + стан']
   ]
 },
