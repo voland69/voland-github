@@ -1,24 +1,30 @@
-# VOLAND CHRONICLES — GitHub Ready (light pack)
 
-heroes-work -> voland-github YES, new repo.
-Minimal <35KB, 12 files, no heavy images.
+# VOLAND - Dark Fantasy RPG
 
-## Structure
-- index.html — GitHub Pages ready (dark, grid, modal, bars)
-- heroes/*.html — 8 champion cards
-- assets/heroes/README.md — add webp images here
-- docs/PROMPT_ETALON_3_STRANITSY.txt — 3 page spec
-- README.md, .gitignore
+Open source browser RPG.
 
-## Deploy
-1. Create repo voland-github
-2. Upload files (drag zip content)
-3. Settings > Pages > Deploy from main / root
-4. Done: https://username.github.io/voland-github/
+## Pages
+- `index.html` - Entry / 3 profiles
+- `page2.html` - Hero select (8 heroes)
+- `page3.html` - Hero stats (BASE + gear from page4)
+- `page4.html` - Inventory / Bag (11 slots, equip system)
+- `page5.html` - Skills (5 skills per hero)
+- `page6.html` - Battlefield arena list
+- `page6_1.html` - DESERT location - 4 mobs, boss TITAN DUN (PARRY 15%, Avatar buffs)
+- `page6_2.html` - Second location
 
-## Etalon
-Page1: CHOOSE 8 HEROES — ALL 08 MALE 04 FEMALE 04
-Page2: Modal IRON VOW HP1420 DEF290 DAMAGE152 CRIT13% DODGE8% MANA110 name VOLAND_1337
-Page3: HERO/QUESTS/BATTLE/MAP/INVENTORY + bars HP red MANA blue STAMINA green XP gold
+## Mechanics v1.1
+- Tanks `LION WARDEN` & `IRON VOW`: PARRY 12% (was DODGE), DODGE 0%
+- Other heroes: DODGE 8-20%, PARRY 0%
+- Shield `Щит Бастион`: +60 DEF +50 HP +5% PARRY
+- Battle: DODGE + PARRY + IMMUNE logs
+- Ultimate `Аватар Империи`: +50% HP (1300→1950), immune 2 rounds, +300% DMG 3 rounds
 
-Size: JS <8KB, no external fonts, system monospace + Georgia.
+## Run
+Just open `index.html` - uses localStorage, no backend.
+
+## GitHub Pages
+Enable Pages -> main / root. Add `assets/heroes/` images if you have them.
+
+## License
+MIT - open source.

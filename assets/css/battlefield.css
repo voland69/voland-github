@@ -1,0 +1,97 @@
+/* VOLAND BATTLEFIELD CSS v2 - modular */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") center/cover no-repeat fixed #0a0e14;color:#d8d2b8;font-family:Inter,Arial,sans-serif;overflow:hidden}
+.bg{position:fixed;inset:0;z-index:0}.bg:after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.42)}
+.wrap{position:fixed;inset:0;display:flex;z-index:2}
+.left-nav{width:68px;min-width:68px;background:rgba(18,24,30,.35);border-right:1px solid rgba(30,42,50,.5);display:flex;flex-direction:column;align-items:center;padding:12px 6px;gap:18px;backdrop-filter: blur(2px)}
+.nav-item{width:48px;height:48px;background:#1a252f;border:1px solid #2a3a4a;border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0.6;transition:.2s;font-size:20px}
+.nav-item.active{background:#1e2f3e;border-color:#e6d5a0;opacity:1;box-shadow:0 0 12px rgba(230,213,160,.2)}
+.nav-label{font-size:7px;letter-spacing:.15em;color:#6a7a8a;margin-top:4px;text-align:center;font-family:'JetBrains Mono',monospace}
+.main{flex:1;display:flex;flex-direction:column;background:rgba(16,22,30,.25);backdrop-filter: blur(2px);overflow:auto;padding:22px 26px;align-items:center}
+.bf-header{width:100%;max-width:960px;display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;border-bottom:1px solid rgba(42,58,74,.5);padding-bottom:12px}
+.bf-title{font-family:'Cinzel Decorative',serif;font-size:20px;letter-spacing:.35em;color:#e6d5a0;font-weight:900}
+.bf-sub{font-size:7px;letter-spacing:.2em;color:#6a7a8a;font-family:'JetBrains Mono',monospace;margin-top:6px}
+.bf-stats{font-size:7px;color:#8a9a6a;font-family:'JetBrains Mono',monospace;text-align:right;line-height:1.6}
+.top-actions{width:100%;max-width:960px;display:flex;gap:10px;margin-bottom:14px}
+.btn-exit{background:rgba(20,28,36,.85);border:1px solid #2a3a4a;color:#8a9a6a;padding:8px 14px;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;cursor:pointer;transition:.2s}
+.btn-exit:hover{border-color:#e6d5a0;color:#e6d5a0;box-shadow:0 0 8px rgba(230,213,160,.15)}
+.loc-grid{width:100%;max-width:960px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.loc-card{background:rgba(26,36,47,.88);border:1px solid #2a3a4a;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:.2s;position:relative;overflow:hidden;min-height:160px;padding:14px}
+.loc-card:hover{border-color:#e6d5a0;background:rgba(30,47,62,.92);box-shadow:0 0 16px rgba(230,213,160,.15);transform:translateY(-2px)}
+.loc-card.boss{border-color:#8a6a1a;background:linear-gradient(180deg,rgba(26,36,47,.9),rgba(40,30,15,.6))}
+.loc-card.boss:hover{border-color:#d0b040}
+.card-num{position:absolute;top:8px;left:10px;font-size:8px;font-family:'JetBrains Mono',monospace;color:#4a5a6a}
+.card-icon{font-size:38px;margin-bottom:6px}
+.card-name{font-size:11px;letter-spacing:.12em;color:#e6d5a0;font-family:'JetBrains Mono',monospace;font-weight:700;text-align:center}
+.card-desc{margin-top:6px;font-size:6px;color:#8a9a6a;font-family:'JetBrains Mono',monospace;text-align:center;line-height:1.4;max-width:160px}
+.card-lvl{position:absolute;top:8px;right:10px;font-size:6px;color:#6a7a8a;font-family:'JetBrains Mono',monospace;background:#0a0e14;border:1px solid #1e2a32;padding:2px 6px;border-radius:8px}
+.card-hp{margin-top:8px;width:80%;height:4px;background:#0a0e14;border-radius:2px;overflow:hidden;border:1px solid #1e2a32}
+.card-hp-fill{height:100%;background:linear-gradient(90deg,#b33030,#e05050)}
+.battle-view{width:100%;max-width:960px;display:none;flex-direction:column;gap:16px}
+.battle-top{display:flex;gap:16px;align-items:stretch}
+.hero-battle,.enemy-battle{flex:1;background:rgba(20,28,36,.85);border:1px solid #2a3a4a;border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:10px;position:relative}
+.hero-battle.active{border-color:#e6d5a0;box-shadow:0 0 12px rgba(230,213,160,.15)}
+.enemy-battle.active{border-color:#e05050;box-shadow:0 0 12px rgba(224,80,80,.15)}
+.b-name{font-family:'Cinzel Decorative',serif;font-size:14px;color:#e6d5a0;letter-spacing:.15em}
+.b-sub{font-size:7px;color:#8a9a6a;font-family:'JetBrains Mono',monospace}
+.b-img{width:100%;height:140px;background:#0a0e14;border:1px solid #1e2a32;border-radius:8px;display:flex;align-items:center;justify-content:center;overflow:hidden;font-size:48px}
+.b-img img{width:100%;height:100%;object-fit:cover}
+.bar-row{display:flex;flex-direction:column;gap:4px}
+.bar-label{font-size:7px;letter-spacing:.1em;color:#6a7a8a;font-family:'JetBrains Mono',monospace;display:flex;justify-content:space-between}
+.bar-track{height:20px;background:#0a0e14;border-radius:4px;overflow:hidden;border:1px solid #1e2a32}
+.bar-fill{height:100%;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;font-family:'JetBrains Mono',monospace;transition:width .4s;white-space:nowrap;padding:0 4px}
+.bar-fill.hp{background:linear-gradient(90deg,#b33030,#e05050);color:#fff}
+.bar-fill.mana{background:linear-gradient(90deg,#2a5a9a,#4a8ad0);color:#fff}
+.battle-log{width:100%;max-height:160px;overflow:auto;background:rgba(10,14,20,.75);border:1px solid #1e2a32;border-radius:8px;padding:10px;display:flex;flex-direction:column;gap:4px}
+.log-line{font-size:8px;font-family:'JetBrains Mono',monospace;padding:4px 6px;border-radius:4px;line-height:1.4}
+.log-line.hero{background:rgba(42,58,74,.4);border-left:2px solid #e6d5a0}
+.log-line.enemy{background:rgba(80,30,30,.3);border-left:2px solid #e05050}
+.log-line.crit{background:rgba(180,160,80,.25);border-left:2px solid #d0b040;color:#e6d5a0;font-weight:700}
+.log-line.sys{background:rgba(20,28,36,.5);color:#6a7a8a}
+.actions{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.act-btn{background:rgba(26,36,47,.9);border:1px solid #2a3a4a;border-radius:10px;padding:12px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;transition:.2s;position:relative;min-height:80px}
+.act-btn:hover{border-color:#e6d5a0;background:rgba(30,47,62,.95)}
+.act-btn[disabled]{opacity:.4;pointer-events:none}
+.act-btn.ult{border-color:#8a6a1a;background:linear-gradient(180deg,rgba(26,36,47,.9),rgba(40,30,15,.5))}
+.act-btn.ult:hover{border-color:#d0b040}
+.a-icon{font-size:22px}
+.a-name{font-size:9px;font-family:'JetBrains Mono',monospace;color:#e6d5a0;font-weight:700;text-align:center}
+.a-meta{font-size:6px;color:#6a7a8a;font-family:'JetBrains Mono',monospace;text-align:center}
+.cooldown{position:absolute;top:6px;right:6px;background:#b33030;color:#fff;font-size:10px;font-weight:900;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.battle-controls{display:flex;justify-content:space-between;margin-top:8px}
+.ctrl-btn{background:rgba(20,14,14,.6);border:1px solid #3a2a2a;color:#8a6a6a;padding:8px 14px;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:8px;cursor:pointer}
+.ctrl-btn:hover{border-color:#e05050;color:#e0a0a0}
+
+/* VICTORY MODAL - VOLAND STYLE */
+.modal-overlay{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.75);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.show{display:flex}
+.victory-box{width:100%;max-width:420px;background:linear-gradient(180deg,rgba(26,36,47,.98),rgba(16,22,30,.98));border:1px solid #3a4a2a;border-radius:16px;padding:24px 20px;display:flex;flex-direction:column;align-items:center;gap:14px;box-shadow:0 0 40px rgba(230,213,160,.15),0 20px 60px rgba(0,0,0,.8);position:relative;overflow:hidden}
+.victory-box.defeat{border-color:#4a2a2a;box-shadow:0 0 40px rgba(224,80,80,.15),0 20px 60px rgba(0,0,0,.8)}
+.victory-box:before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#e6d5a0,transparent);opacity:.6}
+.trophy{font-size:48px;filter:drop-shadow(0 0 12px rgba(230,213,160,.4))}
+.v-title{font-family:'Cinzel Decorative',serif;font-size:22px;color:#e6d5a0;letter-spacing:.25em;font-weight:900;text-shadow:0 0 12px rgba(230,213,160,.3)}
+.v-sub{font-size:9px;font-family:'JetBrains Mono',monospace;color:#8a9a6a;letter-spacing:.1em}
+.v-stats{display:flex;gap:12px;width:100%;margin-top:4px}
+.v-stat{flex:1;background:rgba(10,14,20,.7);border:1px solid #1e2a32;border-radius:10px;padding:12px 8px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.v-stat-icon{font-size:18px}
+.v-stat-val{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;color:#e6d5a0}
+.v-stat-label{font-size:7px;color:#6a7a8a;font-family:'JetBrains Mono',monospace;letter-spacing:.1em}
+.v-stat.gold .v-stat-val{color:#d0b040}
+.v-stat.xp .v-stat-val{color:#a080ff}
+.v-stat.loot .v-stat-val{color:#6ab0ff}
+.v-bonus{font-size:8px;color:#8a9a6a;font-family:'JetBrains Mono',monospace;background:rgba(0,0,0,.3);padding:4px 8px;border-radius:12px;border:1px solid #1e2a32}
+.v-actions{display:flex;gap:10px;width:100%;margin-top:6px}
+.v-btn{flex:1;padding:12px 10px;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.08em;cursor:pointer;transition:.2s;border:1px solid;display:flex;align-items:center;justify-content:center;gap:6px}
+.v-btn-again{background:rgba(30,42,50,.9);border-color:#2a3a4a;color:#8a9a8a}
+.v-btn-again:hover{border-color:#6a7a8a;color:#d8d2b8}
+.v-btn-cont{background:linear-gradient(180deg,#d0b040,#8a6a1a);border-color:#d0b040;color:#0a0e14;box-shadow:0 0 12px rgba(208,176,64,.3)}
+.v-btn-cont:hover{box-shadow:0 0 18px rgba(208,176,64,.5);transform:translateY(-1px)}
+.chat{position:fixed;right:12px;bottom:12px;width:220px;background:rgba(16,22,30,.7);border:1px solid #1e2a32;border-radius:10px;z-index:5;display:flex;flex-direction:column;overflow:hidden}
+.chat-head{padding:8px 10px;font-size:8px;font-family:'JetBrains Mono',monospace;color:#6a7a8a;border-bottom:1px solid #1e2a32;display:flex;justify-content:space-between}
+.chat-body{height:100px;overflow:auto;padding:8px;display:flex;flex-direction:column;gap:4px}
+.chat-msg{font-size:7px;font-family:'JetBrains Mono',monospace;color:#8a9a6a}
+.sys-msg{font-size:7px;color:#4a5a6a;font-family:'JetBrains Mono',monospace}
+.chat-in{display:flex;border-top:1px solid #1e2a32}
+.chat-in input{flex:1;background:transparent;border:0;color:#d8d2b8;padding:8px;font-size:8px;font-family:'JetBrains Mono',monospace;outline:none}
+.chat-in button{background:#1e2a32;border:0;color:#6a7a8a;padding:0 10px;cursor:pointer;font-size:10px}
