@@ -65,49 +65,40 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
 .a-icon{font-size:22px}
 .a-name{font-size:9px;font-family:'JetBrains Mono',monospace;color:#e6d5a0;font-weight:700;text-align:center}
 .a-meta{font-size:6px;color:#6a7a8a;font-family:'JetBrains Mono',monospace;text-align:center}
-.cooldown{position:absolute;top:6px;right:6px;background:#b33030;color:#fff;font-size:10px;font-weight:900;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center}
-.battle-controls{display:flex;justify-content:space-between;margin-top:8px}
-.ctrl-btn{background:rgba(20,14,14,.6);border:1px solid #3a2a2a;color:#8a6a6a;padding:8px 14px;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:8px;cursor:pointer}
-.ctrl-btn:hover{border-color:#e05050;color:#e0a0a0}
-
-/* VICTORY MODAL - VOLAND STYLE */
-.modal-overlay{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.75);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:20px}
-.modal-overlay.show{display:flex}
-.victory-box{width:100%;max-width:420px;background:linear-gradient(180deg,rgba(26,36,47,.98),rgba(16,22,30,.98));border:1px solid #3a4a2a;border-radius:16px;padding:24px 20px;display:flex;flex-direction:column;align-items:center;gap:14px;box-shadow:0 0 40px rgba(230,213,160,.15),0 20px 60px rgba(0,0,0,.8);position:relative;overflow:hidden}
-.victory-box.defeat{border-color:#4a2a2a;box-shadow:0 0 40px rgba(224,80,80,.15),0 20px 60px rgba(0,0,0,.8)}
-.victory-box:before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#e6d5a0,transparent);opacity:.6}
-.trophy{font-size:48px;filter:drop-shadow(0 0 12px rgba(230,213,160,.4))}
-.v-title{font-family:'Cinzel Decorative',serif;font-size:22px;color:#e6d5a0;letter-spacing:.25em;font-weight:900;text-shadow:0 0 12px rgba(230,213,160,.3)}
-.v-sub{font-size:9px;font-family:'JetBrains Mono',monospace;color:#8a9a6a;letter-spacing:.1em}
-.v-stats{display:flex;gap:12px;width:100%;margin-top:4px}
-.v-stat{flex:1;background:rgba(10,14,20,.7);border:1px solid #1e2a32;border-radius:10px;padding:12px 8px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.right{width:200px;min-width:200px;background:rgba(14,20,26,.9);border-left:1px solid rgba(30,42,50,.5);display:flex;flex-direction:column;backdrop-filter: blur(2px)}
+.chat-header{padding:12px;border-bottom:1px solid #1e2a32;display:flex;align-items:center;gap:8px;background:#141c24}
+.dot{width:8px;height:8px;border-radius:50%;background:#3ad080;box-shadow:0 0 6px #3ad080}
+.chat-title{font-size:9px;letter-spacing:.2em;color:#6a7a8a;font-family:'JetBrains Mono',monospace}
+.chat-body{flex:1;padding:10px;overflow:auto;display:flex;flex-direction:column;gap:8px}
+.sys-msg{background:#1a242f;border-left:2px solid #d0b040;padding:8px;font-size:9px;color:#9a9a7a;line-height:1.3;border-radius:0 6px 6px 0}
+.chat-msg{font-size:8px;font-family:'JetBrains Mono',monospace;color:#8a9a6a;background:rgba(26,36,47,.5);padding:6px;border-radius:4px}
+.chat-input{padding:8px;border-top:1px solid #1e2a32;display:flex;gap:6px;background:#12181e}
+.chat-input input{flex:1;background:#0a0e14;border:1px solid #1e2a32;border-radius:6px;padding:8px;font-size:11px;color:#d8d2b8}
+.chat-input button{width:32px;background:#e6d5a0;border:none;border-radius:6px;cursor:pointer;font-weight:800}
+.v-modal{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:50}
+.v-modal.show{display:flex}
+.v-box{background:rgba(20,28,36,.95);border:1px solid #e6d5a0;border-radius:14px;padding:22px;min-width:320px;max-width:420px;display:flex;flex-direction:column;gap:14px;box-shadow:0 0 24px rgba(230,213,160,.2)}
+.v-box.defeat{border-color:#e05050;box-shadow:0 0 24px rgba(224,80,80,.2)}
+.v-trophy{font-size:42px;text-align:center}
+.v-title{font-family:'Cinzel Decorative',serif;font-size:18px;color:#e6d5a0;text-align:center;letter-spacing:.2em}
+.v-sub{font-size:8px;color:#8a9a6a;font-family:'JetBrains Mono',monospace;text-align:center}
+.v-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.v-stat{background:#1a242f;border:1px solid #2a3a4a;border-radius:8px;padding:10px;text-align:center}
 .v-stat-icon{font-size:18px}
-.v-stat-val{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;color:#e6d5a0}
-.v-stat-label{font-size:7px;color:#6a7a8a;font-family:'JetBrains Mono',monospace;letter-spacing:.1em}
-.v-stat.gold .v-stat-val{color:#d0b040}
-.v-stat.xp .v-stat-val{color:#a080ff}
-.v-stat.loot .v-stat-val{color:#6ab0ff}
-.v-bonus{font-size:8px;color:#8a9a6a;font-family:'JetBrains Mono',monospace;background:rgba(0,0,0,.3);padding:4px 8px;border-radius:12px;border:1px solid #1e2a32}
-.v-actions{display:flex;gap:10px;width:100%;margin-top:6px}
-.v-btn{flex:1;padding:12px 10px;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.08em;cursor:pointer;transition:.2s;border:1px solid;display:flex;align-items:center;justify-content:center;gap:6px}
-.v-btn-again{background:rgba(30,42,50,.9);border-color:#2a3a4a;color:#8a9a8a}
-.v-btn-again:hover{border-color:#6a7a8a;color:#d8d2b8}
-.v-btn-cont{background:linear-gradient(180deg,#d0b040,#8a6a1a);border-color:#d0b040;color:#0a0e14;box-shadow:0 0 12px rgba(208,176,64,.3)}
-.v-btn-cont:hover{box-shadow:0 0 18px rgba(208,176,64,.5);transform:translateY(-1px)}
-.chat{position:fixed;right:12px;bottom:12px;width:220px;background:rgba(16,22,30,.7);border:1px solid #1e2a32;border-radius:10px;z-index:5;display:flex;flex-direction:column;overflow:hidden}
-.chat-head{padding:8px 10px;font-size:8px;font-family:'JetBrains Mono',monospace;color:#6a7a8a;border-bottom:1px solid #1e2a32;display:flex;justify-content:space-between}
-.chat-body{height:100px;overflow:auto;padding:8px;display:flex;flex-direction:column;gap:4px}
-.chat-msg{font-size:7px;font-family:'JetBrains Mono',monospace;color:#8a9a6a}
-.sys-msg{font-size:7px;color:#4a5a6a;font-family:'JetBrains Mono',monospace}
-.chat-in{display:flex;border-top:1px solid #1e2a32}
-.chat-in input{flex:1;background:transparent;border:0;color:#d8d2b8;padding:8px;font-size:8px;font-family:'JetBrains Mono',monospace;outline:none}
-.chat-in button{background:#1e2a32;border:0;color:#6a7a8a;padding:0 10px;cursor:pointer;font-size:10px}
+.v-stat-val{font-size:16px;color:#e6d5a0;font-weight:800;font-family:'JetBrains Mono',monospace;margin-top:4px}
+.v-stat-label{font-size:6px;color:#6a7a8a;font-family:'JetBrains Mono',monospace;margin-top:4px;letter-spacing:.1em}
+.v-bonus{font-size:6px;color:#3ad080;font-family:'JetBrains Mono',monospace;margin-top:2px}
+.v-actions{display:flex;gap:10px}
+.v-btn{flex:1;padding:10px;border-radius:8px;border:1px solid #2a3a4a;background:#1a242f;color:#e6d5a0;font-family:'JetBrains Mono',monospace;font-size:9px;cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;gap:6px}
+.v-btn:hover{border-color:#e6d5a0}
+.v-btn-again{border-color:#8a6a1a;background:linear-gradient(180deg,#1a242f,#2a2410)}
+.v-btn-cont{border-color:#2a3a4a}
 </style>
 </head>
 <body>
-<div class="bg"></div>
+<div class="bg"><img src="assets/heroes/bg-battlefield.webp" onerror="this.style.display='none'"></div>
 <div class="wrap">
-<div class="left-nav">
+  <div class="left-nav">
     <div onclick="location.href='./page3.html'"><div class="nav-item">👤</div><div class="nav-label">HERO</div></div>
     <div onclick="location.href='./page4.html'"><div class="nav-item">🎒</div><div class="nav-label">BAG</div></div>
     <div onclick="location.href='./page5.html'"><div class="nav-item">📜</div><div class="nav-label">SKILLS</div></div>
@@ -115,7 +106,7 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
     <div onclick="location.href='./index.html'"><div class="nav-item">🗺️</div><div class="nav-label">MAP</div></div>
   </div>
   <div class="main">
-  <div class="bf-header" id="bfHeader">
+    <div class="bf-header" id="bfHeader">
       <div>
         <div class="bf-title" id="mainTitle">BATTLEFIELD</div>
         <div class="bf-sub" id="mainSub">ВЫБЕРИ ЛОКАЦИЮ • 3 ЗОНЫ • PARRY У ТАНКОВ</div>
@@ -124,66 +115,51 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
     </div>
     <div class="top-actions">
       <button class="btn-exit" id="btnToHero" onclick="location.href='./page3.html'">← К ГЕРОЮ</button>
-      <button class="btn-exit" id="btnToLocs" style="display:none" onclick="backToLocations()">← К ЛОКАЦИЯМ</button>
+      <button class="btn-exit" id="btnToLocs" style="display:none" onclick="renderLocations()">← К ЛОКАЦИЯМ</button>
     </div>
-
     <div class="loc-grid" id="locView"></div>
     <div class="loc-grid" id="enemyView" style="display:none"></div>
-
     <div class="battle-view" id="battleView">
-
-  <button class="btn-exit" id="btnToHero" onclick="location.href='data:text/html;base64,PCFET0NUWVBFIGh0bWw+CjxodG1sIGxhbmc9InJ1Ij4KPGhlYWQ+CjxtZXRhIGNoYXJzZXQ9IlVURi04Ij4KPG1ldGEgbmFtZT0idmlld3BvcnQiIGNvbnRlbnQ9IndpZHRoPWRldmljZS13aWR0aCxpbml0aWFsLXNjYWxlPTEiPgo8dGl0bGU+Vk9MQU5EIC0gSEVSTzwvdGl0bGU+CjxsaW5rIGhyZWY9Imh0dHBzOi8vZm9udHMuZ29vZ2xlYXBpcy5jb20vY3NzMj9mYW1pbHk9Q2luemVsK0RlY29yYXRpdmU6d2dodEA3MDA7OTAwJmZhbWlseT1KZXRCcmFpbnMrTW9ubzp3Z2h0QDQwMDs3MDAmZGlzcGxheT1zd2FwIiByZWw9InN0eWxlc2hlZXQiPgo8c3R5bGU+CkBpbXBvcnQgdXJsKCdodHRwczovL2ZvbnRzLmdvb2dsZWFwaXMuY29tL2NzczI/ZmFtaWx5PUludGVyOndnaHRANDAwOzYwMCZkaXNwbGF5PXN3YXAnKTsKKnttYXJnaW46MDtwYWRkaW5nOjA7Ym94LXNpemluZzpib3JkZXItYm94fQpodG1sLGJvZHl7aGVpZ2h0OjEwMCU7YmFja2dyb3VuZDojMGEwZTE0O2NvbG9yOiNkOGQyYjg7Zm9udC1mYW1pbHk6SW50ZXIsQXJpYWwsc2Fucy1zZXJpZjtvdmVyZmxvdzpoaWRkZW59Ci5iZ3twb3NpdGlvbjpmaXhlZDtpbnNldDowO3otaW5kZXg6MH0uYmcgaW1ne3dpZHRoOjEwMCU7aGVpZ2h0OjEwMCU7b2JqZWN0LWZpdDpjb3ZlcjtvcGFjaXR5OjAuOX0uYmc6YWZ0ZXJ7Y29udGVudDoiIjtwb3NpdGlvbjphYnNvbHV0ZTtpbnNldDowO2JhY2tncm91bmQ6cmdiYSgxMCwxNCwyMCwuNzgpfQoud3JhcHtwb3NpdGlvbjpmaXhlZDtpbnNldDowO2Rpc3BsYXk6ZmxleDt6LWluZGV4OjJ9Ci5sZWZ0LW5hdnt3aWR0aDo2OHB4O21pbi13aWR0aDo2OHB4O2JhY2tncm91bmQ6IzEyMTgxZTtib3JkZXItcmlnaHQ6MXB4IHNvbGlkICMxZTJhMzI7ZGlzcGxheTpmbGV4O2ZsZXgtZGlyZWN0aW9uOmNvbHVtbjthbGlnbi1pdGVtczpjZW50ZXI7cGFkZGluZzoxMnB4IDZweDtnYXA6MThweH0KLm5hdi1pdGVte3dpZHRoOjQ4cHg7aGVpZ2h0OjQ4cHg7YmFja2dyb3VuZDojMWEyNTJmO2JvcmRlcjoxcHggc29saWQgIzJhM2E0YTtib3JkZXItcmFkaXVzOjEwcHg7ZGlzcGxheTpmbGV4O2FsaWduLWl0ZW1zOmNlbnRlcjtqdXN0aWZ5LWNvbnRlbnQ6Y2VudGVyO2N1cnNvcjpwb2ludGVyO29wYWNpdHk6MC42O3RyYW5zaXRpb246LjJzO2ZvbnQtc2l6ZToyMHB4fQoubmF2LWl0ZW0uYWN0aXZle2JhY2tncm91bmQ6IzFlMmYzZTtib3JkZXItY29sb3I6IzNhNGE1YTtvcGFjaXR5OjE7Ym94LXNoYWRvdzowIDAgMTJweCByZ2JhKDIzMCwyMTMsMTYwLC4yKX0KLm5hdi1sYWJlbHtmb250LXNpemU6N3B4O2xldHRlci1zcGFjaW5nOi4xNWVtO2NvbG9yOiM2YTdhOGE7bWFyZ2luLXRvcDo0cHg7dGV4dC1hbGlnbjpjZW50ZXI7Zm9udC1mYW1pbHk6J0pldEJyYWlucyBNb25vJyxtb25vc3BhY2V9Ci5oZXJvLXBhbmVse3dpZHRoOjM4MHB4O21pbi13aWR0aDozODBweDtiYWNrZ3JvdW5kOiMxNDFjMjQ7Ym9yZGVyLXJpZ2h0OjFweCBzb2xpZCAjMWUyYTMyO2Rpc3BsYXk6ZmxleDtmbGV4LWRpcmVjdGlvbjpjb2x1bW47b3ZlcmZsb3c6aGlkZGVufQouaGVyby1pbWctd3JhcHtmbGV4OjE7YmFja2dyb3VuZDojMGEwZTEyO2Rpc3BsYXk6ZmxleDthbGlnbi1pdGVtczpjZW50ZXI7anVzdGlmeS1jb250ZW50OmNlbnRlcjtwYWRkaW5nOjEycHg7cG9zaXRpb246cmVsYXRpdmU7b3ZlcmZsb3c6aGlkZGVufQouaGVyby1pbWctd3JhcCBpbWd7d2lkdGg6MTAwJTtoZWlnaHQ6MTAwJTtvYmplY3QtZml0OmNvdmVyO29iamVjdC1wb3NpdGlvbjp0b3AgY2VudGVyO2JvcmRlci1yYWRpdXM6NHB4O21heC1oZWlnaHQ6NzJ2aH0KLmhlcm8taW5mb3twYWRkaW5nOjE4cHggMTZweDtiYWNrZ3JvdW5kOiMxMTE4MjE7Ym9yZGVyLXRvcDoxcHggc29saWQgIzFlMmEzMjt0ZXh0LWFsaWduOmNlbnRlcn0KLmhlcm8tbmFtZXtmb250LWZhbWlseTonQ2luemVsIERlY29yYXRpdmUnLHNlcmlmO2ZvbnQtc2l6ZToxNnB4O2xldHRlci1zcGFjaW5nOi4zZW07Y29sb3I6I2U2ZDVhMDtmb250LXdlaWdodDo5MDB9Ci5oZXJvLWNsYXNze21hcmdpbi10b3A6OHB4O2ZvbnQtc2l6ZToxMHB4O2xldHRlci1zcGFjaW5nOi4xNWVtO2NvbG9yOiM4YTlhNmE7Zm9udC1mYW1pbHk6J0pldEJyYWlucyBNb25vJyxtb25vc3BhY2U7dGV4dC10cmFuc2Zvcm06dXBwZXJjYXNlfQoubWFpbntmbGV4OjE7ZGlzcGxheTpmbGV4O2ZsZXgtZGlyZWN0aW9uOmNvbHVtbjtiYWNrZ3JvdW5kOnJnYmEoMTYsMjIsMzAsLjkyKTtvdmVyZmxvdzphdXRvO3BhZGRpbmc6MH0KLnN0YXRzLWdyaWR7ZGlzcGxheTpncmlkO2dyaWQtdGVtcGxhdGUtY29sdW1uczpyZXBlYXQoMywxZnIpO2dhcDoxMnB4O3BhZGRpbmc6MTRweDtiYWNrZ3JvdW5kOiMxMzFhMjI7Ym9yZGVyLWJvdHRvbToxcHggc29saWQgIzFlMmEzMn0KLnN0YXQtY2FyZHtiYWNrZ3JvdW5kOiMxYTI0MmY7Ym9yZGVyOjFweCBzb2xpZCAjMmEzYTRhO2JvcmRlci1yYWRpdXM6OHB4O3BhZGRpbmc6MTRweCAxMHB4O3RleHQtYWxpZ246Y2VudGVyfQouc3RhdC1sYWJlbHtmb250LXNpemU6OHB4O2xldHRlci1zcGFjaW5nOi4yZW07Y29sb3I6IzZhN2E4YTtmb250LWZhbWlseTonSmV0QnJhaW5zIE1vbm8nLG1vbm9zcGFjZX0KLnN0YXQtdmFsdWV7bWFyZ2luLXRvcDo2cHg7Zm9udC1zaXplOjIycHg7Zm9udC13ZWlnaHQ6ODAwO2NvbG9yOiNlNmQ1YTA7Zm9udC1mYW1pbHk6J0pldEJyYWlucyBNb25vJyxtb25vc3BhY2V9Ci5iYXJzLXBhbmVse3BhZGRpbmc6MThweCAyMHB4O2JhY2tncm91bmQ6IzExMTgyMTtkaXNwbGF5OmZsZXg7ZmxleC1kaXJlY3Rpb246Y29sdW1uO2dhcDoxNHB4O2ZsZXg6MX0KLmJhci1yb3d7ZGlzcGxheTpmbGV4O2FsaWduLWl0ZW1zOmNlbnRlcjtnYXA6MTJweH0KLmJhci1sYWJlbHt3aWR0aDo2MHB4O2ZvbnQtc2l6ZTo5cHg7bGV0dGVyLXNwYWNpbmc6LjE1ZW07Y29sb3I6IzZhN2E4YTt0ZXh0LWFsaWduOnJpZ2h0O2ZvbnQtZmFtaWx5OidKZXRCcmFpbnMgTW9ubycsbW9ub3NwYWNlfQouYmFyLXRyYWNre2ZsZXg6MTtoZWlnaHQ6MThweDtiYWNrZ3JvdW5kOiMwYTBlMTQ7Ym9yZGVyLXJhZGl1czozcHg7b3ZlcmZsb3c6aGlkZGVuO2JvcmRlcjoxcHggc29saWQgIzFlMmEzMjtwb3NpdGlvbjpyZWxhdGl2ZX0KLmJhci1maWxse2hlaWdodDoxMDAlO2Rpc3BsYXk6ZmxleDthbGlnbi1pdGVtczpjZW50ZXI7anVzdGlmeS1jb250ZW50OmNlbnRlcjtmb250LXNpemU6OXB4O2ZvbnQtd2VpZ2h0OjcwMDtmb250LWZhbWlseTonSmV0QnJhaW5zIE1vbm8nLG1vbm9zcGFjZX0KLmJhci1maWxsLmhwe2JhY2tncm91bmQ6bGluZWFyLWdyYWRpZW50KDkwZGVnLCNiMzMwMzAsI2UwNTA1MCk7Y29sb3I6I2ZmZn0KLmJhci1maWxsLm1hbmF7YmFja2dyb3VuZDpsaW5lYXItZ3JhZGllbnQoOTBkZWcsIzFhNGE5YSwjMmE2YWQwKTtjb2xvcjojZmZmfQouYmFyLWZpbGwuc3RhbWluYXtiYWNrZ3JvdW5kOmxpbmVhci1ncmFkaWVudCg5MGRlZywjMWE3YTRhLCMzYWQwODApO2NvbG9yOiNmZmZ9Ci5iYXItZmlsbC54cHtiYWNrZ3JvdW5kOmxpbmVhci1ncmFkaWVudCg5MGRlZywjOGE2YTFhLCNkMGIwNDApO2NvbG9yOiNmZmZ9Ci5yaWdodHt3aWR0aDoyMDBweDttaW4td2lkdGg6MjAwcHg7YmFja2dyb3VuZDojMGUxNDFhO2JvcmRlci1sZWZ0OjFweCBzb2xpZCAjMWUyYTMyO2Rpc3BsYXk6ZmxleDtmbGV4LWRpcmVjdGlvbjpjb2x1bW59Ci5jaGF0LWhlYWRlcntwYWRkaW5nOjEycHg7Ym9yZGVyLWJvdHRvbToxcHggc29saWQgIzFlMmEzMjtkaXNwbGF5OmZsZXg7YWxpZ24taXRlbXM6Y2VudGVyO2dhcDo4cHh9Ci5kb3R7d2lkdGg6OHB4O2hlaWdodDo4cHg7Ym9yZGVyLXJhZGl1czo1MCU7YmFja2dyb3VuZDojM2FkMDgwO2JveC1zaGFkb3c6MCAwIDZweCAjM2FkMDgwfQouY2hhdC10aXRsZXtmb250LXNpemU6OXB4O2xldHRlci1zcGFjaW5nOi4yZW07Y29sb3I6IzZhN2E4YTtmb250LWZhbWlseTonSmV0QnJhaW5zIE1vbm8nLG1vbm9zcGFjZX0KLmNoYXQtYm9keXtmbGV4OjE7cGFkZGluZzoxMHB4O292ZXJmbG93OmF1dG99Ci5zeXMtbXNne2JhY2tncm91bmQ6IzFhMjQyZjtib3JkZXItbGVmdDoycHggc29saWQgI2QwYjA0MDtwYWRkaW5nOjhweDtmb250LXNpemU6MTBweDtjb2xvcjojOWE5YTdhO2xpbmUtaGVpZ2h0OjEuNDtib3JkZXItcmFkaXVzOjAgNnB4IDZweCAwfQouY2hhdC1pbnB1dHtwYWRkaW5nOjhweDtib3JkZXItdG9wOjFweCBzb2xpZCAjMWUyYTMyO2Rpc3BsYXk6ZmxleDtnYXA6NnB4fQouY2hhdC1pbnB1dCBpbnB1dHtmbGV4OjE7YmFja2dyb3VuZDojMGEwZTE0O2JvcmRlcjoxcHggc29saWQgIzFlMmEzMjtib3JkZXItcmFkaXVzOjZweDtwYWRkaW5nOjhweDtmb250LXNpemU6MTFweDtjb2xvcjojZDhkMmI4fQouY2hhdC1pbnB1dCBidXR0b257d2lkdGg6MzJweDtiYWNrZ3JvdW5kOiNlNmQ1YTA7Ym9yZGVyOm5vbmU7Ym9yZGVyLXJhZGl1czo2cHg7Y3Vyc29yOnBvaW50ZXI7Zm9udC13ZWlnaHQ6ODAwfQo8L3N0eWxlPgo8L2hlYWQ+Cjxib2R5Pgo8ZGl2IGNsYXNzPSJiZyI+PGltZyBzcmM9ImFzc2V0cy9oZXJvZXMvYmctYmF0dGxlZmllbGQud2VicCIgb25lcnJvcj0idGhpcy5zdHlsZS5kaXNwbGF5PSdub25lJyI+PC9kaXY+CjxkaXYgY2xhc3M9IndyYXAiPgogIDxkaXYgY2xhc3M9ImxlZnQtbmF2Ij4KICAgIDxkaXY+PGRpdiBjbGFzcz0ibmF2LWl0ZW0gYWN0aXZlIj7wn5GkPC9kaXY+PGRpdiBjbGFzcz0ibmF2LWxhYmVsIj5IRVJPPC9kaXY+PC9kaXY+CiAgICA8ZGl2PjxkaXYgY2xhc3M9Im5hdi1pdGVtIj7wn5OcPC9kaXY+PGRpdiBjbGFzcz0ibmF2LWxhYmVsIj5RVUVTVFM8L2Rpdj48L2Rpdj4KICAgIDxkaXY+PGRpdiBjbGFzcz0ibmF2LWl0ZW0iPuKalO+4jzwvZGl2PjxkaXYgY2xhc3M9Im5hdi1sYWJlbCI+QkFUVExFPC9kaXY+PC9kaXY+CiAgICA8ZGl2PjxkaXYgY2xhc3M9Im5hdi1pdGVtIj7wn5OWPC9kaXY+PGRpdiBjbGFzcz0ibmF2LWxhYmVsIj5NQVA8L2Rpdj48L2Rpdj4KICAgIDxkaXY+PGRpdiBjbGFzcz0ibmF2LWl0ZW0iPvCfjpI8L2Rpdj48ZGl2IGNsYXNzPSJuYXYtbGFiZWwiPklOVkVOVE9SWTwvZGl2PjwvZGl2PgogIDwvZGl2PgogIDxkaXYgY2xhc3M9Imhlcm8tcGFuZWwiPgogICAgPGRpdiBjbGFzcz0iaGVyby1pbWctd3JhcCI+PGltZyBpZD0iaGVyb0ltZyIgc3JjPSJhc3NldHMvaGVyb2VzL3dhcnJpb3ItZi53ZWJwIiBhbHQ9Imhlcm8iPjwvZGl2PgogICAgPGRpdiBjbGFzcz0iaGVyby1pbmZvIj4KICAgICAgPGRpdiBjbGFzcz0iaGVyby1uYW1lIiBpZD0iaGVyb05hbWUiPlZPTEFORCAxMzM3PC9kaXY+CiAgICAgIDxkaXYgY2xhc3M9Imhlcm8tY2xhc3MiIGlkPSJoZXJvQ2xhc3MiPlNISUVMRCBUQU5LIOKAoiBXYXJyaW9yIC0gRmVtYWxlPC9kaXY+CiAgICA8L2Rpdj4KICA8L2Rpdj4KICA8ZGl2IGNsYXNzPSJtYWluIj4KICAgIDxkaXYgY2xhc3M9InN0YXRzLWdyaWQiIGlkPSJzdGF0c0dyaWQiPjwvZGl2PgogICAgPGRpdiBjbGFzcz0iYmFycy1wYW5lbCIgaWQ9ImJhcnNQYW5lbCI+PC9kaXY+CiAgPC9kaXY+CiAgPGRpdiBjbGFzcz0icmlnaHQiPgogICAgPGRpdiBjbGFzcz0iY2hhdC1oZWFkZXIiPjxkaXYgY2xhc3M9ImRvdCI+PC9kaXY+PGRpdiBjbGFzcz0iY2hhdC10aXRsZSI+Q0hBVCAyMDBQWDwvZGl2PjwvZGl2PgogICAgPGRpdiBjbGFzcz0iY2hhdC1ib2R5Ij48ZGl2IGNsYXNzPSJzeXMtbXNnIj7QodC40YHRgtC10LzQsDog0JvQtdC50LDRg9GCINC+0LHQvdC+0LLQu9C10L0g4oCUINGD0LHRgNCw0L3RiyDQt9Cw0YfQtdGA0LrQvdGD0YLRi9C1INCx0LvQvtC60Lg8L2Rpdj48L2Rpdj4KICAgIDxkaXYgY2xhc3M9ImNoYXQtaW5wdXQiPjxpbnB1dCBpZD0iY2hhdEluIiBwbGFjZWhvbGRlcj0iLi4uIj48YnV0dG9uPuKWtjwvYnV0dG9uPjwvZGl2PgogIDwvZGl2Pgo8L2Rpdj4KPHNjcmlwdD4KY29uc3QgREI9ewonbmVjcm8tZi1uZXcnOntuOidBTUVUSFlTVCcscm9sZTonTUFHRSDigKIgTmVjcm8gLSBGZW1hbGUnLGltZzonYXNzZXRzL2hlcm9lcy9uZWNyby1mLW5ldy53ZWJwJyxzdDp7SFA6MTQyMCxERUY6MjkwLERNRzoxNTIsTUFOQToxMTAsQ1JJVDoxMyxET0RHRTo4fX0sCiduZWNyby1tJzp7bjonR1JBVkVMT1JEJyxyb2xlOidUQU5LIOKAoiBOZWNybyAtIE1hbGUnLGltZzonYXNzZXRzL2hlcm9lcy9uZWNyby1tLndlYnAnLHN0OntIUDoxNTUwLERFRjozNDAsRE1HOjE0MCxNQU5BOjk1LENSSVQ6OCxET0RHRTo1fX0sCidhcmNoZXItZic6e246J1dJTEQgUEFUSCcscm9sZTonUkFOR0VSIOKAoiBBcmNoZXIgLSBGZW1hbGUnLGltZzonYXNzZXRzL2hlcm9lcy9hcmNoZXItZi53ZWJwJyxzdDp7SFA6MTI4MCxERUY6MjEwLERNRzoxODAsTUFOQToxMDAsQ1JJVDoyMixET0RHRToxOH19LAonYXJjaGVyLW0nOntuOidEQVJLIFJBTkdFUicscm9sZTonUkFOR0VSIOKAoiBBcmNoZXIgLSBNYWxlJyxpbWc6J2Fzc2V0cy9oZXJvZXMvYXJjaGVyLW0ud2VicCcsc3Q6e0hQOjEzMjAsREVGOjIzMCxETUc6MTk1LE1BTkE6MTA1LENSSVQ6MTgsRE9ER0U6MTV9fSwKJ2FyY2htYWdlLW0nOntuOidBWlVSRSBTQUdFJyxyb2xlOidNQUdFIOKAoiBBcmNobWFnZSAtIE1hbGUnLGltZzonYXNzZXRzL2hlcm9lcy9hcmNobWFnZS1tLndlYnAnLHN0OntIUDoxMjAwLERFRjoxODAsRE1HOjIxMCxNQU5BOjE4MCxDUklUOjE1LERPREdFOjd9fSwKJ21hZ2UtZi1uZXcnOntuOidWT0xDQU5JQycscm9sZTonTUFHRSDigKIgRmlyZSAtIEZlbWFsZScsaW1nOidhc3NldHMvaGVyb2VzL21hZ2UtZi1uZXcud2VicCcsc3Q6e0hQOjEzNTAsREVGOjIwMCxETUc6MjMwLE1BTkE6MTYwLENSSVQ6MjAsRE9ER0U6OX19LAond2Fycmlvci1mJzp7bjonSVJPTiBWT1cnLHJvbGU6J1NISUVMRCBUQU5LIOKAoiBXYXJyaW9yIC0gRmVtYWxlJyxpbWc6J2Fzc2V0cy9oZXJvZXMvd2Fycmlvci1mLndlYnAnLHN0OntIUDoxNDIwLERFRjoyOTAsRE1HOjE1MixNQU5BOjExMCxDUklUOjEzLERPREdFOjh9fSwKJ3dhcnJpb3ItbSc6e246J0xJT04gV0FSREVOJyxyb2xlOidTSElFTEQgVEFOSyDigKIgV2FycmlvciAtIE1hbGUnLGltZzonYXNzZXRzL2hlcm9lcy93YXJyaW9yLW0ud2VicCcsc3Q6e0hQOjE2NTAsREVGOjM1MCxETUc6MTQ1LE1BTkE6OTAsQ1JJVDoxMCxET0RHRTo2fX0sCn07CmxldCBoZXJvSWQgPSBsb2NhbFN0b3JhZ2UuZ2V0SXRlbSgndm9sYW5kX2hlcm8nKSB8fCAnd2Fycmlvci1mJzsKbGV0IGhlcm9OYW1lID0gbG9jYWxTdG9yYWdlLmdldEl0ZW0oJ3ZvbGFuZF9uYW1lJykgfHwgJ0RERFNTU1MnOwppZighREJbaGVyb0lkXSkgaGVyb0lkPSd3YXJyaW9yLWYnOwpsZXQgaCA9IERCW2hlcm9JZF07CmRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdoZXJvSW1nJykuc3JjID0gaC5pbWc7CmRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdoZXJvTmFtZScpLnRleHRDb250ZW50ID0gaGVyb05hbWUudG9VcHBlckNhc2UoKTsKZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ2hlcm9DbGFzcycpLnRleHRDb250ZW50ID0gaC5yb2xlOwpjb25zdCBzID0gaC5zdDsKZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3N0YXRzR3JpZCcpLmlubmVySFRNTCA9IGAKICA8ZGl2IGNsYXNzPSJzdGF0LWNhcmQiPjxkaXYgY2xhc3M9InN0YXQtbGFiZWwiPkhQPC9kaXY+PGRpdiBjbGFzcz0ic3RhdC12YWx1ZSI+JHtzLkhQfTwvZGl2PjwvZGl2PgogIDxkaXYgY2xhc3M9InN0YXQtY2FyZCI+PGRpdiBjbGFzcz0ic3RhdC1sYWJlbCI+REVGPC9kaXY+PGRpdiBjbGFzcz0ic3RhdC12YWx1ZSI+JHtzLkRFRn08L2Rpdj48L2Rpdj4KICA8ZGl2IGNsYXNzPSJzdGF0LWNhcmQiPjxkaXYgY2xhc3M9InN0YXQtbGFiZWwiPkRBTUFHRTwvZGl2PjxkaXYgY2xhc3M9InN0YXQtdmFsdWUiPiR7cy5ETUd9PC9kaXY+PC9kaXY+CiAgPGRpdiBjbGFzcz0ic3RhdC1jYXJkIj48ZGl2IGNsYXNzPSJzdGF0LWxhYmVsIj5NQU5BPC9kaXY+PGRpdiBjbGFzcz0ic3RhdC12YWx1ZSI+JHtzLk1BTkF9PC9kaXY+PC9kaXY+CiAgPGRpdiBjbGFzcz0ic3RhdC1jYXJkIj48ZGl2IGNsYXNzPSJzdGF0LWxhYmVsIj5DUklUPC9kaXY+PGRpdiBjbGFzcz0ic3RhdC12YWx1ZSI+JHtzLkNSSVR9JTwvZGl2PjwvZGl2PgogIDxkaXYgY2xhc3M9InN0YXQtY2FyZCI+PGRpdiBjbGFzcz0ic3RhdC1sYWJlbCI+RE9ER0U8L2Rpdj48ZGl2IGNsYXNzPSJzdGF0LXZhbHVlIj4ke3MuRE9ER0V9JTwvZGl2PjwvZGl2PgpgOwpkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnYmFyc1BhbmVsJykuaW5uZXJIVE1MID0gYAogIDxkaXYgY2xhc3M9ImJhci1yb3ciPjxkaXYgY2xhc3M9ImJhci1sYWJlbCI+SFA8L2Rpdj48ZGl2IGNsYXNzPSJiYXItdHJhY2siPjxkaXYgY2xhc3M9ImJhci1maWxsIGhwIiBzdHlsZT0id2lkdGg6JHtNYXRoLm1pbigxMDAscy5IUC8xNTUwKjEwMCl9JSI+JHtzLkhQfSAvIDE1NTA8L2Rpdj48L2Rpdj48L2Rpdj4KICA8ZGl2IGNsYXNzPSJiYXItcm93Ij48ZGl2IGNsYXNzPSJiYXItbGFiZWwiPk1BTkE8L2Rpdj48ZGl2IGNsYXNzPSJiYXItdHJhY2siPjxkaXYgY2xhc3M9ImJhci1maWxsIG1hbmEiIHN0eWxlPSJ3aWR0aDoke3MuTUFOQS80MDAqMTAwfSUiPiR7cy5NQU5BfSAvIDQwMDwvZGl2PjwvZGl2PjwvZGl2PgogIDxkaXYgY2xhc3M9ImJhci1yb3ciPjxkaXYgY2xhc3M9ImJhci1sYWJlbCI+U1RBTUlOQTwvZGl2PjxkaXYgY2xhc3M9ImJhci10cmFjayI+PGRpdiBjbGFzcz0iYmFyLWZpbGwgc3RhbWluYSIgc3R5bGU9IndpZHRoOjEwMCUiPjEwMCAvIDEwMDwvZGl2PjwvZGl2PjwvZGl2PgogIDxkaXYgY2xhc3M9ImJhci1yb3ciPjxkaXYgY2xhc3M9ImJhci1sYWJlbCI+WFA8L2Rpdj48ZGl2IGNsYXNzPSJiYXItdHJhY2siPjxkaXYgY2xhc3M9ImJhci1maWxsIHhwIiBzdHlsZT0id2lkdGg6NjQlIj5MVkwgNyAtIDY0MjAgLyAxMDAwMCBYUDwvZGl2PjwvZGl2PjwvZGl2PgpgOwo8L3NjcmlwdD4KPC9ib2R5Pgo8L2h0bWw+Cg=='">← К ГЕРОЮ</button>
-<button class="btn-exit" id="btnToLocs" style="display:none" onclick="backToLocations()">← К ЛОКАЦИЯМ</button>
+      <div class="battle-top">
+        <div class="hero-battle" id="heroBox">
+          <div class="b-name" id="bHeroName"></div><div class="b-sub" id="bHeroSub"></div>
+          <div class="b-img" id="bHeroImgWrap"><img id="bHeroImg"></div>
+          <div class="bar-row"><div class="bar-label"><span>HP</span><span id="hHpPct">100%</span></div><div class="bar-track"><div class="bar-fill hp" id="hHpBar">1000 / 1000</div></div></div>
+          <div class="bar-row"><div class="bar-label"><span>MANA</span><span id="hManaPct">100%</span></div><div class="bar-track"><div class="bar-fill mana" id="hManaBar">200 / 200</div></div></div>
+        </div>
+        <div class="enemy-battle" id="enemyBox">
+          <div class="b-name" id="bEnemyName"></div><div class="b-sub" id="bEnemySub"></div>
+          <div class="b-img" id="bEnemyImgWrap"></div>
+          <div class="bar-row"><div class="bar-label"><span>HP ВРАГА</span><span id="eHpPct">100%</span></div><div class="bar-track"><div class="bar-fill hp" id="eHpBar">500 / 500</div></div></div>
+        </div>
+      </div>
+      <div class="battle-log" id="battleLog"></div>
+      <div class="actions" id="actions"></div>
+      <div class="battle-controls"><button class="btn-exit" id="btnRun" onclick="runBattle()">СБЕЖАТЬ → К ЛОКАЦИИ</button></div>
+    </div>
+  </div>
+  <div class="right" id="chatBox">
+    <div class="chat-header"><div class="dot"></div><div class="chat-title">CHAT + ЛОГИ</div><span id="chatOnline" style="margin-left:auto;font-size:7px;color:#3ad080">● 1</span></div>
+    <div class="chat-body" id="chatBody"><div class="sys-msg">Battlefield loaded — 3 локации • PARRY • клик по мобу = бой</div></div>
+    <div class="chat-input"><input id="chatIn" placeholder="msg..."><button id="chatBtn">▶</button></div>
+  </div>
 </div>
 
-<div class="loc-grid" id="locView"></div>
-<div class="loc-grid" id="enemyView" style="display:none"></div>
-
-<div class="battle-view" id="battleView">
-<div class="battle-top">
-<div class="hero-battle" id="heroBox">
-<div class="b-name" id="bHeroName"></div><div class="b-sub" id="bHeroSub"></div>
-<div class="b-img" id="bHeroImgWrap"><img id="bHeroImg"></div>
-<div class="bar-row"><div class="bar-label"><span>HP</span><span id="hHpPct">100%</span></div><div class="bar-track"><div class="bar-fill hp" id="hHpBar">1000 / 1000</div></div><div class="bar-label" id="hHpTxt" style="display:none"></div></div>
-<div class="bar-row"><div class="bar-label"><span>MANA</span><span id="hManaPct">100%</span></div><div class="bar-track"><div class="bar-fill mana" id="hManaBar">200 / 200</div></div></div>
-</div>
-<div class="enemy-battle" id="enemyBox">
-<div class="b-name" id="bEnemyName"></div><div class="b-sub" id="bEnemySub"></div>
-<div class="b-img" id="bEnemyImgWrap"></div>
-<div class="bar-row"><div class="bar-label"><span>HP ВРАГА</span><span id="eHpPct">100%</span></div><div class="bar-track"><div class="bar-fill hp" id="eHpBar">500 / 500</div></div><div class="bar-label" id="eHpTxt" style="display:none"></div></div>
-</div>
-</div>
-<div class="battle-log" id="battleLog"></div>
-<div class="actions" id="actions"></div>
-<div class="battle-controls">
-<button class="ctrl-btn" id="btnRun" onclick="runBattle()">СБЕЖАТЬ → К ЛОКАЦИИ</button>
-</div>
-</div>
-</div>
-</div>
-
-<!-- VICTORY MODAL -->
-<div class="modal-overlay" id="victoryModal">
-<div class="victory-box" id="victoryBox">
-<div class="trophy" id="vTrophy">🏆</div>
-<div class="v-title" id="vTitle">¡VICTORIA!</div>
-<div class="v-sub" id="vSub">Ты победил в бою</div>
-<div class="v-stats">
-<div class="v-stat gold"><div class="v-stat-icon">🪙</div><div class="v-stat-val" id="vGold">+83</div><div class="v-stat-label">GOLD</div><div class="v-bonus" id="vGoldBonus">+2 (5%)</div></div>
-<div class="v-stat xp"><div class="v-stat-icon">⭐</div><div class="v-stat-val" id="vXp">+3.780</div><div class="v-stat-label">XP</div><div class="v-bonus" id="vXpBonus">+780 (26%)</div></div>
-<div class="v-stat loot"><div class="v-stat-icon">📦</div><div class="v-stat-val" id="vLoot">0</div><div class="v-stat-label">LOOT</div></div>
-</div>
-<div class="v-actions">
-<button class="v-btn v-btn-again" onclick="fightAgain()"><span>⚔️</span> БИТЬ СНОВА</button>
-<button class="v-btn v-btn-cont" onclick="continueToMobs()"><span>✓</span> К МОБАМ</button>
-</div>
-</div>
-</div>
-
-<div class="chat" id="chatBox">
-<div class="chat-head"><span>CHAT</span><span id="chatOnline">● 1</span></div>
-<div class="chat-body" id="chatBody"><div class="sys-msg">Battlefield loaded</div></div>
-<div class="chat-in"><input id="chatIn" placeholder="msg..."><button id="chatBtn">➤</button></div>
+<div class="v-modal" id="victoryModal">
+  <div class="v-box" id="victoryBox">
+    <div class="v-trophy" id="vTrophy">🏆</div>
+    <div class="v-title" id="vTitle">¡VICTORIA!</div>
+    <div class="v-sub" id="vSub">Ты победил</div>
+    <div class="v-stats">
+      <div class="v-stat"><div class="v-stat-icon">🪙</div><div class="v-stat-val" id="vGold">+0</div><div class="v-stat-label">GOLD</div><div class="v-bonus" id="vGoldBonus">+0</div></div>
+      <div class="v-stat"><div class="v-stat-icon">⭐</div><div class="v-stat-val" id="vXp">+0</div><div class="v-stat-label">XP</div><div class="v-bonus" id="vXpBonus">+0</div></div>
+      <div class="v-stat"><div class="v-stat-icon">📦</div><div class="v-stat-val" id="vLoot">0</div><div class="v-stat-label">LOOT</div></div>
+    </div>
+    <div class="v-actions">
+      <button class="v-btn v-btn-again" onclick="fightAgain()">⚔️ БИТЬ СНОВА</button>
+      <button class="v-btn v-btn-cont" onclick="continueToMobs()">✓ К МОБАМ</button>
+    </div>
+  </div>
 </div>
 
 <script src="./assets/js/db.js"></script>
@@ -606,6 +582,7 @@ chatBtn.onclick=()=>{ if (chatIn.value.trim()){ const d=document.createElement('
 chatIn.addEventListener('keydown',e=>{ if (e.key==='Enter') chatBtn.click(); });
 
 renderLocations();
+
 </script>
 </body>
 </html>
