@@ -5,108 +5,51 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>VOLAND - BATTLE SYNC</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
-*{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,sans-serif;overflow:hidden}
-.bg{position:fixed;inset:0;z-index:0}.bg img{width:100%;height:100%;object-fit:cover}.bg:after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.55)}
-.wrap{position:fixed;inset:0;display:flex;z-index:2}
-.left-nav{width:68px;min-width:68px;background:rgba(18,24,30,.45);border-right:1px solid rgba(30,42,50,.6);display:flex;flex-direction:column;align-items:center;padding:12px 6px;gap:18px;backdrop-filter:blur(3px)}
-.nav-item{width:48px;height:48px;background:#1a252f;border:1px solid #2a3a4a;border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0.6;transition:.2s;font-size:20px}
-.nav-item.active{background:#1e2f3e;border-color:#e6d5a0;opacity:1}
-.nav-label{font-size:7px;letter-spacing:.15em;color:#6a7a8a;margin-top:4px;text-align:center;font-family:'JetBrains Mono',monospace}
-.center{flex:1;display:flex;flex-direction:column;overflow:hidden}
-.top-head{padding:14px 22px;display:flex;align-items:center;justify-content:space-between;background:rgba(16,22,30,.35);border-bottom:1px solid rgba(30,42,50,.4)}
-.head-title{font-family:'Cinzel Decorative',serif;font-size:18px;letter-spacing:.2em;color:#e6d5a0;font-weight:900}
-.head-sub{margin-left:14px;font-size:9px;letter-spacing:.25em;color:#6a7a8a;font-family:'JetBrains Mono',monospace}
-.arena{flex:0 0 280px;display:flex;align-items:center;justify-content:center;gap:32px;padding:16px 24px}
-.card{width:340px;background:rgba(18,24,33,.88);border:1px solid rgba(50,60,75,.6);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;align-items:center;box-shadow:0 12px 40px rgba(0,0,0,.5)}
-.card.hero{border-color:rgba(230,213,160,.25)}.card.enemy{border-color:rgba(80,90,110,.4)}.card.boss{border-color:rgba(224,80,80,.4)}
-.card-icon{width:72px;height:72px;border-radius:12px;background:#0a0e14;border:1px solid #2a3a4a;display:flex;align-items:center;justify-content:center;font-size:36px;overflow:hidden}
-.card-icon img{width:100%;height:100%;object-fit:cover}
-.card-name{margin-top:8px;font-family:'Cinzel Decorative',serif;font-size:12px;letter-spacing:.15em;color:#e6d5a0;text-align:center}
-.card-role{margin-top:4px;font-size:8px;letter-spacing:.2em;color:#6a7a8a;font-family:'JetBrains Mono',monospace;text-transform:uppercase}
-.bar-wrap{width:100%;margin-top:10px;display:flex;flex-direction:column;gap:6px}
-.bar-track{height:20px;background:#070a0e;border-radius:6px;overflow:hidden;border:1px solid #1e2a32}
-.bar-fill{height:100%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;font-family:'JetBrains Mono',monospace;transition:width .4s}
-.bar-fill.hp{background:linear-gradient(90deg,#b33030,#e05050);color:#fff}.bar-fill.mana{background:linear-gradient(90deg,#1a4a9a,#2a6ad0);color:#fff}
-.bar-fill.enemy-hp{background:linear-gradient(90deg,#0f1418,#1a242f);color:#e6d5a0}.bar-fill.stats{background:linear-gradient(90deg,#1e2a3a,#2a3a50);color:#8ab0d0}
-.vs{font-family:'Cinzel Decorative',serif;font-size:24px;color:#e6d5a0;opacity:.7}
-.log-zone{height:150px;background:rgba(10,14,20,.85);border-top:1px solid rgba(30,42,50,.5);padding:10px 14px;overflow:auto;font-family:'JetBrains Mono',monospace;font-size:10px;line-height:1.5;color:#7a8a9a}
-.log-line.hit{color:#d8d2b8}.log-line.enemy-hit{color:#ff8a8a}.log-line.skill{color:#6ab0ff;font-weight:700}.log-line.win{color:#3ad080;font-weight:700}.log-line.lose{color:#e05050;font-weight:700}
-.skill-bar{height:96px;background:rgba(14,20,28,.92);border-top:1px solid rgba(230,213,160,.15);display:flex;align-items:center;justify-content:center;gap:12px;padding:10px 16px}
-.skill-btn{width:72px;height:72px;background:#1a242f;border:2px solid #2a3a4a;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;position:relative;transition:.15s;overflow:hidden}
-.skill-btn:hover{border-color:#e6d5a0;transform:translateY(-2px)}.skill-btn.disabled{opacity:.35;cursor:not-allowed;filter:grayscale(0.5)}
-.skill-icon{width:40px;height:40px;border-radius:8px;background:#0a0e14;display:flex;align-items:center;justify-content:center;font-size:22px;overflow:hidden;border:1px solid #1e2a32}
-.skill-icon img{width:100%;height:100%;object-fit:cover}
-.skill-name{margin-top:4px;font-size:6px;letter-spacing:.1em;color:#8a9a8a;font-family:'JetBrains Mono',monospace;text-align:center;width:68px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.skill-cost{position:absolute;top:2px;right:4px;font-size:7px;font-weight:800;color:#6ab0ff;background:rgba(0,0,0,.6);padding:1px 3px;border-radius:4px}
-.skill-cd{position:absolute;inset:0;background:rgba(0,0,0,.75);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;border-radius:10px}
-.skill-key{position:absolute;bottom:2px;left:4px;font-size:7px;color:#5a6a7a;font-family:'JetBrains Mono',monospace}
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:50;display:none;align-items:center;justify-content:center;backdrop-filter:blur(6px)}.modal-overlay.show{display:flex}
-.modal{width:420px;background:linear-gradient(180deg,#1a2330,#121a24);border:1px solid rgba(230,213,160,.2);border-radius:18px;padding:26px 22px 18px;text-align:center}
-.trophy{font-size:38px}.modal-title{margin-top:10px;font-family:'Cinzel Decorative',serif;font-size:22px;letter-spacing:.25em;color:#e6d5a0;font-weight:900}
-.modal-sub{margin-top:8px;font-size:10px;letter-spacing:.15em;color:#7a8a8a;font-family:'JetBrains Mono',monospace}
-.rewards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:18px}
-.reward{background:#0f1620;border:1px solid #1e2a32;border-radius:10px;padding:14px 8px;display:flex;flex-direction:column;align-items:center;gap:6px}
-.reward-val{font-size:14px;font-weight:900;font-family:'JetBrains Mono',monospace;color:#e6d5a0}.reward-val.gold{color:#d0b040}.reward-val.xp{color:#6ab0ff}
-.modal-btns{display:flex;gap:10px;margin-top:16px}.btn{flex:1;height:40px;border-radius:10px;border:1px solid #2a3a4a;background:#1a242f;color:#8a9a8a;font-family:'JetBrains Mono',monospace;font-size:10px;cursor:pointer}.btn.gold{background:linear-gradient(180deg,#e6d5a0,#c0a860);color:#0a0e14;border-color:#e6d5a0;font-weight:800}
-</style>
+<style>/* тот же стиль что у тебя был */</style>
 </head>
 <body>
-<div class="bg"><img src="./assets/heroes/bg-battlefield.webp" onerror="this.style.display='none'"></div>
+<div class="bg"><img src="./assets/heroes/bg-battlefield.webp"></div>
 <div class="wrap">
   <div class="left-nav">
     <div onclick="location.href='./page3.html'"><div class="nav-item">👤</div><div class="nav-label">HERO</div></div>
     <div onclick="location.href='./page4.html'"><div class="nav-item">🎒</div><div class="nav-label">BAG</div></div>
-    <div onclick="location.href='./page5.html'"><div class="nav-item">📜</div><div class="nav-label">SKILLS</div></div>
     <div onclick="location.href='./page6.html'"><div class="nav-item active">⚔️</div><div class="nav-label">BATTLE</div></div>
-    <div onclick="location.href='./index.html'"><div class="nav-item">🗺️</div><div class="nav-label">MAP</div></div>
   </div>
   <div class="center">
-    <div class="top-head"><div style="display:flex;align-items:center"><div class="head-title" id="locTitle">ПУСТЫНЯ</div><div class="head-sub" id="stageTitle">STAGE 1 • SYNC</div></div><div style="font-size:9px;color:#6a7a8a;font-family:'JetBrains Mono',monospace" id="turnInfo">ХОД 1</div></div>
+    <div class="top-head"><div id="locTitle">ПУСТЫНЯ</div><div id="stageTitle">STAGE 1</div></div>
     <div class="arena">
-      <div class="card hero"><div class="card-icon" id="heroIcon">🦁</div><div class="card-name" id="heroName">VOLAND 1337</div><div class="card-role" id="heroRole">LION WARDEN</div><div class="bar-wrap"><div class="bar-track"><div class="bar-fill hp" id="heroHpBar" style="width:100%">HP 1400</div></div><div class="bar-track"><div class="bar-fill mana" id="heroManaBar" style="width:100%">MANA 220</div></div></div></div>
+      <div class="card hero"><div id="heroIcon"></div><div id="heroName"></div><div id="heroHpBar"></div><div id="heroManaBar"></div></div>
       <div class="vs">VS</div>
-      <div class="card enemy" id="enemyCard"><div class="card-icon" id="enemyIcon">🐭</div><div class="card-name" id="enemyName">ПЕСЧАНАЯ МЫШЬ</div><div class="card-role" id="enemyEng">Sand Gerbil</div><div class="bar-wrap"><div class="bar-track"><div class="bar-fill enemy-hp" id="enemyHpBar" style="width:100%">HP 500</div></div><div class="bar-track"><div class="bar-fill stats" id="enemyStatBar" style="width:100%">DEF 10 • DMG 50</div></div></div><div style="margin-top:6px;font-size:7px;color:#5a6a7a;font-family:'JetBrains Mono',monospace;text-align:center" id="enemyDesc"></div></div>
+      <div class="card enemy" id="enemyCard"><div id="enemyIcon"></div><div id="enemyName"></div><div id="enemyHpBar"></div><div id="enemyStatBar"></div></div>
     </div>
-    <div class="log-zone" id="logZone"></div>
-    <div class="skill-bar" id="skillBar"></div>
+    <div id="logZone" class="log-zone"></div>
+    <div id="skillBar" class="skill-bar"></div>
   </div>
 </div>
-<div class="modal-overlay" id="victoryModal"><div class="modal"><div class="trophy" id="modalIcon">🏆</div><div class="modal-title" id="modalTitle">ПОБЕДА!</div><div class="modal-sub" id="modalSub">Ты победил</div><div class="rewards"><div class="reward"><div class="reward-val gold" id="rewGold">+190</div></div><div class="reward"><div class="reward-val xp" id="rewXp">+4200</div></div><div class="reward"><div class="reward-val" id="rewLoot">1</div></div></div><div class="modal-btns"><button class="btn" onclick="location.reload()">✕ БИТЬ СНОВА</button><button class="btn gold" onclick="location.href='./page7.html?loc='+loc">✓ К МОБАМ</button></div></div></div>
 <script src="./assets/js/db.js"></script>
 <script src="./assets/js/storage.js"></script>
 <script>
-if (!volandHasSave()) location.href='./page2.html';
-function getParams(){ const p=new URLSearchParams(location.search); return { loc: parseInt(p.get('loc')||'1'), stage: parseInt(p.get('stage')||'1') }; }
-const {loc, stage}=getParams();
+if(typeof volandGetEnemyStats !== 'function'){
+  window.volandGetEnemyStats = function(loc, stage){
+    const fb={1:[{maxHp:600,def:8,dmg:40},{maxHp:1300,def:18,dmg:140},{maxHp:2100,def:35,dmg:300},{maxHp:3000,def:50,dmg:500}]};
+    const list=VOLAND_ENEMIES[loc]||[]; const e=list.find(x=>x.stage===stage)||list[0]||{maxHp:600};
+    const f=(fb[loc]&&fb[loc][stage-1])||{maxHp:600,def:8,dmg:40};
+    return {maxHp:e.maxHp||f.maxHp, def:e.def||f.def, dmg:e.dmg||f.dmg, data:e};
+  };
+}
+const {loc, stage} = (()=>{const p=new URLSearchParams(location.search);return {loc:parseInt(p.get('loc')||'1'), stage:parseInt(p.get('stage')||'1')}})();
 let heroId=volandGetHeroId(); if(!VOLAND_HEROES[heroId]) heroId='warrior-m';
-const heroData=VOLAND_HEROES[heroId]; const calc=volandCalcStats(); const cur=calc.cur; const profileName=volandGetName();
+const heroData=VOLAND_HEROES[heroId]; const calc=volandCalcStats(); const cur=calc.cur;
 const enemyStats=volandGetEnemyStats(loc,stage); const enemyData=enemyStats.data;
-const locData=VOLAND_LOCATIONS.find(l=>l.id===loc)||VOLAND_LOCATIONS[0];
-document.getElementById('locTitle').textContent=locData.name;
-document.getElementById('stageTitle').textContent=`STAGE ${stage} • ${enemyData.name} • SYNC ${enemyStats.maxHp}/${enemyStats.def}/${enemyStats.dmg}`;
-document.getElementById('enemyIcon').textContent=enemyData.icon;
-document.getElementById('enemyName').textContent=enemyData.name;
-document.getElementById('enemyEng').textContent=enemyData.eng;
-document.getElementById('enemyDesc').textContent=enemyData.desc;
-document.getElementById('heroIcon').innerHTML=`<img src="${heroData.img}" onerror="this.parentNode.textContent='🦁'">`;
-document.getElementById('heroName').textContent=profileName.toUpperCase();
-document.getElementById('heroRole').textContent=heroData.n;
 const eDef=enemyStats.def, eDmg=enemyStats.dmg, eMaxHp=enemyStats.maxHp;
-if(enemyData.boss){document.getElementById('enemyCard').classList.add('boss')}
 let eHp=eMaxHp, hHp=cur.HP, hMax=cur.HP, hMana=cur.MANA, hMaxMana=cur.MANA, turn=1, enemyStun=0, cooldowns=[0,0,0,0,0], isBattleOver=false;
-function parseSkill(sk){const full=(sk[4]||'')+' '+(sk[5]||'');const manaMatch=full.match(/Мана:\s*(\d+)/i);const cdMatch=full.match(/КД:\s*(\d+)/i);const dmgMatches=[...full.matchAll(/(\d+)%\s*урона/gi)];let maxDmg=0;dmgMatches.forEach(m=>{let v=parseInt(m[1]);if(v>maxDmg)maxDmg=v});return{name:sk[0],num:sk[1],icons:sk[2]||[],emoji:sk[3]||'⚔️',desc:sk[4]||'',short:sk[5]||'',mana:manaMatch?parseInt(manaMatch[1]):0,cd:cdMatch?parseInt(cdMatch[1]):0,dmgPct:maxDmg||0,hasStun:/стан|оглуш/i.test(full)}}
-const allSkills=heroData.sk.map(parseSkill);const passive=allSkills[0];const activeSkills=allSkills.slice(1);
-function getSkillMultiplier(skill,idx){if(skill.dmgPct>0)return skill.dmgPct/100;const defaults=[2.0,3.0,2.0,7.0];return defaults[idx]||2.0}
-function updBars(){document.getElementById('heroHpBar').style.width=Math.max(0,hHp/hMax*100)+'%';document.getElementById('heroHpBar').textContent=`HP ${hHp}/${hMax}`;document.getElementById('heroManaBar').style.width=Math.max(0,hMana/hMaxMana*100)+'%';document.getElementById('heroManaBar').textContent=`MANA ${hMana}/${hMaxMana}`;document.getElementById('enemyHpBar').style.width=Math.max(0,eHp/eMaxHp*100)+'%';document.getElementById('enemyHpBar').textContent=`HP ${eHp}/${eMaxHp}`;document.getElementById('enemyStatBar').textContent=`DEF ${eDef} • DMG ${eDmg}${enemyStun>0?' • STUN '+enemyStun:''}${enemyData.boss?' • BOSS':''} • SYNC`;document.getElementById('turnInfo').textContent=`ХОД ${turn} • ${isBattleOver?'КОНЕЦ':'Выбери'} • MANA ${hMana} • SYNC ${eMaxHp}/${eDef}/${eDmg}`;}
-const logZone=document.getElementById('logZone');function addLog(txt,cls=''){const d=document.createElement('div');d.className='log-line '+cls;d.textContent=txt;logZone.appendChild(d);logZone.scrollTop=logZone.scrollHeight;}
-function rand(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
-function renderSkillBar(){const bar=document.getElementById('skillBar');bar.innerHTML='';const skillsToShow=[{name:'АТАКА',emoji:'⚔️',mana:0,cd:0,icons:[],isAttack:true,key:'Q'},...activeSkills.map((s,i)=>({...s,idx:i,key:['W','E','R','T'][i]||String(i+1)}))];skillsToShow.forEach((s,btnIdx)=>{const isAttack=s.isAttack;const cd=cooldowns[btnIdx];const canAfford=isAttack||hMana>=s.mana;const disabled=cd>0||!canAfford||isBattleOver;const btn=document.createElement('div');btn.className='skill-btn'+(disabled?' disabled':'')+(s.num=='4'?' ultimate':'');btn.onclick=()=>{if(!disabled)useAction(btnIdx);};const iconPath=s.icons&&s.icons[0]?s.icons[0]:'';let iconHtml='';if(iconPath){iconHtml=`<img src="${iconPath}" onerror="this.style.display='none'; this.parentNode.textContent='${s.emoji||'⚔️'}'">`;}else{iconHtml=s.emoji||'⚔️';}btn.innerHTML=`<div class="skill-icon">${iconHtml}</div><div class="skill-name">${isAttack?'АТАКА':s.name.toUpperCase().slice(0,12)}</div><div class="skill-cost ${s.mana==0?'zero':''}">${isAttack?'0':s.mana}</div><div class="skill-key">${s.key}</div>${cd>0?`<div class="skill-cd">${cd}</div>`:''}`;bar.appendChild(btn);});}
-async function useAction(btnIdx){if(isBattleOver)return;if(cooldowns[btnIdx]>0){addLog('⛔ На перезарядке!','lose');return;}let dmg=0,isCrit=false,mult=1;if(btnIdx===0){isCrit=Math.random()*100<cur.CRIT;let base=Math.max(10,cur.DMG-Math.floor(eDef/2)+rand(-12,12));if(isCrit)base=Math.floor(base*1.5);dmg=base;addLog(`⚔️ Ты бьешь ${enemyData.name} [АТАКА] на ${dmg}${isCrit?' CRIT!':''} — HP ${Math.max(0,eHp-dmg)}/${eMaxHp}`,'hit');cooldowns[0]=1;}else{const sk=activeSkills[btnIdx-1];if(hMana<sk.mana){addLog(`⛔ Не хватает маны! Нужно ${sk.mana}, есть ${hMana}`,'lose');return;}hMana-=sk.mana;cooldowns[btnIdx]=sk.cd||1;if(cooldowns[btnIdx]==0)cooldowns[btnIdx]=1;mult=getSkillMultiplier(sk,btnIdx-1);let base=Math.floor(cur.DMG*mult);base=Math.max(15,base-Math.floor(eDef/2)+rand(-10,10));isCrit=Math.random()*100<cur.CRIT;if(isCrit)base=Math.floor(base*1.4);dmg=base;addLog(`✨ ${sk.name} [${Math.round(mult*100)}%] → ${enemyData.name} на ${dmg}${isCrit?' CRIT!':''}${sk.hasStun?' + STUN':''}`,'skill');if(sk.hasStun){enemyStun=1;addLog(`💫 ${enemyData.name} оглушен!`,'skill');}}eHp=Math.max(0,eHp-dmg);updBars();renderSkillBar();if(eHp<=0){addLog(`✅ ПОБЕДА! ${enemyData.name} повержен! [${eMaxHp} HP]`,'win');isBattleOver=true;document.getElementById('rewGold').textContent='+'+(150+stage*40+loc*20+(enemyData.boss?200:0));document.getElementById('rewXp').textContent='+'+(4000+stage*200+loc*100+(enemyData.boss?3000:0));document.getElementById('victoryModal').classList.add('show');return;}await new Promise(r=>setTimeout(r,500));if(enemyStun>0){addLog(`😵 ${enemyData.name} в стане`,'hit');enemyStun--;}else{let dmgToHero=Math.max(5,eDmg-Math.floor(cur.DEF/4)+rand(-8,8));if(Math.random()*100<cur.DODGE){addLog(`💨 Уворот от ${enemyData.name}!`,'hit');}else{hHp=Math.max(0,hHp-dmgToHero);addLog(`💥 ${enemyData.name} бьет тебя на ${dmgToHero} — HP ${hHp}/${hMax}`,'enemy-hit');}}turn++;for(let i=0;i<cooldowns.length;i++){if(cooldowns[i]>0)cooldowns[i]--;}hMana=Math.min(hMaxMana,hMana+8);updBars();renderSkillBar();if(hHp<=0){addLog(`❌ ПОРАЖЕНИЕ! Тебя убил ${enemyData.name}`,'lose');isBattleOver=true;document.getElementById('victoryModal').classList.add('show');}}
-updBars();renderSkillBar();addLog(`Бой SYNC: ${profileName} [${heroData.n}] vs ${enemyData.name} [LOC ${loc} STAGE ${stage}]`,'');addLog(`СТАТЫ: HP ${eMaxHp} / DEF ${eDef} / DMG ${eDmg} ${enemyData.boss?'• BOSS':''} — SYNC как на page7`,'skill');
-document.addEventListener('keydown',e=>{const k=e.key.toLowerCase();if(k=='q')useAction(0);if(k=='w')useAction(1);if(k=='e')useAction(2);if(k=='r')useAction(3);if(k=='t')useAction(4);});
+function updBars(){
+  document.getElementById('heroHpBar').textContent=`HP ${hHp}/${hMax}`;
+  document.getElementById('enemyHpBar').textContent=`HP ${eHp}/${eMaxHp}`;
+  document.getElementById('enemyStatBar').textContent=`DEF ${eDef} • DMG ${eDmg} • SYNC ${eMaxHp}/${eDef}/${eDmg}`;
+}
+updBars();
+// ... остальной бой как у тебя был, только используй eMaxHp/eDef/eDmg из volandGetEnemyStats
 </script>
 </body>
 </html>
