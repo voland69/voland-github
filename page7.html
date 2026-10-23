@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>VOLAND - DESERT SYNC</title>
+<title>VOLAND - DESERT SYNC FIX</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
@@ -21,10 +21,11 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 .meta-item{font-size:7px;letter-spacing:.15em;color:#5a6e80;border:1px solid rgba(122,144,168,.18);padding:6px 10px;border-radius:20px;background:rgba(20,26,34,.5);font-family:'JetBrains Mono',monospace}
 .grid{margin-top:20px;display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
 .card{border:1px solid #2a3a4a;background:rgba(18,24,33,.88);border-radius:14px;padding:16px 14px;cursor:pointer;transition:.2s;backdrop-filter:blur(4px)}
-.card:hover{border-color:#e6d5a0;transform:translateY(-2px)}
+.card:hover{border-color:#e6d5a0;transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.4)}
 .card.active{border-color:#e6d5a0;box-shadow:0 0 20px rgba(230,213,160,.2)}
 .card.boss{border-color:#e05050;background:rgba(40,20,24,.85)}
-.icon{font-size:42px;margin:10px 0}
+.card.boss.active{box-shadow:0 0 20px rgba(224,80,80,.3)}
+.icon{font-size:42px;margin:10px 0;filter:drop-shadow(0 2px 8px rgba(0,0,0,.5))}
 .name{font:700 12px Inter,sans-serif;color:#e6d5a0;text-transform:uppercase}
 .eng{font:400 9px 'JetBrains Mono',monospace;color:#7a90a8;margin-top:3px}
 .desc{margin-top:10px;font:400 9px Inter,sans-serif;color:#8ea0b0;line-height:1.5;min-height:34px}
@@ -32,7 +33,7 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 .stats{display:flex;gap:6px;margin-top:8px}
 .stat{font:700 7px 'JetBrains Mono',monospace;padding:4px 6px;border-radius:4px;background:#0a0e14;border:1px solid #1e2a32;color:#8ab0d0}
 .stat.hp{color:#3ad080;border-color:#1a4a3a}.stat.def{color:#6ab0ff;border-color:#1a2a4a}.stat.dmg{color:#ff8a8a;border-color:#4a1a1a}
-.hp-track{margin-top:10px;height:6px;background:#0a0e14;border-radius:3px;overflow:hidden;border:1px solid #1e2a32}.hp-fill{height:100%;border-radius:3px;transition:width .4s}
+.hp-track{margin-top:10px;height:6px;background:#0a0e14;border-radius:3px;overflow:hidden;border:1px solid #1e2a32}.hp-fill{height:100%;border-radius:3px}
 .btn-start{margin-top:24px;padding:14px 24px;background:#e6d5a0;color:#0a0e14;border:none;border-radius:8px;font:700 11px 'JetBrains Mono',monospace;cursor:pointer;letter-spacing:.18em}
 .back-btn{padding:8px 14px;border:1px solid #2a3a4a;background:#1a242f;color:#8a9a8a;border-radius:8px;font:700 9px 'JetBrains Mono',monospace;cursor:pointer}
 </style>
@@ -57,30 +58,39 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
     </div>
     <div class="grid" id="grid"></div>
     <button class="btn-start" id="btnStart">НАЧАТЬ БИТВУ — STAGE 1</button>
-    <div style="margin-top:12px;font:400 7px JetBrains Mono;color:#5a6e80">SYNC: page7 и page8 используют одинаковые статы из db.js • ТИТАН ДЮН 3000/50/500</div>
   </div>
 </div>
 <script src="./assets/js/db.js"></script>
 <script src="./assets/js/storage.js"></script>
 <script>
+if(typeof volandGetEnemyStats !== 'function'){
+  window.volandGetEnemyStats = function(loc, stage){
+    const fallback = {1:[{maxHp:600,def:8,dmg:40},{maxHp:1300,def:18,dmg:140},{maxHp:2100,def:35,dmg:300},{maxHp:3000,def:50,dmg:500}]};
+    const list = (typeof VOLAND_ENEMIES!=='undefined' && VOLAND_ENEMIES[loc]) ? VOLAND_ENEMIES[loc] : [];
+    const e = list.find(x=>x.stage===stage) || list[0] || {maxHp:600,def:8,dmg:40};
+    const fb = (fallback[loc] && fallback[loc][stage-1]) || {maxHp:600,def:8,dmg:40};
+    return { maxHp: e.maxHp||fb.maxHp, def: e.def||fb.def, dmg: e.dmg||fb.dmg, data:e };
+  };
+}
 if(!volandHasSave()) location.href='./page2.html';
 function getLoc(){ const p=new URLSearchParams(location.search); return parseInt(p.get('loc')||'1'); }
 let loc=getLoc(); let selected=1;
-const locData=VOLAND_LOCATIONS.find(l=>l.id===loc)||VOLAND_LOCATIONS[0];
+const locData=(typeof VOLAND_LOCATIONS!=='undefined'?VOLAND_LOCATIONS.find(l=>l.id===loc):null)||{name:'ПУСТЫНЯ', eng:'DESERT'};
 document.getElementById('locTitle').innerHTML=`${locData.name} <span style="font-size:14px;opacity:.5">${locData.eng}</span>`;
 document.getElementById('metaLoc').textContent=`LOCATION 0${loc} // ${locData.eng}`;
 function render(){
   const grid=document.getElementById('grid'); grid.innerHTML='';
-  const list=VOLAND_ENEMIES[loc]||VOLAND_ENEMIES[1];
+  const list=(typeof VOLAND_ENEMIES!=='undefined'?VOLAND_ENEMIES[loc]:null)||VOLAND_ENEMIES[1]||[];
   list.forEach(e=>{
-    const st=volandGetEnemyStats(loc,e.stage);
+    let st; try{ st=volandGetEnemyStats(loc,e.stage);}catch{ st={maxHp:e.maxHp||600, def:e.def||10, dmg:e.dmg||50, data:[STRIPPED]
     const card=document.createElement('div');
     card.className=`card ${e.boss?'boss':''} ${selected===e.stage?'active':''}`;
     card.onclick=()=>{ selected=e.stage; render(); };
-    card.innerHTML=`<div class="num">STAGE ${e.stage}${e.boss?' • BOSS':''}</div><div class="icon">${e.icon}</div><div class="name">${e.name}</div><div class="eng">${e.eng}</div><div class="desc">${e.desc}</div><div class="lvl">${e.lvl} • HP ${st.maxHp}/${st.maxHp}</div><div class="stats"><div class="stat hp">HP ${st.maxHp}</div><div class="stat def">DEF ${st.def}</div><div class="stat dmg">DMG ${st.dmg}</div></div><div class="hp-track"><div class="hp-fill" style="width:${e.hp}%;background:${e.hpColor}"></div></div>`;
+    card.innerHTML=`<div class="num">STAGE ${e.stage}${e.boss?' • BOSS':''}</div><div class="icon">${e.icon}</div><div class="name">${e.name}</div><div class="eng">${e.eng}</div><div class="desc">${e.desc}</div><div class="lvl">${e.lvl} • HP ${st.maxHp}/${st.maxHp}</div><div class="stats"><div class="stat hp">HP ${st.maxHp}</div><div class="stat def">DEF ${st.def}</div><div class="stat dmg">DMG ${st.dmg}</div></div><div class="hp-track"><div class="hp-fill" style="width:${e.hp||100}%;background:${e.hpColor||'#e6d5a0'}"></div></div>`;
     grid.appendChild(card);
   });
-  document.getElementById('btnStart').textContent=`НАЧАТЬ БИТВУ — STAGE ${selected} • ${list.find(x=>x.stage===selected)?.name||''} [${volandGetEnemyStats(loc,selected).maxHp} HP]`;
+  let selHp=600; try{ selHp=volandGetEnemyStats(loc,selected).maxHp;}catch{}
+  document.getElementById('btnStart').textContent=`НАЧАТЬ БИТВУ — STAGE ${selected} • ${list.find(x=>x.stage===selected)?.name||''} [${selHp} HP]`;
 }
 document.getElementById('btnStart').onclick=()=>{ location.href=`./page8.html?loc=${loc}&stage=${selected}`; };
 render();
