@@ -107,3 +107,100 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 <div class="modal-overlay" id="victoryModal">
   <div class="modal">
     <div class="trophy">🏆</div>
+    <div class="modal-title" id="modalTitle">ПОБЕДА!</div>
+    <div class="modal-sub" id="modalSub">Ты победил в битве • ПЕСЧАНАЯ МЫШЬ</div>
+    <div class="rewards">
+      <div class="reward"><div class="reward-icon">🪙</div><div class="reward-val gold" id="rewGold">+190</div><div class="reward-lbl">GOLD</div></div>
+      <div class="reward"><div class="reward-icon">⭐</div><div class="reward-val xp" id="rewXp">+4200</div><div class="reward-lbl">XP</div></div>
+      <div class="reward"><div class="reward-icon">📦</div><div class="reward-val" id="rewLoot">1</div><div class="reward-lbl">LOOT</div></div>
+    </div>
+    <div class="modal-btns">
+      <button class="btn" onclick="fightAgain()">✕ БИТЬ СНОВА</button>
+      <button class="btn gold" onclick="goToMobs()">✓ К МОБАМ</button>
+    </div>
+  </div>
+</div>
+
+<script src="./assets/js/db.js"></script>
+<script src="./assets/js/storage.js"></script>
+<script>
+if (!volandHasSave()){ location.href='./page2.html'; }
+function getParams(){
+  const p = new URLSearchParams(location.search);
+  return { loc: parseInt(p.get('loc')||'1'), stage: parseInt(p.get('stage')||'1') };
+}
+const {loc, stage} = getParams();
+let heroId = volandGetHeroId();
+if(!VOLAND_HEROES[heroId]) heroId='warrior-m';
+const heroData = VOLAND_HEROES[heroId];
+const calc = volandCalcStats();
+const cur = calc.cur;
+const profileName = volandGetName();
+document.getElementById('heroIcon').innerHTML = `<img src="${heroData.img}" onerror="this.parentNode.textContent='🦁'">`;
+document.getElementById('heroName').textContent = profileName.toUpperCase();
+document.getElementById('heroRole').textContent = heroData.n;
+let enemies = VOLAND_ENEMIES[loc] || VOLAND_ENEMIES[1];
+let enemyData = enemies.find(e=>e.stage===stage) || enemies[0];
+let locData = VOLAND_LOCATIONS.find(l=>l.id===loc) || VOLAND_LOCATIONS[0];
+document.getElementById('locTitle').textContent = locData.name;
+document.getElementById('stageTitle').textContent = `STAGE ${stage} • ${enemyData.name}`;
+document.getElementById('enemyIcon').textContent = enemyData.icon;
+document.getElementById('enemyName').textContent = enemyData.name;
+document.getElementById('enemyEng').textContent = enemyData.eng;
+document.getElementById('enemyDesc').textContent = enemyData.desc;
+const eDef = 10 * stage + (loc-1)*5;
+const eDmg = 30 + 20*stage + (loc-1)*10;
+const eMaxHp = 400 + stage*100 + (loc-1)*150;
+let eHp = eMaxHp;
+let hHp = cur.HP;
+let hMax = cur.HP;
+function updBars(){
+  document.getElementById('heroHpBar').style.width = Math.max(0, hHp / hMax * 100) + '%';
+  document.getElementById('heroHpBar').textContent = `HP ${hHp} / ${hMax}`;
+  document.getElementById('heroStatBar').textContent = `DEF ${cur.DEF} • DMG ${cur.DMG}`;
+  document.getElementById('enemyHpBar').style.width = Math.max(0, eHp / eMaxHp * 100) + '%';
+  document.getElementById('enemyHpBar').textContent = `HP ${eHp} / ${eMaxHp}`;
+  document.getElementById('enemyStatBar').textContent = `DEF ${eDef} • DMG ${eDmg}`;
+}
+updBars();
+const logZone = document.getElementById('logZone');
+function addLog(txt, cls=''){ const d=document.createElement('div'); d.className='log-line '+cls; d.textContent=txt; logZone.appendChild(d); logZone.scrollTop = 9999; }
+function rand(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+async function runBattle(){
+  addLog(`Бой: ${profileName} vs ${enemyData.name} [LOC ${loc} STAGE ${stage}]`);
+  addLog(`${enemyData.name} HP ${eMaxHp} DEF ${eDef} DMG ${eDmg} vs HERO HP ${hMax} DEF ${cur.DEF} DMG ${cur.DMG}`);
+  while(hHp>0 && eHp>0){
+    await new Promise(r=>setTimeout(r, 420));
+    let isCrit = Math.random()*100 < cur.CRIT;
+    let baseDmg = Math.max(10, cur.DMG - Math.floor(eDef/2) + rand(-12,12));
+    if(isCrit) baseDmg = Math.floor(baseDmg*1.5);
+    eHp = Math.max(0, eHp - baseDmg);
+    updBars();
+    addLog(`⚔️ Ты бьешь ${enemyData.name} на ${baseDmg}${isCrit?' CRIT!':''}`, 'hit');
+    if(eHp<=0) break;
+    await new Promise(r=>setTimeout(r, 380));
+    let dmgToHero = Math.max(5, eDmg - Math.floor(cur.DEF/4) + rand(-8,8));
+    if(Math.random()*100 < cur.DODGE){ addLog(`💨 Ты увернулся от ${enemyData.name}!`, 'hit'); }
+    else { hHp = Math.max(0, hHp - dmgToHero); updBars(); addLog(`💥 ${enemyData.name} бьет тебя на ${dmgToHero} — HP ${hHp}/${hMax}`, 'enemy-hit'); }
+    if(hHp<=0) break;
+  }
+  if(eHp<=0){ addLog(`✅ ПОБЕДА!`, 'win'); showVictory(); } else { addLog(`❌ ПОРАЖЕНИЕ!`, 'lose'); showDefeat(); }
+}
+function showVictory(){
+  document.getElementById('rewGold').textContent = `+${150 + stage*40 + loc*20}`;
+  document.getElementById('rewXp').textContent = `+${4000 + stage*200 + loc*100}`;
+  document.getElementById('modalTitle').textContent = 'ПОБЕДА!';
+  document.getElementById('modalSub').textContent = `Ты победил в битве • ${enemyData.name}`;
+  document.getElementById('victoryModal').classList.add('show');
+}
+function showDefeat(){
+  document.getElementById('modalTitle').textContent = 'ПОРАЖЕНИЕ!';
+  document.getElementById('modalSub').textContent = `Тебя победил ${enemyData.name}`;
+  document.getElementById('victoryModal').classList.add('show');
+}
+function fightAgain(){ location.reload(); }
+function goToMobs(){ location.href = `./page7.html?loc=${loc}`; }
+runBattle();
+</script>
+</body>
+</html>
