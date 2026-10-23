@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>VOLAND - DESERT SYNC FIX</title>
+<title>VOLAND - DESERT SYNC FIX CLICKABLE</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
@@ -20,21 +20,20 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 .meta{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap}
 .meta-item{font-size:7px;letter-spacing:.15em;color:#5a6e80;border:1px solid rgba(122,144,168,.18);padding:6px 10px;border-radius:20px;background:rgba(20,26,34,.5);font-family:'JetBrains Mono',monospace}
 .grid{margin-top:20px;display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
-.card{border:1px solid #2a3a4a;background:rgba(18,24,33,.88);border-radius:14px;padding:16px 14px;cursor:pointer;transition:.2s;backdrop-filter:blur(4px)}
+.card{border:1px solid #2a3a4a;background:rgba(18,24,33,.88);border-radius:14px;padding:16px 14px;cursor:pointer;transition:.2s;backdrop-filter:blur(4px);user-select:none}
 .card:hover{border-color:#e6d5a0;transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.4)}
-.card.active{border-color:#e6d5a0;box-shadow:0 0 20px rgba(230,213,160,.2)}
+.card.active{border-color:#e6d5a0;box-shadow:0 0 20px rgba(230,213,160,.25);background:rgba(28,34,44,.95)}
 .card.boss{border-color:#e05050;background:rgba(40,20,24,.85)}
-.card.boss.active{box-shadow:0 0 20px rgba(224,80,80,.3)}
-.icon{font-size:42px;margin:10px 0;filter:drop-shadow(0 2px 8px rgba(0,0,0,.5))}
-.name{font:700 12px Inter,sans-serif;color:#e6d5a0;text-transform:uppercase}
-.eng{font:400 9px 'JetBrains Mono',monospace;color:#7a90a8;margin-top:3px}
-.desc{margin-top:10px;font:400 9px Inter,sans-serif;color:#8ea0b0;line-height:1.5;min-height:34px}
-.lvl{margin-top:10px;font:700 8px 'JetBrains Mono',monospace;color:#e6d5a0;letter-spacing:.18em}
-.stats{display:flex;gap:6px;margin-top:8px}
+.icon{font-size:42px;margin:10px 0;pointer-events:none}
+.name{font:700 12px Inter,sans-serif;color:#e6d5a0;text-transform:uppercase;pointer-events:none}
+.eng{font:400 9px 'JetBrains Mono',monospace;color:#7a90a8;margin-top:3px;pointer-events:none}
+.desc{margin-top:10px;font:400 9px Inter,sans-serif;color:#8ea0b0;line-height:1.5;min-height:34px;pointer-events:none}
+.lvl{margin-top:10px;font:700 8px 'JetBrains Mono',monospace;color:#e6d5a0;letter-spacing:.18em;pointer-events:none}
+.stats{display:flex;gap:6px;margin-top:8px;pointer-events:none}
 .stat{font:700 7px 'JetBrains Mono',monospace;padding:4px 6px;border-radius:4px;background:#0a0e14;border:1px solid #1e2a32;color:#8ab0d0}
 .stat.hp{color:#3ad080;border-color:#1a4a3a}.stat.def{color:#6ab0ff;border-color:#1a2a4a}.stat.dmg{color:#ff8a8a;border-color:#4a1a1a}
-.hp-track{margin-top:10px;height:6px;background:#0a0e14;border-radius:3px;overflow:hidden;border:1px solid #1e2a32}.hp-fill{height:100%;border-radius:3px}
-.btn-start{margin-top:24px;padding:14px 24px;background:#e6d5a0;color:#0a0e14;border:none;border-radius:8px;font:700 11px 'JetBrains Mono',monospace;cursor:pointer;letter-spacing:.18em}
+.hp-track{margin-top:10px;height:6px;background:#0a0e14;border-radius:3px;overflow:hidden;border:1px solid #1e2a32;pointer-events:none}.hp-fill{height:100%;border-radius:3px;transition:width .4s}
+.btn-start{margin-top:24px;padding:14px 24px;background:#e6d5a0;color:#0a0e14;border:none;border-radius:8px;font:700 11px 'JetBrains Mono',monospace;cursor:pointer;letter-spacing:.18em;z-index:10}
 .back-btn{padding:8px 14px;border:1px solid #2a3a4a;background:#1a242f;color:#8a9a8a;border-radius:8px;font:700 9px 'JetBrains Mono',monospace;cursor:pointer}
 </style>
 </head>
@@ -49,11 +48,8 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
     <div onclick="location.href='./index.html'"><div class="nav-item">🗺️</div><div class="nav-label">MAP</div></div>
   </div>
   <div class="center">
-    <div style="display:flex;justify-content:space-between;align-items:center">
-      <div>
-        <div class="title" id="locTitle">ПУСТЫНЯ <span style="font-size:14px;opacity:.5">DESERT</span></div>
-        <div class="meta"><div class="meta-item" id="metaLoc">LOCATION 01 // DESERT</div><div class="meta-item">volandGetEnemyStats() SYNC</div><div class="meta-item">ТИТАН 3000/50/500</div></div>
-      </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+      <div><div class="title" id="locTitle">ПУСТЫНЯ <span style="font-size:14px;opacity:.5">DESERT</span></div><div class="meta"><div class="meta-item" id="metaLoc">LOCATION 01 // DESERT</div><div class="meta-item">volandGetEnemyStats() SYNC</div><div class="meta-item" id="metaSync">ТИТАН 3000/50/500 CLICK FIX</div></div></div>
       <button class="back-btn" onclick="location.href='./page6.html'">← BATTLEFIELD</button>
     </div>
     <div class="grid" id="grid"></div>
@@ -65,34 +61,41 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 <script>
 if(typeof volandGetEnemyStats !== 'function'){
   window.volandGetEnemyStats = function(loc, stage){
-    const fallback = {1:[{maxHp:600,def:8,dmg:40},{maxHp:1300,def:18,dmg:140},{maxHp:2100,def:35,dmg:300},{maxHp:3000,def:50,dmg:500}]};
-    const list = (typeof VOLAND_ENEMIES!=='undefined' && VOLAND_ENEMIES[loc]) ? VOLAND_ENEMIES[loc] : [];
-    const e = list.find(x=>x.stage===stage) || list[0] || {maxHp:600,def:8,dmg:40};
-    const fb = (fallback[loc] && fallback[loc][stage-1]) || {maxHp:600,def:8,dmg:40};
-    return { maxHp: e.maxHp||fb.maxHp, def: e.def||fb.def, dmg: e.dmg||fb.dmg, data:e };
+    const fb={1:[{maxHp:600,def:8,dmg:40},{maxHp:1300,def:18,dmg:140},{maxHp:2100,def:35,dmg:300},{maxHp:3000,def:50,dmg:500}]};
+    try{
+      const list=(VOLAND_ENEMIES&&VOLAND_ENEMIES[loc])||[]; 
+      const e=list.find(x=>x.stage===stage)||list[0]||{};
+      const f=(fb[loc]&&fb[loc][stage-1])||{maxHp:600,def:8,dmg:40};
+      return {maxHp:e.maxHp||f.maxHp, def:e.def||f.def, dmg:e.dmg||f.dmg, data:[STRIPPED]
+    }catch(err){ 
+      const f=(fb[loc]&&fb[loc][stage-1])||{maxHp:600,def:8,dmg:40};
+      return {maxHp:f.maxHp, def:f.def, dmg:f.dmg, data:{icon:'🐭',name:'МЫШЬ',eng:'Mouse',desc:'',lvl:'LVL 1',hp:100,hpColor:'#e6d5a0'}};
+    }
   };
 }
-if(!volandHasSave()) location.href='./page2.html';
 function getLoc(){ const p=new URLSearchParams(location.search); return parseInt(p.get('loc')||'1'); }
 let loc=getLoc(); let selected=1;
-const locData=(typeof VOLAND_LOCATIONS!=='undefined'?VOLAND_LOCATIONS.find(l=>l.id===loc):null)||{name:'ПУСТЫНЯ', eng:'DESERT'};
-document.getElementById('locTitle').innerHTML=`${locData.name} <span style="font-size:14px;opacity:.5">${locData.eng}</span>`;
-document.getElementById('metaLoc').textContent=`LOCATION 0${loc} // ${locData.eng}`;
+try{
+  const locData=(VOLAND_LOCATIONS&&VOLAND_LOCATIONS.find(l=>l.id===loc))||{name:'ПУСТЫНЯ',eng:'DESERT'};
+  document.getElementById('locTitle').innerHTML=`${locData.name} <span style="font-size:14px;opacity:.5">${locData.eng}</span>`;
+  document.getElementById('metaLoc').textContent=`LOCATION 0${loc} // ${locData.eng}`;
+}catch(e){}
 function render(){
-  const grid=document.getElementById('grid'); grid.innerHTML='';
-  const list=(typeof VOLAND_ENEMIES!=='undefined'?VOLAND_ENEMIES[loc]:null)||VOLAND_ENEMIES[1]||[];
+  const grid=document.getElementById('grid'); if(!grid) return; grid.innerHTML='';
+  const list=(VOLAND_ENEMIES&&VOLAND_ENEMIES[loc])||VOLAND_ENEMIES[1]||[];
   list.forEach(e=>{
-    let st; try{ st=volandGetEnemyStats(loc,e.stage);}catch{ st={maxHp:e.maxHp||600, def:e.def||10, dmg:e.dmg||50, data:[STRIPPED]
+    let st; try{ st=volandGetEnemyStats(loc,e.stage);}catch(err){ st={maxHp:e.maxHp||600, def:e.def||10, dmg:e.dmg||50, data:[STRIPPED]
     const card=document.createElement('div');
     card.className=`card ${e.boss?'boss':''} ${selected===e.stage?'active':''}`;
-    card.onclick=()=>{ selected=e.stage; render(); };
-    card.innerHTML=`<div class="num">STAGE ${e.stage}${e.boss?' • BOSS':''}</div><div class="icon">${e.icon}</div><div class="name">${e.name}</div><div class="eng">${e.eng}</div><div class="desc">${e.desc}</div><div class="lvl">${e.lvl} • HP ${st.maxHp}/${st.maxHp}</div><div class="stats"><div class="stat hp">HP ${st.maxHp}</div><div class="stat def">DEF ${st.def}</div><div class="stat dmg">DMG ${st.dmg}</div></div><div class="hp-track"><div class="hp-fill" style="width:${e.hp||100}%;background:${e.hpColor||'#e6d5a0'}"></div></div>`;
+    card.dataset.stage=e.stage;
+    card.onclick=function(){ selected=parseInt(this.dataset.stage); render(); };
+    card.innerHTML=`<div>STAGE ${e.stage}${e.boss?' • BOSS':''}</div><div class="icon">${e.icon}</div><div class="name">${e.name}</div><div class="eng">${e.eng}</div><div class="desc">${e.desc}</div><div class="lvl">${e.lvl} • HP ${st.maxHp}/${st.maxHp}</div><div class="stats"><div class="stat hp">HP ${st.maxHp}</div><div class="stat def">DEF ${st.def}</div><div class="stat dmg">DMG ${st.dmg}</div></div><div class="hp-track"><div class="hp-fill" style="width:${e.hp||100}%;background:${e.hpColor||'#e6d5a0'}"></div></div>`;
     grid.appendChild(card);
   });
-  let selHp=600; try{ selHp=volandGetEnemyStats(loc,selected).maxHp;}catch{}
-  document.getElementById('btnStart').textContent=`НАЧАТЬ БИТВУ — STAGE ${selected} • ${list.find(x=>x.stage===selected)?.name||''} [${selHp} HP]`;
+  let selHp=600, selDef=8, selDmg=40; try{ const s=volandGetEnemyStats(loc,selected); selHp=s.maxHp; selDef=s.def; selDmg=s.dmg; }catch(e){}
+  const btn=document.getElementById('btnStart'); if(btn){ btn.textContent=`НАЧАТЬ БИТВУ — STAGE ${selected} [${selHp}/${selDef}/${selDmg}] • КЛИКАБЕЛЬНО`; btn.onclick=function(){ location.href=`./page8.html?loc=${loc}&stage=${selected}`; }; }
+  const metaSync=document.getElementById('metaSync'); if(metaSync){ metaSync.textContent=`SYNC ${selHp}/${selDef}/${selDmg} • CLICK FIX v2`; }
 }
-document.getElementById('btnStart').onclick=()=>{ location.href=`./page8.html?loc=${loc}&stage=${selected}`; };
 render();
 </script>
 </body>
