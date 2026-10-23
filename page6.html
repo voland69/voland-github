@@ -19,13 +19,15 @@ html,body{height:100%;background:url("./assets/heroes/bg-battlefield.webp") cent
 .nav-label{font-size:7px;letter-spacing:.12em;color:#6a7a8a;margin-top:4px;text-align:center;font-family:'JetBrains Mono',monospace}
 .nav-group.active .nav-label{color:#e6d5a0}
 .center{flex:1;padding:24px;overflow:auto;background:rgba(16,22,30,.08);backdrop-filter:blur(1px);display:flex;flex-direction:column;align-items:center}
-.loc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;width:100%;max-width:1100px;margin-top:8px}
+.title{font:900 32px 'Cinzel Decorative',serif;color:#e6d5a0;letter-spacing:.06em;text-align:center}
+.sub{margin-top:6px;font:8px 'JetBrains Mono',monospace;letter-spacing:.32em;color:#7a90a8;text-transform:uppercase}
+.loc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;width:100%;max-width:1100px;margin-top:24px}
 .loc-card{background:rgba(20,26,34,.82);border:1px solid rgba(122,144,168,.18);border-radius:12px;padding:30px 18px;text-align:center;backdrop-filter:blur(10px);box-shadow:0 12px 40px rgba(0,0,0,.4);cursor:pointer;transition:.2s}
-.loc-card:hover{border-color:#e6d5a0;transform:translateY(-2px);box-shadow:0 0 16px rgba(230,213,160,.2)}
+.loc-card:hover{border-color:#e6d5a0;transform:translateY(-2px)}
 .loc-card.soon{opacity:.45;cursor:default;border-style:dashed;background:rgba(20,26,34,.5);pointer-events:none}
 .loc-icon{font-size:36px;margin-bottom:12px}
 .loc-name{font:700 13px Inter,sans-serif;letter-spacing:.08em;color:#e6d5a0;text-transform:uppercase}
-.loc-name span{display:block;font:400 10px 'JetBrains Mono',monospace;color:#7a90a8;margin-top:4px;letter-spacing:.12em}
+.loc-name span{display:block;font:400 10px 'JetBrains Mono',monospace;color:#7a90a8;margin-top:4px}
 .loc-type{margin-top:10px;font:7px 'JetBrains Mono',monospace;color:#8ea0b0;letter-spacing:.2em;text-transform:uppercase}
 .loc-lvl{margin-top:10px;font:600 9px 'JetBrains Mono',monospace;color:#e6d5a0}
 .soon-badge{margin-top:12px;font:900 11px 'JetBrains Mono',monospace;letter-spacing:.25em;color:#5a6e80;border:1px solid #3a4a5a;border-radius:6px;padding:4px 8px;display:inline-block;background:rgba(0,0,0,.2)}
@@ -42,7 +44,7 @@ html,body{height:100%;background:url("./assets/heroes/bg-battlefield.webp") cent
 </style>
 </head>
 <body>
-<div class="bg"><img src="./assets/heroes/bg-battlefield.webp" onerror="this.style.display='none'"></div>
+<div class="bg"><img src="./assets/heroes/bg-battlefield.webp"></div>
 <div class="wrap">
 <nav class="left-nav">
 <div class="nav-group" onclick="location.href='./page3.html'"><div class="nav-item">👤</div><div class="nav-label">HERO</div></div>
@@ -51,50 +53,37 @@ html,body{height:100%;background:url("./assets/heroes/bg-battlefield.webp") cent
 <div class="nav-group active" onclick="location.href='./page6.html'"><div class="nav-item active">⚔️</div><div class="nav-label">BATTLE</div></div>
 </nav>
 <main class="center">
+<div class="title">BATTLEFIELD</div>
+<div class="sub">VOLAND • 3 ACTIVE + 3 SOON</div>
 <div class="loc-grid" id="locGrid"></div>
 </main>
 <aside class="right">
 <div class="chat-head"><div class="dot"></div><div class="chat-title">VOLAND • COMMS</div></div>
-<div class="chat-body" id="chatBody"><div class="sys-msg">SYS: 3 active top + 3 SOON bottom — без надписи BATTLEFIELD</div></div>
+<div class="chat-body" id="chatBody"><div class="sys-msg">SYS: Battlefield — LVL 1 / 5 / 10 fixed</div></div>
 <div class="chat-input"><input id="chatIn" placeholder="transmit..."><button id="sendBtn">›</button></div>
 </aside>
 </div>
 <script src="./assets/js/db.js"></script>
 <script src="./assets/js/storage.js"></script>
 <script>
-function getData(){
- let a=[], s=[];
+const LVLS=[1,5,10];
+function render(){
+ const g=document.getElementById('locGrid');
+ let a=[],s=[];
  try{
   if(window.VOLAND_LOCATIONS){
    a=VOLAND_LOCATIONS.filter(l=>l.active).slice(0,3);
    s=VOLAND_LOCATIONS.filter(l=>!l.active).slice(0,3);
   }
  }catch(e){}
- if(!a.length){
-  a=[
-   {id:1,name:'ПУСТЫНЯ',eng:'DESERT',icon:'🏜️',type:'Жара • Песок'},
-   {id:2,name:'ТЕМНЫЙ ЛЕС',eng:'DARK FOREST',icon:'🌲',type:'Тень • Яд'},
-   {id:3,name:'ЛЕДЯНЫЕ ЗЕМЛИ',eng:'FROSTLANDS',icon:'❄️',type:'Холод • Лед'}
-  ];
- }
- if(!s.length){
-  s=[
-   {id:4,name:'БОЛОТО',eng:'SWAMP',icon:'🐊'},
-   {id:5,name:'ВУЛКАН',eng:'VOLCANO',icon:'🌋'},
-   {id:6,name:'РУИНЫ',eng:'RUINS',icon:'🏛️'}
-  ];
- }
- return {a,s};
-}
-function render(){
- const grid=document.getElementById('locGrid');
- const {a,s}=getData();
- const top=a.map(l=>`<div class="loc-card" onclick="pickLoc('${l.id}')"><div class="loc-icon">${l.icon}</div><div class="loc-name">${l.name}<span>${l.eng}</span></div><div class="loc-type">${l.type}</div><div class="loc-lvl">LVL ${l.id} • ENTER</div></div>`).join('');
+ if(!a.length) a=[{id:1,name:'ПУСТЫНЯ',eng:'DESERT',icon:'🏜️',type:'Жара • Песок'},{id:2,name:'ТЕМНЫЙ ЛЕС',eng:'DARK FOREST',icon:'🌲',type:'Тень • Яд'},{id:3,name:'ЛЕДЯНЫЕ ЗЕМЛИ',eng:'FROSTLANDS',icon:'❄️',type:'Холод • Лед'}];
+ if(!s.length) s=[{id:4,name:'БОЛОТО',eng:'SWAMP',icon:'🐊'},{id:5,name:'ВУЛКАН',eng:'VOLCANO',icon:'🌋'},{id:6,name:'РУИНЫ',eng:'RUINS',icon:'🏛️'}];
+ const top=a.map((l,i)=>`<div class="loc-card" onclick="pickLoc('${l.id}')"><div class="loc-icon">${l.icon}</div><div class="loc-name">${l.name}<span>${l.eng}</span></div><div class="loc-type">${l.type}</div><div class="loc-lvl">LVL ${LVLS[i]} • ENTER</div></div>`).join('');
  const bottom=s.map(l=>`<div class="loc-card soon"><div class="loc-icon">${l.icon}</div><div class="loc-name">${l.name}<span>${l.eng}</span></div><div class="loc-type">SOON</div><div class="soon-badge">SOON</div></div>`).join('');
- grid.innerHTML=top+bottom;
+ g.innerHTML=top+bottom;
 }
 function pickLoc(id){try{localStorage.setItem('voland_location',id);}catch(e){}location.href='./page7.html';}
-function sendChat(){const inp=document.getElementById('chatIn'),body=document.getElementById('chatBody');const txt=inp.value.trim();if(!txt)return;const d=document.createElement('div');d.className='sys-msg';d.style.color='#c9d6e2';d.textContent='YOU: '+txt;body.appendChild(d);inp.value='';body.scrollTop=9999;}
+function sendChat(){const i=document.getElementById('chatIn'),b=document.getElementById('chatBody');if(!i.value.trim())return;const d=document.createElement('div');d.className='sys-msg';d.style.color='#c9d6e2';d.textContent='YOU: '+i.value;b.appendChild(d);i.value='';b.scrollTop=9999;}
 document.getElementById('sendBtn').onclick=sendChat;
 document.getElementById('chatIn').onkeydown=e=>{if(e.key==='Enter')sendChat();};
 render();
