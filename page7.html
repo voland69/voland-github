@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VOLAND - DESERT</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;background:url("./assets/heroes/bg-battlefield.webp") center/cover no-repeat fixed #0a0e14;color:#d8d2b8;font-family:Inter,Arial,sans-serif;overflow:hidden}
+.bg{position:fixed;inset:0;z-index:0}.bg img{width:100%;height:100%;object-fit:cover;display:block}
+.bg:after{content:"";position:absolute;inset:0;background:rgba(0,0,0,0)}
+.wrap{position:fixed;inset:0;display:flex;z-index:2}
+.left-nav{width:68px;min-width:68px;background:rgba(18,24,30,.35);border-right:1px solid rgba(30,42,50,.5);display:flex;flex-direction:column;align-items:center;padding:12px 6px;gap:18px;backdrop-filter:blur(2px)}
+.nav-group{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer}
+.nav-item{width:48px;height:48px;background:#1a252f;border:1px solid #2a3a4a;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;opacity:.6;transition:.2s}
+.nav-item.active{background:#1e2f3e;border-color:#e6d5a0;opacity:1;box-shadow:0 0 12px rgba(230,213,160,.2)}
+.nav-label{font-size:7px;letter-spacing:.12em;color:#6a7a8a;margin-top:4px;text-align:center;font-family:'JetBrains Mono',monospace}
+.nav-group.active .nav-label{color:#e6d5a0}
+.center{flex:1;padding:24px;overflow:auto;background:rgba(16,22,30,.08);backdrop-filter:blur(1px);display:flex;flex-direction:column;align-items:center}
+.top-row{width:100%;max-width:1100px;display:flex;justify-content:space-between;align-items:flex-start}
+.title{font:900 32px 'Cinzel Decorative',serif;color:#e6d5a0;letter-spacing:.06em}
+.title span{display:block;font:400 12px 'JetBrains Mono',monospace;color:#7a90a8;letter-spacing:.2em;margin-top:4px}
+.sub{margin-top:8px;font:7px 'JetBrains Mono',monospace;letter-spacing:.32em;color:#7a90a8}
+.back-btn{background:rgba(20,26,34,.6);border:1px solid #2a3a4a;border-radius:6px;padding:6px 12px;color:#7a90a8;font:8px 'JetBrains Mono',monospace;cursor:pointer}
+.meta{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap}
+.meta-item{font:7px 'JetBrains Mono',monospace;color:#5a6e80;border:1px solid rgba(122,144,168,.18);padding:5px 10px;border-radius:20px;background:rgba(20,26,34,.5)}
+.stages-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;width:100%;max-width:1100px;margin-top:28px}
+.stage-card{background:rgba(20,26,34,.82);border:1px solid rgba(122,144,168,.18);border-radius:12px;padding:22px 14px;text-align:center;backdrop-filter:blur(10px);box-shadow:0 12px 40px rgba(0,0,0,.4);cursor:pointer;transition:.2s}
+.stage-card:hover{border-color:#e6d5a0;transform:translateY(-2px)}
+.stage-card.active{border-color:#e6d5a0;box-shadow:0 0 16px rgba(230,213,160,.2)}
+.stage-card.boss{border-color:#e05050;background:rgba(40,20,24,.85)}
+.stage-num{font:7px 'JetBrains Mono',monospace;color:#5a6e80;letter-spacing:.2em}
+.stage-icon{font-size:42px;margin:12px 0}
+.stage-name{font:700 12px Inter,sans-serif;color:#e6d5a0;text-transform:uppercase}
+.stage-eng{font:9px 'JetBrains Mono',monospace;color:#7a90a8;margin-top:2px}
+.stage-desc{margin-top:10px;font:9px Inter,sans-serif;color:#8ea0b0;line-height:1.4;min-height:36px}
+.stage-lvl{margin-top:12px;font:700 8px 'JetBrains Mono',monospace;color:#e6d5a0}
+.hp-track{margin-top:10px;height:6px;background:#0a0e14;border-radius:3px;border:1px solid #1e2a32;overflow:hidden}
+.hp-fill{height:100%}
+.btn-start{margin-top:26px;padding:12px 24px;background:#e6d5a0;color:#0a0e14;border:none;border-radius:8px;font:700 11px 'JetBrains Mono',monospace;letter-spacing:.18em;cursor:pointer;box-shadow:0 6px 20px rgba(230,213,160,.18)}
+.right{width:200px;min-width:200px;background:rgba(14,20,26,.9);border-left:1px solid rgba(30,42,50,.6);display:flex;flex-direction:column;backdrop-filter:blur(6px)}
+.chat-head{height:44px;display:flex;align-items:center;gap:8px;padding:0 12px;border-bottom:1px solid rgba(30,42,50,.5)}
+.dot{width:6px;height:6px;border-radius:50%;background:#4ade80;box-shadow:0 0 8px #4ade80}
+.chat-title{font:7px 'JetBrains Mono',monospace;letter-spacing:.2em;color:#e6d5a0}
+.chat-body{flex:1;padding:12px;overflow:auto;display:flex;flex-direction:column;gap:8px}
+.sys-msg{font:10px 'JetBrains Mono',monospace;color:#5a6e80;background:rgba(122,144,168,.08);border-radius:6px;padding:8px;line-height:1.4}
+.chat-input{border-top:1px solid rgba(30,42,50,.5);display:flex;gap:6px;padding:8px;background:#12181e}
+.chat-input input{flex:1;background:rgba(20,26,34,.8);border:1px solid rgba(42,58,74,.6);border-radius:6px;padding:7px 8px;font:10px 'JetBrains Mono',monospace;color:#c9d6e2;outline:none}
+.chat-input button{background:#1e2f3e;border:1px solid #e6d5a0;border-radius:6px;padding:0 10px;font:10px 'JetBrains Mono',monospace;color:#e6d5a0;cursor:pointer}
+@media(max-width:900px){.stages-grid{grid-template-columns:1fr 1fr}.right{display:none}}
+</style>
+</head>
+<body>
+<div class="bg"><img src="./assets/heroes/bg-battlefield.webp"></div>
+<div class="wrap">
+<nav class="left-nav">
+<div class="nav-group" onclick="location.href='./page3.html'"><div class="nav-item">👤</div><div class="nav-label">HERO</div></div>
+<div class="nav-group" onclick="location.href='./page4.html'"><div class="nav-item">🎒</div><div class="nav-label">BAG</div></div>
+<div class="nav-group" onclick="location.href='./page5.html'"><div class="nav-item">📜</div><div class="nav-label">SKILLS</div></div>
+<div class="nav-group active"><div class="nav-item active">⚔️</div><div class="nav-label">BATTLE</div></div>
+</nav>
+<main class="center">
+<div class="top-row">
+<div>
+<div class="title">ПУСТЫНЯ<span>DESERT</span></div>
+<div class="sub">DESERT • 4 STAGES • LVL 1-7 • BOSS TITAN</div>
+<div class="meta"><div class="meta-item">LOCATION 01</div><div class="meta-item">voland_location = 1</div><div class="meta-item">sandstorm: on</div></div>
+</div>
+<div><button class="back-btn" onclick="location.href='./page6.html'">← BATTLEFIELD</button></div>
+</div>
+<div class="stages-grid" id="stages"></div>
+<button class="btn-start" id="startBtn">НАЧАТЬ БИТВУ / START BATTLE — STAGE 1</button>
+</main>
+<aside class="right">
+<div class="chat-head"><div class="dot"></div><div class="chat-title">VOLAND • COMMS</div></div>
+<div class="chat-body" id="chatBody"><div class="sys-msg">SYS: Desert loaded from db.js — 4 enemies — клик по стадии выбирает</div></div>
+<div class="chat-input"><input id="chatIn" placeholder="transmit..."><button id="sendBtn">›</button></div>
+</aside>
+</div>
+<script src="./assets/js/db.js"></script>
+<script src="./assets/js/storage.js"></script>
+<script>
+let curStage=1;
+function getEnemies(){
+ let list=[];
+ try{if(window.VOLAND_ENEMIES && VOLAND_ENEMIES[1]) list=VOLAND_ENEMIES[1];}catch(e){}
+ if(!list.length){
+  list=[
+   {stage:1,name:'ПЕСЧАНАЯ МЫШЬ',eng:'Sand Gerbil',icon:'🐭',desc:'Безобидный грызун, ворует крошки. Урон 10%',lvl:'LVL 1',hp:40,hpColor:'#3ad080'},
+   {stage:2,name:'ПУСТЫННЫЙ СКОРПИОН',eng:'Desert Scorpion',icon:'🦂',desc:'Ядовитое жало, стан 20% шанс. Урон 60%',lvl:'LVL 3',hp:65,hpColor:'#d0b040'},
+   {stage:3,name:'ДЕТЕНЫШ ЧЕРВЯ',eng:'Sandworm Cub',icon:'🐛',desc:'Глотает целиком, игнор 15% брони. Урон 140%',lvl:'LVL 5',hp:85,hpColor:'#e05050'},
+   {stage:4,name:'ТИТАН ДЮН',eng:'Dune Tyrant - BOSS',icon:'👹',desc:'Босс Пустыни: Песчаная буря + оглушение AOE. Урон 300%',lvl:'BOSS LVL 7',hp:100,hpColor:'#e6d5a0',boss:true}
+  ];
+ }
+ return list.map(e=>({id:e.stage,name:e.name,eng:e.eng,icon:e.icon,desc:e.desc,lvl:e.lvl.replace('LVL ',''),hp:e.hp,maxHp:100,hpColor:e.hpColor,boss:!!e.boss}));
+}
+function render(){
+ const grid=document.getElementById('stages');
+ const enemies=getEnemies();
+ grid.innerHTML=enemies.map(e=>`<div class="stage-card ${e.boss?'boss':''} ${curStage===e.id?'active':''}" onclick="selectStage(${e.id})"><div class="stage-num">STAGE ${e.id}${e.boss?' • BOSS':''}</div><div class="stage-icon">${e.icon}</div><div class="stage-name">${e.name}</div><div class="stage-eng">${e.eng}</div><div class="stage-desc">${e.desc}</div><div class="stage-lvl">LVL ${e.lvl} • HP ${e.hp}/${e.maxHp}</div><div class="hp-track"><div class="hp-fill" style="width:${e.hp}%;background:${e.hpColor}"></div></div></div>`).join('');
+ document.getElementById('startBtn').textContent=`НАЧАТЬ БИТВУ / START BATTLE — STAGE ${curStage}`;
+}
+function selectStage(id){
+ curStage=id;
+ try{localStorage.setItem('voland_stage',id);}catch(e){}
+ render();
+ log(`STAGE ${id} selected`);
+}
+function startBattle(){
+ try{localStorage.setItem('voland_location',1);localStorage.setItem('voland_stage',curStage);}catch(e){}
+ log(`START BATTLE Desert Stage ${curStage} → page8.html`);
+ location.href=`./page8.html?loc=1&stage=${curStage}`;
+}
+function log(t){const b=document.getElementById('chatBody');const d=document.createElement('div');d.className='sys-msg';d.style.color='#c9d6e2';d.textContent=t;b.appendChild(d);b.scrollTop=9999;}
+document.getElementById('startBtn').onclick=startBattle;
+document.getElementById('sendBtn').onclick=()=>{const i=document.getElementById('chatIn');if(!i.value.trim())return;log('YOU: '+i.value);i.value='';};
+document.getElementById('chatIn').onkeydown=e=>{if(e.key==='Enter')document.getElementById('sendBtn').click();};
+render();
+</script>
+</body>
+</html>
