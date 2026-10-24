@@ -1,4 +1,4 @@
-// VOLAND BATTLE SKILLS v2 - AMETHYST full kit + LION WARDEN
+// VOLAND BATTLE SKILLS v3 - AMETHYST + GRAVELORD + DARK RANGER + LION WARDEN
 function parseSkillMultiplier(desc){ const m = desc.match(/(\d+)% урона/); if (m) return parseInt(m[1]); return 0; }
 function parseManaCost(meta){ const m = meta.match(/Мана:\s*(\d+)/i); return m ? parseInt(m[1]) : 10; }
 function parseCooldown(meta){ const m = meta.match(/КД:\s*(\d+)/i); return m ? parseInt(m[1]) : 3; }
@@ -49,7 +49,6 @@ function applySkillEffect(sName, battle){
   addBattleLog('🌌 Аметистовый Закат: 5 душ по 200% (до 1000%) + стан', 'crit');
  }
 
-
  // GRAVELORD
  if (sName.includes('Костяное Копье')){
   battle.enemy.boneVulnTurns = 2;
@@ -70,8 +69,37 @@ function applySkillEffect(sName, battle){
   battle.hero.armyCount = 5;
   addBattleLog('💀 Армия Погибели: 5 скелетов 3 раунда по 50% урона', 'crit');
  }
+
+ // DARK RANGER
+ if (sName.includes('Беглый выстрел')){
+  if(battle.enemy.shadowMarkTurns>0){
+    addBattleLog('🏹 Беглый выстрел +100% метка', 'crit');
+  }
+ }
+ if (sName.includes('Шаг в Ничто')){
+  battle.hero.invisTurns = 3;
+  battle.hero.invisCrit = true;
+  addBattleLog('🌑 Шаг в Ничто: инвиз 3 раунда + гарант крит', 'crit');
+ }
+ if (sName.includes('Призрачная Стрела')){
+  if(Math.random()<0.33){
+    battle.enemy.stunned=1;
+    addBattleLog('💫 Призрачная Стрела: стан 1 раунд!', 'crit');
+  }
+ }
+ if (sName.includes('Залп Бездны')){
+  addBattleLog('🌌 Залп Бездны: 7 стрел по 100% (700% в одну)', 'crit');
+ }
+ // пассивка Метка Тени - каждая 4-я атака на 2 раунда +100%
+ if (battle.hero.attackCounter!==undefined){
+   battle.hero.attackCounter++;
+   if(battle.hero.attackCounter%4==0){
+     battle.enemy.shadowMarkTurns=2;
+     addBattleLog('👁️ Метка Тени: +100% урона 2 раунда', 'crit');
+   }
+ }
  // пассивка Легион
- if (battle.hero.legionCount < 3){
+ if (battle.hero.legionCount!==undefined && battle.hero.legionCount < 3){
   battle.hero.legionCount = (battle.hero.legionCount||0)+1;
   addBattleLog('🦴 Легион: скелет '+(battle.hero.legionCount)+'/3', 'crit');
  }
