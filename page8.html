@@ -113,9 +113,9 @@ document.getElementById('heroName').textContent=profileName.toUpperCase();
 document.getElementById('heroRole').textContent=heroData.n;
 
 // РЕАЛЬНЫЕ БОЕВЫЕ СТАТЫ - РУКАМИ, как ты решил, hp из db.js = % для бара, тут реальные цифры
-const eDef = stage==4 ? 200 : stage==3 ? 30 : stage==2 ? 20 : 10;
-const eDmg = stage==4 ? 230 : stage==3 ? 200 : stage==2 ? 100 : 50;
-const eMaxHp = stage==4 ? 2400 : stage==3 ? 1500 : stage==2 ? 1000 : 400;
+const eDef = stage==4 ? 200 : stage==3 ? 150 : stage==2 ? 100 : 50;
+const eDmg = stage==4 ? 250 : stage==3 ? 200 : stage==2 ? 100 : 50;
+const eMaxHp = stage==4 ? 2400 : stage==3 ? 1500 : stage==2 ? 1000 : 500;
 
 let eHp=eMaxHp, hHp=cur.HP, hMax=cur.HP, hMana=cur.MANA, hMaxMana=cur.MANA;
 let turn=1, enemyStun=0, cooldowns=[0,0,0,0,0], isBattleOver=false;
