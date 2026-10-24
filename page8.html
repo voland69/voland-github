@@ -95,7 +95,7 @@ let enemies=VOLAND_ENEMIES[loc]||VOLAND_ENEMIES[1]; let enemyData=enemies.find(e
 document.getElementById('locTitle').textContent=locData.name; document.getElementById('stageTitle').textContent=`STAGE ${stage} • ${enemyData.name}`;
 document.getElementById('enemyIcon').textContent=enemyData.icon; document.getElementById('enemyName').textContent=enemyData.name; document.getElementById('enemyEng').textContent=enemyData.eng; document.getElementById('enemyDesc').textContent=enemyData.desc;
 document.getElementById('heroIcon').innerHTML=`<img src="${heroData.img}" onerror="this.parentNode.textContent='🦁'">`; document.getElementById('heroName').textContent=profileName.toUpperCase(); document.getElementById('heroRole').textContent=heroData.n;
-const eDef=10*stage+(loc-1)*5; const eDmg=30+20*stage+(loc-1)*10; const eMaxHp=400+stage*100+(loc-1)*150;
+const eDef=30*stage+(loc-1)*5; const eDmg=30+50*stage+(loc-1)*10; const eMaxHp=500+stage*500+(loc-1)*150;
 let eHp=eMaxHp; let hHp=cur.HP; let hMax=cur.HP; let hMana=cur.MANA; let hMaxMana=cur.MANA; let turn=1; let enemyStun=0; let cooldowns=[0,0,0,0,0]; let isBattleOver=false;
 function parseSkill(sk){ const full=(sk[4]||'')+' '+(sk[5]||''); const manaMatch=full.match(/Мана:\s*(\d+)/i); const cdMatch=full.match(/КД:\s*(\d+)/i); const dmgMatches=[...full.matchAll(/(\d+)%\s*урона/gi)]; let maxDmg=0; dmgMatches.forEach(m=>{let v=parseInt(m[1]); if(v>maxDmg) maxDmg=v;}); return {name:sk[0],num:sk[1],icons:sk[2]||[],emoji:sk[3]||'⚔️',desc:sk[4]||'',short:sk[5]||'',mana:manaMatch?parseInt(manaMatch[1]):0,cd:cdMatch?parseInt(cdMatch[1]):0,dmgPct:maxDmg||0,hasStun:/стан|оглуш/i.test(full)}; }
 const allSkills=heroData.sk.map(parseSkill); const passive=allSkills[0]; const activeSkills=allSkills.slice(1);
