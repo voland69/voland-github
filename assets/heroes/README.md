@@ -1,6 +1,6 @@
 # Heroes assets
 
-Place 8 webp images here (optional, fallback to emoji):
+Place 8 webp images here
 
 - archer-m.webp — DARK RANGER
 - warrior-m.webp — LION WARDEN
