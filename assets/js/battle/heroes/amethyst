@@ -1,0 +1,30 @@
+// AMETHYST - Necro Female
+function applyAmethystSkills(sName, battle){
+ if (sName.includes('Проклятие Душ')){
+  battle.enemy.dmgDebuff = 0.15;
+  battle.enemy.dmgDebuffTurns = 4;
+  battle.hero.mana += 5;
+  addBattleLog('💜 Проклятие Душ: -15% урона врага 4 хода +5 маны', 'crit');
+ }
+ if (sName.includes('Аметистовая Тюрьма')){
+  battle.enemy.stunned = 1;
+  battle.enemy.prisonTurns = 1;
+  battle.enemy.prisonMult = 3.0;
+  addBattleLog('👻 Тюрьма: клетка 1 раунд + взрыв 300% в конце раунда', 'crit');
+ }
+ if (sName.includes('Похищение Жизни')){
+  battle.hero.linkTurns = 4;
+  battle.hero.linkReflect = 0.3;
+  battle.hero.linkHeal = 0.3;
+  addBattleLog('💀 Похищение Жизни: линк 4 раунда — 30% отраж + 30% хил', 'crit');
+ }
+ if (sName.includes('Аметистовый Закат')){
+  battle.enemy.stunned = 1;
+  addBattleLog('🌌 Аметистовый Закат: 5 душ по 200% (до 1000%) + стан', 'crit');
+ }
+ // пассивка
+ if (battle.hero.spellCount && battle.hero.spellCount % 3 === 0){
+  battle.hero.spiritTurns = 3;
+  addBattleLog('🔮 Шепот Аметиста: дух 3 раунда 100% урона +5 маны/раунд', 'crit');
+ }
+}
