@@ -135,6 +135,12 @@ let bomber2=0; // 300% во 2 раунде
 let armyTurns=0; // Армия Погибели 3 раунда
 let armyCount=0;
 
+// DARK RANGER
+let shadowMarkTurns=0; // Метка Тени 3 раунда +200%
+let attackCounter=0; // каждая 2-я атака = метка
+let invisTurns=0; // Шаг в Ничто 3 раунда
+let invisCrit=false; // след атака в инвизе гарант крит
+
 function tryNav(url){
  if(!isBattleOver){ addLog('⛔ Нельзя выйти из боя! Закончи бой — победа или поражение','lose'); return; }
  location.href=url;
@@ -171,8 +177,10 @@ function updBars(){
  if(boneShield>0) stat+=' • 🛡️ЩИТ '+boneShield;
  if(bomber1>0||bomber2>0) stat+=' • 💣БОМБЕРЫ '+ (bomber1>0?1:0)+(bomber2>0?1:0);
  if(armyTurns>0) stat+=' • 💀АРМИЯ '+armyCount+'x'+armyTurns;
+ if(shadowMarkTurns>0) stat+=' • 👁️МЕТКА '+shadowMarkTurns;
+ if(invisTurns>0) stat+=' • 🌑ИНВИЗ '+invisTurns;
  document.getElementById('enemyStatBar').textContent=stat;
- document.getElementById('turnInfo').textContent='ХОД '+turn+' • '+(isBattleOver?'КОНЕЦ':'ТВОЙ ХОД')+' • MANA '+hMana+(linkTurns>0?' • 💀ЛИНК':'')+(fearTurns>0?' • 💜-15%':'')+(spiritTurns>0?' • 🔮ДУХ':'')+(legionCount>0?' • 🦴'+legionCount:'')+(boneShield>0?' • 🛡️':'')+(armyTurns>0?' • 💀АРМИЯ':'');
+ document.getElementById('turnInfo').textContent='ХОД '+turn+' • '+(isBattleOver?'КОНЕЦ':'ТВОЙ ХОД')+' • MANA '+hMana+(linkTurns>0?' • 💀ЛИНК':'')+(fearTurns>0?' • 💜-15%':'')+(spiritTurns>0?' • 🔮ДУХ':'')+(legionCount>0?' • 🦴'+legionCount:'')+(boneShield>0?' • 🛡️':'')+(armyTurns>0?' • 💀АРМИЯ':'')+(shadowMarkTurns>0?' • 👁️МЕТКА':'')+(invisTurns>0?' • 🌑ИНВИЗ':'');
 }
 const logZone=document.getElementById('logZone');
 function addLog(t,c=''){ const d=document.createElement('div'); d.className='log-line '+c; d.textContent=t; logZone.appendChild(d); logZone.scrollTop=9999; }
@@ -196,13 +204,23 @@ function renderSkillBar(){
 async function useAction(idx){
  if(isBattleOver) return; if(cooldowns[idx]>0) return;
  let dmg=0, isCrit=false, mult=1;
+ // инвиз крит
+ let forceCrit = invisTurns>0 && invisCrit;
+
  if(idx===0){
-  isCrit=Math.random()*100<cur.CRIT;
+  isCrit = forceCrit || (Math.random()*100<cur.CRIT);
   let base=Math.max(10, cur.DMG - eDef + rand(-12,12));
   if(isCrit) base=Math.floor(base*1.5);
+  // метка тени +100%
+  if(shadowMarkTurns>0){
+    let extra=Math.floor(cur.DMG*1.0);
+    base+=extra;
+    addLog('👁️ Метка Тени: +'+extra+' [100%] к атаке','skill');
+  }
   dmg=base;
-  addLog('⚔️ Ты бьешь '+enemyData.name+' [АТАКА] на '+dmg+(isCrit?' CRIT!':''), 'hit');
+  addLog('⚔️ Ты бьешь '+enemyData.name+' [АТАКА] на '+dmg+(isCrit?' CRIT!':'')+(shadowMarkTurns>0?' +МЕТКА':''), 'hit');
   cooldowns[0]=1;
+  if(invisTurns>0 && invisCrit){ invisTurns=0; invisCrit=false; addLog('🌑 Инвиз снят после атаки','hit'); }
  }else{
   const sk=activeSkills[idx-1];
   if(hMana<sk.mana){ addLog('⛔ Не хватает маны! Нужно '+sk.mana,'lose'); return; }
@@ -225,7 +243,6 @@ async function useAction(idx){
     prisonMult=3.0;
     dmg=0;
     addLog('👻 '+sk.name+' [300%] → клетка на 1 раунд! '+enemyData.name+' оглушен, взрыв 300% в конце раунда','skill');
-    addLog('💫 '+enemyData.name+' в аметистовой клетке!','skill');
   }else if(sk.name.includes('Похищение')){
     linkTurns=4;
     dmg=0;
@@ -266,23 +283,89 @@ async function useAction(idx){
     armyCount=5;
     dmg=0;
     addLog('💀 '+sk.name+' [ULT] → 5 скелетов на 3 раунда, каждый 50% урона!','skill');
-  }else{
-    mult=getMult(sk,idx-1);
+  // --- DARK RANGER ---
+  }else if(sk.name.includes('Беглый выстрел')){
+    mult=2.0;
+    if(shadowMarkTurns>0) mult+=1.0; // +100% если метка
+    isCrit = forceCrit || (Math.random()*100<cur.CRIT);
     let base=Math.floor(cur.DMG*mult);
     base=Math.max(15, base - eDef + rand(-10,10));
-    isCrit=Math.random()*100<cur.CRIT; if(isCrit) base=Math.floor(base*1.4);
+    if(isCrit) base=Math.floor(base*1.5);
+    dmg=base;
+    addLog('🏹 '+sk.name+' ['+Math.round(mult*100)+'%] → '+enemyData.name+' на '+dmg+(isCrit?' CRIT!':'')+(shadowMarkTurns>0?' +МЕТКА +100%':'')+(forceCrit?' +ИНВИЗ ГАРАНТ':'') ,'skill');
+    if(invisTurns>0 && invisCrit){ invisTurns=0; invisCrit=false; addLog('🌑 Инвиз снят после атаки','hit'); }
+  }else if(sk.name.includes('Шаг в Ничто')){
+    invisTurns=3;
+    invisCrit=true;
+    dmg=0;
+    addLog('🌑 '+sk.name+' → инвиз 3 раунда! След атака гарант крит','skill');
+  }else if(sk.name.includes('Призрачная Стрела')){
+    mult=1.4;
+    if(shadowMarkTurns>0) mult+=1.0;
+    isCrit = forceCrit || (Math.random()*100<cur.CRIT);
+    let base=Math.floor(cur.DMG*mult);
+    base=Math.max(15, base - eDef + rand(-10,10));
+    if(isCrit) base=Math.floor(base*1.5);
+    dmg=base;
+    let stunChance = 0.33;
+    if(Math.random()<stunChance){ enemyStun=1; addLog('💫 '+enemyData.name+' оглушен Призрачной Стрелой!','skill'); }
+    addLog('💫 '+sk.name+' ['+Math.round(mult*100)+'%] → '+enemyData.name+' на '+dmg+(shadowMarkTurns>0?' +МЕТКА':'')+(isCrit?' CRIT!':'')+' [стан 33%]','skill');
+    if(invisTurns>0 && invisCrit){ invisTurns=0; invisCrit=false; addLog('🌑 Инвиз снят после атаки','hit'); }
+  }else if(sk.name.includes('Залп Бездны')){
+    // 7 стрел по 100%
+    let total=0;
+    let arrows=7;
+    let curMult = 1.0 + (shadowMarkTurns>0 ? 1.0 : 0); // +100% если метка -> 200% per arrow if marked
+    // Actually per design: each 100%, if marked +200% => 300% per arrow
+    for(let i=0;i<arrows;i++){
+      let b=Math.floor(cur.DMG*curMult);
+      b=Math.max(10, b - eDef + rand(-8,8));
+      let c = forceCrit || (Math.random()*100<cur.CRIT);
+      if(c) b=Math.floor(b*1.5);
+      total+=b;
+      addLog('🌌 Стрела '+(i+1)+'/7 → '+enemyData.name+' на '+b+(c?' CRIT!':''),'skill');
+      await new Promise(r=>setTimeout(r,90));
+    }
+    dmg=total;
+    addLog('🌌 '+sk.name+' ['+Math.round(curMult*100*arrows)+'% в одну цель] → всего '+dmg+(shadowMarkTurns>0?' +МЕТКА +100%':'')+(forceCrit?' +ИНВИЗ':'') ,'skill');
+    if(invisTurns>0 && invisCrit){ invisTurns=0; invisCrit=false; addLog('🌑 Инвиз снят после ульты','hit'); }
+  }else{
+    mult=getMult(sk,idx-1);
+    if(shadowMarkTurns>0 && heroData.n.includes('DARK RANGER')) mult+=1.0;
+    isCrit = forceCrit || (Math.random()*100<cur.CRIT);
+    let base=Math.floor(cur.DMG*mult);
+    base=Math.max(15, base - eDef + rand(-10,10));
+    if(isCrit) base=Math.floor(base*1.5);
     dmg=base;
     addLog('✨ '+sk.name+' ['+Math.round(mult*100)+'%] → '+enemyData.name+' на '+dmg+(isCrit?' CRIT!':'')+(sk.hasStun?' + STUN':''),'skill');
     if(sk.hasStun){ enemyStun=1; addLog('💫 '+enemyData.name+' оглушен!','skill'); }
+    if(invisTurns>0 && invisCrit){ invisTurns=0; invisCrit=false; addLog('🌑 Инвиз снят','hit'); }
   }
 
+  // пассивки
   if(spellCount%3==0 && heroData.n.includes('AMETHYST')){
     spiritTurns=3;
     addLog('🔮 Пассивка Шепот Аметиста: призван дух на 3 раунда! 100% урона +5 маны/раунд','skill');
   }
  }
+
+ // DARK RANGER passive - каждая 4-я атака = метка 2 раунда +100%
+ if(heroData.n.includes('DARK RANGER')){
+   attackCounter++;
+   if(attackCounter%4==0){
+     shadowMarkTurns=2;
+     addLog('👁️ Пассивка Метка Тени: наложена на 2 раунда! +100% урона стрел','skill');
+   }
+ }
+
  eHp=Math.max(0,eHp-dmg); updBars(); renderSkillBar();
- if(eHp<=0){ addLog('✅ ПОБЕДА! '+enemyData.name+' повержен!','win'); showVictory(); return; }
+ if(eHp<=0){ 
+   if(shadowMarkTurns>0 && heroData.n.includes('DARK RANGER')){
+     hMana=Math.min(hMaxMana, hMana+15);
+     addLog('👁️ Метка Тени: убийство отмеченной цели +15 маны','skill');
+   }
+   addLog('✅ ПОБЕДА! '+enemyData.name+' повержен!','win'); showVictory(); return; 
+ }
  await new Promise(r=>setTimeout(r,500));
 
  // --- ход врага ---
@@ -290,9 +373,11 @@ async function useAction(idx){
  else{
   let effDmg = fearTurns>0 ? Math.floor(eDmg*0.85) : eDmg;
   let dmgToHero=Math.max(5, effDmg - Math.floor(cur.DEF/2) + rand(-8,8));
-  if(Math.random()*100<cur.DODGE){ addLog('💨 Ты увернулся от '+enemyData.name+'!','hit'); }
+  // инвиз DARK RANGER = 100% уворот
+  if(invisTurns>0 && heroData.n.includes('DARK RANGER')){
+    addLog('🌑 Ты в инвизе — '+enemyData.name+' не видит тебя!','hit');
+  }else if(Math.random()*100<cur.DODGE){ addLog('💨 Ты увернулся от '+enemyData.name+'!','hit'); }
   else{
-   // щит Граве
    if(boneShield>0){
      if(dmgToHero <= boneShield){
        boneShield-=dmgToHero;
@@ -302,7 +387,6 @@ async function useAction(idx){
        let overflow=dmgToHero-boneShield;
        addLog('🛡️ Костяной Щит разрушен! Поглотил '+boneShield,'skill');
        boneShield=0;
-       // взрыв щита 300%
        let expBase=Math.floor(cur.DMG*3.0);
        let expDmg=Math.max(15, expBase - eDef + rand(-10,10));
        eHp=Math.max(0,eHp-expDmg);
@@ -352,15 +436,12 @@ async function useAction(idx){
  }
 
  // --- GRAVELORD саммоны ---
- // пассивный легион каждый раунд призывает
  if(heroData.n.includes('GRAVELORD')){
    if(legionCount<3){
      legionCount++;
      addLog('🦴 Легион: призван скелет '+legionCount+'/3 [50% урона]','skill');
    }
  }
-
- // урон легиона + армии
  if(legionCount>0 || armyCount>0){
    let vulnMult = boneVulnTurns>0 ? 1.25 : 1.0;
    let totalSummonDmg=0;
@@ -385,10 +466,7 @@ async function useAction(idx){
      if(eHp<=0){ addLog('✅ ПОБЕДА! Скелеты добили '+enemyData.name+'!','win'); showVictory(); return; }
    }
  }
-
- // бомберы
  if(bomber1>0){
-  // взрывается в конце этого раунда
   let bMult=2.0*(boneVulnTurns>0?1.25:1.0);
   let bDmg=Math.max(15, Math.floor(cur.DMG*bMult) - eDef + rand(-10,10));
   eHp=Math.max(0,eHp-bDmg);
@@ -418,6 +496,8 @@ async function useAction(idx){
  if(spiritTurns>0){ spiritTurns--; if(spiritTurns==0) addLog('🔮 Дух исчез','hit'); }
  if(boneVulnTurns>0){ boneVulnTurns--; if(boneVulnTurns==0) addLog('☠️ Уязвимость Костей закончилась','hit'); }
  if(armyTurns>0){ armyTurns--; if(armyTurns==0){ armyCount=0; addLog('💀 Армия Погибели исчезла','hit'); } }
+ if(shadowMarkTurns>0){ shadowMarkTurns--; if(shadowMarkTurns==0) addLog('👁️ Метка Тени закончилась','hit'); }
+ if(invisTurns>0){ invisTurns--; if(invisTurns==0){ invisCrit=false; addLog('🌑 Инвиз закончился','hit'); } }
  hMana=Math.min(hMaxMana,hMana+8); updBars(); renderSkillBar();
  if(hHp<=0){ addLog('❌ ПОРАЖЕНИЕ!','lose'); showDefeat(); } else { addLog('--- Ход '+turn+': твой ход ---',''); }
 }
