@@ -49,7 +49,34 @@ function applySkillEffect(sName, battle){
   addBattleLog('🌌 Аметистовый Закат: 5 душ по 200% (до 1000%) + стан', 'crit');
  }
 
- // Пассивка
+
+ // GRAVELORD
+ if (sName.includes('Костяное Копье')){
+  battle.enemy.boneVulnTurns = 2;
+  battle.enemy.boneVulnMult = 0.25;
+  addBattleLog('🦴 Костяное Копье: +25% урон саммонов 2 хода', 'crit');
+ }
+ if (sName.includes('Костяной Щит')){
+  battle.hero.boneShield = Math.floor(battle.hero.maxHp*0.2);
+  addBattleLog('🛡️ Костяной Щит: щит 20% HP + взрыв 300% при разрушении', 'crit');
+ }
+ if (sName.includes('Поднять Мертвых')){
+  battle.hero.bomber1 = 1;
+  battle.hero.bomber2 = 2;
+  addBattleLog('💣 Поднять Мертвых: 2 бомбера 200% и 300%', 'crit');
+ }
+ if (sName.includes('Армия Погибели') || sName.includes('Могильный Пакт')){
+  battle.hero.armyTurns = 3;
+  battle.hero.armyCount = 5;
+  addBattleLog('💀 Армия Погибели: 5 скелетов 3 раунда по 50% урона', 'crit');
+ }
+ // пассивка Легион
+ if (battle.hero.legionCount < 3){
+  battle.hero.legionCount = (battle.hero.legionCount||0)+1;
+  addBattleLog('🦴 Легион: скелет '+(battle.hero.legionCount)+'/3', 'crit');
+ }
+
+ // Пассивка AMETHYST
  if (battle.hero.spellCount && battle.hero.spellCount % 3 === 0){
   battle.hero.spiritTurns = 3;
   addBattleLog('🔮 Шепот Аметиста: дух 3 раунда 100% урона +5 маны/раунд', 'crit');
