@@ -10,7 +10,6 @@
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%;background:url("./assets/heroes/bg-battlefield.webp") center/cover no-repeat fixed #0a0e14;color:#d8d2b8;font-family:Inter,Arial,sans-serif;overflow:hidden}
 .bg{position:fixed;inset:0;z-index:0}.bg img{width:100%;height:100%;object-fit:cover;display:block}
-.bg:after{content:"";position:absolute;inset:0;background:rgba(0,0,0,0)}
 .wrap{position:fixed;inset:0;display:flex;z-index:2}
 .left-nav{width:68px;min-width:68px;background:rgba(18,24,30,.35);border-right:1px solid rgba(30,42,50,.5);display:flex;flex-direction:column;align-items:center;padding:12px 6px;gap:18px;backdrop-filter:blur(2px)}
 .nav-group{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer}
@@ -50,7 +49,7 @@ html,body{height:100%;background:url("./assets/heroes/bg-battlefield.webp") cent
 <div class="nav-group" onclick="location.href='./page3.html'"><div class="nav-item">👤</div><div class="nav-label">HERO</div></div>
 <div class="nav-group" onclick="location.href='./page4.html'"><div class="nav-item">🎒</div><div class="nav-label">BAG</div></div>
 <div class="nav-group" onclick="location.href='./page5.html'"><div class="nav-item">📜</div><div class="nav-label">SKILLS</div></div>
-<div class="nav-group active" onclick="location.href='./page6.html'"><div class="nav-item active">⚔️</div><div class="nav-label">BATTLE</div></div>
+<div class="nav-group active"><div class="nav-item active">⚔️</div><div class="nav-label">BATTLE</div></div>
 </nav>
 <main class="center">
 <div class="title">BATTLEFIELD</div>
@@ -82,7 +81,7 @@ function render(){
  const bottom=s.map(l=>`<div class="loc-card soon"><div class="loc-icon">${l.icon}</div><div class="loc-name">${l.name}<span>${l.eng}</span></div><div class="loc-type">SOON</div><div class="soon-badge">SOON</div></div>`).join('');
  g.innerHTML=top+bottom;
 }
-function pickLoc(id){try{localStorage.setItem('voland_location',id);}catch(e){}location.href='./page7.html';}
+function pickLoc(id){try{localStorage.setItem('voland_location',id);}catch(e){}location.href='./page7.html?loc='+id;}
 function sendChat(){const i=document.getElementById('chatIn'),b=document.getElementById('chatBody');if(!i.value.trim())return;const d=document.createElement('div');d.className='sys-msg';d.style.color='#c9d6e2';d.textContent='YOU: '+i.value;b.appendChild(d);i.value='';b.scrollTop=9999;}
 document.getElementById('sendBtn').onclick=sendChat;
 document.getElementById('chatIn').onkeydown=e=>{if(e.key==='Enter')sendChat();};
