@@ -4,14 +4,14 @@
 Open source browser RPG.
 
 ## Pages
-- `index.html` - Entry / 3 profiles
+- `index.html` - Entry 
 - `page2.html` - Hero select (8 heroes)
 - `page3.html` - Hero stats (BASE + gear from page4)
 - `page4.html` - Inventory / Bag (11 slots, equip system)
 - `page5.html` - Skills (5 skills per hero)
-- `page6.html` - Battlefield arena list
-- `page6_1.html` - DESERT location - 4 mobs, boss TITAN DUN (PARRY 15%, Avatar buffs)
-- `page6_2.html` - Second location
+- `page6.html` - Battlefield 
+- `page7.html` - DESERT location - 4 mobs, boss TITAN DUN 
+- `page8.html` - Battle page with log 
 
 ## Mechanics v1.1
 - Tanks `LION WARDEN` & `IRON VOW`: PARRY 12% (was DODGE), DODGE 0%
