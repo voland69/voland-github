@@ -1,0 +1,22 @@
+// LION WARDEN - Warrior Male
+function applyLionWardenSkills(sName, battle){
+ if (sName.includes('Удар Льва')){
+  battle.enemy.stunned = 1;
+  addBattleLog('💫 ' + battle.enemy.name + ' оглушен Ударом Льва на 1 раунд!', 'crit');
+ }
+ if (sName.includes('Имперский Бастион') || sName.includes('Бастион')){
+  battle.hero.block = 0.5;
+  battle.hero.blockTurns = 3;
+  battle.hero.reflect = 0.25;
+  battle.hero.reflectTurns = 3;
+  addBattleLog('🛡 Имперский Бастион: блок 50% 3 раунда + отражение 25%!', 'crit');
+ }
+ if (sName.includes('Аватар Империи')){
+  const hpAdd = Math.floor(battle.hero.baseMaxHp * 0.5);
+  battle.hero.hpBuff = hpAdd;
+  battle.hero.maxHp = battle.hero.baseMaxHp + hpAdd;
+  battle.hero.hp += hpAdd;
+  battle.hero.hpBuffTurns = 3;
+  addBattleLog('👑 Аватар Империи: +50% HP на 3 раунда!', 'crit');
+ }
+}
