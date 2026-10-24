@@ -145,7 +145,7 @@ const VOLAND_ENEMIES = {
    {stage:1, name:'ПЕСЧАНАЯ МЫШЬ', eng:'Sand Gerbil', icon:'🐭', desc:'Безобидный грызун, ворует крошки.', lvl:'LVL 1', hp:500, hpColor:'#3ad080'},
    {stage:2, name:'ПУСТЫННЫЙ СКОРПИОН', eng:'Desert Scorpion', icon:'🦂', desc:'Ядовитое жало, стан 20% шанс. Урон 60%', lvl:'LVL 3', hp:65, hpColor:'#d0b040'},
    {stage:3, name:'ДЕТЕНЫШ ЧЕРВЯ', eng:'Sandworm Cub', icon:'🐛', desc:'Глотает целиком, игнор 15% брони. Урон 140%', lvl:'LVL 5', hp:85, hpColor:'#e05050'},
-   {stage:4, name:'ТИТАН ДЮН', eng:'Dune Tyrant - BOSS', icon:'👹', desc:'Босс Пустыни: Песчаная буря + оглушение AOE. Урон 300%', lvl:'BOSS LVL 7', hp:100, hpColor:'#e6d5a0', boss:true},
+   {stage:4, name:'ТИТАН ДЮН', eng:'Dune Tyrant - BOSS', icon:'👹', desc:'Босс Пустыни: Песчаная буря + оглушение AOE. Урон 300%', lvl:'BOSS LVL 7', hp:3000, hpColor:'#e6d5a0', boss:true},
  ],
 2: [
    {stage:1, name:'ЛЕСНОЙ ЗАЯЦ', eng:'Forest Hare', icon:'🐰', desc:'Быстрый, уворот +10%. Почти не бьет', lvl:'LVL 2', hp:45, hpColor:'#3ad080'},
