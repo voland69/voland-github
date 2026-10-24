@@ -8,99 +8,96 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%;background:url("./assets/heroes/bg-battlefield.webp") center/cover no-repeat fixed #0a0e14;color:#d8d2b8;font-family:Inter,Arial,sans-serif;overflow:hidden}
-.bg{position:fixed;inset:0;z-index:0}.bg img{width:100%;height:100%;object-fit:cover}
+html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,sans-serif;overflow:hidden}
+.bg{position:fixed;inset:0;z-index:0}.bg img{width:100%;height:100%;object-fit:cover;opacity:.9}.bg:after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.45)}
 .wrap{position:fixed;inset:0;display:flex;z-index:2}
 .left-nav{width:68px;min-width:68px;background:rgba(18,24,30,.35);border-right:1px solid rgba(30,42,50,.5);display:flex;flex-direction:column;align-items:center;padding:12px 6px;gap:18px;backdrop-filter:blur(2px)}
-.nav-group{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer}
-.nav-item{width:48px;height:48px;background:#1a252f;border:1px solid #2a3a4a;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;opacity:.6;transition:.2s}
+.nav-item{width:48px;height:48px;background:#1a252f;border:1px solid #2a3a4a;border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0.6;transition:.2s;font-size:20px}
 .nav-item.active{background:#1e2f3e;border-color:#e6d5a0;opacity:1;box-shadow:0 0 12px rgba(230,213,160,.2)}
-.nav-label{font-size:7px;letter-spacing:.12em;color:#6a7a8a;margin-top:4px;text-align:center;font-family:'JetBrains Mono',monospace}
-.center{flex:1;padding:24px;overflow:auto;background:rgba(16,22,30,.08);backdrop-filter:blur(1px);display:flex;flex-direction:column;align-items:center}
-.top-row{width:100%;max-width:1100px;display:flex;justify-content:space-between;align-items:flex-start}
-.title{font:900 32px 'Cinzel Decorative',serif;color:#e6d5a0}
-.title span{display:block;font:400 12px 'JetBrains Mono',monospace;color:#7a90a8;letter-spacing:.2em;margin-top:4px}
-.sub{margin-top:8px;font:7px 'JetBrains Mono',monospace;letter-spacing:.32em;color:#7a90a8}
-.back-btn{background:rgba(20,26,34,.6);border:1px solid #2a3a4a;border-radius:6px;padding:6px 12px;color:#7a90a8;font:8px 'JetBrains Mono',monospace;cursor:pointer}
-.stages-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;width:100%;max-width:1100px;margin-top:28px}
-.stage-card{background:rgba(20,26,34,.82);border:1px solid rgba(122,144,168,.18);border-radius:12px;padding:20px 14px;text-align:center;backdrop-filter:blur(10px);box-shadow:0 12px 40px rgba(0,0,0,.4);cursor:pointer;transition:.2s}
-.stage-card:hover{border-color:#e6d5a0;transform:translateY(-2px)}
-.stage-card.active{border-color:#e6d5a0;box-shadow:0 0 16px rgba(230,213,160,.2)}
-.stage-card.boss{border-color:#e05050;background:rgba(40,20,24,.85)}
-.stage-num{font:7px 'JetBrains Mono',monospace;color:#5a6e80;letter-spacing:.2em}
-.stage-icon{font-size:40px;margin:10px 0}
+.nav-label{font-size:7px;letter-spacing:.15em;color:#6a7a8a;margin-top:4px;text-align:center;font-family:'JetBrains Mono',monospace}
+.center{flex:1;display:flex;flex-direction:column;padding:28px 32px;overflow:auto;background:rgba(16,22,30,.18);backdrop-filter:blur(2px)}
+.title{font-family:'Cinzel Decorative',serif;font-size:34px;font-weight:900;letter-spacing:.15em;color:#e6d5a0;line-height:1}
+.title span{display:block;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.35em;color:#7a90a8;margin-top:8px}
+.sub{margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.2em;color:#5a6e80;text-transform:uppercase}
+.stages-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;max-width:1100px;margin-top:28px}
+.stage-card{position:relative;background:rgba(20,26,34,.88);border:1px solid rgba(122,144,168,.22);border-radius:12px;padding:18px 16px 16px;text-align:center;cursor:pointer;transition:.25s}
+.stage-card:hover{transform:translateY(-4px);border-color:#e6d5a0;box-shadow:0 12px 28px rgba(0,0,0,.5),0 0 16px rgba(230,213,160,.18)}
+.stage-card.boss{border-color:rgba(224,80,80,.45);background:rgba(40,20,24,.88)}
+.stage-num{font:400 7px 'JetBrains Mono',monospace;color:#5a6e80;letter-spacing:.24em}
+.stage-icon{font-size:42px;margin:14px 0 10px}
 .stage-name{font:700 12px Inter,sans-serif;color:#e6d5a0;text-transform:uppercase}
-.stage-eng{font:9px 'JetBrains Mono',monospace;color:#7a90a8;margin-top:2px}
-.stage-desc{margin-top:8px;font:9px Inter,sans-serif;color:#8ea0b0;line-height:1.4;min-height:32px}
-.stage-stats{margin-top:10px;display:flex;flex-wrap:wrap;gap:4px;justify-content:center}
-.stat-badge{font:700 7px 'JetBrains Mono',monospace;padding:3px 6px;border-radius:10px;border:1px solid rgba(122,144,168,.2);background:rgba(10,14,20,.6);color:#8ea0b0}
-.stat-badge.hp{color:#3ad080;border-color:rgba(58,208,128,.3)}
-.stat-badge.def{color:#6ab0ff;border-color:rgba(106,176,255,.3)}
-.stat-badge.dmg{color:#e05050;border-color:rgba(224,80,80,.3)}
-.stage-lvl{margin-top:8px;font:700 8px 'JetBrains Mono',monospace;color:#e6d5a0}
-.hp-track{margin-top:10px;height:6px;background:#0a0e14;border-radius:3px;border:1px solid #1e2a32;overflow:hidden}
-.hp-fill{height:100%;width:100%}
-.btn-start{margin-top:24px;padding:12px 24px;background:#e6d5a0;color:#0a0e14;border:none;border-radius:8px;font:700 11px 'JetBrains Mono',monospace;letter-spacing:.18em;cursor:pointer}
-.right{width:200px;min-width:200px;background:rgba(14,20,26,.9);border-left:1px solid rgba(30,42,50,.6);display:flex;flex-direction:column;backdrop-filter:blur(6px)}
-.chat-head{height:44px;display:flex;align-items:center;gap:8px;padding:0 12px;border-bottom:1px solid rgba(30,42,50,.5)}
-.dot{width:6px;height:6px;border-radius:50%;background:#4ade80;box-shadow:0 0 8px #4ade80}
-.chat-title{font:7px 'JetBrains Mono',monospace;letter-spacing:.2em;color:#e6d5a0}
-.chat-body{flex:1;padding:12px;overflow:auto;display:flex;flex-direction:column;gap:8px}
-.sys-msg{font:10px 'JetBrains Mono',monospace;color:#5a6e80;background:rgba(122,144,168,.08);border-radius:6px;padding:8px;line-height:1.4}
-.chat-input{border-top:1px solid rgba(30,42,50,.5);display:flex;gap:6px;padding:8px;background:#12181e}
-.chat-input input{flex:1;background:rgba(20,26,34,.8);border:1px solid rgba(42,58,74,.6);border-radius:6px;padding:7px 8px;font:10px 'JetBrains Mono',monospace;color:#c9d6e2;outline:none}
-.chat-input button{background:#1e2f3e;border:1px solid #e6d5a0;border-radius:6px;padding:0 10px;font:10px 'JetBrains Mono',monospace;color:#e6d5a0;cursor:pointer}
-@media(max-width:900px){.stages-grid{grid-template-columns:1fr 1fr}.right{display:none}}
+.stage-eng{font:400 9px 'JetBrains Mono',monospace;color:#7a90a8;margin-top:3px}
+.stage-desc{margin-top:10px;font:400 9px Inter,sans-serif;color:#8ea0b0;line-height:1.5;min-height:32px}
+.badges{display:flex;justify-content:center;gap:6px;margin-top:12px;flex-wrap:wrap}
+.badge{font:700 7px 'JetBrains Mono',monospace;padding:4px 7px;border-radius:20px;border:1px solid rgba(122,144,168,.22)}
+.badge.hp{color:#3ad080;background:rgba(58,208,128,.08)}
+.badge.def{color:#7ab8ff;background:rgba(122,184,255,.08)}
+.badge.dmg{color:#ff8a7a;background:rgba(255,138,122,.08)}
+.stage-lvl{margin-top:14px;font:700 8px 'JetBrains Mono',monospace;color:#e6d5a0;letter-spacing:.18em}
+.hp-track{margin-top:10px;height:6px;background:#0a0e14;border-radius:3px;overflow:hidden;border:1px solid #1e2a32}
+.hp-fill{height:100%;border-radius:3px}
+.click-hint{margin-top:12px;font:700 7px 'JetBrains Mono',monospace;color:#e6d5a0;opacity:0;transition:.2s}
+.stage-card:hover .click-hint{opacity:.9}
+.right{width:200px;min-width:200px;background:rgba(14,20,26,.92);border-left:1px solid rgba(30,42,50,.5);display:flex;flex-direction:column}
+.chat-header{padding:12px;border-bottom:1px solid #1e2a32;display:flex;align-items:center;gap:8px}
+.dot{width:8px;height:8px;border-radius:50%;background:#3ad080;box-shadow:0 0 6px #3ad080}
+.chat-title{font-size:9px;letter-spacing:.2em;color:#6a7a8a;font-family:'JetBrains Mono',monospace}
+.chat-body{flex:1;padding:12px;overflow:auto;display:flex;flex-direction:column;gap:10px}
+.sys-msg{background:#1a242f;border-left:2px solid #d0b040;padding:8px;font-size:9px;color:#9a9a7a;line-height:1.4;border-radius:0 6px 6px 0;font-family:'JetBrains Mono',monospace}
 </style>
 </head>
 <body>
-<div class="bg"><img src="./assets/heroes/bg-battlefield.webp"></div>
+<div class="bg"><img src="./assets/heroes/bg-battlefield.webp" onerror="this.style.display='none'"></div>
 <div class="wrap">
-<nav class="left-nav">
-<div class="nav-group" onclick="location.href='./page3.html'"><div class="nav-item">👤</div><div class="nav-label">HERO</div></div>
-<div class="nav-group" onclick="location.href='./page4.html'"><div class="nav-item">🎒</div><div class="nav-label">BAG</div></div>
-<div class="nav-group" onclick="location.href='./page5.html'"><div class="nav-item">📜</div><div class="nav-label">SKILLS</div></div>
-<div class="nav-group"><div class="nav-item active">⚔️</div><div class="nav-label">BATTLE</div></div>
-</nav>
-<main class="center">
-<div class="top-row">
-<div><div class="title">ПУСТЫНЯ<span>DESERT</span></div><div class="sub">DESERT • 4 STAGES • HP 100% • DMG 50/100/200/500</div></div>
-<div><button class="back-btn" onclick="location.href='./page6.html'">← BATTLEFIELD</button></div>
-</div>
-<div class="stages-grid" id="stages"></div>
-<button class="btn-start" id="startBtn">НАЧАТЬ БИТВУ / START BATTLE — STAGE 1</button>
-</main>
-<aside class="right">
-<div class="chat-head"><div class="dot"></div><div class="chat-title">VOLAND • COMMS</div></div>
-<div class="chat-body" id="chatBody"><div class="sys-msg">SYS: Desert DMG 50/100/200/500 + HP 500/1000/1500/3000 DEF 10/20/30/50</div></div>
-<div class="chat-input"><input id="chatIn" placeholder="transmit..."><button id="sendBtn">›</button></div>
-</aside>
+  <div class="left-nav">
+    <div onclick="location.href='./page3.html'"><div class="nav-item">👤</div><div class="nav-label">HERO</div></div>
+    <div onclick="location.href='./page4.html'"><div class="nav-item">🎒</div><div class="nav-label">BAG</div></div>
+    <div onclick="location.href='./page5.html'"><div class="nav-item">📜</div><div class="nav-label">SKILLS</div></div>
+    <div onclick="location.href='./page6.html'"><div class="nav-item active">⚔️</div><div class="nav-label">BATTLE</div></div>
+    <div onclick="location.href='./index.html'"><div class="nav-item">🗺️</div><div class="nav-label">MAP</div></div>
+  </div>
+  <div class="center">
+    <div class="title">ПУСТЫНЯ<span>DESERT • 4 STAGES • CLICK MOB TO FIGHT</span></div>
+    <div class="sub">КЛИК ПО МОНСТРУ → PAGE8.HTML?LOC=1&STAGE=X • БЕЗ КНОПОК BATTLEFIELD И START BATTLE</div>
+    <div class="stages-grid" id="stagesGrid"></div>
+  </div>
+  <div class="right">
+    <div class="chat-header"><div class="dot"></div><div class="chat-title">VOLAND • COMMS</div></div>
+    <div class="chat-body"><div class="sys-msg">SYS: Desert DMG 50/100/200/500 + HP 500/1000/1500/3000 DEF 10/20/30/50 — click card to start battle</div></div>
+  </div>
 </div>
 <script src="./assets/js/db.js"></script>
 <script src="./assets/js/storage.js"></script>
 <script>
-let curStage=1;
-function getEnemies(){
- return [
-  {id:1,name:'ПЕСЧАНАЯ МЫШЬ',eng:'Sand Gerbil',icon:'🐭',desc:'Безобидный грызун, ворует крошки.',lvl:'LVL 1',hp:500,def:10,dmg:50,hpColor:'#3ad080'},
-  {id:2,name:'ПУСТЫННЫЙ СКОРПИОН',eng:'Desert Scorpion',icon:'🦂',desc:'Ядовитое жало, стан 20% шанс.',lvl:'LVL 3',hp:1000,def:20,dmg:100,hpColor:'#d0b040'},
-  {id:3,name:'ДЕТЕНЫШ ЧЕРВЯ',eng:'Sandworm Cub',icon:'🐛',desc:'Глотает целиком, игнор 15% брони.',lvl:'LVL 5',hp:1500,def:30,dmg:200,hpColor:'#e05050'},
-  {id:4,name:'ТИТАН ДЮН',eng:'Dune Tyrant - BOSS',icon:'👹',desc:'Босс Пустыни: Песчаная буря + AOE.',lvl:'BOSS LVL 7',hp:3000,def:50,dmg:500,hpColor:'#e6d5a0',boss:true}
- ];
+let locId = 1;
+const extra = [
+  {hp:500, def:10, dmg:50, lvl:'LVL 1', maxHp:500, color:'#3ad080'},
+  {hp:1000, def:20, dmg:100, lvl:'LVL 3', maxHp:1000, color:'#d0b040'},
+  {hp:1500, def:30, dmg:200, lvl:'LVL 5', maxHp:1500, color:'#e05050'},
+  {hp:3000, def:50, dmg:500, lvl:'BOSS LVL 7', maxHp:3000, color:'#e6d5a0', boss:true}
+];
+let enemies = (typeof VOLAND_ENEMIES !== 'undefined' && VOLAND_ENEMIES[locId]) ? VOLAND_ENEMIES[locId].map((e,i)=>{
+  const ex = extra[i];
+  return {id:e.stage, stage:e.stage, name:e.name, eng:e.eng, icon:e.icon, desc:e.desc, lvl:e.lvl||ex.lvl, hp:ex.hp, maxHp:ex.maxHp, def:ex.def, dmg:ex.dmg, color:e.hpColor||ex.color, boss:!!e.boss||!!ex.boss};
+}) : extra.map((ex,i)=>({id:i+1, stage:i+1, name:['ПЕСЧАНАЯ МЫШЬ','ПУСТЫННЫЙ СКОРПИОН','ДЕТЕНЫШ ЧЕРВЯ','ТИТАН ДЮН'][i], eng:['Sand Gerbil','Desert Scorpion','Sandworm Cub','Dune Tyrant'][i], icon:['🐭','🦂','🐛','👹'][i], desc:'', ...ex}));
+
+function startBattle(stage){
+  try{ localStorage.setItem('voland_last_stage', String(stage)); }catch(e){}
+  location.href = './page8.html?loc='+locId+'&stage='+stage;
 }
-function render(){
- const grid=document.getElementById('stages');
- const enemies=getEnemies();
- grid.innerHTML=enemies.map(e=>`<div class="stage-card ${e.boss?'boss':''} ${curStage===e.id?'active':''}" onclick="selectStage(${e.id})"><div class="stage-num">STAGE ${e.id}${e.boss?' • BOSS':''}</div><div class="stage-icon">${e.icon}</div><div class="stage-name">${e.name}</div><div class="stage-eng">${e.eng}</div><div class="stage-desc">${e.desc}</div><div class="stage-stats"><span class="stat-badge hp">HP ${e.hp}</span><span class="stat-badge def">DEF ${e.def}</span><span class="stat-badge dmg">DMG ${e.dmg}</span></div><div class="stage-lvl">${e.lvl}</div><div class="hp-track"><div class="hp-fill" style="background:${e.hpColor}"></div></div></div>`).join('');
- document.getElementById('startBtn').textContent=`НАЧАТЬ БИТВУ / START BATTLE — STAGE ${curStage}`;
-}
-function selectStage(id){curStage=id;try{localStorage.setItem('voland_stage',id);}catch(e){}render();}
-function startBattle(){try{localStorage.setItem('voland_location',1);localStorage.setItem('voland_stage',curStage);}catch(e){}location.href=`./page8.html?loc=1&stage=${curStage}`;}
-function log(t){const b=document.getElementById('chatBody');const d=document.createElement('div');d.className='sys-msg';d.style.color='#c9d6e2';d.textContent=t;b.appendChild(d);b.scrollTop=9999;}
-document.getElementById('startBtn').onclick=startBattle;
-document.getElementById('sendBtn').onclick=()=>{const i=document.getElementById('chatIn');if(!i.value.trim())return;log('YOU: '+i.value);i.value='';};
-document.getElementById('chatIn').onkeydown=e=>{if(e.key==='Enter')document.getElementById('sendBtn').click();};
-render();
+document.getElementById('stagesGrid').innerHTML = enemies.map(e=>`
+  <div class="stage-card ${e.boss?'boss':''}" onclick="startBattle(${e.id})">
+    <div class="stage-num">STAGE ${e.stage}${e.boss?' • BOSS':''}</div>
+    <div class="stage-icon">${e.icon}</div>
+    <div class="stage-name">${e.name}</div>
+    <div class="stage-eng">${e.eng}</div>
+    <div class="stage-desc">${e.desc}</div>
+    <div class="badges"><div class="badge hp">HP ${e.hp}</div><div class="badge def">DEF ${e.def}</div><div class="badge dmg">DMG ${e.dmg}</div></div>
+    <div class="stage-lvl">${e.lvl}</div>
+    <div class="hp-track"><div class="hp-fill" style="width:${(e.hp/e.maxHp)*100}%;background:${e.color}"></div></div>
+    <div class="click-hint">▶ CLICK TO FIGHT</div>
+  </div>
+`).join('');
 </script>
 </body>
 </html>
