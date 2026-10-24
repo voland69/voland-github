@@ -25,8 +25,7 @@
 - assets/data/items/ - weapons, armor etc
 
 ## page6
-- page6_modular.html is new main (120 lines only, was 600)
-- Old page6_FINAL.html kept as backup
+- page6.html is new main 
 
 ## What was fixed in this refactor
 1. EXIT buttons on loc & mob screens
