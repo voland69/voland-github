@@ -3,101 +3,101 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>VOLAND - DESERT</title>
+<title>VOLAND - LOCATIONS</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,sans-serif;overflow:hidden}
-.bg{position:fixed;inset:0;z-index:0}.bg img{width:100%;height:100%;object-fit:cover;opacity:.9}.bg:after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.45)}
+.bg{position:fixed;inset:0;z-index:0}.bg img{width:100%;height:100%;object-fit:cover;opacity:.9}
+.bg:after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.45)}
 .wrap{position:fixed;inset:0;display:flex;z-index:2}
-.left-nav{width:68px;min-width:68px;background:rgba(18,24,30,.35);border-right:1px solid rgba(30,42,50,.5);display:flex;flex-direction:column;align-items:center;padding:12px 6px;gap:18px;backdrop-filter:blur(2px)}
-.nav-item{width:48px;height:48px;background:#1a252f;border:1px solid #2a3a4a;border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0.6;transition:.2s;font-size:20px}
-.nav-item.active{background:#1e2f3e;border-color:#e6d5a0;opacity:1;box-shadow:0 0 12px rgba(230,213,160,.2)}
+.left-nav{width:68px;min-width:68px;background:rgba(18,24,30,.35);border-right:1px solid rgba(30,42,50,.5);display:flex;flex-direction:column;align-items:center;padding:12px 6px;gap:18px}
+.nav-item{width:48px;height:48px;background:#1a252f;border:1px solid #2a3a4a;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;opacity:.6;transition:.2s}
+.nav-item.active{background:#1e2f3e;border-color:#e6d5a0;opacity:1}
 .nav-label{font-size:7px;letter-spacing:.15em;color:#6a7a8a;margin-top:4px;text-align:center;font-family:'JetBrains Mono',monospace}
-.center{flex:1;display:flex;flex-direction:column;padding:28px 32px;overflow:auto;background:rgba(16,22,30,.18);backdrop-filter:blur(2px)}
-.title{font-family:'Cinzel Decorative',serif;font-size:34px;font-weight:900;letter-spacing:.15em;color:#e6d5a0;line-height:1}
-.title span{display:block;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.35em;color:#7a90a8;margin-top:8px}
-.sub{margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.2em;color:#5a6e80;text-transform:uppercase}
-.stages-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;max-width:1100px;margin-top:28px}
-.stage-card{position:relative;background:rgba(20,26,34,.88);border:1px solid rgba(122,144,168,.22);border-radius:12px;padding:18px 16px 16px;text-align:center;cursor:pointer;transition:.25s}
-.stage-card:hover{transform:translateY(-4px);border-color:#e6d5a0;box-shadow:0 12px 28px rgba(0,0,0,.5),0 0 16px rgba(230,213,160,.18)}
-.stage-card.boss{border-color:rgba(224,80,80,.45);background:rgba(40,20,24,.88)}
-.stage-num{font:400 7px 'JetBrains Mono',monospace;color:#5a6e80;letter-spacing:.24em}
-.stage-icon{font-size:42px;margin:14px 0 10px}
-.stage-name{font:700 12px Inter,sans-serif;color:#e6d5a0;text-transform:uppercase}
-.stage-eng{font:400 9px 'JetBrains Mono',monospace;color:#7a90a8;margin-top:3px}
-.stage-desc{margin-top:10px;font:400 9px Inter,sans-serif;color:#8ea0b0;line-height:1.5;min-height:32px}
-.badges{display:flex;justify-content:center;gap:6px;margin-top:12px;flex-wrap:wrap}
-.badge{font:700 7px 'JetBrains Mono',monospace;padding:4px 7px;border-radius:20px;border:1px solid rgba(122,144,168,.22)}
-.badge.hp{color:#3ad080;background:rgba(58,208,128,.08)}
-.badge.def{color:#7ab8ff;background:rgba(122,184,255,.08)}
-.badge.dmg{color:#ff8a7a;background:rgba(255,138,122,.08)}
-.stage-lvl{margin-top:14px;font:700 8px 'JetBrains Mono',monospace;color:#e6d5a0;letter-spacing:.18em}
-.hp-track{margin-top:10px;height:6px;background:#0a0e14;border-radius:3px;overflow:hidden;border:1px solid #1e2a32}
-.hp-fill{height:100%;border-radius:3px}
-.click-hint{margin-top:12px;font:700 7px 'JetBrains Mono',monospace;color:#e6d5a0;opacity:0;transition:.2s}
-.stage-card:hover .click-hint{opacity:.9}
+.center{flex:1;display:flex;flex-direction:column;padding:28px 32px;overflow:auto;background:rgba(16,22,30,.18)}
+.title{font:900 34px 'Cinzel Decorative',serif;letter-spacing:.15em;color:#e6d5a0;line-height:1}
+.title span{display:block;font:400 10px 'JetBrains Mono',monospace;letter-spacing:.35em;color:#7a90a8;margin-top:8px}
+.stages{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;max-width:1100px;margin-top:28px}
+.card{position:relative;background:rgba(20,26,34,.88);border:1px solid rgba(122,144,168,.22);border-radius:12px;padding:18px 16px 14px;text-align:center;cursor:pointer;transition:.25s}
+.card:hover{transform:translateY(-4px);border-color:#e6d5a0;box-shadow:0 12px 28px rgba(0,0,0,.5),0 0 16px rgba(230,213,160,.18)}
+.card.boss{border-color:rgba(224,80,80,.45);background:rgba(40,20,24,.88)}
+.num{font:400 7px 'JetBrains Mono',monospace;color:#5a6e80;letter-spacing:.24em}
+.icon{font-size:42px;margin:14px 0 10px}
+.name{font:700 12px Inter,sans-serif;color:#e6d5a0;text-transform:uppercase}
+.eng{font:400 9px 'JetBrains Mono',monospace;color:#7a90a8;margin-top:3px}
+.desc{margin-top:10px;font:400 9px Inter,sans-serif;color:#8ea0b0;line-height:1.5;min-height:28px}
+.lvl{margin-top:12px;font:700 8px 'JetBrains Mono',monospace;color:#e6d5a0;letter-spacing:.18em}
+.track{margin-top:10px;height:6px;background:#0a0e14;border-radius:3px;overflow:hidden;border:1px solid #1e2a32}
+.fill{height:100%;border-radius:3px;transition:width .3s}
+.hint{margin-top:10px;font:700 7px 'JetBrains Mono',monospace;color:#e6d5a0;opacity:0;transition:.2s}
+.card:hover .hint{opacity:.9}
 .right{width:200px;min-width:200px;background:rgba(14,20,26,.92);border-left:1px solid rgba(30,42,50,.5);display:flex;flex-direction:column}
-.chat-header{padding:12px;border-bottom:1px solid #1e2a32;display:flex;align-items:center;gap:8px}
+.chat-head{padding:12px;border-bottom:1px solid #1e2a32;display:flex;align-items:center;gap:8px}
 .dot{width:8px;height:8px;border-radius:50%;background:#3ad080;box-shadow:0 0 6px #3ad080}
 .chat-title{font-size:9px;letter-spacing:.2em;color:#6a7a8a;font-family:'JetBrains Mono',monospace}
 .chat-body{flex:1;padding:12px;overflow:auto;display:flex;flex-direction:column;gap:10px}
-.sys-msg{background:#1a242f;border-left:2px solid #d0b040;padding:8px;font-size:9px;color:#9a9a7a;line-height:1.4;border-radius:0 6px 6px 0;font-family:'JetBrains Mono',monospace}
+.sys{font:9px 'JetBrains Mono',monospace;color:#7a90a8;background:rgba(122,144,168,.08);border-radius:6px;padding:8px;line-height:1.4}
+@media(max-width:900px){.stages{grid-template-columns:1fr 1fr}.right{display:none}}
 </style>
 </head>
 <body>
 <div class="bg"><img src="./assets/heroes/bg-battlefield.webp" onerror="this.style.display='none'"></div>
 <div class="wrap">
-  <div class="left-nav">
-    <div onclick="location.href='./page3.html'"><div class="nav-item">👤</div><div class="nav-label">HERO</div></div>
-    <div onclick="location.href='./page4.html'"><div class="nav-item">🎒</div><div class="nav-label">BAG</div></div>
-    <div onclick="location.href='./page5.html'"><div class="nav-item">📜</div><div class="nav-label">SKILLS</div></div>
-    <div onclick="location.href='./page6.html'"><div class="nav-item active">⚔️</div><div class="nav-label">BATTLE</div></div>
-    <div onclick="location.href='./index.html'"><div class="nav-item">🗺️</div><div class="nav-label">MAP</div></div>
-  </div>
-  <div class="center">
-    <div class="title">ПУСТЫНЯ<span>DESERT • 4 STAGES • CLICK MOB TO FIGHT</span></div>
-    <div class="sub">КЛИК ПО МОНСТРУ → PAGE8.HTML?LOC=1&STAGE=X • БЕЗ КНОПОК BATTLEFIELD И START BATTLE</div>
-    <div class="stages-grid" id="stagesGrid"></div>
-  </div>
-  <div class="right">
-    <div class="chat-header"><div class="dot"></div><div class="chat-title">VOLAND • COMMS</div></div>
-    <div class="chat-body"><div class="sys-msg">SYS: Desert DMG 50/100/200/500 + HP 500/1000/1500/3000 DEF 10/20/30/50 — click card to start battle</div></div>
-  </div>
+<div class="left-nav">
+<div onclick="location.href='./page3.html'"><div class="nav-item">👤</div><div class="nav-label">HERO</div></div>
+<div onclick="location.href='./page4.html'"><div class="nav-item">🎒</div><div class="nav-label">BAG</div></div>
+<div onclick="location.href='./page5.html'"><div class="nav-item">📜</div><div class="nav-label">SKILLS</div></div>
+<div onclick="location.href='./page6.html'"><div class="nav-item active">⚔️</div><div class="nav-label">BATTLE</div></div>
+</div>
+<div class="center">
+<div class="title" id="locTitle">ПУСТЫНЯ<span id="locSub">DESERT • 4 STAGES</span></div>
+<div class="stages" id="stagesGrid"></div>
+</div>
+<div class="right">
+<div class="chat-head"><div class="dot"></div><div class="chat-title">VOLAND • COMMS</div></div>
+<div class="chat-body"><div class="sys" id="chatInfo">SYS: Click card → page8 same mob • hp% from db.js</div></div>
+</div>
 </div>
 <script src="./assets/js/db.js"></script>
 <script src="./assets/js/storage.js"></script>
 <script>
-let locId = 1;
-const extra = [
-  {hp:500, def:10, dmg:50, lvl:'LVL 1', maxHp:500, color:'#3ad080'},
-  {hp:1000, def:20, dmg:100, lvl:'LVL 3', maxHp:1000, color:'#d0b040'},
-  {hp:1500, def:30, dmg:200, lvl:'LVL 5', maxHp:1500, color:'#e05050'},
-  {hp:3000, def:50, dmg:500, lvl:'BOSS LVL 7', maxHp:3000, color:'#e6d5a0', boss:true}
-];
-let enemies = (typeof VOLAND_ENEMIES !== 'undefined' && VOLAND_ENEMIES[locId]) ? VOLAND_ENEMIES[locId].map((e,i)=>{
-  const ex = extra[i];
-  return {id:e.stage, stage:e.stage, name:e.name, eng:e.eng, icon:e.icon, desc:e.desc, lvl:e.lvl||ex.lvl, hp:ex.hp, maxHp:ex.maxHp, def:ex.def, dmg:ex.dmg, color:e.hpColor||ex.color, boss:!!e.boss||!!ex.boss};
-}) : extra.map((ex,i)=>({id:i+1, stage:i+1, name:['ПЕСЧАНАЯ МЫШЬ','ПУСТЫННЫЙ СКОРПИОН','ДЕТЕНЫШ ЧЕРВЯ','ТИТАН ДЮН'][i], eng:['Sand Gerbil','Desert Scorpion','Sandworm Cub','Dune Tyrant'][i], icon:['🐭','🦂','🐛','👹'][i], desc:'', ...ex}));
+const p=new URLSearchParams(location.search);
+let locId=parseInt(p.get('loc')||localStorage.getItem('voland_location')||'1');
+let enemies=(window.VOLAND_ENEMIES&&VOLAND_ENEMIES[locId])?VOLAND_ENEMIES[locId]:VOLAND_ENEMIES[1];
+let locData=(window.VOLAND_LOCATIONS&&VOLAND_LOCATIONS.find(l=>l.id==locId))||{name:'ПУСТЫНЯ',eng:'DESERT'};
+document.getElementById('locTitle').innerHTML=locData.name+'<span id="locSub">'+locData.eng+' • '+enemies.length+' STAGES • CLICK TO FIGHT</span>';
 
 function startBattle(stage){
-  try{ localStorage.setItem('voland_last_stage', String(stage)); }catch(e){}
-  location.href = './page8.html?loc='+locId+'&stage='+stage;
+ try{
+  localStorage.setItem('voland_location',String(locId));
+  localStorage.setItem('voland_last_stage',String(stage));
+  localStorage.setItem('voland_battle',JSON.stringify({loc:locId,stage:stage}));
+ }catch(e){}
+ location.href='./page8.html?loc='+locId+'&stage='+stage;
 }
-document.getElementById('stagesGrid').innerHTML = enemies.map(e=>`
-  <div class="stage-card ${e.boss?'boss':''}" onclick="startBattle(${e.id})">
-    <div class="stage-num">STAGE ${e.stage}${e.boss?' • BOSS':''}</div>
-    <div class="stage-icon">${e.icon}</div>
-    <div class="stage-name">${e.name}</div>
-    <div class="stage-eng">${e.eng}</div>
-    <div class="stage-desc">${e.desc}</div>
-    <div class="badges"><div class="badge hp">HP ${e.hp}</div><div class="badge def">DEF ${e.def}</div><div class="badge dmg">DMG ${e.dmg}</div></div>
-    <div class="stage-lvl">${e.lvl}</div>
-    <div class="hp-track"><div class="hp-fill" style="width:${(e.hp/e.maxHp)*100}%;background:${e.color}"></div></div>
-    <div class="click-hint">▶ CLICK TO FIGHT</div>
-  </div>
+
+document.getElementById('stagesGrid').innerHTML=enemies.map(e=>`
+ <div class="card ${e.boss?'boss':''}" onclick="startBattle(${e.stage})">
+  <div class="num">STAGE ${e.stage}${e.boss?' • BOSS':''}</div>
+  <div class="icon">${e.icon}</div>
+  <div class="name">${e.name}</div>
+  <div class="eng">${e.eng}</div>
+  <div class="desc">${e.desc}</div>
+  <div class="lvl">${e.lvl}</div>
+  <div class="track"><div class="fill" style="width:${e.hp}%;background:${e.hpColor||'#3ad080'}"></div></div>
+  <div class="hint">▶ CLICK TO FIGHT • HP ${e.hp}% bar</div>
+ </div>
 `).join('');
+
+// подсветка LOC1 STAGE4 для проверки синхронизации
+try{
+ if(locId==1){
+  const el=document.querySelectorAll('.card')[3];
+  if(el){ el.style.outline='1px solid #e6d5a0'; }
+ }
+}catch(e){}
 </script>
 </body>
 </html>
