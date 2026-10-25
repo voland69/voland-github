@@ -1,23 +1,28 @@
-// VOLCANIC - archmage-f - TRUE SKILLS from Mage-F-New.html
-export function applyVolcanic(sName, B, addLog){
-  if(sName.includes('Сердце Кальдеры')){
-    // passive handled in battle core: every 4th spell
-    addLog('🌋 Сердце Кальдеры: земля горит 100% AOE 2 раунда', 'skill');
+// VOLCANIC - archmage-f - TRUE SKILLS from Mage-F-New.html - FIXED 2026-10-25
+function applyVolcanicSkills(sName, battle){
+  // Пассивка: Сердце Кальдеры - каждое 4-е заклинание поджигает землю на 2 раунда 100% AOE
+  if(battle.hero.spellCount && battle.hero.spellCount % 4 === 0){
+    battle.enemy.calderaTurns = 2;
+    if(typeof addBattleLog==='function') addBattleLog('🌋 Сердце Кальдеры: земля горит 100% AOE 2 раунда!', 'crit');
   }
   if(sName.includes('Огненный Шар')){
-    addLog('🔥 Огненный Шар: 150% + дот 20% 2 раунда, крит = AOE', 'skill');
+    battle.enemy.burnTurns = 2;
+    battle.enemy.burnPct = 20;
+    if(typeof addBattleLog==='function') addBattleLog('🔥 Огненный Шар: 150% + поджог 20% 2 раунда, крит = AOE всем', 'crit');
   }
   if(sName.includes('Извержение')){
-    B.enemy.lavaTurns = 3;
-    addLog('💥 Извержение: 200% AOE + лава 50% 3 раунда', 'skill');
+    battle.enemy.lavaTurns = 3;
+    battle.enemy.lavaPct = 50;
+    if(typeof addBattleLog==='function') addBattleLog('💥 Извержение: 200% AOE + лава 50% 3 раунда', 'crit');
   }
   if(sName.includes('Метеор') && !sName.includes('Судный')){
-    addLog('☄️ Метеор: 500% + волна 300% в след. раунде', 'skill');
-    B.enemy.meteorWave = 1;
+    battle.enemy.meteorWave = 1;
+    battle.enemy.meteorWaveDmg = 300;
+    if(typeof addBattleLog==='function') addBattleLog('☄️ Метеор: 500% + волна 300% в след. раунде', 'crit');
   }
   if(sName.includes('Судный День')){
-    B.enemy.judgmentTurns = 4;
-    B.enemy.judgmentCount = 0;
-    addLog('🌋 Судный День: 4 метеора по 200% + финал 400% + поджог 50% 2 раунда', 'skill');
+    battle.enemy.judgmentTurns = 4;
+    battle.enemy.judgmentCount = 0;
+    if(typeof addBattleLog==='function') addBattleLog('🌋 Судный День: 4 метеора по 200% + финал 400% + поджог 50% 2 раунда', 'crit');
   }
 }
