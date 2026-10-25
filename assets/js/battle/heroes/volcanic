@@ -1,6 +1,5 @@
-// VOLCANIC - archmage-f - TRUE SKILLS from Mage-F-New.html - FIXED 2026-10-25
+// VOLCANIC - archmage-f - TRUE SKILLS from Mage-F-New.html - FIXED 2026-10-25 v2 FINAL
 function applyVolcanicSkills(sName, battle){
-  // Пассивка: Сердце Кальдеры - каждое 4-е заклинание поджигает землю на 2 раунда 100% AOE
   if(battle.hero.spellCount && battle.hero.spellCount % 4 === 0){
     battle.enemy.calderaTurns = 2;
     if(typeof addBattleLog==='function') addBattleLog('🌋 Сердце Кальдеры: земля горит 100% AOE 2 раунда!', 'crit');
@@ -17,6 +16,7 @@ function applyVolcanicSkills(sName, battle){
   }
   if(sName.includes('Метеор') && !sName.includes('Судный')){
     battle.enemy.meteorWave = 1;
+    battle.enemy.meteorWaveDelay = 1;
     battle.enemy.meteorWaveDmg = 300;
     if(typeof addBattleLog==='function') addBattleLog('☄️ Метеор: 500% + волна 300% в след. раунде', 'crit');
   }
