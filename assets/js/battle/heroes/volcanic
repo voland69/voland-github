@@ -1,0 +1,23 @@
+// VOLCANIC - archmage-f - TRUE SKILLS from Mage-F-New.html
+export function applyVolcanic(sName, B, addLog){
+  if(sName.includes('Сердце Кальдеры')){
+    // passive handled in battle core: every 4th spell
+    addLog('🌋 Сердце Кальдеры: земля горит 100% AOE 2 раунда', 'skill');
+  }
+  if(sName.includes('Огненный Шар')){
+    addLog('🔥 Огненный Шар: 150% + дот 20% 2 раунда, крит = AOE', 'skill');
+  }
+  if(sName.includes('Извержение')){
+    B.enemy.lavaTurns = 3;
+    addLog('💥 Извержение: 200% AOE + лава 50% 3 раунда', 'skill');
+  }
+  if(sName.includes('Метеор') && !sName.includes('Судный')){
+    addLog('☄️ Метеор: 500% + волна 300% в след. раунде', 'skill');
+    B.enemy.meteorWave = 1;
+  }
+  if(sName.includes('Судный День')){
+    B.enemy.judgmentTurns = 4;
+    B.enemy.judgmentCount = 0;
+    addLog('🌋 Судный День: 4 метеора по 200% + финал 400% + поджог 50% 2 раунда', 'skill');
+  }
+}
