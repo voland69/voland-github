@@ -1,0 +1,40 @@
+// AZURE SAGE - archmage-m - TRUE SKILLS from Archmage-M.html - FIXED 2026-10-25
+function applyAzureSageSkills(sName, battle){
+  // PASSIVE: Искривление Времени - каждый спелл +10% базового урона, стак 5 раундов, на 5 стаках след. заклинание +50%
+  if(battle.hero.spellCount && battle.hero.spellCount > 0){
+    if(!battle.hero.timeStacks) battle.hero.timeStacks = 0;
+    // стаки уже учтены в page8 через getMult? Для простоты логику стаков делаем тут
+    // Каждый каст кроме пассива увеличивает стак
+    if(!sName.includes('Искривление')){
+      battle.hero.timeStacks = Math.min(5, (battle.hero.timeStacks||0)+1);
+      if(battle.hero.timeStacks === 5){
+        battle.hero.timeBonus = true;
+        if(typeof addBattleLog==='function') addBattleLog('⏳ Искривление Времени: 5 стаков! След. заклинание +50% урона', 'crit');
+      }
+    }
+  }
+
+  if(sName.includes('Ледяное Копье')){
+    // 250% уже в базовом уроне (mult), + дебаф DEF -20% на 3 раунда
+    battle.enemy.defDebuffTurns = 3;
+    battle.enemy.defDebuffPct = 20;
+    if(typeof addBattleLog==='function') addBattleLog('❄️ Ледяное Копье: 250% + DEF -20% 3 раунда', 'crit');
+  }
+  if(sName.includes('Сфера Бури')){
+    // 3 раунда бьет молниями 3 цели по 160%
+    battle.enemy.stormSphereTurns = 3;
+    battle.enemy.stormSpherePct = 160;
+    battle.enemy.stormSphereTargets = 3;
+    if(typeof addBattleLog==='function') addBattleLog('⚡ Сфера Бури: 3 раунда по 160% по 3 целям', 'crit');
+  }
+  if(sName.includes('Лавина')){
+    // 300% уже в базовом уроне, AOE
+    if(typeof addBattleLog==='function') addBattleLog('🏔️ Лавина: 300% всем врагам', 'crit');
+  }
+  if(sName.includes('Аннигиляция Времени')){
+    // Заморозка 3 раунда стан + взрыв 350% всем
+    battle.enemy.timeFreezeTurns = 3;
+    battle.enemy.timeFreezeExplosion = 350;
+    if(typeof addBattleLog==='function') addBattleLog('🌌 Аннигиляция Времени: заморозка 3 раунда + взрыв 350% всем', 'crit');
+  }
+}
