@@ -71,8 +71,8 @@ const VOLAND_HEROES = {
 },
 'archmage-f': {
   n:'VOLCANIC', role:'MAGE • Archmage - Female',
-  img:'./assets/heroes/archmage-f.webp',
-  thumb:'./assets/heroes/archmage-f.webp',
+  img:'./assets/heroes/mage-f-new.webp',
+  thumb:'./assets/heroes/mage-f-new.webp',
   st:{HP:950,DEF:85,DMG:280,MANA:300,CRIT:22,PARRY:0,DODGE:11},
   sk:[
     ['Сердце Кальдеры','PASSIVE',['./assets/heroes/icon_volcanic_heart.jpg','./assets/heroes/icon_serdtse_kaldery.jpg'],'🌋','Каждое 4 заклинание поджигает землю на 2 раунда нанося 100% урона всем врагам.','КД: 4 • Мана: 20 • Урон: 100% 2 раунда'],
