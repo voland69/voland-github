@@ -1,7 +1,5 @@
-// VOLAND DB v2 - SAFEGUARD MODE - 8 HEROES - VOLCANIC TRUE SKILLS
-// TRUE SKILLS from user HTML - no invention
-// VOLCANIC stats from screenshot: HP 950, DEF 85, DMG 280, MANA 300, CRIT 22%, DODGE 11%
-// Skills from Mage-F-New.html
+// VOLAND DB v2 - SAFEGUARD MODE - 8 HEROES - TRUE SKILLS
+// VOLCANIC + AZURE SAGE TRUE SKILLS from HTML - no invention
 
 const VOLAND_HEROES = {
 'necro-f-new': {
@@ -63,10 +61,10 @@ const VOLAND_HEROES = {
   st:{HP:900,DEF:80,DMG:260,MANA:320,CRIT:18,PARRY:0,DODGE:10},
   sk:[
     ['Искривление Времени','PASSIVE',['./assets/heroes/icon_iskrivlenie_vremeni.jpg'],'⏳','Каждое заклинание увеличивает базовый урон на 10%, стакается 5 раундов. При 5 стаках всё следующее заклинание кастуется +50% урона.','Стаки: 5 раундов • Бонус: +50% базового урона'],
-    ['Временная Петля','1',['./assets/heroes/icon_vremennaya_petlya.jpg'],'⏰','Наносит 180% урона и откатывает КД случайного скилла на 1 раунд','КД: 4 раунда • Мана: 15 • Урон: 180%'],
-    ['Хроносфера','2',['./assets/heroes/icon_khronosfera.jpg'],'🔵','Купол на 3 раунда: враги внутри -30% скорости, ты +20% урона','КД: 12 раундов • Мана: 30 • Контроль: -30% скорости врага'],
-    ['Разлом Времени','3',['./assets/heroes/icon_razlom_vremeni.jpg'],'💥','Разрывает время: 250% урона всем + 20% шанс стана','КД: 15 раундов • Мана: 35 • AOE 250%'],
-    ['Коллапс Вечности','4',['./assets/heroes/icon_kollaps_vechnosti.jpg'],'🌌','ULTIMATE: Останавливает время на 2 раунда, ты бьешь без ответа +400% урона','КД: 30 раундов • Мана: 100 • Урон: 400% + стоп-тайм']
+    ['Ледяное Копье','1',['./assets/heroes/icon_ledyanoe_kopye.jpg'],'❄️','Бросает ледяное копье в спину своего врага, нанося +250% урона и уменьшает его защиту на 20%.','КД: 3 раундов • Мана: 10 • Урон: 235×2,5 • DEF -20%'],
+    ['Сфера Бури','2',['./assets/heroes/icon_sfera_buri.jpg'],'⚡','Создает сферу, которая 3 раунда бьет молниями ближайших врагов (3 цели) по +160% урона каждый раунд.','КД: 10 раундов • Мана: 20 • Тиков: 3×235×160%'],
+    ['Лавина','3',['./assets/heroes/icon_lavina.jpg'],'🏔️','Вызывает лавину, которая наносит всем врагам +300% урона.','КД: 15 раундов • Мана: 30 • Урон: 235×3 всем врагам'],
+    ['Аннигиляция Времени','4',['./assets/heroes/icon_annigilyatsiya_vremeni.jpg'],'🌌','ULTIMATE: Замораживает время на 3 раунда (враги не могут двигаться/атаковать) (стан), затем взрыв на +350% урона всем.','КД: 25 раундов • Мана: 50 • Урон: 350% + контроль 3 раундов']
   ]
 },
 'archmage-f': {
@@ -83,12 +81,12 @@ const VOLAND_HEROES = {
   ]
 },
 'warrior-f': {
-  n:'IRON VOW', role:'SHIELD TANK • Warrior - Female',
+  n:'IRON VOW', role:'MELEE • Warrior - Female',
   img:'./assets/heroes/warrior-f.webp',
   thumb:'./assets/heroes/warrior-f.webp',
-  st:{HP:1250,DEF:160,DMG:175,MANA:180,CRIT:12,PARRY:12,DODGE:0},
+  st:{HP:1200,DEF:150,DMG:200,MANA:240,CRIT:12,PARRY:5,DODGE:5},
   sk:[
-    ['Клятва Стаи','PASSIVE',['./assets/heroes/icon_klyatva_stai.jpg'],'🐺','При HP <30% урон +50% и +30% лайфстил от нанесенного урона.','КД: — • Мана: 0'],
+    ['Клятва Стаи','PASSIVE',['./assets/heroes/icon_klyatva_stai.jpg'],'🐺','При получении урона призывает волка на 3 раунда. Волк бьет 80% урона.','КД: — • Мана: 0'],
     ['Рассекающий Волк','1',['./assets/heroes/icon_rassekayushchiy_volk.jpg'],'🗡','2 удара мечом по 110% урона каждый.','КД: 3 раунда • Мана: 5 • Урон: 220%'],
     ['Щит Волчьего Вожака','2',['./assets/heroes/icon_shchit_volchego_vozhaka.jpg'],'🛡','Поднимает щит с волком на 4 раунда, блокирует урон с вероятностью 50%. Успешный блок дает контратаку на 350% урона.','КД: 15 раундов • Мана: 20 • Блок: 50%'],
     ['Зов Стаи','3',['./assets/heroes/icon_zov_stai.jpg'],'🐾','Издает зов волка, который станит 1 врага, все остальные враги получают 200% урона, оглушенный враг получает урон 2 раза.','КД: 15 раундов • Мана: 20 • Волки: 200% AOE + стан'],
@@ -171,6 +169,6 @@ try{
   if(missing.length>0){
     console.error('❌ VOLAND DB ERROR: Потеряны герои:', missing, 'Ожидалось 8, сейчас', actual.length);
   }else{
-    console.log('✅ VOLAND DB OK: 8 героев - VOLCANIC TRUE SKILLS OK');
+    console.log('✅ VOLAND DB OK: 8 героев - TRUE SKILLS OK');
   }
 }catch(e){ console.warn('DB check failed', e); }
