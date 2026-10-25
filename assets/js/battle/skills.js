@@ -13,4 +13,5 @@ function applySkillEffect(sName, battle){
  try{ if (typeof applyWildPathSkills === 'function') applyWildPathSkills(sName, battle); }catch(e){}
  try{ if (typeof applyIronVowSkills === 'function') applyIronVowSkills(sName, battle); }catch(e){}
  try{ if (typeof applyAzureSageSkills === 'function') applyAzureSageSkills(sName, battle); }catch(e){}
+ try{ if (typeof applyVolcanicSkills === 'function') applyVolcanicSkills(sName, battle); }catch(e){}
 }
