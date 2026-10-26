@@ -29,7 +29,8 @@ document.getElementById('heroRole').textContent=heroData.n+' • '+heroData.role
 
 // РЕАЛЬНЫЕ СТАТЫ - РУКАМИ, hp из db.js = % для бара UI
 const eDef = stage==4 ? 200 : stage==3 ? 30 : stage==2 ? 20 : 10;
-const eDmg = stage==4 ? 230 : stage==3 ? 200 : stage==2 ? 100 : 50;
+let eDmg = stage==4 ? 230 : stage==3 ? 200 : stage==2 ? 100 : 50;
+const baseEDmg = eDmg;
 const eMaxHp = stage==4 ? 2400 : stage==3 ? 1500 : stage==2 ? 1000 : 400;
 
 let eHp=eMaxHp, hHp=cur.HP, hMax=cur.HP, hMana=cur.MANA, hMaxMana=cur.MANA;
@@ -37,7 +38,7 @@ let turn=1, enemyStun=0, cooldowns=[0,0,0,0,0], isBattleOver=false;
 let spellCount=0;
 
 // общие статусы - могут использоваться героями
-window.VB={eDef,eDmg,eMaxHp, get eHp(){return eHp}, set eHp(v){eHp=v}, get hHp(){return hHp}, set hHp(v){hHp=v}, get hMana(){return hMana}, set hMana(v){hMana=v}, cur, heroData, enemyData, loc, stage};
+window.VB={eDef, get eDmg(){return eDmg}, set eDmg(v){eDmg=v}, baseEDmg, eMaxHp, get eHp(){return eHp}, set eHp(v){eHp=v}, get hHp(){return hHp}, set hHp(v){hHp=v}, get hMana(){return hMana}, set hMana(v){hMana=v}, get hMax(){return hMax}, cur, heroData, enemyData, loc, stage, _lastEnemyDmg:0, _linkActive:false};
 
 function rand(a,b){return Math.floor(Math.random()*(b-a+1))+a}
 const logZone=document.getElementById('logZone');
@@ -139,7 +140,9 @@ function enemyTurn(){
    if(skip){ endRound(); return; }
  }
  if(enemyStun>0){ addLog('💤 '+enemyData.name+' оглушен, пропускает ход [стан '+enemyStun+'→'+(enemyStun-1)+']','hit'); enemyStun--; endRound(); return; }
- let dmgToHero=Math.max(10, eDmg - cur.DEF + rand(-10,10));
+ let effectiveDmg = window.VB.eDmg; // может быть снижен страхом -15%
+ let dmgToHero=Math.max(10, effectiveDmg - cur.DEF + rand(-10,10));
+ window.VB._lastEnemyDmg = dmgToHero;
  hHp=Math.max(0,hHp-dmgToHero);
  addLog('💥 '+enemyData.name+' бьет тебя на '+dmgToHero+' — HP '+hHp+'/'+hMax,'enemy-hit');
  updBars();
