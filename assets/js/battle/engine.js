@@ -1,208 +1,182 @@
-// VOLAND BATTLE ENGINE v1 - core combat
-let battle = null;
-let currentLoc = null;
-let currentStage = null;
-let lastEnemyData = null;
+// VOLAND BATTLE ENGINE v1 - база, чистый старт
+// DMG-DEF+rand, полоски HP/MANA, QWER, win/lose, грузит механику героя из heroes/${heroId}.js
+(function(){
+if(typeof volandHasSave==='function' && !volandHasSave()) location.href='./page2.html';
+const p=new URLSearchParams(location.search);
+const loc=parseInt(p.get('loc')||localStorage.getItem('voland_location')||'1');
+const stage=parseInt(p.get('stage')||localStorage.getItem('voland_last_stage')||'1');
 
-function calcDamage(attacker, defender, multiplier){
-  if ((defender.immune||0)>0){
-    return {dmg:0, crit:false, dodge:false, parry:false, immune:true};
-  }
-  const effectiveDmg = attacker.dmg * (1 + (attacker.dmgBuff||0));
-  const base = effectiveDmg * (multiplier||1);
-  const defReduce = defender.def * 0.5;
-  let dmg = Math.max(5, base - defReduce);
-  const isCrit = Math.random()*100 < attacker.crit;
-  if (isCrit) dmg *= 1.5;
-  const isDodge = Math.random()*100 < (defender.dodge||0);
-  if (isDodge) return {dmg:0, crit:false, dodge:true, parry:false, immune:false};
-  const isParry = Math.random()*100 < (defender.parry||0);
-  if (isParry) return {dmg:0, crit:false, dodge:false, parry:true, immune:false};
-  dmg *= (0.9 + Math.random()*0.2);
-  return {dmg: Math.floor(dmg), crit:isCrit, dodge:false, parry:false, immune:false};
+let heroId=(typeof volandGetHeroId==='function'?volandGetHeroId():'necro-f-new');
+if(typeof VOLAND_HEROES!=='undefined' && !VOLAND_HEROES[heroId]) heroId=Object.keys(VOLAND_HEROES)[0]||'necro-f-new';
+const heroData=VOLAND_HEROES[heroId];
+const calc=(typeof volandCalcStats==='function'?volandCalcStats():{cur:heroData.st,bonus:{}});
+const cur=calc.cur;
+const profileName=(typeof volandGetName==='function'?volandGetName():'VOLAND');
+
+let enemies=(VOLAND_ENEMIES&&VOLAND_ENEMIES[loc])?VOLAND_ENEMIES[loc]:VOLAND_ENEMIES[1];
+let enemyData=enemies.find(e=>e.stage===stage)||enemies[0];
+let locData=(VOLAND_LOCATIONS&&VOLAND_LOCATIONS.find(l=>l.id==loc))||{name:'ПУСТЫНЯ',eng:'DESERT'};
+
+document.getElementById('locTitle').textContent=locData.name;
+document.getElementById('stageTitle').textContent='STAGE '+stage+' • '+enemyData.name;
+document.getElementById('enemyIcon').textContent=enemyData.icon;
+document.getElementById('enemyName').textContent=enemyData.name;
+document.getElementById('enemyEng').textContent=enemyData.eng;
+document.getElementById('enemyDesc').textContent=enemyData.desc;
+document.getElementById('heroIcon').innerHTML='<img src="'+heroData.img+'" onerror="this.parentNode.textContent=\'🦁\'">';
+document.getElementById('heroName').textContent=profileName.toUpperCase();
+document.getElementById('heroRole').textContent=heroData.n+' • '+heroData.role;
+
+// РЕАЛЬНЫЕ СТАТЫ - РУКАМИ, hp из db.js = % для бара UI
+const eDef = stage==4 ? 200 : stage==3 ? 30 : stage==2 ? 20 : 10;
+const eDmg = stage==4 ? 230 : stage==3 ? 200 : stage==2 ? 100 : 50;
+const eMaxHp = stage==4 ? 2400 : stage==3 ? 1500 : stage==2 ? 1000 : 400;
+
+let eHp=eMaxHp, hHp=cur.HP, hMax=cur.HP, hMana=cur.MANA, hMaxMana=cur.MANA;
+let turn=1, enemyStun=0, cooldowns=[0,0,0,0,0], isBattleOver=false;
+let spellCount=0;
+
+// общие статусы - могут использоваться героями
+window.VB={eDef,eDmg,eMaxHp, get eHp(){return eHp}, set eHp(v){eHp=v}, get hHp(){return hHp}, set hHp(v){hHp=v}, get hMana(){return hMana}, set hMana(v){hMana=v}, cur, heroData, enemyData, loc, stage};
+
+function rand(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+const logZone=document.getElementById('logZone');
+function addLog(t,c=''){ const d=document.createElement('div'); d.className='log-line '+c; d.textContent=t; logZone.appendChild(d); logZone.scrollTop=9999; }
+window.VB.addLog=addLog;
+
+function parseSkill(sk){
+ const full=(sk[4]||'')+' '+(sk[5]||'');
+ const manaMatch=full.match(/Мана:\s*(\d+)/i);
+ const cdMatch=full.match(/КД:\s*(\d+)/i);
+ const dmgMatches=[...full.matchAll(/(\d+)%\s*урона/gi)];
+ let maxDmg=0; dmgMatches.forEach(m=>{let v=parseInt(m[1]); if(v>maxDmg) maxDmg=v;});
+ return {name:sk[0],num:sk[1],icons:sk[2]||[],emoji:sk[3]||'⚔️',desc:sk[4]||'',short:sk[5]||'',mana:manaMatch?parseInt(manaMatch[1]):0,cd:cdMatch?parseInt(cdMatch[1]):0,dmgPct:maxDmg||0,hasStun:/стан|оглуш/i.test(full)};
+}
+const allSkills=heroData.sk.map(parseSkill);
+const passive=allSkills[0];
+const activeSkills=allSkills.slice(1);
+function getMult(s,i){ if(s.dmgPct>0) return s.dmgPct/100; return [2.0,3.0,2.0,7.0][i]||2.0; }
+
+window.VB.allSkills=allSkills; window.VB.activeSkills=activeSkills; window.VB.passive=passive;
+
+function updBars(){
+ document.getElementById('heroHpBar').style.width=Math.max(0,hHp/hMax*100)+'%';
+ document.getElementById('heroHpBar').textContent='HP '+hHp+'/'+hMax;
+ document.getElementById('heroManaBar').style.width=Math.max(0,hMana/hMaxMana*100)+'%';
+ document.getElementById('heroManaBar').textContent='MANA '+hMana+'/'+hMaxMana;
+ document.getElementById('enemyHpBar').style.width=Math.max(0,eHp/eMaxHp*100)+'%';
+ document.getElementById('enemyHpBar').textContent='HP '+eHp+'/'+eMaxHp+' ('+enemyData.hp+'% bar)';
+ let stat='DEF '+eDef+' • DMG '+eDmg;
+ if(enemyStun>0) stat+=' • STUN '+enemyStun;
+ if(window.VB.extraStat) stat+=' • '+window.VB.extraStat();
+ document.getElementById('enemyStatBar').textContent=stat;
+ document.getElementById('turnInfo').textContent='ХОД '+turn+' • '+(isBattleOver?'КОНЕЦ':'ТВОЙ ХОД')+' • MANA '+hMana;
+}
+window.VB.updBars=updBars;
+
+function renderSkillBar(){
+ const bar=document.getElementById('skillBar'); bar.innerHTML='';
+ const list=[{name:'АТАКА',emoji:'⚔️',mana:0,cd:0,icons:[],isAttack:true,key:'Q'}, ...activeSkills.map((s,i)=>({...s,idx:i,key:['W','E','R','T'][i]}))];
+ list.forEach((s,idx)=>{
+  const cd=cooldowns[idx]; const can=s.isAttack||hMana>=s.mana; const dis=cd>0||!can||isBattleOver;
+  const btn=document.createElement('div'); btn.className='skill-btn'+(dis?' disabled':'')+(s.num=='4'?' ultimate':'');
+  btn.onclick=()=>{if(!dis) useAction(idx);};
+  const iconPath=s.icons&&s.icons[0]?s.icons[0]:'';
+  let iconHtml=iconPath?'<img src="'+iconPath+'" onerror="this.style.display=\'none\'; this.parentNode.textContent=\''+s.emoji+'\'">' : (s.emoji||'⚔️');
+  btn.innerHTML='<div class="skill-icon">'+iconHtml+'</div><div class="skill-name">'+(s.isAttack?'АТАКА':s.name.toUpperCase().slice(0,12))+'</div><div class="skill-cost '+(s.mana==0?'zero':'')+'">'+(s.isAttack?'0':s.mana)+'</div><div class="skill-key">'+s.key+'</div>'+(cd>0?'<div class="skill-cd">'+cd+'</div>':'');
+  btn.title=s.isAttack?'Атака DMG '+cur.DMG+' - DEF '+eDef+' + rand' : s.name+'\n'+s.desc+'\n'+s.short;
+  bar.appendChild(btn);
+ });
+}
+window.VB.renderSkillBar=renderSkillBar;
+
+async function useAction(idx){
+ if(isBattleOver) return; if(cooldowns[idx]>0) return;
+ // хук героя
+ if(window.VOLAND_HERO_USE_SKILL){
+   let handled = await window.VOLAND_HERO_USE_SKILL(idx, {cur, eDef, eDmg, eMaxHp, get eHp(){return eHp}, set eHp(v){eHp=v}, get hHp(){return hHp}, set hHp(v){hHp=v}, get hMana(){return hMana}, set hMana(v){hMana=v}, hMax, hMaxMana, enemyData, heroData, activeSkills, getMult, rand, addLog, updBars, cooldowns, turn, spellCount, enemyStun, setEnemyStun:v=>enemyStun=v, isBattleOver, allSkills});
+   if(handled){ spellCount++; afterHeroAction(); return; }
+ }
+ // база
+ let dmg=0, isCrit=false;
+ if(idx===0){
+  isCrit=Math.random()*100<cur.CRIT;
+  let base=Math.max(10, cur.DMG - eDef + rand(-12,12));
+  if(isCrit) base=Math.floor(base*1.5);
+  dmg=base;
+  addLog('⚔️ Ты бьешь '+enemyData.name+' [АТАКА] на '+dmg+(isCrit?' CRIT!':''),'hit');
+  cooldowns[0]=1;
+ }else{
+  const sk=activeSkills[idx-1];
+  if(hMana<sk.mana){ addLog('⛔ Не хватает маны! Нужно '+sk.mana,'lose'); return; }
+  hMana-=sk.mana; cooldowns[idx]=sk.cd||1; if(cooldowns[idx]==0) cooldowns[idx]=1;
+  let mult=getMult(sk, idx-1);
+  let base=Math.floor(cur.DMG*mult);
+  base=Math.max(15, base - eDef + rand(-10,10));
+  isCrit=Math.random()*100<cur.CRIT; if(isCrit) base=Math.floor(base*1.4);
+  dmg=base;
+  if(sk.hasStun){ enemyStun=1; addLog('💫 '+sk.name+' оглушает на 1 раунд!','skill'); }
+  addLog('🔮 '+sk.name+' ['+Math.round(mult*100)+'%] → '+enemyData.name+' на '+dmg+(isCrit?' CRIT!':''),'skill');
+ }
+ eHp=Math.max(0,eHp-dmg);
+ updBars();
+ if(eHp<=0){ addLog('✅ ПОБЕДА! '+enemyData.name+' убит!','win'); showVictory(); return; }
+ afterHeroAction();
 }
 
-function startBattle(stage){
-  hideVictory();
-  currentStage = stage;
-  const enemies = VOLAND_ENEMIES[currentLoc];
-  const eData = enemies.find(x=>x.stage===stage);
-  if (!eData){ logChat('Моб не найден'); return; }
-  lastEnemyData = eData;
-  const hStats = getHeroStats();
-  const scaleHp = [0.4, 0.7, 1.0, 1.6][stage-1] || 0.5;
-  const scaleDmg = [0.4, 0.6, 0.85, 1.15][stage-1] || 0.5;
-  const scaleDef = [0.3, 0.5, 0.7, 0.9][stage-1] || 0.5;
-  battle = {
-    hero: {
-      name: heroData.n,
-      baseMaxHp: hStats.HP,
-      baseDmg: hStats.DMG,
-      maxHp: hStats.HP,
-      hp: hStats.HP,
-      maxMana: hStats.MANA,
-      mana: hStats.MANA,
-      dmg: hStats.DMG,
-      def: hStats.DEF,
-      crit: hStats.CRIT,
-      dodge: hStats.DODGE||0,
-      parry: hStats.PARRY||0,
-      immune:0,
-      dmgBuff:0,
-      dmgBuffTurns:0,
-      hpBuff:0,
-      hpBuffTurns:0,
-      block:0,
-      blockTurns:0,
-      reflect:0,
-      reflectTurns:0,
-      skills: heroData.sk,
-      cooldowns: [0,0,0,0,0],
-      manaCosts: heroData.sk.map(s=>parseManaCost(s[5])),
-      cdMax: heroData.sk.map(s=>parseCooldown(s[5])),
-      mult: heroData.sk.map(s=>parseSkillMultiplier(s[4]))
-    },
-    enemy: {
-      name: eData.name,
-      icon: eData.icon,
-      maxHp: Math.floor(hStats.HP * scaleHp + 50),
-      hp: Math.floor(hStats.HP * scaleHp + 50),
-      dmg: Math.floor(hStats.DMG * scaleDmg + 10),
-      def: Math.floor(hStats.DEF * scaleDef + 5),
-      crit: 5 + stage*2,
-      dodge: 3 + stage*2,
-      parry: eData.boss ? 15 : 0,
-      stunned:0,
-      stage: stage,
-      lvl: eData.lvl,
-      boss: !!eData.boss
-    },
-    turn: 'hero',
-    log: []
-  };
-  document.getElementById('locView').style.display='none';
-  document.getElementById('enemyView').style.display='none';
-  document.getElementById('battleView').style.display='flex';
-  document.getElementById('btnToHero').style.display='none';
-  document.getElementById('btnToLocs').style.display='none';
-  document.getElementById('mainTitle').textContent = 'BATTLE • ' + eData.name;
-  document.getElementById('mainSub').textContent = 'STAGE '+stage+' • '+eData.eng+' • БОЙ ИДЕТ • PARRY '+battle.enemy.parry+'%';
-  document.getElementById('bHeroName').textContent = battle.hero.name + ' • ' + profileName.toUpperCase();
-  document.getElementById('bHeroSub').textContent = heroData.role + ' • HP '+battle.hero.maxHp+' • DMG '+battle.hero.dmg;
-  document.getElementById('bHeroImg').src = heroData.img;
-  document.getElementById('bEnemyName').textContent = battle.enemy.name;
-  document.getElementById('bEnemySub').textContent = eData.eng + ' • ' + eData.lvl + (eData.boss?' • BOSS • PARRY 15%':'');
-  document.getElementById('bEnemyImgWrap').innerHTML = '<div style="font-size:64px">'+battle.enemy.icon+'</div>';
-  clearBattleLog();
-  addBattleLog('Бой начался: '+battle.hero.name+' vs '+battle.enemy.name, 'sys');
-  addBattleLog('Твои статы: HP '+battle.hero.maxHp+' DMG '+battle.hero.dmg+' DEF '+battle.hero.def+' MANA '+battle.hero.maxMana+' CRIT '+battle.hero.crit+'% '+(battle.hero.parry>0 ? 'PARRY '+battle.hero.parry+'%' : 'DODGE '+battle.hero.dodge+'%'), 'hero');
-  addBattleLog('Враг: HP '+battle.enemy.maxHp+' DMG '+battle.enemy.dmg+' DEF '+battle.enemy.def+' PARRY '+battle.enemy.parry+'%', 'enemy');
-  renderBattleUI(); renderActions();
-}
-
-function heroAction(type, skillIdx){
-  if (!battle || battle.turn!=='hero') return;
-  if (type==='attack'){
-    const res = calcDamage(battle.hero, battle.enemy, 1.0);
-    if (res.immune){ addBattleLog(battle.enemy.name + ' неуязвим! Урон 0 🛡️', 'sys'); }
-    else if (res.dodge){ addBattleLog(battle.enemy.name + ' увернулся от атаки!', 'enemy'); }
-    else if (res.parry){ addBattleLog(battle.enemy.name + ' парировал атаку ' + battle.hero.name + '! 🛡️', 'enemy'); }
-    else { battle.enemy.hp -= res.dmg; addBattleLog(battle.hero.name + ' бьет на ' + res.dmg + (res.crit?' CRIT!':'') + ' • HP врага ' + Math.max(0,battle.enemy.hp) + '/' + battle.enemy.maxHp, res.crit?'crit':'hero'); }
-  } else if (type==='skill'){
-    const i = skillIdx;
-    if (battle.hero.cooldowns[i]>0){ addBattleLog('Скил на КД: '+battle.hero.cooldowns[i]+' ходов', 'sys'); return; }
-    if (battle.hero.mana < battle.hero.manaCosts[i]){ addBattleLog('Не хватает маны для '+battle.hero.skills[i][0], 'sys'); return; }
-    const mult = battle.hero.mult[i];
-    const res = calcDamage(battle.hero, battle.enemy, mult);
-    battle.hero.mana -= battle.hero.manaCosts[i];
-    battle.hero.cooldowns[i] = battle.hero.cdMax[i];
-    if (res.immune){ addBattleLog(battle.enemy.name + ' неуязвим к скилу ' + battle.hero.skills[i][0] + '!', 'sys'); }
-    else if (res.dodge){ addBattleLog(battle.enemy.name + ' увернулся от скила ' + battle.hero.skills[i][0] + '!', 'enemy'); }
-    else if (res.parry){ addBattleLog(battle.enemy.name + ' парировал скил ' + battle.hero.skills[i][0] + ' 🛡️', 'enemy'); }
-    else { battle.enemy.hp -= res.dmg; addBattleLog(battle.hero.name + ' кастует ' + battle.hero.skills[i][0] + ' ['+battle.hero.skills[i][1]+'] на ' + res.dmg + (res.crit?' CRIT!':'') + ' • '+battle.hero.skills[i][4].slice(0,60), res.crit?'crit':'hero'); }
-    const sName = battle.hero.skills[i][0];
-    applySkillEffect(sName, battle);
-  }
-  for (let j=0;j<battle.hero.cooldowns.length;j++){ if (battle.hero.cooldowns[j]>0) battle.hero.cooldowns[j]--; }
-  renderBattleUI(); renderActions();
-  if (battle.enemy.hp<=0){
-    addBattleLog('ПОБЕДА! ' + battle.enemy.name + ' повержен!', 'crit');
-    logChat('Победа над ' + battle.enemy.name + ' Stage '+battle.enemy.stage);
-    battle.turn = 'ended';
-    setTimeout(()=> showVictory(true), 600);
-    return;
-  }
-  battle.turn = 'enemy'; renderBattleUI(); renderActions(); setTimeout(enemyTurn, 800);
+function afterHeroAction(){
+ spellCount++;
+ // хук конца хода героя
+ if(window.VOLAND_HERO_ON_TURN_END) window.VOLAND_HERO_ON_TURN_END({cur, eDef, eDmg, eMaxHp, get eHp(){return eHp}, set eHp(v){eHp=v}, get hHp(){return hHp}, set hHp(v){hHp=v}, get hMana(){return hMana}, set hMana(v){hMana=v}, hMax, hMaxMana, addLog, updBars, rand, enemyData, turn});
+ if(eHp<=0){ addLog('✅ ПОБЕДА!','win'); showVictory(); return; }
+ setTimeout(enemyTurn, 400);
 }
 
 function enemyTurn(){
-  if (!battle || battle.enemy.hp<=0) return;
-  if (battle.enemy.stunned>0){
-    addBattleLog('🌀 ' + battle.enemy.name + ' оглушен! Пропускает ход!', 'sys');
-    battle.enemy.stunned--;
-    battle.turn='hero'; renderBattleUI(); renderActions(); return;
-  }
-  const res = calcDamage(battle.enemy, battle.hero, 1.0);
-  let finalDmg = res.dmg;
-  let blocked = 0;
-  let reflected = 0;
-  if (!res.immune && !res.dodge && !res.parry){
-    if (battle.hero.blockTurns>0 && battle.hero.block>0){
-      blocked = Math.floor(finalDmg * battle.hero.block);
-      finalDmg -= blocked;
-      addBattleLog('🛡️ Бастион блокирует ' + blocked + ' урона ('+Math.round(battle.hero.block*100)+'% )', 'hero');
-    }
-    if (battle.hero.reflectTurns>0 && battle.hero.reflect>0 && finalDmg>0){
-      reflected = Math.floor(finalDmg * battle.hero.reflect);
-      if (reflected>0){
-        battle.enemy.hp -= reflected;
-        addBattleLog('↩️ Отражение ' + reflected + ' урона обратно в ' + battle.enemy.name + '!', 'crit');
-      }
-    }
-  }
-  if (res.immune){ addBattleLog(battle.hero.name + ' неуязвим! 🛡️ Урон 0', 'hero'); }
-  else if (res.dodge){ addBattleLog(battle.hero.name + ' увернулся от атаки ' + battle.enemy.name + '!', 'hero'); }
-  else if (res.parry){ addBattleLog(battle.hero.name + ' парировал атаку ' + battle.enemy.name + '! 🛡️', 'hero'); }
-  else { 
-    battle.hero.hp -= finalDmg; 
-    let txt = battle.enemy.name + ' бьет на ' + finalDmg;
-    if (blocked>0) txt += ' (блок '+blocked+')';
-    txt += (res.crit?' CRIT!':'') + ' • Твое HP ' + Math.max(0,battle.hero.hp) + '/' + battle.hero.maxHp;
-    addBattleLog(txt, res.crit?'crit':'enemy'); 
-  }
-  renderBattleUI();
-  if (battle.enemy.hp<=0){
-    addBattleLog('ПОБЕДА! ' + battle.enemy.name + ' повержен отражением!', 'crit');
-    battle.turn='ended';
-    setTimeout(()=> showVictory(true), 600);
-    return;
-  }
-  if (battle.hero.hp<=0){
-    addBattleLog('ПОРАЖЕНИЕ! Ты пал в бою против ' + battle.enemy.name, 'enemy');
-    logChat('Поражение от ' + battle.enemy.name);
-    battle.turn = 'ended'; renderActions();
-    setTimeout(()=> showVictory(false), 600);
-    return;
-  }
-  if (battle.hero.immune>0){ battle.hero.immune--; if (battle.hero.immune===0) addBattleLog('Неуязвимость спала', 'sys'); }
-  if (battle.hero.blockTurns>0){ battle.hero.blockTurns--; if (battle.hero.blockTurns===0){ battle.hero.block=0; battle.hero.reflect=0; addBattleLog('Имперский Бастион спал', 'sys'); } }
-  if (battle.hero.reflectTurns>0){ battle.hero.reflectTurns--; }
-  if (battle.hero.dmgBuffTurns>0){
-    battle.hero.dmgBuffTurns--;
-    if (battle.hero.dmgBuffTurns===0){
-      battle.hero.dmgBuff=0;
-      battle.hero.dmg = battle.hero.baseDmg;
-      addBattleLog('Баф +300% урона закончился', 'sys');
-    }
-  }
-  if (battle.hero.hpBuffTurns>0){
-    battle.hero.hpBuffTurns--;
-    if (battle.hero.hpBuffTurns===0){
-      battle.hero.maxHp = battle.hero.baseMaxHp;
-      if (battle.hero.hp > battle.hero.maxHp) battle.hero.hp = battle.hero.maxHp;
-      battle.hero.hpBuff=0;
-      addBattleLog('Баф +50% HP закончился', 'sys');
-    }
-  }
-  battle.turn = 'hero'; renderBattleUI(); renderActions();
+ if(isBattleOver) return;
+ if(window.VOLAND_HERO_ON_ENEMY_TURN){
+   let skip = window.VOLAND_HERO_ON_ENEMY_TURN({cur, eDef, eDmg, eMaxHp, get eHp(){return eHp}, set eHp(v){eHp=v}, get hHp(){return hHp}, set hHp(v){hHp=v}, addLog, updBars, rand, enemyStun});
+   if(skip){ endRound(); return; }
+ }
+ if(enemyStun>0){ addLog('💤 '+enemyData.name+' оглушен, пропускает ход [стан '+enemyStun+'→'+(enemyStun-1)+']','hit'); enemyStun--; endRound(); return; }
+ let dmgToHero=Math.max(10, eDmg - cur.DEF + rand(-10,10));
+ hHp=Math.max(0,hHp-dmgToHero);
+ addLog('💥 '+enemyData.name+' бьет тебя на '+dmgToHero+' — HP '+hHp+'/'+hMax,'enemy-hit');
+ updBars();
+ if(hHp<=0){ addLog('❌ ПОРАЖЕНИЕ!','lose'); showDefeat(); return; }
+ endRound();
 }
+
+function endRound(){
+ turn++;
+ for(let i=0;i<cooldowns.length;i++){ if(cooldowns[i]>0) cooldowns[i]--; }
+ hMana=Math.min(hMaxMana,hMana+8);
+ updBars(); renderSkillBar();
+ if(hHp<=0){ addLog('❌ ПОРАЖЕНИЕ!','lose'); showDefeat(); } else { addLog('--- Ход '+turn+': твой ход ---',''); }
+ if(window.VOLAND_HERO_ON_ROUND_END) window.VOLAND_HERO_ON_ROUND_END({turn});
+}
+
+function showVictory(){ isBattleOver=true; document.getElementById('rewGold').textContent='+'+(150+stage*40+loc*20); document.getElementById('rewXp').textContent='+'+(4000+stage*200+loc*100); document.getElementById('modalTitle').textContent='ПОБЕДА!'; document.getElementById('modalSub').textContent='Ты победил • '+enemyData.name+' • LOC'+loc+' STAGE'+stage; document.getElementById('victoryModal').classList.add('show'); renderSkillBar(); }
+function showDefeat(){ isBattleOver=true; document.getElementById('modalIcon').textContent='💀'; document.getElementById('modalTitle').textContent='ПОРАЖЕНИЕ!'; document.getElementById('modalSub').textContent='Тебя победил '+enemyData.name; document.getElementById('victoryModal').classList.add('show'); renderSkillBar(); }
+
+function tryNav(url){ if(!isBattleOver){ addLog('⛔ Нельзя выйти из боя! Закончи бой','lose'); return; } location.href=url; }
+window.tryNav=tryNav;
+
+function loadHeroModule(){
+ const s=document.createElement('script');
+ s.src='./assets/js/battle/heroes/'+heroId+'.js';
+ s.onload=()=>{ addLog('✨ Механика героя '+heroData.n+' загружена из heroes/'+heroId+'.js','skill'); renderSkillBar(); };
+ s.onerror=()=>{ addLog('ℹ️ Нет отдельной механики для '+heroId+' — используется база DMG-DEF','hit'); };
+ document.head.appendChild(s);
+}
+
+updBars(); renderSkillBar();
+addLog('Бой: '+profileName+' ['+heroData.n+'] vs '+enemyData.name+' [LOC '+loc+' STAGE '+stage+']','');
+addLog('Моб UI: hp '+enemyData.hp+'% бар • Реал: DEF '+eDef+' DMG '+eDmg+' HP '+eMaxHp+' (ручками в engine.js)','skill');
+addLog('Формула: урон = DMG героя - DEF моба + rand, мин 10 • Мана +8 за ход','');
+addLog('Пассивка: '+passive.name+' — '+passive.desc,'skill');
+addLog('⬇️ Жми: Q=Атака, W,E,R,T=Скилы','');
+loadHeroModule();
+document.addEventListener('keydown',e=>{ const k=e.key.toLowerCase(); if(k=='q') useAction(0); if(k=='w') useAction(1); if(k=='e') useAction(2); if(k=='r') useAction(3); if(k=='t') useAction(4); });
+window.useAction=useAction;
+})();
