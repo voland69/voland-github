@@ -83,35 +83,24 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 </div>
 </div>
 <div class="modal-overlay" id="victoryModal"><div class="modal"><div id="modalIcon" style="font-size:36px">🏆</div><div class="modal-title" id="modalTitle">ПОБЕДА!</div><div class="modal-sub" id="modalSub">Ты победил</div><div class="rewards"><div class="reward"><div>🪙</div><div class="reward-val gold" id="rewGold">+190</div><div class="reward-lbl">GOLD</div></div><div class="reward"><div>⭐</div><div class="reward-val xp" id="rewXp">+4200</div><div class="reward-lbl">XP</div></div><div class="reward"><div>📦</div><div class="reward-val" id="rewLoot">1</div><div class="reward-lbl">LOOT</div></div></div><div class="modal-btns"><button class="btn" onclick="location.reload()">✕ БИТЬ СНОВА</button><button class="btn gold" onclick="location.href='./page7.html?loc='+loc">✓ К МОБАМ</button></div></div></div>
-
-
-<script src="./assets/js/storage.js" onerror=""></script>
-<!-- HERO MODULES -->
-<script src="./assets/js/battle/heroes/amethyst.js"></script>
-<script src="./assets/js/battle/heroes/gravelord.js"></script>
-<script src="./assets/js/battle/heroes/dark-ranger.js"></script>
-<script src="./assets/js/battle/heroes/lion-warden.js"></script>
-<script src="./assets/js/battle/heroes/wild-path.js"></script>
-<script src="./assets/js/battle/heroes/iron-vow.js"></script>
-<script src="./assets/js/battle/heroes/azure-sage.js"></script>
-<script src="./assets/js/battle/heroes/volcanic.js"></script>
-<script src="./assets/js/battle/skills.js"></script>
-<script src="./db.js"></script>
+<script src="data:application/javascript;base64,Ly8gVk9MQU5EIERCIHYxIC0g0LXQtNC40L3Ri9C5INC40YHRgtC+0YfQvdC40Log0LTQsNC90L3Ri9GFINC00LvRjyDQstGB0LXRhSDRgdGC0YDQsNC90LjRhgovLyBUUlVFIFNLSUxMUyBmcm9tIHVzZXIgSFRNTCAtIG5vIGludmVudGlvbgpjb25zdCBWT0xBTkRfSEVST0VTID0gewonbmVjcm8tZi1uZXcnOiB7CiAgbjonQU1FVEhZU1QnLCByb2xlOidNQUdFIOKAoiBOZWNybyAtIEZlbWFsZScsCiAgaW1nOicuL2Fzc2V0cy9oZXJvZXMvbmVjcm8tZi1uZXcud2VicCcsCiAgdGh1bWI6Jy4vYXNzZXRzL2hlcm9lcy9uZWNyby1mLW5ldy53ZWJwJywKICBzdDp7SFA6MTAwMCxERUY6MTAwLERNRzoyNDAsTUFOQToyODAsQ1JJVDoxNSxQQVJSWTowLERPREdFOjEyfSwKICBzazpbCiAgICBbJ9Co0LXQv9C+0YIg0JDQvNC10YLQuNGB0YLQsCcsJ1BBU1NJVkUnLFsnLi9hc3NldHMvaGVyb2VzL2ljb25fc2hlcG90X2FtZXRpc3RhLmpwZyddLCfwn5SuJywn0JrQsNC20LTQvtC1IDMt0LUg0LfQsNC60LvQuNC90LDQvdC40LUg0L/RgNC40LfRi9Cy0LDQtdGCINCw0LzQtdGC0LjRgdGC0L7QstC+0LPQviDQtNGD0YXQsCDQvdCwIDMg0YDQsNGD0L3QtNCwLiDQlNGD0YUg0LHRjNC10YIg0L3QsCAxMDAlINGD0YDQvtC90LAg0LfQsNC60LvQuNC90LDRgtC10LvRjyDQuCDQtNCw0LXRgiDRgtC10LHQtSArNSDQvNCw0L3RiyDQt9CwINGA0LDRg9C90LQg0L/QvtC60LAg0LbQuNCyLicsJ9CU0YPRhTogMTAwJSDRg9GA0L7QvdCwIOKAoiDQnNCw0L3QsDogKzUg0LfQsCDRgNCw0YPQvdC0J10sCiAgICBbJ9Cf0YDQvtC60LvRj9GC0LjQtSDQlNGD0YgnLCcxJyxbJy4vYXNzZXRzL2hlcm9lcy9pY29uX3Byb2tseWF0aWVfZHVzaC5qcGcnLCcuL2Fzc2V0cy9oZXJvZXMvaWNvbl9wcm9rbHlhdHllX2R1c2guanBnJ10sJ/CfkpwnLCfQm9GD0Ycg0YHQstC10YLQsCDQvdCw0L3QvtGB0LjRgiAyMDAlINGD0YDQvtC90LAgKyDQutGA0LDQtNC10YIgNSDQvNCw0L3RiyDRgyDQstGA0LDQs9CwINC4INC90LDQutC70LDQtNGL0LLQsNC10YIg0KHRgtGA0LDRhSDQlNGD0Yg6IC0xNSUg0YPRgNC+0L3QsCDQstGA0LDQs9CwINC90LAgNCDRgNCw0YPQvdC00LAuJywn0JrQlDogMyDRgNCw0YPQvdC00L7QsiDigKIg0JzQsNC90LA6IDEwIOKAoiAtMTUlINGD0YDQvtC90LAg0LLRgNCw0LPQsCddLAogICAgWyfQkNC80LXRgtC40YHRgtC+0LLQsNGPINCi0Y7RgNGM0LzQsCcsJzInLFsnLi9hc3NldHMvaGVyb2VzL2ljb25fYW1ldGlzdG92YXlhX3R5dXJtYS5qcGcnXSwn8J+RuycsJ9Cf0YDQuNC30YvQstCw0YLQtdC70Ywg0LfQsNC60LvRjtGH0LDQtdGCINCy0YHQtdGFINCy0YDQsNCz0L7QsiDQsiDQutC70LXRgtC60YMg0L3QsCAxINGA0LDRg9C90LQuINCSINC60L7QvdGG0LUg0YDQsNGD0L3QtNCwINC60LvQtdGC0LrQsCDQstC30YDRi9Cy0LDQtdGC0YHRjyDQvdCw0L3QvtGB0Y8g0LLRgdC10LwgMzAwJSDRg9GA0L7QvdCwLicsJ9Ca0JQ6IDEwINGA0LDRg9C90LTQvtCyIOKAoiDQnNCw0L3QsDogMTUg4oCiINCa0L7QvdGC0YDQvtC70Yw6INCh0YLQsNC9IEFPRSAxINGA0LDRg9C90LQnXSwKICAgIFsn0J/QvtGF0LjRidC10L3QuNC1INCW0LjQt9C90LgnLCczJyxbJy4vYXNzZXRzL2hlcm9lcy9pY29uX3Bva2hpc2hjaGVuaWVfemhpem5pLmpwZyddLCfwn5KAJywn0KHQstGP0LfRjCDRgSDQstGA0LDQs9C+0Lwg0L3QsCA0INGA0LDRg9C90LTQsDogMzAlINGD0YDQvtC90LAsINC60L7RgtC+0YDRi9C5INGC0Ysg0L/QvtC70YPRh9Cw0LXRiNGMLCDQvtGC0YDQsNC20LDQtdGC0YHRjyDQsiDQstGA0LDQs9CwLCDQuCAzMCUg0YPRgNC+0L3QsCDQstGA0LDQs9CwINGF0LjQu9C40YIg0YLQtdCx0Y8uJywn0JrQlDogMTgg0YDQsNGD0L3QtNC+0LIg4oCiINCc0LDQvdCwOiAzMCDigKIgMzAlINC/0L7Qu9GD0YfQsNC10LzQvtCz0L4g0YPRgNC+0L3QsCAtINC+0YLQtNCw0YfQsCAzMCUg0LvQsNC50YTRgdGC0LjQuyddLAogICAgWyfQkNC80LXRgtC40YHRgtC+0LLRi9C5INCX0LDQutCw0YInLCc0JyxbJy4vYXNzZXRzL2hlcm9lcy9pY29uX2FtZXRpc3Rvdnl5X3pha2F0LmpwZyddLCfwn4yMJywnVUxUSU1BVEU6INCS0YvQv9GD0YHQutCw0LXRgiA1INCw0LzQtdGC0LjRgdGC0L7QstGL0YUg0LTRg9GILCDQutCw0LbQtNCw0Y8g0LjRidC10YIg0LLRgNCw0LPQsCDQuCDQvdCw0L3QvtGB0LjRgiAyMDAlINGD0YDQvtC90LAgKyDRgdGC0LDQvdC40YIg0L3QsCAxINGA0LDRg9C90LQuINCV0YHQu9C4INCy0YDQsNCzINC+0LTQuNC9IOKAlCDQstGB0LUgNSDQv9C+0L/QsNC00LDRjtGCINCyINC90LXQs9C+LicsJ9Ca0JQ6IDI1INGA0LDRg9C90LTQvtCyIOKAoiDQnNCw0L3QsDogMTAwIOKAoiDQo9GA0L7QvTog0LTQviAxMDAwJSArINGB0YLQsNC9IDEg0YDQsNGD0L3QtCddCiAgXQp9LAonbmVjcm8tbSc6IHsKICBuOidHUkFWRUxPUkQnLCByb2xlOidUQU5LIOKAoiBOZWNybyAtIE1hbGUnLAogIGltZzonLi9hc3NldHMvaGVyb2VzL25lY3JvLW0ud2VicCcsCiAgdGh1bWI6Jy4vYXNzZXRzL2hlcm9lcy9uZWNyby1tLndlYnAnLAogIHN0OntIUDoxMTUwLERFRjoxMTAsRE1HOjE5MCxNQU5BOjI2MCxDUklUOjEwLFBBUlJZOjAsRE9ER0U6OH0sCiAgc2s6WwogICAgWyfQmtC+0YHRgtGP0L3QvtC5INCb0LXQs9C40L7QvScsJ1BBU1NJVkUnLFsnLi9hc3NldHMvaGVyb2VzL2ljb25fa29zdHlhbm95X2xlZ2lvbi5qcGcnXSwn8J+mtCcsJ9Ca0LDQttC00YvQuSDRgNCw0YPQvdC0INC/0YDQuNC30YvQstCw0LXRgtGB0Y8g0L/QviAxINGB0LrQtdC70LXRgtGDINC/0L7QvNC+0YnQvdC40LrRgyAo0LzQsNC60YEgMykuINCh0LrQtdC70LXRgtGLINC90LDRgdC70LXQtNGD0Y7RgiA1MCUg0YLQstC+0LXQs9C+INGD0YDQvtC90LAuINCh0LrQtdC70LXRgtGLINCx0LXRgdGB0LzQtdGA0YLQvdGLINC4INCy0L7RjtGO0YIg0LTQviDQutC+0L3RhtCwINCx0L7Rjy4nLCfQodC60LXQu9C10YIgNTAlINGD0YDQvtC90LAg4oCiINCc0LDQutGBINGB0LrQtdC70LXRgtC+0LI6IDMnXSwKICAgIFsn0JrQvtGB0YLRj9C90L7QtSDQmtC+0L/RjNC1JywnMScsWycuL2Fzc2V0cy9oZXJvZXMvaWNvbl9rb3N0eWFub2Vfa29weWUuanBnJ10sJ+KYoCcsJ9CR0YDQvtGB0LDQtdGCINC60L7RgdGC0YwsINC90LDQvdC+0YHQuNGCICsxNTAlINGD0YDQvtC90LAg0Lgg0L3QsNC60LvQsNC00YvQstCw0LXRgiDQo9GP0LfQstC40LzQvtGB0YLRjCDQmtC+0YHRgtC10Lk6ICsyNSUg0YPRgNC+0L0g0L7RgiDRgdCw0LzQvNC+0L3QvtCyINC90LAgMiDRgNCw0YPQvdC00LAuJywn0JrQlDogNCDRgNCw0YPQvdC00LAg4oCiINCc0LDQvdCwOiAxNSDigKIgKzI1JSDRg9GA0L7QvdCwINC+0YIg0YHQsNC80LzQvtC90L7QsiddLAogICAgWyfQmtC+0YHRgtGP0L3QvtC5INCp0LjRgicsJzInLFsnLi9hc3NldHMvaGVyb2VzL2ljb25fa29zdHlhbm95X3NoY2hpdC5qcGcnXSwn8J+boScsJ9Cf0YDQuNC30YvQstCw0LXRgiDRidC40YIg0LjQtyDQutC+0YHRgtC10Lk6IDIwJSDQvNCw0LrRgSBIUC4g0J/RgNC4INGA0LDQt9GA0YPRiNC10L3QuNC4INCy0LfRgNGL0LLQsNC10YLRgdGPLCDQvdCw0L3QvtGB0Y8gKzMwMCUg0YPRgNC+0L3QsCDQstGB0LXQvCDQstGA0LDQs9Cw0LwuJywn0JrQlDogMTAg0YDQsNGD0L3QtNC+0LIg4oCiINCc0LDQvdCwOiAzMCDigKIg0KnQuNGCOiAyMCUgSFAg4oCiINCj0YDQvtC9ICszMDAlIEFPRSddLAogICAgWyfQn9C+0LTQvdGP0YLRjCDQnNC10YDRgtCy0YvRhScsJzMnLFsnLi9hc3NldHMvaGVyb2VzL2ljb25fcG9kbnlhdF9tZXJ0dnlraC5qcGcnXSwn8J+RpScsJ9CS0L7RgdC60YDQtdGI0LDQtdGCIDIg0YHQutC10LvQtdGC0L7QsiDQv9C+0LTRgNGL0LLQvdC40LrQvtCyLiDQkiAxINGA0LDRg9C90LTQtSAxINGB0LrQtdC70LXRgiDQstC30YDRi9Cy0LDQtdGC0YHRjyDQuCDQvdCw0L3QvtGB0LjRgiAyMDAlINGD0YDQvtC90LAg0LLRgdC10LwuINCS0YLQvtGA0L7QuSDRgdC60LXQu9C10YIg0LLQt9GA0YvQstCw0LXRgtGB0Y8g0LLQviAyINGA0LDRg9C90LTQtSDQuCDQvdCw0L3QvtGB0LjRgiAzMDAlINGD0YDQvtC90LAg0LLRgdC10LwuJywn0JrQlDogMTgg0YDQsNGD0L3QtNC+0LIg4oCiINCc0LDQvdCwOiAzMCDigKIg0KHQsNC80LzQvtC90Ys6IDInXSwKICAgIFsn0JDRgNC80LjRjyDQn9C+0LPQuNCx0LXQu9C4JywnNCcsWycuL2Fzc2V0cy9oZXJvZXMvaWNvbl9tb2dpbG55eV9wYWt0LmpwZycsJy4vYXNzZXRzL2hlcm9lcy9pY29uX2FybWl5YV9wb2dpYmVsaS5qcGcnXSwn8J+SgCcsJ1VMVElNQVRFOiDQn9GA0LjQt9GL0LLQsNC10YIgNSDRgdC60LXQu9C10YLQvtCyINC90LAgMyDRgNCw0YPQvdC00LAuINCa0LDQttC00YvQuSDRgdC60LXQu9C10YIg0LjQvNC10LXRgiA1MCUg0YPRgNC+0L3QsCDQv9GA0LjQt9GL0LLQsNGC0LXQu9GPLicsJ9Ca0JQ6IDI1INGA0LDRg9C90LTQvtCyIOKAoiDQnNCw0L3QsDogMTAwIOKAoiDQotC40YLQsNC9IDIwMCUg0YPRgNC+0L3QsCddCiAgXQp9LAonYXJjaGVyLWYnOiB7CiAgbjonV0lMRCBQQVRIJywgcm9sZTonUkFOR0VSIOKAoiBBcmNoZXIgLSBGZW1hbGUnLAogIGltZzonLi9hc3NldHMvaGVyb2VzL2FyY2hlci1mLndlYnAnLAogIHRodW1iOicuL2Fzc2V0cy9oZXJvZXMvYXJjaGVyLWYud2VicCcsCiAgc3Q6e0hQOjk4MCxERUY6OTAsRE1HOjIxMCxNQU5BOjIwMCxDUklUOjI1LFBBUlJZOjAsRE9ER0U6MjB9LAogIHNrOlsKICAgIFsn0KLRgNC+0L/RiyDQl9Cy0LXRgNGPJywnUEFTU0lWRScsWycuL2Fzc2V0cy9oZXJvZXMvaWNvbl9kdWtoX2xlc2EuanBnJywnLi9hc3NldHMvaGVyb2VzL2ljb25fdHJvcHlfenZlcnlhLmpwZyddLCfwn5C+Jywn0J/RgNC4INGD0LrQu9C+0L3QtdC90LjQuCwg0YHQu9C10LTRg9GO0YnQuNC5INGD0LTQsNGAIDEwMCUg0LrRgNC40YLQuNGH0LXRgdC60LjQuS4nLCfQmtCUOiDigJQg4oCiINCc0LDQvdCwOiAwJ10sCiAgICBbJ9CU0LLQvtC50L3QvtC5INCS0YvRgdGC0YDQtdC7JywnMScsWycuL2Fzc2V0cy9oZXJvZXMvaWNvbl90b2Nobnl5X3Z5c3RyZWwuanBnJywnLi9hc3NldHMvaGVyb2VzL2ljb25fZHZveW5veV92eXN0cmVsLmpwZyddLCfwn46vJywn0JLRi9GB0YLRgNC10LvQuNCy0LDQtdGCIDIg0YHRgtGA0LXQu9GLINC/0L4gMTAwJSDRg9GA0L7QvdCwINC60LDQttC00LDRjy4g0JXRgdC70Lgg0L7QsdC1INC/0L7Qv9Cw0LvQuCDQsiDQvtC00L3RgyDRhtC10LvRjCDigJQg0LrRgNC+0LLQvtGC0LXRh9C10L3QuNC1IDI1JSDRg9GA0L7QvdCwINC90LAgNCDRgNCw0YPQvdC00LAuJywn0JrQlDogMyDRgNCw0YPQvdC00LAg4oCiINCc0LDQvdCwOiA1IOKAoiDQo9GA0L7QvTogMjAwJSArINC00L7RgiddLAogICAgWyfQr9C00L7QstC40YLQsNGPINCb0LjQsNC90LAnLCcyJyxbJy4vYXNzZXRzL2hlcm9lcy9pY29uX2dyYWRpbmFfc3RyZWwuanBnJywnLi9hc3NldHMvaGVyb2VzL2ljb25feWFkb3ZpdGF5YV9saWFuYS5qcGcnLCcuL2Fzc2V0cy9oZXJvZXMvaWNvbl9rb3JuaS5qcGcnXSwn8J+MvycsJ9CR0YDQvtGB0LDQtdGCINC70LjQsNC90YMg0LIg0LHQu9C40LbQsNC50YjQtdCz0L4g0LLRgNCw0LPQsC4g0JLRgNCw0LMg0L7Qs9C70YPRiNCw0LXRgtGB0Y8g0L3QsCAxINGA0LDRg9C90LQg0Lgg0L7RgtGA0LDQstC70Y/QtdGC0YHRjyDQvdCwIDMg0YDQsNGD0L3QtNCwLiDQntGC0YDQsNCy0LvQtdC90L3Ri9C5INCy0YDQsNCzINC/0L7Qu9GD0YfQsNC10YIgMTAwJSDRg9GA0L7QvdCwINCyINGC0LXRh9C10L3QuNC1IDMg0YDQsNGD0L3QtNC+0LIuJywn0JrQlDogMTAg0YDQsNGD0L3QtNC+0LIg4oCiINCc0LDQvdCwOiAxNSDigKIg0KHRgtCw0L0gMSDRgNCw0YPQvdC0ICsg0LTQvtGCJ10sCiAgICBbJ9CT0LvQsNC3INCv0YHRgtGA0LXQsdCwJywnMycsWycuL2Fzc2V0cy9oZXJvZXMvaWNvbl9rb3JuaS5qcGcnLCcuL2Fzc2V0cy9oZXJvZXMvaWNvbl9nbGF6X3lhc3RyZWJhLmpwZyddLCfwn6aFJywn0J3QsCA0INGA0LDRg9C90LTQsCDQstC40LTQuNGCINCy0YHQtdGFINCy0YDQsNCz0L7QsiDQsiDRgNCw0LTQuNGD0YHQtSAo0LTQsNC20LUg0LIg0LjQvdCy0LjQt9C1KSDQuCDQv9C+0LvRg9GH0LDQtdGCICsyNSUg0LrRgNC40YIg0YjQsNC90YEuINCQ0YLQsNC60Lgg0LjQs9C90L7RgNC40YDRg9GO0YIgMjAlINCx0YDQvtC90LguJywn0JrQlDogMjAg0YDQsNGD0L3QtNC+0LIg4oCiINCc0LDQvdCwOiAyMCDigKIg0JrRgNC40YI6ICsyNSUnXSwKICAgIFsn0JHRg9GA0Y8g0KHRgtGA0LXQuycsJzQnLFsnLi9hc3NldHMvaGVyb2VzL2ljb25fcHJpenl2X3N0YWkuanBnJywnLi9hc3NldHMvaGVyb2VzL2ljb25fYnVyeWFfc3RyZWwuanBnJ10sJ/CfjKrvuI8nLCdVTFRJTUFURTog0J/RgNGL0LbQvtC6INCyINCy0L7Qt9C00YPRhSwgMTIg0YHRgtGA0LXQuyDQt9CwIDMg0YDQsNGD0L3QtNCwINC/0L4g0L7QsdC70LDRgdGC0LguINCa0LDQttC00LDRjyA4MCUg0YPRgNC+0L3QsCArIDI1JSDRiNCw0L3RgSDRgdGC0LDQvdCwINC90LAgMSDRgNCw0YPQvdC0LicsJ9Ca0JQ6IDI1INGA0LDRg9C90LTQvtCyIOKAoiDQnNCw0L3QsDogMzAg4oCiINCj0YDQvtC9OiDQtNC+IDk2MCUgKyDRgdGC0LDQvSddCiAgXQp9LAonYXJjaGVyLW0nOiB7CiAgbjonREFSSyBSQU5HRVInLCByb2xlOidSQU5HRVIg4oCiIEFyY2hlciAtIE1hbGUnLAogIGltZzonLi9hc3NldHMvaGVyb2VzL2FyY2hlci1tLndlYnAnLAogIHRodW1iOicuL2Fzc2V0cy9oZXJvZXMvYXJjaGVyLW0ud2VicCcsCiAgc3Q6e0hQOjEwMjAsREVGOjk1LERNRzoyMzAsTUFOQToyMTAsQ1JJVDoyMCxQQVJSWTowLERPREdFOjE4fSwKICBzazpbCiAgICBbJ9Cc0LXRgtC60LAg0KLQtdC90LgnLCdQQVNTSVZFJyxbJy4vYXNzZXRzL2hlcm9lcy9pY29uX3Rlbi5qcGcnLCcuL2Fzc2V0cy9oZXJvZXMvaWNvbl9tZXRrYV90ZW5pLmpwZyddLCfwn5GB77iPJywn0JrQsNC20LTQsNGPIDIt0Y8g0LDRgtCw0LrQsCDQvdCw0LrQu9Cw0LTRi9Cy0LDQtdGCINCc0LXRgtC60YMg0KLQtdC90Lgg0L3QsCAzINGA0LDRg9C90LTQsC4g0J7RgtC80LXRh9C10L3QvdGL0LUg0YbQtdC70Lgg0L/QvtC70YPRh9Cw0Y7RgiArMjAwJSDRg9GA0L7QvdCwINC+0YIg0YLQstC+0LjRhSDRgdGC0YDQtdC7LiDQo9Cx0LjQudGB0YLQstC+INC+0YLQvNC10YfQtdC90L3QvtC5INGG0LXQu9C4INCy0L7RgdGB0YLQsNC90LDQstC70LjQstCw0LXRgiAxNSDQvNCw0L3Riy4nLCfQmtCUOiDigJQg4oCiINCc0LDQvdCwOiAwJ10sCiAgICBbJ9CR0LXQs9C70YvQuSDQstGL0YHRgtGA0LXQuycsJzEnLFsnLi9hc3NldHMvaGVyb2VzL2ljb25fdGVtbmF5YV9zdHJlbGEuanBnJywnLi9hc3NldHMvaGVyb2VzL2ljb25fYmVnbHl5X3Z5c3RyZWwuanBnJ10sJ/Cfj7knLCfQodGC0YDQtdC70Y/QtdGCINC/0L4g0LHQu9C40LbQsNC50YjQtdC80YMg0LLRgNCw0LPRgywg0L3QsNC90L7RgdGPIDIwMCUg0YPRgNC+0L3QsC4nLCfQmtCUOiAzINGA0LDRg9C90LTQsCDigKIg0JzQsNC90LA6IDUg4oCiINCj0YDQvtC9OiAyMDAlJ10sCiAgICBbJ9Co0LDQsyDQsiDQndC40YfRgtC+JywnMicsWycuL2Fzc2V0cy9oZXJvZXMvaWNvbl90ZW5ldm95X3ByeXpob2suanBnJywnLi9hc3NldHMvaGVyb2VzL2ljb25fc2hhZ192X25pY2h0by5qcGcnXSwn8J+MkScsJ9Ch0YLQsNC90L7QstC40YLRgdGPINC90LXQstC40LTQuNC80YvQvCDQvdCwIDMg0YDQsNGD0L3QtNCwLiDQodC70LXQtNGD0Y7RidCw0Y8g0LDRgtCw0LrQsCDQsiDQuNC90LLQuNC30LUg0LrRgNC40YLRg9C10YIg0LPQsNGA0LDQvdGC0LjRgNC+0LLQsNC90L3QviDQuCDRgdC90LjQvNCw0LXRgiDRjdGE0YTQtdC60YIg0LjQvdCy0LjQt9CwLicsJ9Ca0JQ6IDIwINGA0LDRg9C90LTQvtCyIOKAoiDQnNCw0L3QsDogMjUnXSwKICAgIFsn0J/RgNC40LfRgNCw0YfQvdCw0Y8g0KHRgtGA0LXQu9CwJywnMycsWycuL2Fzc2V0cy9oZXJvZXMvaWNvbl9zZXRfdGVuZXkuanBnJywnLi9hc3NldHMvaGVyb2VzL2ljb25fcHJpenJhY2huYXlhX3N0cmVsYS5qcGcnXSwn8J+SqycsJ9CS0YvQv9GD0YHQutCw0LXRgiDRgdGC0YDQtdC70YMsINC/0YDQvtGF0L7QtNGP0YnRg9GOINGB0LrQstC+0LfRjCDQstGA0LDQs9C+0LIuINCd0LDQvdC+0YHQuNGCICsxNDAlINGD0YDQvtC90LAg0Lgg0L7Qs9C70YPRiNCw0LXRgiDQvdCwIDEg0YDQsNGD0L3QtCDRgSDQstC10YDQvtGP0YLQvdC+0YHRgtGM0Y4gMzMlLiDQn9GA0L7QvdC30LDQtdGCINC00L4gMyDRhtC10LvQtdC5LicsJ9Ca0JQ6IDUg0YDQsNGD0L3QtNC+0LIg4oCiINCc0LDQvdCwOiAyMCDigKIg0KPRgNC+0L06IDE4NcOXMS40J10sCiAgICBbJ9CX0LDQu9C/INCR0LXQt9C00L3RiycsJzQnLFsnLi9hc3NldHMvaGVyb2VzL2ljb25fdGVuZXZveV9sZWdpb24uanBnJywnLi9hc3NldHMvaGVyb2VzL2ljb25femFscF9iZXpkbnkuanBnJ10sJ/CfjIwnLCdVTFRJTUFURTog0JLRi9C/0YPRgdC60LDQtdGCIDcg0YHRgtGA0LXQuy4g0JrQsNC20LTQsNGPINGB0YLRgNC10LvQsCDQvdCw0L3QvtGB0LjRgiArMTAwJSDRg9GA0L7QvdCwINC+0LTQvdC+0LzRgyDQv9GA0L7RgtC40LLQvdC40LrRgy4g0JXRgdC70Lgg0YbQtdC70Ywg0L7QtNC90LAg4oCUINCy0LXRgdGMINGD0YDQvtC9INC/0L7Qv9Cw0LTQsNC10YIg0LIg0L3QtdGRICs3MDAlINGD0YDQvtC90LAuJywn0JrQlDogMjUg0YDQsNGD0L3QtNC+0LIg4oCiINCc0LDQvdCwOiA0MCDigKIg0KPRgNC+0L06ICs3MDAlINCyINC+0LTQvdGDINGG0LXQu9GMJ10KICBdCn0sCidhcmNobWFnZS1tJzogewogIG46J0FaVVJFIFNBR0UnLCByb2xlOidNQUdFIOKAoiBBcmNobWFnZSAtIE1hbGUnLAogIGltZzonLi9hc3NldHMvaGVyb2VzL2FyY2htYWdlLW0ud2VicCcsCiAgdGh1bWI6Jy4vYXNzZXRzL2hlcm9lcy9hcmNobWFnZS1tLndlYnAnLAogIHN0OntIUDo5MDAsREVGOjgwLERNRzoyNjAsTUFOQTozMjAsQ1JJVDoxOCxQQVJSWTowLERPREdFOjEwfSwKICBzazpbCiAgICBbJ9CY0YHQutGA0LjQstC70LXQvdC40LUg0JLRgNC10LzQtdC90LgnLCdQQVNTSVZFJyxbJy4vYXNzZXRzL2hlcm9lcy9pY29uX211ZHJvc3QuanBnJywnLi9hc3NldHMvaGVyb2VzL2ljb25faXNrcml2bGVuaWVfdnJlbWVuaS5qcGcnXSwn4o+zJywn0JrQsNC20LTQvtC1INC30LDQutC70LjQvdCw0L3QuNC1INGD0LLQtdC70LjRh9C40LLQsNC10YIg0LHQsNC30L7QstGL0Lkg0YPRgNC+0L0g0L3QsCAxMCUsINGB0YLQsNC60LDQtdGC0YHRjyA1INGA0LDRg9C90LTQvtCyLiDQn9GA0LggNSDRgdGC0LDQutCw0YUg0LLRgdGRINGB0LvQtdC00YPRjtGJ0LXQtSDQt9Cw0LrQu9C40L3QsNC90LjQtSDQutCw0YHRgtGD0LXRgtGB0Y8gKzUwJSDRg9GA0L7QvdCwLicsJ9Ch0YLQsNC60Lg6IDUg0YDQsNGD0L3QtNC+0LIg4oCiINCR0L7QvdGD0YE6ICs1MCUg0LHQsNC30L7QstC+0LPQviDRg9GA0L7QvdCwJ10sCiAgICBbJ9Cb0LXQtNGP0L3QvtC1INCa0L7Qv9GM0LUnLCcxJyxbJy4vYXNzZXRzL2hlcm9lcy9pY29uX2xlZHlhbm9lX2tvcHllLmpwZyddLCfinYTvuI8nLCfQkdGA0L7RgdCw0LXRgiDQutC+0L/RjNC1INC70YzQtNCwLCDQvdCw0L3QvtGB0LjRgiAyMjAlINGD0YDQvtC90LAg0Lgg0LfQsNC80LXQtNC70Y/QtdGCINCy0YDQsNCz0LAg0L3QsCAzMCUg0L3QsCAyINGA0LDRg9C90LTQsC4nLCfQmtCUOiAzINGA0LDRg9C90LTQsCDigKIg0JzQsNC90LA6IDE1IOKAoiDQo9GA0L7QvTogMjIwJSddLAogICAgWyfQntCz0L3QtdC90L3Ri9C5INCo0LDRgCcsJzInLFsnLi9hc3NldHMvaGVyb2VzL2ljb25fb2duZW5ueXlfc2hhci5qcGcnXSwn8J+UpScsJ9Co0LDRgCDQvtCz0L3RjyDQvdCw0L3QvtGB0LjRgiAzMDAlINGD0YDQvtC90LAg0L/QviDQvtCx0LvQsNGB0YLQuCDQuCDQv9C+0LTQttC40LPQsNC10YIg0LLRgNCw0LPQvtCyINC90LAgMyDRgNCw0YPQvdC00LAuJywn0JrQlDogOCDRgNCw0YPQvdC00L7QsiDigKIg0JzQsNC90LA6IDI1IOKAoiDQo9GA0L7QvTogMzAwJSBBT0UnXSwKICAgIFsn0KnQuNGCINCc0LDQvdGLJywnMycsWycuL2Fzc2V0cy9oZXJvZXMvaWNvbl9zaGNoaXRfbWFueS5qcGcnXSwn8J+boe+4jycsJ9Ch0L7Qt9C00LDQtdGCINGJ0LjRgiDQuNC3INC80LDQvdGLOiAyNSUg0LzQsNC60YEgSFAg0L3QsCAzINGA0LDRg9C90LTQsC4g0J/QvtC60LAg0YnQuNGCINCw0LrRgtC40LLQtdC9LCDQvNCw0L3QsCDQvdC1INGC0YDQsNGC0LjRgtGB0Y8uJywn0JrQlDogMTUg0YDQsNGD0L3QtNC+0LIg4oCiINCc0LDQvdCwOiAzMCDigKIg0KnQuNGCOiAyNSUgSFAnXSwKICAgIFsn0JDRgNC80LDQs9C10LTQtNC+0L0nLCc0JyxbJy4vYXNzZXRzL2hlcm9lcy9pY29uX2FybWFnZWRkb24uanBnJ10sJ/CfjIwnLCdVTFRJTUFURTog0J/RgNC40LfRi9Cy0LDQtdGCINC80LXRgtC10L7RgNC40YLRiywg0L3QsNC90L7RgdGP0YIgODAwJSDRg9GA0L7QvdCwINCy0YHQtdC8INCy0YDQsNCz0LDQvCDQuCDRgdGC0LDQvSDQvdCwIDEg0YDQsNGD0L3QtC4nLCfQmtCUOiAyNSDRgNCw0YPQvdC00L7QsiDigKIg0JzQsNC90LA6IDEwMCDigKIg0KPRgNC+0L06IDgwMCUgKyDRgdGC0LDQvSddCiAgXQp9LAonYXJjaG1hZ2UtZic6IHsKICBuOidGUk9TVCBXRUFWRVInLCByb2xlOidNQUdFIOKAoiBBcmNobWFnZSAtIEZlbWFsZScsCiAgaW1nOicuL2Fzc2V0cy9oZXJvZXMvYXJjaG1hZ2UtZi53ZWJwJywKICB0aHVtYjonLi9hc3NldHMvaGVyb2VzL2FyY2htYWdlLWYud2VicCcsCiAgc3Q6e0hQOjg4MCxERUY6NzUsRE1HOjI3MCxNQU5BOjM0MCxDUklUOjIwLFBBUlJZOjAsRE9ER0U6MTJ9LAogIHNrOlsKICAgIFsn0JvQtdC00Y/QvdC+0LUg0KHQtdGA0LTRhtC1JywnUEFTU0lWRScsWycuL2Fzc2V0cy9oZXJvZXMvaWNvbl9sZWR5YW5vZV9zZXJkdHNlLmpwZyddLCfwn5KOJywn0JrQsNC20LTQvtC1INC30LDQutC70LjQvdCw0L3QuNC1INC70YzQtNCwINC90LDQutC70LDQtNGL0LLQsNC10YIg0KXQvtC70L7QtDogLTEwJSDRgdC60L7RgNC+0YHRgtC4INCy0YDQsNCz0LAsINGB0YLQsNC60LDQtdGC0YHRjyDQtNC+IDMg0YDQsNC3LiDQn9GA0LggMyDRgdGC0LDQutCw0YUg0LLRgNCw0LMg0LfQsNC80L7RgNCw0LbQuNCy0LDQtdGC0YHRjyDQvdCwIDEg0YDQsNGD0L3QtC4nLCfQl9Cw0LzQvtGA0L7Qt9C60LAg0L/RgNC4IDMg0YHRgtCw0LrQsNGFJ10sCiAgICBbJ9Ch0L7RgdGD0LvRjNC60LAnLCcxJyxbJy4vYXNzZXRzL2hlcm9lcy9pY29uX3Nvc3Vsa2EuanBnJ10sJ/Cfp4onLCfQkdGA0L7RgdCw0LXRgiDRgdC+0YHRg9C70YzQutGDLCDQvdCw0L3QvtGB0LjRgiAyMDAlINGD0YDQvtC90LAgKyDQpdC+0LvQvtC0LicsJ9Ca0JQ6IDIg0YDQsNGD0L3QtNCwIOKAoiDQnNCw0L3QsDogMTAg4oCiINCj0YDQvtC9OiAyMDAlJ10sCiAgICBbJ9CS0YzRjtCz0LAnLCcyJyxbJy4vYXNzZXRzL2hlcm9lcy9pY29uX3Z5dWdhLmpwZyddLCfwn4yo77iPJywn0JLRjNGO0LPQsCDQvdCw0L3QvtGB0LjRgiAyNTAlINGD0YDQvtC90LAg0LLRgdC10Lwg0Lgg0L3QsNC60LvQsNC00YvQstCw0LXRgiAyINGB0YLQsNC60LAg0KXQvtC70L7QtNCwLicsJ9Ca0JQ6IDgg0YDQsNGD0L3QtNC+0LIg4oCiINCc0LDQvdCwOiAyMCDigKIg0KPRgNC+0L06IDI1MCUgQU9FJ10sCiAgICBbJ9Cb0LXQtNGP0L3QsNGPINCT0LvRi9Cx0LAnLCczJyxbJy4vYXNzZXRzL2hlcm9lcy9pY29uX2xlZHlhbmF5YV9nbHliYS5qcGcnXSwn8J+nsScsJ9CX0LDQvNC+0YDQsNC20LjQstCw0LXRgiDQstGA0LDQs9CwINCyINCz0LvRi9Cx0LUg0L3QsCAyINGA0LDRg9C90LTQsC4g0JLRgNCw0LMg0L3QtSDQvNC+0LbQtdGCINC00LXQudGB0YLQstC+0LLQsNGC0YwsINC90L4g0L/QvtC70YPRh9Cw0LXRgiAtMzAlINGD0YDQvtC90LAuJywn0JrQlDogMTUg0YDQsNGD0L3QtNC+0LIg4oCiINCc0LDQvdCwOiAzMCDigKIg0JrQvtC90YLRgNC+0LvRjDogMiDRgNCw0YPQvdC00LAnXSwKICAgIFsn0JDQsdGB0L7Qu9GO0YLQvdGL0Lkg0J3QvtC70YwnLCc0JyxbJy4vYXNzZXRzL2hlcm9lcy9pY29uX2Fic29seXV0bnl5X25vbC5qcGcnXSwn4p2E77iPJywnVUxUSU1BVEU6INCX0LDQvNC+0YDQsNC20LjQstCw0LXRgiDQstGB0LXRhSDQstGA0LDQs9C+0LIg0L3QsCAxINGA0LDRg9C90LQg0Lgg0L3QsNC90L7RgdC40YIgNjAwJSDRg9GA0L7QvdCwLiDQl9Cw0LzQvtGA0L7QttC10L3QvdGL0LUg0L/QvtC70YPRh9Cw0Y7RgiArNTAlINGD0YDQvtC90LAg0LIg0YHQu9C10LTRg9GO0YnQtdC8INGA0LDRg9C90LTQtS4nLCfQmtCUOiAyNSDRgNCw0YPQvdC00L7QsiDigKIg0JzQsNC90LA6IDgwIOKAoiDQo9GA0L7QvTogNjAwJSArINGB0YLQsNC9J10KICBdCn0sCid3YXJyaW9yLWYnOiB7CiAgbjonSVJPTiBWT1cnLCByb2xlOidTSElFTEQgVEFOSyDigKIgV2FycmlvciAtIEZlbWFsZScsCiAgaW1nOicuL2Fzc2V0cy9oZXJvZXMvd2Fycmlvci1mLndlYnAnLAogIHRodW1iOicuL2Fzc2V0cy9oZXJvZXMvd2Fycmlvci1mLndlYnAnLAogIHN0OntIUDoxMjUwLERFRjoxNjAsRE1HOjE3NSxNQU5BOjE4MCxDUklUOjEyLFBBUlJZOjEyLERPREdFOjB9LAogIHNrOlsKICAgIFsn0JrQu9GP0YLQstCwINCh0YLQsNC4JywnUEFTU0lWRScsWycuL2Fzc2V0cy9oZXJvZXMvaWNvbl9rbHlhdHZhX3N0YWkuanBnJ10sJ/CfkLonLCfQn9GA0LggSFAgPDMwJSDRg9GA0L7QvSArNTAlINC4ICszMCUg0LvQsNC50YTRgdGC0LjQuyDQvtGCINC90LDQvdC10YHQtdC90L3QvtCz0L4g0YPRgNC+0L3QsC4nLCfQmtCUOiDigJQg4oCiINCc0LDQvdCwOiAwJ10sCiAgICBbJ9Cg0LDRgdGB0LXQutCw0Y7RidC40Lkg0JLQvtC70LonLCcxJyxbJy4vYXNzZXRzL2hlcm9lcy9pY29uX3Jhc3Nla2F5dXNoY2hpeV92b2xrLmpwZyddLCfwn5ehJywnMiDRg9C00LDRgNCwINC80LXRh9C+0Lwg0L/QviAxMTAlINGD0YDQvtC90LAg0LrQsNC20LTRi9C5LicsJ9Ca0JQ6IDMg0YDQsNGD0L3QtNCwIOKAoiDQnNCw0L3QsDogNSDigKIg0KPRgNC+0L06IDIyMCUnXSwKICAgIFsn0KnQuNGCINCS0L7Qu9GH0YzQtdCz0L4g0JLQvtC20LDQutCwJywnMicsWycuL2Fzc2V0cy9oZXJvZXMvaWNvbl9zaGNoaXRfdm9sY2hlZ29fdm96aGFrYS5qcGcnXSwn8J+boScsJ9Cf0L7QtNC90LjQvNCw0LXRgiDRidC40YIg0YEg0LLQvtC70LrQvtC8INC90LAgNCDRgNCw0YPQvdC00LAsINCx0LvQvtC60LjRgNGD0LXRgiDRg9GA0L7QvSDRgSDQstC10YDQvtGP0YLQvdC+0YHRgtGM0Y4gNTAlLiDQo9GB0L/QtdGI0L3Ri9C5INCx0LvQvtC6INC00LDQtdGCINC60L7QvdGC0YDQsNGC0LDQutGDINC90LAgMzUwJSDRg9GA0L7QvdCwLicsJ9Ca0JQ6IDE1INGA0LDRg9C90LTQvtCyIOKAoiDQnNCw0L3QsDogMjAg4oCiINCR0LvQvtC6OiA1MCUnXSwKICAgIFsn0JfQvtCyINCh0YLQsNC4JywnMycsWycuL2Fzc2V0cy9oZXJvZXMvaWNvbl96b3Zfc3RhaS5qcGcnXSwn8J+QvicsJ9CY0LfQtNCw0LXRgiDQt9C+0LIg0LLQvtC70LrQsCwg0LrQvtGC0L7RgNGL0Lkg0YHRgtCw0L3QuNGCIDEg0LLRgNCw0LPQsCwg0LLRgdC1INC+0YHRgtCw0LvRjNC90YvQtSDQstGA0LDQs9C4INC/0L7Qu9GD0YfQsNGO0YIgMjAwJSDRg9GA0L7QvdCwLCDQvtCz0LvRg9GI0LXQvdC90YvQuSDQstGA0LDQsyDQv9C+0LvRg9GH0LDQtdGCINGD0YDQvtC9IDIg0YDQsNC30LAuJywn0JrQlDogMTUg0YDQsNGD0L3QtNC+0LIg4oCiINCc0LDQvdCwOiAyMCDigKIg0JLQvtC70LrQuDogMjAwJSBBT0UgKyDRgdGC0LDQvSddLAogICAgWyfQkNC70YzRhNCwINCl0LjRidC90LjQuicsJzQnLFsnLi9hc3NldHMvaGVyb2VzL2ljb25fYWxmYV9raGlzaGNobmlrLmpwZyddLCfwn4yVJywnVUxUSU1BVEU6INCf0YDQtdCy0YDQsNGJ0LDQtdGC0YHRjyDQsiDQstC+0LvQutCwINC90LAgNSDRgNCw0YPQvdC00L7QsjogKzUwJSDQvNCw0LrRgSBIUCwgKzMwJSDRg9GA0L7QvdCwLCDQsNGC0LDQutC4INC90LDQvdC+0YHRj9GCINC60YDQvtCy0L7RgtC10YfQtdC90LjQtSAxMDAlINGD0YDQvtC90LAuJywn0JrQlDogMjAg0YDQsNGD0L3QtNC+0LIg4oCiINCc0LDQvdCwOiAyMCDigKIgKzUwJSDQvNCw0LrRgSBIUCArMzAlINGD0YDQvtC90LAgKyDQtNC+0YInXQogIF0KfSwKJ3dhcnJpb3ItbSc6IHsKICBuOidMSU9OIFdBUkRFTicsIHJvbGU6J1NISUVMRCBUQU5LIOKAoiBXYXJyaW9yIC0gTWFsZScsCiAgaW1nOicuL2Fzc2V0cy9oZXJvZXMvd2Fycmlvci1tLndlYnAnLAogIHRodW1iOicuL2Fzc2V0cy9oZXJvZXMvd2Fycmlvci1tLndlYnAnLAogIHN0OntIUDoxMzAwLERFRjoxODAsRE1HOjE4MCxNQU5BOjIyMCxDUklUOjgsUEFSUlk6MTIsRE9ER0U6MH0sCiAgc2s6WwogICAgWyfQndC10L/QvtC60L7Qu9C10LHQuNC80LDRjyDQodGC0LXQvdCwJywnUEFTU0lWRScsWycuL2Fzc2V0cy9oZXJvZXMvaWNvbl9uZXBva29sZWJpbWF5YV9zdGVuYS5qcGcnXSwn8J+mgScsJ9CX0LAg0LrQsNC20LTRi9C1IDUlINC/0L7RgtC10YDRj9C90L3QvtCz0L4gSFAg0L/QvtC70YPRh9Cw0LXRgiArMyUgREVGICjQtNC+IDMwJSkuINCf0YDQuCBIUCA8MzAlINC/0L7Qu9GD0YfQsNC10YIg0YnQuNGCIDE1JSDQvNCw0LrRgSBIUCDQvdCwIDQg0YDQsNGD0L3QtNCwLicsJ9Ca0JQ6IC0g4oCiINCc0LDQvdCwOiAwIOKAoiBERUYg0LHQvtC90YPRgTog0LTQviAzMCUg4oCiINCp0LjRgjogMTUlJ10sCiAgICBbJ9Cj0LTQsNGAINCb0YzQstCwJywnMScsWycuL2Fzc2V0cy9oZXJvZXMvaWNvbl91ZGFyX2x2YS5qcGcnXSwn4pqUJywn0JzQvtGJ0L3Ri9C5INGD0LTQsNGAINGJ0LjRgtC+0LwsINC90LDQvdC+0YHQuNGCIDIwMCUg0YPRgNC+0L3QsCArINC+0LPQu9GD0YjQtdC90LjQtSDQvdCwIDEg0YDQsNGD0L3QtC4nLCfQmtCUOiA4INGA0LDRg9C90LTQvtCyIOKAoiDQnNCw0L3QsDogMTAg4oCiINCh0YLQsNC9OiAxINGA0LDRg9C90LQg4oCiINCj0YDQvtC9IDIwMCUnXSwKICAgIFsn0JjQvNC/0LXRgNGB0LrQuNC5INCR0LDRgdGC0LjQvtC9JywnMicsWycuL2Fzc2V0cy9oZXJvZXMvaWNvbl9pbXBlcnNraXlfYmFzdGlvbi5qcGcnXSwn8J+boScsJ9Cf0L7QtNC90LjQvNCw0LXRgiDRidC40YIg0L3QsCAzINGA0LDRg9C90LTQsCwg0LHQu9C+0LrQuNGA0YPQtdGCIDUwJSDRg9GA0L7QvdCwINC4INC+0YLRgNCw0LbQsNC10YIgMjUlINGD0YDQvtC90LAg0L7QsdGA0LDRgtC90L4uINCh0L7RjtC30L3QuNC60Lgg0LfQsCDRgdC/0LjQvdC+0LkgLTIwJSDRg9GA0L7QvdCwLicsJ9Ca0JQ6IDE1INGA0LDRg9C90LTQvtCyIOKAoiDQnNCw0L3QsDogMzAg4oCiINCR0LvQvtC6OiA1MCUg4oCiINCe0YLRgNCw0LbQtdC90LjQtSAyNSUnXSwKICAgIFsn0KDQsNGB0YHQtdC60LDRjtGJ0LjQuSDRg9C00LDRgCcsJzMnLFsnLi9hc3NldHMvaGVyb2VzL2ljb25fcmFzc2VrYXl1c2hjaGl5X3VkYXIuanBnJ10sJ/Cfk68nLCfQo9C00LDRgCDQvNC10YfQvtC8IDIwMCUg0YPRgNC+0L3QsCDQv9C+INCx0LvQuNC20LDQudGI0LXQvNGDINC/0YDQvtGC0LjQstC90LjQutGDLicsJ9Ca0JQ6IDMg0YDQsNGD0L3QtNCwIOKAoiDQnNCw0L3QsDogNSDigKIg0KPRgNC+0L0gMjAwJSddLAogICAgWyfQkNCy0LDRgtCw0YAg0JjQvNC/0LXRgNC40LgnLCc0JyxbJy4vYXNzZXRzL2hlcm9lcy9pY29uX2F2YXRhcl9pbXBlcmlpLmpwZyddLCfwn5GRJywnVUxUSU1BVEU6INCd0LXRg9GP0LfQstC40Lwg0L3QsCAyINGA0LDRg9C90LTQsCwgKzUwJSDQvNCw0LrRgSBIUCwgKzMwMCUg0YPRgNC+0L3QsCDQvdCwIDMg0YDQsNGD0L3QtNCwLiDQktGB0LUg0LLRgNCw0LPQuCDQvdCwINC/0L7Qu9C1INCx0L7RjyDQv9C+0LvRg9GH0LDRjtGCIDIwMCUg0YPRgNC+0L3QsCDQtdC00LjQvdC+0LbQtNGLLicsJ9Ca0JQ6IDM1INGA0LDRg9C90LTQvtCyIOKAoiDQnNCw0L3QsDogNTAg4oCiINCj0YDQvtC9OiArMzAwJSDigKIgSFA6ICs1MCUnXQogIF0KfQp9OwoKY29uc3QgVk9MQU5EX0lURU1TID0gWwoge2lkOidoZWFkJyxuYW1lOifQqNC70LXQvCDQr9GA0L7RgdGC0LgnLGljb246J/CfqpYnLHNsb3Q6J2hlYWQnLGJvbnVzOntETUc6MjAsREVGOjEwfSxkZXNjOicrMjAg0YPRgNC+0L3QsCArMTAgREVGJ30sCiB7aWQ6J2VhcjEnLG5hbWU6J9Ch0LXRgNGM0LPQsCDQmtGA0LjRgtCwJyxpY29uOifwn5S5JyxzbG90OidlYXIxJyxib251czp7Q1JJVDoxLERNRzo1fSxkZXNjOicrMSUg0LrRgNC40YLQsCArNSBETUcnfSwKIHtpZDonZWFyMicsbmFtZTon0KHQtdGA0YzQs9CwINCi0LXQvdC4JyxpY29uOifwn5S4JyxzbG90OidlYXIyJyxib251czp7Q1JJVDoxLERPREdFOjJ9LGRlc2M6JysxJSDQutGA0LjRgtCwICsyIERPREdFJ30sCiB7aWQ6J2FtdWxldCcsbmFtZTon0JDQvNGD0LvQtdGCINCU0YPRiCcsaWNvbjon8J+Tvycsc2xvdDonYW11bGV0Jyxib251czp7TUFOQTo1MCxDUklUOjJ9LGRlc2M6Jys1MCDQvNCw0L3RiyArMiUg0LrRgNC40YLQsCd9LAoge2lkOidhcm1vcicsbmFtZTon0JrQvtC70YzRh9GD0LPQsCDQotC40YLQsNC90LAnLGljb246J/CfpronLHNsb3Q6J2FybW9yJyxib251czp7SFA6MTAwLERFRjozMH0sZGVzYzonKzEwMCBIUCArMzAgREVGJ30sCiB7aWQ6J3dlYXBvbicsbmFtZTon0JzQtdGHINCR0YPRgNC4JyxpY29uOifimpTvuI8nLHNsb3Q6J3dlYXBvbicsYm9udXM6e0RNRzo0MH0sZGVzYzonKzQwINGD0YDQvtC90LAnfSwKIHtpZDonc2hpZWxkJyxuYW1lOifQqdC40YIg0JHQsNGB0YLQuNC+0L0nLGljb246J/Cfm6HvuI8nLHNsb3Q6J3NoaWVsZCcsYm9udXM6e0RFRjo2MCxIUDo1MCxQQVJSWTo1fSxkZXNjOicrNjAgREVGICs1MCBIUCArNSUgUEFSUlknfSwKIHtpZDoncmluZzEnLG5hbWU6J9Ca0L7Qu9GM0YbQviDQmtGA0L7QstC4JyxpY29uOifwn5KNJyxzbG90OidyaW5nMScsYm9udXM6e0RNRzoxNSxDUklUOjF9LGRlc2M6JysxNSDRg9GA0L7QvdCwICsxJSDQutGA0LjRgtCwJ30sCiB7aWQ6J3JpbmcyJyxuYW1lOifQmtC+0LvRjNGG0L4g0JzQsNC90YsnLGljb246J/Cfko0nLHNsb3Q6J3JpbmcyJyxib251czp7TUFOQTozMCxET0RHRToxfSxkZXNjOicrMzAg0LzQsNC90YsgKzEgRE9ER0UnfSwKIHtpZDonZ2xvdmVzJyxuYW1lOifQn9C10YDRh9Cw0YLQutC4INCh0LjQu9GLJyxpY29uOifwn6ekJyxzbG90OidnbG92ZXMnLGJvbnVzOntERUY6MTUsRE1HOjEwfSxkZXNjOicrMTUgREVGICsxMCBETUcnfSwKIHtpZDonYm9vdHMnLG5hbWU6J9CR0L7RgtC40L3QutC4INCS0LXRgtGA0LAnLGljb246J/CfkaInLHNsb3Q6J2Jvb3RzJyxib251czp7REVGOjIwLERPREdFOjIsSFA6MjB9LGRlc2M6JysyMCBERUYgKzIgRE9ER0UgKzIwIEhQJ30sCl07Cgpjb25zdCBWT0xBTkRfSVRFTVNfTUFQID0gewogaGVhZDp7RE1HOjIwLERFRjoxMH0sIGVhcjE6e0NSSVQ6MSxETUc6NX0sIGVhcjI6e0NSSVQ6MSxET0RHRToyfSwKIGFtdWxldDp7TUFOQTo1MCxDUklUOjJ9LCBhcm1vcjp7SFA6MTAwLERFRjozMH0sIHdlYXBvbjp7RE1HOjQwfSwKIHNoaWVsZDp7REVGOjYwLEhQOjUwLFBBUlJZOjV9LCByaW5nMTp7RE1HOjE1LENSSVQ6MX0sIHJpbmcyOntNQU5BOjMwLERPREdFOjF9LAogZ2xvdmVzOntERUY6MTUsRE1HOjEwfSwgYm9vdHM6e0RFRjoyMCxET0RHRToyLEhQOjIwfQp9OwoKY29uc3QgVk9MQU5EX0xPQ0FUSU9OUyA9IFsKIHtpZDoxLCBuYW1lOifQn9Cj0KHQotCr0J3QrycsIGVuZzonREVTRVJUJywgaWNvbjon8J+PnO+4jycsIHR5cGU6J9CW0LDRgNCwIOKAoiDQn9C10YHQvtC6JywgYWN0aXZlOnRydWV9LAoge2lkOjIsIG5hbWU6J9Ci0JXQnNCd0KvQmSDQm9CV0KEnLCBlbmc6J0RBUksgRk9SRVNUJywgaWNvbjon8J+MsicsIHR5cGU6J9Ci0LXQvdGMIOKAoiDQr9C0JywgYWN0aXZlOnRydWV9LAoge2lkOjMsIG5hbWU6J9Cb0JXQlNCv0J3Qq9CVINCX0JXQnNCb0JgnLCBlbmc6J0ZST1NUTEFORFMnLCBpY29uOifinYTvuI8nLCB0eXBlOifQpdC+0LvQvtC0IOKAoiDQm9C10LQnLCBhY3RpdmU6dHJ1ZX0sCiB7aWQ6NCwgbmFtZTon0JHQntCb0J7QotCeJywgZW5nOidTV0FNUCcsIGljb246J/CfkIonLCB0eXBlOidTT09OJywgYWN0aXZlOmZhbHNlfSwKIHtpZDo1LCBuYW1lOifQktCj0JvQmtCQ0J0nLCBlbmc6J1ZPTENBTk8nLCBpY29uOifwn4yLJywgdHlwZTonU09PTicsIGFjdGl2ZTpmYWxzZX0sCiB7aWQ6NiwgbmFtZTon0KDQo9CY0J3QqycsIGVuZzonUlVJTlMnLCBpY29uOifwn4+b77iPJywgdHlwZTonU09PTicsIGFjdGl2ZTpmYWxzZX0sCiB7aWQ6NywgbmFtZTon0J3QldCR0JXQodCQJywgZW5nOidTS1kgSVNMQU5EUycsIGljb246J+KYge+4jycsIHR5cGU6J1NPT04nLCBhY3RpdmU6ZmFsc2V9LAoge2lkOjgsIG5hbWU6J9CR0JXQl9CU0J3QkCcsIGVuZzonQUJZU1MnLCBpY29uOifwn5Wz77iPJywgdHlwZTonU09PTicsIGFjdGl2ZTpmYWxzZX0sCl07Cgpjb25zdCBWT0xBTkRfRU5FTUlFUyA9IHsKMTogWwogICB7c3RhZ2U6MSwgbmFtZTon0J/QldCh0KfQkNCd0JDQryDQnNCr0KjQrCcsIGVuZzonU2FuZCBHZXJiaWwnLCBpY29uOifwn5CtJywgZGVzYzon0JHQtdC30L7QsdC40LTQvdGL0Lkg0LPRgNGL0LfRg9C9LCDQstC+0YDRg9C10YIg0LrRgNC+0YjQutC4LiDQo9GA0L7QvSAxMCUnLCBsdmw6J0xWTCAxJywgaHA6NDAsIGhwQ29sb3I6JyMzYWQwODAnfSwKICAge3N0YWdlOjIsIG5hbWU6J9Cf0KPQodCi0KvQndCd0KvQmSDQodCa0J7QoNCf0JjQntCdJywgZW5nOidEZXNlcnQgU2NvcnBpb24nLCBpY29uOifwn6aCJywgZGVzYzon0K/QtNC+0LLQuNGC0L7QtSDQttCw0LvQviwg0YHRgtCw0L0gMjAlINGI0LDQvdGBLiDQo9GA0L7QvSA2MCUnLCBsdmw6J0xWTCAzJywgaHA6NjUsIGhwQ29sb3I6JyNkMGIwNDAnfSwKICAge3N0YWdlOjMsIG5hbWU6J9CU0JXQotCV0J3Qq9CoINCn0JXQoNCS0K8nLCBlbmc6J1NhbmR3b3JtIEN1YicsIGljb246J/CfkJsnLCBkZXNjOifQk9C70L7RgtCw0LXRgiDRhtC10LvQuNC60L7QvCwg0LjQs9C90L7RgCAxNSUg0LHRgNC+0L3QuC4g0KPRgNC+0L0gMTQwJScsIGx2bDonTFZMIDUnLCBocDo4NSwgaHBDb2xvcjonI2UwNTA1MCd9LAogICB7c3RhZ2U6NCwgbmFtZTon0KLQmNCi0JDQnSDQlNCu0J0nLCBlbmc6J0R1bmUgVHlyYW50IC0gQk9TUycsIGljb246J/CfkbknLCBkZXNjOifQkdC+0YHRgSDQn9GD0YHRgtGL0L3QuDog0J/QtdGB0YfQsNC90LDRjyDQsdGD0YDRjyArINC+0LPQu9GD0YjQtdC90LjQtSBBT0UuINCj0YDQvtC9IDMwMCUnLCBsdmw6J0JPU1MgTFZMIDcnLCBocDoxMDAsIGhwQ29sb3I6JyNlNmQ1YTAnLCBib3NzOnRydWV9LAogXSwKMjogWwogICB7c3RhZ2U6MSwgbmFtZTon0JvQldCh0J3QntCZINCX0JDQr9CmJywgZW5nOidGb3Jlc3QgSGFyZScsIGljb246J/CfkLAnLCBkZXNjOifQkdGL0YHRgtGA0YvQuSwg0YPQstC+0YDQvtGCICsxMCUuINCf0L7Rh9GC0Lgg0L3QtSDQsdGM0LXRgicsIGx2bDonTFZMIDInLCBocDo0NSwgaHBDb2xvcjonIzNhZDA4MCd9LAogICB7c3RhZ2U6MiwgbmFtZTon0KLQldCd0JXQktCe0Jkg0JLQntCb0JonLCBlbmc6J1NoYWRvdyBXb2xmJywgaWNvbjon8J+QuicsIGRlc2M6J9Cf0YDRi9C20L7QuiDQuNC3INGC0LXQvdC4LCDQutGA0LjRgiArMTUlJywgbHZsOidMVkwgNCcsIGhwOjcwLCBocENvbG9yOicjZDBiMDQwJ30sCiAgIHtzdGFnZTozLCBuYW1lOifQqNCY0J/QkNCh0KLQq9CZINCc0JXQlNCS0JXQlNCsJywgZW5nOidUaG9ybiBCZWFyJywgaWNvbjon8J+QuycsIGRlc2M6J9Ca0L7Qu9GO0YfQsNGPINGI0LrRg9GA0LAsINC+0YLRgNCw0LbQsNC10YIgMjAlINGD0YDQvtC90LAnLCBsdmw6J0xWTCA2JywgaHA6ODgsIGhwQ29sb3I6JyNlMDUwNTAnfSwKICAge3N0YWdlOjQsIG5hbWU6J9CU0KDQldCS0J3QmNCZINCt0J3QoicsIGVuZzonQW5jaWVudCBFbnQgLSBCT1NTJywgaWNvbjon8J+MsycsIGRlc2M6J9CR0L7RgdGBINCb0LXRgdCwOiDQmtC+0YDQvdC4ICsg0YDQtdCz0LXQvS4g0KXQuNC7IDUlINCyINGA0LDRg9C90LQnLCBsdmw6J0JPU1MgTFZMIDgnLCBocDoxMDAsIGhwQ29sb3I6JyNlNmQ1YTAnLCBib3NzOnRydWV9LAogXSwKMzogWwogICB7c3RhZ2U6MSwgbmFtZTon0KHQndCV0JbQndCr0Jkg0JrQoNCe0JvQmNCaJywgZW5nOidTbm93IEJ1bm55JywgaWNvbjon4p2E77iP8J+QsCcsIGRlc2M6J9Cc0LjQu9GL0LksINC90L4g0LrRg9GB0LDQtdGCINC30LAg0L/QsNC70LXRhicsIGx2bDonTFZMIDMnLCBocDo1MCwgaHBDb2xvcjonIzNhZDA4MCd9LAogICB7c3RhZ2U6MiwgbmFtZTon0JvQldCU0K/QndCe0Jkg0JLQntCb0JonLCBlbmc6J0ljZSBXb2xmJywgaWNvbjon8J+QuicsIGRlc2M6J9CX0LDQvNC+0YDQvtC30LrQsDogLTIwJSDRgdC60L7RgNC+0YHRgtC4INC90LAgMiDRgNCw0YPQvdC00LAnLCBsdmw6J0xWTCA1JywgaHA6NzIsIGhwQ29sb3I6JyM2YWIwZmYnfSwKICAge3N0YWdlOjMsIG5hbWU6J9CZ0JXQotCYJywgZW5nOidGcm9zdCBZZXRpJywgaWNvbjon8J+mpycsIGRlc2M6J9Cc0L7RgNC+0LfQvdGL0Lkg0YDQtdCyOiAtMTUlINGD0YDQvtC90LAg0LLRgNCw0LPQsCcsIGx2bDonTFZMIDcnLCBocDo5MCwgaHBDb2xvcjonI2UwNTA1MCd9LAogICB7c3RhZ2U6NCwgbmFtZTon0JvQldCU0K/QndCe0Jkg0JTQoNCQ0JrQntCdJywgZW5nOidGcm9zdCBEcmFnb24gLSBCT1NTJywgaWNvbjon8J+QiScsIGRlc2M6J9CR0L7RgdGBINCb0YzQtNCwOiDQlNGL0YXQsNC90LjQtSDQu9GM0LTQsCBBT0UgMjUwJSArINC30LDQvNC+0YDQvtC30LrQsCcsIGx2bDonQk9TUyBMVkwgMTAnLCBocDoxMDAsIGhwQ29sb3I6JyNlNmQ1YTAnLCBib3NzOnRydWV9LAogXSwKfTsK"></script>
+<script src="./assets/js/storage.js"></script>
 <script>
-// LIGHT BATTLE ENGINE v4 - modular, 40% lighter than v3
+// SYNC page7 -> page8 : same mob from db.js, hp% = bar UI, real stats manual here
 if(typeof volandHasSave==='function' && !volandHasSave()) location.href='./page2.html';
 const p=new URLSearchParams(location.search);
 const loc=parseInt(p.get('loc')||localStorage.getItem('voland_location')||'1');
 const stage=parseInt(p.get('stage')||localStorage.getItem('voland_last_stage')||'4');
+
 let heroId=(typeof volandGetHeroId==='function'?volandGetHeroId():'warrior-m');
-if(typeof VOLAND_HEROES==='undefined' || !VOLAND_HEROES[heroId]) heroId='warrior-m';
+if(!VOLAND_HEROES[heroId]) heroId='warrior-m';
 const heroData=VOLAND_HEROES[heroId];
 const cur=(typeof volandCalcStats==='function'?volandCalcStats().cur:heroData.st);
 const profileName=(typeof volandGetName==='function'?volandGetName():'VOLAND');
 
-let enemies=(typeof VOLAND_ENEMIES!=='undefined'?VOLAND_ENEMIES[loc]:null)||VOLAND_ENEMIES[1];
+let enemies=VOLAND_ENEMIES[loc]||VOLAND_ENEMIES[1];
 let enemyData=enemies.find(e=>e.stage===stage)||enemies[0];
-let locData=(typeof VOLAND_LOCATIONS!=='undefined'?VOLAND_LOCATIONS.find(l=>l.id===loc):null)||{name:'ПУСТЫНЯ'};
+let locData=VOLAND_LOCATIONS.find(l=>l.id===loc)||VOLAND_LOCATIONS[0];
 
 document.getElementById('locTitle').textContent=locData.name;
 document.getElementById('stageTitle').textContent='STAGE '+stage+' • '+enemyData.name;
@@ -119,43 +108,43 @@ document.getElementById('enemyIcon').textContent=enemyData.icon;
 document.getElementById('enemyName').textContent=enemyData.name;
 document.getElementById('enemyEng').textContent=enemyData.eng;
 document.getElementById('enemyDesc').textContent=enemyData.desc;
-// VOLCANIC IMAGE FIX - support both archmage-f.webp and mage-f-new.webp
-let heroImgSrc = heroData.img;
-if(heroId==='archmage-f' || heroData.n==='VOLCANIC'){
-  heroImgSrc = './assets/heroes/mage-f-new.webp';
-}
-document.getElementById('heroIcon').innerHTML='<img src="'+heroImgSrc+'" onerror="if(this.dataset.fallback!=1){this.dataset.fallback=1; this.src=\'./assets/heroes/archmage-f.webp\';}else{this.parentNode.textContent=\'🌋\';}" style="width:100%;height:100%;object-fit:cover">';
+document.getElementById('heroIcon').innerHTML='<img src="'+heroData.img+'" onerror="this.parentNode.textContent=\'🦁\'">';
 document.getElementById('heroName').textContent=profileName.toUpperCase();
 document.getElementById('heroRole').textContent=heroData.n;
 
-// real stats
+// РЕАЛЬНЫЕ БОЕВЫЕ СТАТЫ - РУКАМИ, как ты решил, hp из db.js = % для бара, тут реальные цифры
 const eDef = stage==4 ? 200 : stage==3 ? 30 : stage==2 ? 20 : 10;
 const eDmg = stage==4 ? 230 : stage==3 ? 200 : stage==2 ? 100 : 50;
-const eMaxHpBase = stage==4 ? 2400 : stage==3 ? 1500 : stage==2 ? 1000 : 400;
+const eMaxHp = stage==4 ? 2400 : stage==3 ? 1500 : stage==2 ? 1000 : 400;
 
-// BATTLE STATE - single source of truth, used by hero modules
-let B = {
- hero:{ hp:cur.HP, maxHp:cur.HP, baseMaxHp:cur.HP, mana:cur.MANA, maxMana:cur.MANA,
-        DMG:cur.DMG, DEF:cur.DEF, CRIT:cur.CRIT, DODGE:cur.DODGE,
-        block:0, blockTurns:0, reflect:0, reflectTurns:0,
-        invisTurns:0, invisCrit:false, attackCounter:0, spellCount:0,
-        spiritTurns:0, legionCount:0, boneShield:0, bomber1:0, bomber2:0,
-        armyTurns:0, armyCount:0, boneVulnTurns:0, boneVulnMult:1,
-        linkTurns:0, linkReflect:0, linkHeal:0, hpBuff:0, hpBuffTurns:0 },
- enemy:{ hp:eMaxHpBase, maxHp:eMaxHpBase, def:eDef, dmg:eDmg,
-         stunned:0, dmgDebuff:0, dmgDebuffTurns:0,
-         prisonTurns:0, prisonMult:3.0, shadowMarkTurns:0,
-         // VOLCANIC
-         calderaTurns:0, lavaTurns:0, lavaPct:50, burnTurns:0, burnPct:20,
-         meteorWave:0, meteorWaveDelay:0, meteorWaveDmg:300, judgmentTurns:0, judgmentCount:0 },
- turn:1, cooldowns:[0,0,0,0,0], isOver:false, name:enemyData.name
-};
+let eHp=eMaxHp, hHp=cur.HP, hMax=cur.HP, hMana=cur.MANA, hMaxMana=cur.MANA;
+let turn=1, enemyStun=0, cooldowns=[0,0,0,0,0], isBattleOver=false;
+let linkTurns=0; // Похищение Жизни: 30% отраж+хил 4 хода
+let fearTurns=0; // Проклятие Душ: -15% урона врага 4 хода
+let prisonTurns=0; // Аметистовая Тюрьма: взрыв в конце раунда
+let prisonMult=3.0;
+let spellCount=0; // пассивка: каждое 3-е заклинание
+let spiritTurns=0; // дух 3 раунда, 100% урона +5 маны
 
-const logZone=document.getElementById('logZone');
-function addLog(t,c=''){ const d=document.createElement('div'); d.className='log-line '+c; d.textContent=t; logZone.appendChild(d); logZone.scrollTop=9999; }
-function addBattleLog(t,c=''){ addLog(t,c); }
-function rand(a,b){return Math.floor(Math.random()*(b-a+1))+a}
-function tryNav(url){ if(!B.isOver){ addLog('⛔ Нельзя выйти из боя!','lose'); return; } location.href=url; }
+// GRAVELORD
+let legionCount=0; // Костяной Легион макс 3
+let boneVulnTurns=0; // Уязвимость Костей +25% урон саммонов 2 хода
+let boneShield=0; // Костяной Щит 20% HP
+let bomber1=0; // Поднять Мертвых: 200% в 1 раунде
+let bomber2=0; // 300% во 2 раунде
+let armyTurns=0; // Армия Погибели 3 раунда
+let armyCount=0;
+
+// DARK RANGER
+let shadowMarkTurns=0; // Метка Тени 3 раунда +200%
+let attackCounter=0; // каждая 2-я атака = метка
+let invisTurns=0; // Шаг в Ничто 3 раунда
+let invisCrit=false; // след атака в инвизе гарант крит
+
+function tryNav(url){
+ if(!isBattleOver){ addLog('⛔ Нельзя выйти из боя! Закончи бой — победа или поражение','lose'); return; }
+ location.href=url;
+}
 
 function parseSkill(sk){
  const full=(sk[4]||'')+' '+(sk[5]||'');
@@ -171,230 +160,358 @@ const activeSkills=allSkills.slice(1);
 function getMult(s,i){ if(s.dmgPct>0) return s.dmgPct/100; return [2.0,3.0,2.0,7.0][i]||2.0; }
 
 function updBars(){
- document.getElementById('heroHpBar').style.width=Math.max(0,B.hero.hp/B.hero.maxHp*100)+'%';
- document.getElementById('heroHpBar').textContent='HP '+B.hero.hp+'/'+B.hero.maxHp;
- document.getElementById('heroManaBar').style.width=Math.max(0,B.hero.mana/B.hero.maxMana*100)+'%';
- document.getElementById('heroManaBar').textContent='MANA '+B.hero.mana+'/'+B.hero.maxMana;
- document.getElementById('enemyHpBar').style.width=Math.max(0,B.enemy.hp/B.enemy.maxHp*100)+'%';
- document.getElementById('enemyHpBar').textContent='HP '+B.enemy.hp+'/'+B.enemy.maxHp+' ('+enemyData.hp+'% bar)';
- let stat='DEF '+B.enemy.def+' • DMG '+B.enemy.dmg;
- if(B.enemy.stunned>0) stat+=' • STUN';
- if(B.hero.linkTurns>0) stat+=' • 💀ЛИНК '+B.hero.linkTurns;
- if(B.enemy.dmgDebuffTurns>0) stat+=' • 💜-15%';
- if(B.enemy.prisonTurns>0) stat+=' • 👻ТЮРЬМА';
- if(B.hero.spiritTurns>0) stat+=' • 🔮ДУХ '+B.hero.spiritTurns;
- if(B.hero.legionCount>0) stat+=' • 🦴ЛЕГИОН '+B.hero.legionCount;
- if(B.hero.boneVulnTurns>0 || B.enemy.boneVulnTurns>0) stat+=' • ☠️УЯЗВ';
- if(B.hero.boneShield>0) stat+=' • 🛡️'+B.hero.boneShield;
- if(B.hero.armyTurns>0) stat+=' • 💀АРМИЯ '+B.hero.armyCount;
- if(B.enemy.shadowMarkTurns>0) stat+=' • 👁️МЕТКА '+B.enemy.shadowMarkTurns;
- if(B.hero.invisTurns>0) stat+=' • 🌑ИНВИЗ';
- // VOLCANIC statuses
- if(B.enemy.calderaTurns>0) stat+=' • 🌋КАЛЬДЕРА '+B.enemy.calderaTurns;
- if(B.enemy.lavaTurns>0) stat+=' • 💥ЛАВА '+B.enemy.lavaTurns;
- if(B.enemy.burnTurns>0) stat+=' • 🔥ГОРИТ '+B.enemy.burnTurns;
- if(B.enemy.meteorWave>0) stat+=' • ☄️ВОЛНА';
- if(B.enemy.judgmentTurns>0) stat+=' • 🌋СУД '+B.enemy.judgmentTurns;
+ document.getElementById('heroHpBar').style.width=Math.max(0,hHp/hMax*100)+'%';
+ document.getElementById('heroHpBar').textContent='HP '+hHp+'/'+hMax;
+ document.getElementById('heroManaBar').style.width=Math.max(0,hMana/hMaxMana*100)+'%';
+ document.getElementById('heroManaBar').textContent='MANA '+hMana+'/'+hMaxMana;
+ document.getElementById('enemyHpBar').style.width=Math.max(0,eHp/eMaxHp*100)+'%';
+ document.getElementById('enemyHpBar').textContent='HP '+eHp+'/'+eMaxHp+' ('+enemyData.hp+'% bar)';
+ let stat='DEF '+eDef+' • DMG '+eDmg;
+ if(enemyStun>0) stat+=' • STUN '+enemyStun;
+ if(linkTurns>0) stat+=' • 💀ЛИНК '+linkTurns;
+ if(fearTurns>0) stat+=' • 💜СТРАХ '+fearTurns+'(-15%)';
+ if(prisonTurns>0) stat+=' • 👻ТЮРЬМА '+prisonTurns;
+ if(spiritTurns>0) stat+=' • 🔮ДУХ '+spiritTurns;
+ if(legionCount>0) stat+=' • 🦴ЛЕГИОН '+legionCount;
+ if(boneVulnTurns>0) stat+=' • ☠️УЯЗВ '+boneVulnTurns;
+ if(boneShield>0) stat+=' • 🛡️ЩИТ '+boneShield;
+ if(bomber1>0||bomber2>0) stat+=' • 💣БОМБЕРЫ '+ (bomber1>0?1:0)+(bomber2>0?1:0);
+ if(armyTurns>0) stat+=' • 💀АРМИЯ '+armyCount+'x'+armyTurns;
+ if(shadowMarkTurns>0) stat+=' • 👁️МЕТКА '+shadowMarkTurns;
+ if(invisTurns>0) stat+=' • 🌑ИНВИЗ '+invisTurns;
  document.getElementById('enemyStatBar').textContent=stat;
- document.getElementById('turnInfo').textContent='ХОД '+B.turn+' • '+(B.isOver?'КОНЕЦ':'ТВОЙ ХОД')+' • MANA '+B.hero.mana;
+ document.getElementById('turnInfo').textContent='ХОД '+turn+' • '+(isBattleOver?'КОНЕЦ':'ТВОЙ ХОД')+' • MANA '+hMana+(linkTurns>0?' • 💀ЛИНК':'')+(fearTurns>0?' • 💜-15%':'')+(spiritTurns>0?' • 🔮ДУХ':'')+(legionCount>0?' • 🦴'+legionCount:'')+(boneShield>0?' • 🛡️':'')+(armyTurns>0?' • 💀АРМИЯ':'')+(shadowMarkTurns>0?' • 👁️МЕТКА':'')+(invisTurns>0?' • 🌑ИНВИЗ':'');
 }
+const logZone=document.getElementById('logZone');
+function addLog(t,c=''){ const d=document.createElement('div'); d.className='log-line '+c; d.textContent=t; logZone.appendChild(d); logZone.scrollTop=9999; }
+function rand(a,b){return Math.floor(Math.random()*(b-a+1))+a}
 
 function renderSkillBar(){
  const bar=document.getElementById('skillBar'); bar.innerHTML='';
  const list=[{name:'АТАКА',emoji:'⚔️',mana:0,cd:0,icons:[],isAttack:true,key:'Q'}, ...activeSkills.map((s,i)=>({...s,idx:i,key:['W','E','R','T'][i]}))];
  list.forEach((s,idx)=>{
-  const cd=B.cooldowns[idx]; const can=s.isAttack||B.hero.mana>=s.mana; const dis=cd>0||!can||B.isOver;
+  const cd=cooldowns[idx]; const can=s.isAttack||hMana>=s.mana; const dis=cd>0||!can||isBattleOver;
   const btn=document.createElement('div'); btn.className='skill-btn'+(dis?' disabled':'')+(s.num=='4'?' ultimate':'');
   btn.onclick=()=>{if(!dis) useAction(idx);};
-  // ONLY assets/heroes images, no emoji fallback, no duplicates - as per user request
-  const icons = s.icons||[];
-  let iconHtml = '';
-  if(icons.length>0){
-    const iconPath = icons[0];
-    iconHtml = `<img src="${iconPath}" style="width:100%;height:100%;object-fit:cover">`;
-  } else {
-    iconHtml = `<div style="font-size:22px">⚔️</div>`;
-  }
+  const iconPath=s.icons&&s.icons[0]?s.icons[0]:'';
+  let iconHtml=iconPath?'<img src="'+iconPath+'" onerror="this.style.display=\'none\'; this.parentNode.textContent=\''+s.emoji+'\'">' : (s.emoji||'⚔️');
   btn.innerHTML='<div class="skill-icon">'+iconHtml+'</div><div class="skill-name">'+(s.isAttack?'АТАКА':s.name.toUpperCase().slice(0,12))+'</div><div class="skill-cost '+(s.mana==0?'zero':'')+'">'+(s.isAttack?'0':s.mana)+'</div><div class="skill-key">'+s.key+'</div>'+(cd>0?'<div class="skill-cd">'+cd+'</div>':'');
+  btn.title=s.isAttack?'Атака DMG '+cur.DMG+' - DEF '+eDef : s.name+'\n'+s.desc+'\n'+s.short;
   bar.appendChild(btn);
  });
 }
 
 async function useAction(idx){
- if(B.isOver) return; if(B.cooldowns[idx]>0) return;
+ if(isBattleOver) return; if(cooldowns[idx]>0) return;
  let dmg=0, isCrit=false, mult=1;
- let forceCrit = B.hero.invisTurns>0 && B.hero.invisCrit;
+ // инвиз крит
+ let forceCrit = invisTurns>0 && invisCrit;
 
  if(idx===0){
-  isCrit = forceCrit || (Math.random()*100<B.hero.CRIT);
-  let base=Math.max(10, B.hero.DMG - B.enemy.def + rand(-12,12));
+  isCrit = forceCrit || (Math.random()*100<cur.CRIT);
+  let base=Math.max(10, cur.DMG - eDef + rand(-12,12));
   if(isCrit) base=Math.floor(base*1.5);
-  if(B.enemy.shadowMarkTurns>0){ base+=Math.floor(B.hero.DMG*1.0); addLog('👁️ Метка Тени +100% к атаке','skill'); }
+  // метка тени +100%
+  if(shadowMarkTurns>0){
+    let extra=Math.floor(cur.DMG*1.0);
+    base+=extra;
+    addLog('👁️ Метка Тени: +'+extra+' [100%] к атаке','skill');
+  }
   dmg=base;
-  addLog('⚔️ АТАКА на '+dmg+(isCrit?' CRIT!':''), 'hit');
-  B.cooldowns[0]=1;
-  if(B.hero.invisTurns>0 && B.hero.invisCrit){ B.hero.invisTurns=0; B.hero.invisCrit=false; addLog('🌑 Инвиз снят','hit'); }
+  addLog('⚔️ Ты бьешь '+enemyData.name+' [АТАКА] на '+dmg+(isCrit?' CRIT!':'')+(shadowMarkTurns>0?' +МЕТКА':''), 'hit');
+  cooldowns[0]=1;
+  if(invisTurns>0 && invisCrit){ invisTurns=0; invisCrit=false; addLog('🌑 Инвиз снят после атаки','hit'); }
  }else{
   const sk=activeSkills[idx-1];
-  if(B.hero.mana<sk.mana){ addLog('⛔ Нет маны','lose'); return; }
-  B.hero.mana-=sk.mana; B.cooldowns[idx]=sk.cd||1; if(B.cooldowns[idx]==0) B.cooldowns[idx]=1;
-  B.hero.spellCount++;
+  if(hMana<sk.mana){ addLog('⛔ Не хватает маны! Нужно '+sk.mana,'lose'); return; }
+  hMana-=sk.mana; cooldowns[idx]=sk.cd||1; if(cooldowns[idx]==0) cooldowns[idx]=1;
+  spellCount++;
 
-  // базовый урон по формуле из db
-  mult=getMult(sk,idx-1);
-  if(B.enemy.shadowMarkTurns>0 && heroData.n.includes('DARK RANGER')) mult+=1.0;
-  // AZURE SAGE PASSIVE: +10% за стак и +50% на 5 стаках
-  if(B.hero.timeStacks>0){ mult += B.hero.timeStacks*0.1; }
-  if(B.hero.timeBonus){ mult += 0.5; addLog('⏳ Бонус Искривления +50%','skill'); B.hero.timeBonus=false; B.hero.timeStacks=0; }
-  isCrit = forceCrit || (Math.random()*100<B.hero.CRIT);
-  let base=Math.floor(B.hero.DMG*mult);
-  // учет дебафа DEF от Ледяного Копья
-  let effDef = B.enemy.def;
-  if(B.enemy.defDebuffTurns>0){ effDef = Math.floor(effDef*0.8); }
-  base=Math.max(15, base - effDef + rand(-10,10));
-  if(isCrit) base=Math.floor(base*1.5);
-  // для скилов с нулевым уроном (щиты, инвиз) dmg=0 переопределится в модулях
-  if(['Костяной Щит','Поднять Мертвых','Армия Погибели','Шаг в Ничто','Тюрьма','Похищение','Судный День','Аннигиляция'].some(x=>sk.name.includes(x))) dmg=0; else dmg=base;
+  // --- AMETHYST ---
+  if(sk.name.includes('Проклятие Душ')){
+    mult=2.0;
+    let base=Math.floor(cur.DMG*mult);
+    base=Math.max(15, base - eDef + rand(-10,10));
+    isCrit=Math.random()*100<cur.CRIT; if(isCrit) base=Math.floor(base*1.4);
+    dmg=base;
+    fearTurns=4;
+    hMana=Math.min(hMaxMana, hMana+5);
+    addLog('💜 '+sk.name+' [200%] → '+enemyData.name+' на '+dmg+' + СТРАХ -15% урона на 4 хода +5 маны','skill');
+  }else if(sk.name.includes('Тюрьма')){
+    enemyStun=1;
+    prisonTurns=1;
+    prisonMult=3.0;
+    dmg=0;
+    addLog('👻 '+sk.name+' [300%] → клетка на 1 раунд! '+enemyData.name+' оглушен, взрыв 300% в конце раунда','skill');
+  }else if(sk.name.includes('Похищение')){
+    linkTurns=4;
+    dmg=0;
+    addLog('💀 '+sk.name+' [30%] → ЛИНК на 4 раунда: 30% урона врага отражается + 30% хилит тебя','skill');
+  }else if(sk.name.includes('Закат')){
+    let total=0;
+    for(let i=0;i<5;i++){
+      let b=Math.floor(cur.DMG*2.0);
+      b=Math.max(15, b - eDef + rand(-10,10));
+      if(Math.random()*100<cur.CRIT) b=Math.floor(b*1.4);
+      total+=b;
+      addLog('🌌 Душа '+(i+1)+' → '+enemyData.name+' на '+b,'skill');
+      await new Promise(r=>setTimeout(r,120));
+    }
+    dmg=total;
+    enemyStun=1;
+    addLog('🌌 '+sk.name+' [до 1000%] → всего '+dmg+' + СТАН 1 раунд','skill');
+  // --- GRAVELORD ---
+  }else if(sk.name.includes('Костяное Копье')){
+    mult=1.5;
+    let base=Math.floor(cur.DMG*mult);
+    base=Math.max(15, base - eDef + rand(-10,10));
+    isCrit=Math.random()*100<cur.CRIT; if(isCrit) base=Math.floor(base*1.4);
+    dmg=base;
+    boneVulnTurns=2;
+    addLog('🦴 '+sk.name+' [150%] → '+enemyData.name+' на '+dmg+' + УЯЗВИМОСТЬ +25% урон саммонов 2 хода','skill');
+  }else if(sk.name.includes('Костяной Щит')){
+    boneShield=Math.floor(hMax*0.2);
+    dmg=0;
+    addLog('🛡️ '+sk.name+' [20% HP] → щит '+boneShield+' HP! При разрушении взрыв 300%','skill');
+  }else if(sk.name.includes('Поднять Мертвых')){
+    bomber1=1;
+    bomber2=2;
+    dmg=0;
+    addLog('💣 '+sk.name+' → 2 скелета-подрывника! 1-й взорвется 200% в этом раунде, 2-й 300% в след.','skill');
+  }else if(sk.name.includes('Армия Погибели') || sk.name.includes('Могильный Пакт')){
+    armyTurns=3;
+    armyCount=5;
+    dmg=0;
+    addLog('💀 '+sk.name+' [ULT] → 5 скелетов на 3 раунда, каждый 50% урона!','skill');
+  // --- DARK RANGER ---
+  }else if(sk.name.includes('Беглый выстрел')){
+    mult=2.0;
+    if(shadowMarkTurns>0) mult+=1.0; // +100% если метка
+    isCrit = forceCrit || (Math.random()*100<cur.CRIT);
+    let base=Math.floor(cur.DMG*mult);
+    base=Math.max(15, base - eDef + rand(-10,10));
+    if(isCrit) base=Math.floor(base*1.5);
+    dmg=base;
+    addLog('🏹 '+sk.name+' ['+Math.round(mult*100)+'%] → '+enemyData.name+' на '+dmg+(isCrit?' CRIT!':'')+(shadowMarkTurns>0?' +МЕТКА +100%':'')+(forceCrit?' +ИНВИЗ ГАРАНТ':'') ,'skill');
+    if(invisTurns>0 && invisCrit){ invisTurns=0; invisCrit=false; addLog('🌑 Инвиз снят после атаки','hit'); }
+  }else if(sk.name.includes('Шаг в Ничто')){
+    invisTurns=3;
+    invisCrit=true;
+    dmg=0;
+    addLog('🌑 '+sk.name+' → инвиз 3 раунда! След атака гарант крит','skill');
+  }else if(sk.name.includes('Призрачная Стрела')){
+    mult=1.4;
+    if(shadowMarkTurns>0) mult+=1.0;
+    isCrit = forceCrit || (Math.random()*100<cur.CRIT);
+    let base=Math.floor(cur.DMG*mult);
+    base=Math.max(15, base - eDef + rand(-10,10));
+    if(isCrit) base=Math.floor(base*1.5);
+    dmg=base;
+    let stunChance = 0.33;
+    if(Math.random()<stunChance){ enemyStun=1; addLog('💫 '+enemyData.name+' оглушен Призрачной Стрелой!','skill'); }
+    addLog('💫 '+sk.name+' ['+Math.round(mult*100)+'%] → '+enemyData.name+' на '+dmg+(shadowMarkTurns>0?' +МЕТКА':'')+(isCrit?' CRIT!':'')+' [стан 33%]','skill');
+    if(invisTurns>0 && invisCrit){ invisTurns=0; invisCrit=false; addLog('🌑 Инвиз снят после атаки','hit'); }
+  }else if(sk.name.includes('Залп Бездны')){
+    // 7 стрел по 100%
+    let total=0;
+    let arrows=7;
+    let curMult = 1.0 + (shadowMarkTurns>0 ? 1.0 : 0); // +100% если метка -> 200% per arrow if marked
+    // Actually per design: each 100%, if marked +200% => 300% per arrow
+    for(let i=0;i<arrows;i++){
+      let b=Math.floor(cur.DMG*curMult);
+      b=Math.max(10, b - eDef + rand(-8,8));
+      let c = forceCrit || (Math.random()*100<cur.CRIT);
+      if(c) b=Math.floor(b*1.5);
+      total+=b;
+      addLog('🌌 Стрела '+(i+1)+'/7 → '+enemyData.name+' на '+b+(c?' CRIT!':''),'skill');
+      await new Promise(r=>setTimeout(r,90));
+    }
+    dmg=total;
+    addLog('🌌 '+sk.name+' ['+Math.round(curMult*100*arrows)+'% в одну цель] → всего '+dmg+(shadowMarkTurns>0?' +МЕТКА +100%':'')+(forceCrit?' +ИНВИЗ':'') ,'skill');
+    if(invisTurns>0 && invisCrit){ invisTurns=0; invisCrit=false; addLog('🌑 Инвиз снят после ульты','hit'); }
+  }else{
+    mult=getMult(sk,idx-1);
+    if(shadowMarkTurns>0 && heroData.n.includes('DARK RANGER')) mult+=1.0;
+    isCrit = forceCrit || (Math.random()*100<cur.CRIT);
+    let base=Math.floor(cur.DMG*mult);
+    base=Math.max(15, base - eDef + rand(-10,10));
+    if(isCrit) base=Math.floor(base*1.5);
+    dmg=base;
+    addLog('✨ '+sk.name+' ['+Math.round(mult*100)+'%] → '+enemyData.name+' на '+dmg+(isCrit?' CRIT!':'')+(sk.hasStun?' + STUN':''),'skill');
+    if(sk.hasStun){ enemyStun=1; addLog('💫 '+enemyData.name+' оглушен!','skill'); }
+    if(invisTurns>0 && invisCrit){ invisTurns=0; invisCrit=false; addLog('🌑 Инвиз снят','hit'); }
+  }
 
-  // ВЫЗОВ МОДУЛЕЙ ГЕРОЕВ - здесь вся магия, if внутри модулей
-  if(typeof applySkillEffect==='function') applySkillEffect(sk.name, B);
-
-  addLog('✨ '+sk.name+' ['+Math.round(mult*100)+'%] → '+dmg+(isCrit?' CRIT':''), 'skill');
-  if(B.hero.invisTurns>0 && B.hero.invisCrit && !sk.name.includes('Шаг')){ /* инвиз снимается в модуле */ }
+  // пассивки
+  if(spellCount%3==0 && heroData.n.includes('AMETHYST')){
+    spiritTurns=3;
+    addLog('🔮 Пассивка Шепот Аметиста: призван дух на 3 раунда! 100% урона +5 маны/раунд','skill');
+  }
  }
 
- // пассивка DARK RANGER - каждая 4-я атака (логика в модуле, но счетчик тут для совместимости)
+ // DARK RANGER passive - каждая 4-я атака = метка 2 раунда +100%
  if(heroData.n.includes('DARK RANGER')){
-   // уже в модуле dark-ranger.js инкремент attackCounter
+   attackCounter++;
+   if(attackCounter%4==0){
+     shadowMarkTurns=2;
+     addLog('👁️ Пассивка Метка Тени: наложена на 2 раунда! +100% урона стрел','skill');
+   }
  }
 
- B.enemy.hp=Math.max(0,B.enemy.hp-dmg); updBars(); renderSkillBar();
- if(B.enemy.hp<=0){
-   if(B.enemy.shadowMarkTurns>0 && heroData.n.includes('DARK RANGER')){
-     B.hero.mana=Math.min(B.hero.maxMana, B.hero.mana+15);
-     addLog('👁️ Метка +15 маны за убийство','skill');
+ eHp=Math.max(0,eHp-dmg); updBars(); renderSkillBar();
+ if(eHp<=0){ 
+   if(shadowMarkTurns>0 && heroData.n.includes('DARK RANGER')){
+     hMana=Math.min(hMaxMana, hMana+15);
+     addLog('👁️ Метка Тени: убийство отмеченной цели +15 маны','skill');
    }
-   addLog('✅ ПОБЕДА!','win'); showVictory(); return;
+   addLog('✅ ПОБЕДА! '+enemyData.name+' повержен!','win'); showVictory(); return; 
  }
  await new Promise(r=>setTimeout(r,500));
 
- // ход врага - AZURE SAGE freeze fix
- if(B.enemy.timeFreezeTurns>0 || B.enemy.stunned>0){
-   if(B.enemy.timeFreezeTurns>0){ addLog('⏳ Враг заморожен Аннигиляцией — не бьет '+B.enemy.timeFreezeTurns+' раунда','skill'); }
-   else { addLog('😵 '+enemyData.name+' в стане','hit'); }
-   if(B.enemy.stunned>0) B.enemy.stunned--;
- }
+ // --- ход врага ---
+ if(enemyStun>0){ addLog('😵 '+enemyData.name+' в стане, пропускает ход','hit'); enemyStun--; }
  else{
-  let effDmg = B.enemy.dmgDebuffTurns>0 ? Math.floor(B.enemy.dmg*0.85) : B.enemy.dmg;
-  let dmgToHero=Math.max(5, effDmg - Math.floor(B.hero.DEF/2) + rand(-8,8));
-  if(B.hero.invisTurns>0){ addLog('🌑 Инвиз — враг не видит','hit'); }
-  else if(Math.random()*100<B.hero.DODGE){ addLog('💨 Уворот!','hit'); }
+  let effDmg = fearTurns>0 ? Math.floor(eDmg*0.85) : eDmg;
+  let dmgToHero=Math.max(5, effDmg - Math.floor(cur.DEF/2) + rand(-8,8));
+  // инвиз DARK RANGER = 100% уворот
+  if(invisTurns>0 && heroData.n.includes('DARK RANGER')){
+    addLog('🌑 Ты в инвизе — '+enemyData.name+' не видит тебя!','hit');
+  }else if(Math.random()*100<cur.DODGE){ addLog('💨 Ты увернулся от '+enemyData.name+'!','hit'); }
   else{
-   if(B.hero.boneShield>0){
-     if(dmgToHero <= B.hero.boneShield){ B.hero.boneShield-=dmgToHero; addLog('🛡️ Щит поглотил '+dmgToHero,'skill'); dmgToHero=0; }
-     else{ let over=dmgToHero-B.hero.boneShield; addLog('🛡️ Щит разрушен! '+B.hero.boneShield,'skill'); B.hero.boneShield=0; let exp=Math.max(15, Math.floor(B.hero.DMG*3.0)-B.enemy.def+rand(-10,10)); B.enemy.hp=Math.max(0,B.enemy.hp-exp); addLog('💥 Щит взрыв '+exp,'skill'); if(B.enemy.hp<=0){ addLog('✅ ПОБЕДА щитом!','win'); showVictory(); return; } dmgToHero=over; }
+   if(boneShield>0){
+     if(dmgToHero <= boneShield){
+       boneShield-=dmgToHero;
+       addLog('🛡️ Костяной Щит поглотил '+dmgToHero+' урона, осталось '+boneShield,'skill');
+       dmgToHero=0;
+     }else{
+       let overflow=dmgToHero-boneShield;
+       addLog('🛡️ Костяной Щит разрушен! Поглотил '+boneShield,'skill');
+       boneShield=0;
+       let expBase=Math.floor(cur.DMG*3.0);
+       let expDmg=Math.max(15, expBase - eDef + rand(-10,10));
+       eHp=Math.max(0,eHp-expDmg);
+       addLog('💥 Щит взрывается! '+expDmg+' → '+enemyData.name+' [300%]','skill');
+       updBars();
+       if(eHp<=0){ addLog('✅ ПОБЕДА! '+enemyData.name+' взорван щитом!','win'); showVictory(); return; }
+       dmgToHero=overflow;
+     }
    }
    if(dmgToHero>0){
-     if(B.hero.blockTurns>0){ let blocked=Math.floor(dmgToHero*B.hero.block); dmgToHero-=blocked; addLog('🛡️ Блок -'+blocked,'skill'); }
-     B.hero.hp=Math.max(0,B.hero.hp-dmgToHero);
-     addLog('💥 Враг бьет '+dmgToHero+' HP '+B.hero.hp+'/'+B.hero.maxHp,'enemy-hit');
-     if(B.hero.linkTurns>0){ let refl=Math.floor(dmgToHero*0.3); let heal=Math.floor(dmgToHero*0.3); B.enemy.hp=Math.max(0,B.enemy.hp-refl); B.hero.hp=Math.min(B.hero.maxHp,B.hero.hp+heal); addLog('💀 Линк отраж '+refl+' хил '+heal,'skill'); if(B.enemy.hp<=0){ addLog('✅ ПОБЕДА отражением!','win'); showVictory(); return; } }
+     hHp=Math.max(0,hHp-dmgToHero);
+     addLog('💥 '+enemyData.name+' бьет тебя на '+dmgToHero+(fearTurns>0?' (-15% страх)':'')+' — HP '+hHp+'/'+hMax,'enemy-hit');
+     if(linkTurns>0){
+       let refl=Math.floor(dmgToHero*0.3);
+       let heal=Math.floor(dmgToHero*0.3);
+       eHp=Math.max(0,eHp-refl);
+       hHp=Math.min(hMax,hHp+heal);
+       addLog('💀 Похищение: отраж '+refl+' → '+enemyData.name+' + хил '+heal+' тебе [линк '+linkTurns+'→'+(linkTurns-1)+']','skill');
+       updBars();
+       if(eHp<=0){ addLog('✅ ПОБЕДА! '+enemyData.name+' убит отражением!','win'); showVictory(); return; }
+     }
    }
   }
  }
 
- // тики эффектов - теперь компактно
- if(B.enemy.prisonTurns>0){ await new Promise(r=>setTimeout(r,300)); let exp=Math.max(15, Math.floor(B.hero.DMG*B.enemy.prisonMult)-B.enemy.def+rand(-10,10)); B.enemy.hp=Math.max(0,B.enemy.hp-exp); addLog('💥 Тюрьма взрыв '+exp,'skill'); B.enemy.prisonTurns=0; if(B.enemy.hp<=0){ addLog('✅ ПОБЕДА тюрьмой!','win'); showVictory(); return; } }
- if(B.hero.spiritTurns>0){ let sp=Math.max(10, B.hero.DMG - B.enemy.def + rand(-8,8)); B.enemy.hp=Math.max(0,B.enemy.hp-sp); B.hero.mana=Math.min(B.hero.maxMana, B.hero.mana+5); addLog('🔮 Дух '+sp+' +5 маны','skill'); if(B.enemy.hp<=0){ addLog('✅ ПОБЕДА духом!','win'); showVictory(); return; } }
- if(B.hero.legionCount>0 || B.hero.armyCount>0){
-   let vuln = (B.hero.boneVulnTurns>0 || B.enemy.boneVulnTurns>0) ? 1.25 : 1.0;
-   let total=0; for(let i=0;i<B.hero.legionCount;i++){ total+=Math.max(5, Math.floor(B.hero.DMG*0.5*vuln)-Math.floor(B.enemy.def/3)+rand(-5,5)); }
-   for(let i=0;i<B.hero.armyCount;i++){ total+=Math.max(5, Math.floor(B.hero.DMG*0.5*vuln)-Math.floor(B.enemy.def/3)+rand(-5,5)); }
-   if(total>0){ B.enemy.hp=Math.max(0,B.enemy.hp-total); addLog('🦴 Саммоны '+total,'skill'); if(B.enemy.hp<=0){ addLog('✅ ПОБЕДА скелетами!','win'); showVictory(); return; } }
+ // --- взрыв тюрьмы ---
+ if(prisonTurns>0){
+  await new Promise(r=>setTimeout(r,300));
+  let expBase=Math.floor(cur.DMG*prisonMult);
+  let expDmg=Math.max(15, expBase - eDef + rand(-10,10));
+  isCrit=Math.random()*100<cur.CRIT; if(isCrit) expDmg=Math.floor(expDmg*1.4);
+  eHp=Math.max(0,eHp-expDmg);
+  addLog('💥 Аметистовая Тюрьма взрывается! '+expDmg+' урона → '+enemyData.name+' [300%]','skill');
+  prisonTurns=0;
+  updBars();
+  if(eHp<=0){ addLog('✅ ПОБЕДА! '+enemyData.name+' взорван тюрьмой!','win'); showVictory(); return; }
  }
- if(B.hero.bomber1>0){ let d=Math.max(15, Math.floor(B.hero.DMG*2.0*(B.hero.boneVulnTurns>0?1.25:1))-B.enemy.def+rand(-10,10)); B.enemy.hp=Math.max(0,B.enemy.hp-d); addLog('💣 Бомбер1 '+d,'skill'); B.hero.bomber1=0; if(B.enemy.hp<=0){ addLog('✅ ПОБЕДА бомбером!','win'); showVictory(); return; } }
- if(B.hero.bomber2>0){ B.hero.bomber2--; if(B.hero.bomber2==0){ let d=Math.max(15, Math.floor(B.hero.DMG*3.0*(B.hero.boneVulnTurns>0?1.25:1))-B.enemy.def+rand(-10,10)); B.enemy.hp=Math.max(0,B.enemy.hp-d); addLog('💣 Бомбер2 '+d,'skill'); if(B.enemy.hp<=0){ addLog('✅ ПОБЕДА!','win'); showVictory(); return; } } else addLog('💣 Бомбер2 тикает','hit'); }
 
- // VOLCANIC TICKS - TRUE SKILLS from Mage-F-New.html - FIXED wave delay
- if(B.enemy.calderaTurns>0){ let d=Math.max(15, Math.floor(B.hero.DMG*1.0)-B.enemy.def+rand(-10,10)); B.enemy.hp=Math.max(0,B.enemy.hp-d); addLog('🌋 Кальдера '+d+' (100% земля горит)','skill'); if(B.enemy.hp<=0){ addLog('✅ ПОБЕДА кальдерой!','win'); showVictory(); return; } }
- if(B.enemy.burnTurns>0){ let d=Math.max(10, Math.floor(B.hero.DMG*0.2)-Math.floor(B.enemy.def/3)+rand(-5,5)); B.enemy.hp=Math.max(0,B.enemy.hp-d); addLog('🔥 Поджог '+d+' (20% дот)','skill'); if(B.enemy.hp<=0){ addLog('✅ ПОБЕДА огнем!','win'); showVictory(); return; } }
- if(B.enemy.lavaTurns>0){ let d=Math.max(15, Math.floor(B.hero.DMG*0.5)-Math.floor(B.enemy.def/3)+rand(-8,8)); B.enemy.hp=Math.max(0,B.enemy.hp-d); addLog('💥 Лава '+d+' (50% 3 раунда)','skill'); if(B.enemy.hp<=0){ addLog('✅ ПОБЕДА лавой!','win'); showVictory(); return; } }
- if(B.enemy.meteorWave>0){
-   if(B.enemy.meteorWaveDelay>0){
-     B.enemy.meteorWaveDelay--;
-     addLog('☄️ Метеор: волна через '+B.enemy.meteorWaveDelay+' ход','hit');
-   } else {
-     let d=Math.max(20, Math.floor(B.hero.DMG*3.0)-B.enemy.def+rand(-10,10)); B.enemy.hp=Math.max(0,B.enemy.hp-d); addLog('☄️ Ударная волна метеора '+d+' (300%)','skill'); B.enemy.meteorWave=0; B.enemy.meteorWaveDelay=0; if(B.enemy.hp<=0){ addLog('✅ ПОБЕДА волной!','win'); showVictory(); return; }
+ // --- дух ---
+ if(spiritTurns>0){
+  let spDmg=Math.max(10, cur.DMG - eDef + rand(-8,8));
+  eHp=Math.max(0,eHp-spDmg);
+  hMana=Math.min(hMaxMana, hMana+5);
+  addLog('🔮 Дух бьет '+enemyData.name+' на '+spDmg+' +5 маны [дух '+spiritTurns+'→'+(spiritTurns-1)+']','skill');
+  updBars();
+  if(eHp<=0){ addLog('✅ ПОБЕДА! Дух добил '+enemyData.name+'!','win'); showVictory(); return; }
+ }
+
+ // --- GRAVELORD саммоны ---
+ if(heroData.n.includes('GRAVELORD')){
+   if(legionCount<3){
+     legionCount++;
+     addLog('🦴 Легион: призван скелет '+legionCount+'/3 [50% урона]','skill');
    }
  }
- if(B.enemy.judgmentTurns>0){
-   B.enemy.judgmentCount++;
-   let isFinal = B.enemy.judgmentCount>=4;
-   let mult = isFinal ? 4.0 : 2.0;
-   let d=Math.max(20, Math.floor(B.hero.DMG*mult)-B.enemy.def+rand(-15,15));
-   B.enemy.hp=Math.max(0,B.enemy.hp-d);
-   addLog((isFinal?'🌋 Суперметеор Судного Дня ':'☄️ Метеор Судного Дня ')+B.enemy.judgmentCount+'/4 '+d+' ('+(mult*100)+'%)','skill');
-   if(B.enemy.hp<=0){ addLog('✅ ПОБЕДА Судным Днем!','win'); showVictory(); return; }
-   if(isFinal){
-     B.enemy.burnTurns=2; B.enemy.burnPct=50;
-     addLog('🔥 Поджог земли 50% на 2 раунда от Судного Дня','skill');
-     B.enemy.judgmentTurns=0; B.enemy.judgmentCount=0;
+ if(legionCount>0 || armyCount>0){
+   let vulnMult = boneVulnTurns>0 ? 1.25 : 1.0;
+   let totalSummonDmg=0;
+   if(legionCount>0){
+     for(let i=0;i<legionCount;i++){
+       let b=Math.floor(cur.DMG*0.5*vulnMult);
+       b=Math.max(5, b - Math.floor(eDef/3) + rand(-5,5));
+       totalSummonDmg+=b;
+     }
+   }
+   if(armyTurns>0 && armyCount>0){
+     for(let i=0;i<armyCount;i++){
+       let b=Math.floor(cur.DMG*0.5*vulnMult);
+       b=Math.max(5, b - Math.floor(eDef/3) + rand(-5,5));
+       totalSummonDmg+=b;
+     }
+   }
+   if(totalSummonDmg>0){
+     eHp=Math.max(0,eHp-totalSummonDmg);
+     addLog('🦴 Саммоны бьют '+enemyData.name+' на '+totalSummonDmg+' [легион '+legionCount+' + армия '+armyCount+' '+(boneVulnTurns>0?'+25% уязв':'')+']','skill');
+     updBars();
+     if(eHp<=0){ addLog('✅ ПОБЕДА! Скелеты добили '+enemyData.name+'!','win'); showVictory(); return; }
    }
  }
-
- // AZURE SAGE TICKS - TRUE SKILLS - FIXED: Sfera 1 immediate + 2 ticks, Annigilyatsiya freeze 3 + explosion
- if(B.enemy.defDebuffTurns>0){
-   addLog('❄️ Ледяное Копье: DEF -20% ('+B.enemy.defDebuffTurns+' ходов)','skill');
+ if(bomber1>0){
+  let bMult=2.0*(boneVulnTurns>0?1.25:1.0);
+  let bDmg=Math.max(15, Math.floor(cur.DMG*bMult) - eDef + rand(-10,10));
+  eHp=Math.max(0,eHp-bDmg);
+  addLog('💣 Бомбер 1 взрывается! '+bDmg+' → '+enemyData.name+' [200%'+(boneVulnTurns>0?' +25%':'')+']','skill');
+  bomber1=0;
+  updBars();
+  if(eHp<=0){ addLog('✅ ПОБЕДА! Бомбер взорвал '+enemyData.name+'!','win'); showVictory(); return; }
  }
- if(B.enemy.stormSphereTurns>0){
-   let d=Math.max(15, Math.floor(B.hero.DMG*1.6)-Math.floor(B.enemy.def/2)+rand(-10,10));
-   B.enemy.hp=Math.max(0,B.enemy.hp-d);
-   addLog('⚡ Сфера Бури тик '+d+' (160%) осталось '+B.enemy.stormSphereTurns,'skill');
-   if(B.enemy.hp<=0){ addLog('✅ ПОБЕДА сферой!','win'); showVictory(); return; }
- }
- if(B.enemy.timeFreezeTurns>0){
-   if(B.enemy.timeFreezeTurns===1){
-     let d=Math.max(25, Math.floor(B.hero.DMG*3.5)-B.enemy.def+rand(-15,15));
-     B.enemy.hp=Math.max(0,B.enemy.hp-d);
-     addLog('🌌 Аннигиляция Времени ВЗРЫВ '+d+' (350%)','skill');
-     if(B.enemy.hp<=0){ addLog('✅ ПОБЕДА аннигиляцией!','win'); showVictory(); return; }
-   } else {
-     addLog('⏳ Время заморожено: враг не бьет '+B.enemy.timeFreezeTurns+' раунда','skill');
-   }
+ if(bomber2>0){
+  bomber2--;
+  if(bomber2==0){
+   let bMult=3.0*(boneVulnTurns>0?1.25:1.0);
+   let bDmg=Math.max(15, Math.floor(cur.DMG*bMult) - eDef + rand(-10,10));
+   eHp=Math.max(0,eHp-bDmg);
+   addLog('💣 Бомбер 2 взрывается! '+bDmg+' → '+enemyData.name+' [300%'+(boneVulnTurns>0?' +25%':'')+']','skill');
+   updBars();
+   if(eHp<=0){ addLog('✅ ПОБЕДА! Бомбер 2 взорвал '+enemyData.name+'!','win'); showVictory(); return; }
+  }else{
+   addLog('💣 Бомбер 2 тикает... взорвется в след. раунде','hit');
+  }
  }
 
- B.turn++; for(let i=0;i<B.cooldowns.length;i++) if(B.cooldowns[i]>0) B.cooldowns[i]--;
- if(B.hero.linkTurns>0){ B.hero.linkTurns--; if(B.hero.linkTurns==0) addLog('💀 Линк кончился','hit'); }
- if(B.enemy.dmgDebuffTurns>0){ B.enemy.dmgDebuffTurns--; }
- if(B.hero.spiritTurns>0){ B.hero.spiritTurns--; if(B.hero.spiritTurns==0) addLog('🔮 Дух исчез','hit'); }
- if(B.hero.boneVulnTurns>0 || B.enemy.boneVulnTurns>0){ if(B.hero.boneVulnTurns>0) B.hero.boneVulnTurns--; if(B.enemy.boneVulnTurns>0) B.enemy.boneVulnTurns--; }
- if(B.hero.armyTurns>0){ B.hero.armyTurns--; if(B.hero.armyTurns==0){ B.hero.armyCount=0; addLog('💀 Армия исчезла','hit'); } }
- if(B.enemy.shadowMarkTurns>0){ B.enemy.shadowMarkTurns--; if(B.enemy.shadowMarkTurns==0) addLog('👁️ Метка кончилась','hit'); }
- if(B.hero.invisTurns>0){ B.hero.invisTurns--; if(B.hero.invisTurns==0){ B.hero.invisCrit=false; addLog('🌑 Инвиз кончился','hit'); } }
- if(B.hero.blockTurns>0){ B.hero.blockTurns--; if(B.hero.blockTurns==0) B.hero.block=0; }
- if(B.hero.reflectTurns>0){ B.hero.reflectTurns--; if(B.hero.reflectTurns==0) B.hero.reflect=0; }
- // VOLCANIC decrements
- if(B.enemy.calderaTurns>0){ B.enemy.calderaTurns--; if(B.enemy.calderaTurns==0) addLog('🌋 Кальдера потухла','hit'); }
- if(B.enemy.lavaTurns>0){ B.enemy.lavaTurns--; if(B.enemy.lavaTurns==0) addLog('💥 Лава остыла','hit'); }
- if(B.enemy.burnTurns>0){ B.enemy.burnTurns--; if(B.enemy.burnTurns==0) addLog('🔥 Горение кончилось','hit'); }
- if(B.enemy.judgmentTurns>0){ B.enemy.judgmentTurns--; if(B.enemy.judgmentTurns==0 && B.enemy.judgmentCount>0 && B.enemy.judgmentCount<4) addLog('🌋 Судный День прерван','hit'); }
- // AZURE SAGE decrements
- if(B.enemy.defDebuffTurns>0){ B.enemy.defDebuffTurns--; if(B.enemy.defDebuffTurns==0) addLog('❄️ Дебаф DEF кончился','hit'); }
- if(B.enemy.stormSphereTurns>0){ B.enemy.stormSphereTurns--; if(B.enemy.stormSphereTurns==0) addLog('⚡ Сфера Бури исчезла','hit'); }
- if(B.enemy.timeFreezeTurns>0){ B.enemy.timeFreezeTurns--; if(B.enemy.timeFreezeTurns==0) addLog('⏳ Время разморожено','hit'); }
-
- B.hero.mana=Math.min(B.hero.maxMana,B.hero.mana+8); updBars(); renderSkillBar();
- if(B.hero.hp<=0){ addLog('❌ ПОРАЖЕНИЕ','lose'); showDefeat(); } else addLog('--- Ход '+B.turn+' ---','');
+ turn++;
+ for(let i=0;i<cooldowns.length;i++){ if(cooldowns[i]>0) cooldowns[i]--; }
+ if(linkTurns>0){ linkTurns--; if(linkTurns==0) addLog('💀 Линк Похищения закончился','hit'); }
+ if(fearTurns>0){ fearTurns--; if(fearTurns==0) addLog('💜 Страх Душ закончился','hit'); }
+ if(spiritTurns>0){ spiritTurns--; if(spiritTurns==0) addLog('🔮 Дух исчез','hit'); }
+ if(boneVulnTurns>0){ boneVulnTurns--; if(boneVulnTurns==0) addLog('☠️ Уязвимость Костей закончилась','hit'); }
+ if(armyTurns>0){ armyTurns--; if(armyTurns==0){ armyCount=0; addLog('💀 Армия Погибели исчезла','hit'); } }
+ if(shadowMarkTurns>0){ shadowMarkTurns--; if(shadowMarkTurns==0) addLog('👁️ Метка Тени закончилась','hit'); }
+ if(invisTurns>0){ invisTurns--; if(invisTurns==0){ invisCrit=false; addLog('🌑 Инвиз закончился','hit'); } }
+ hMana=Math.min(hMaxMana,hMana+8); updBars(); renderSkillBar();
+ if(hHp<=0){ addLog('❌ ПОРАЖЕНИЕ!','lose'); showDefeat(); } else { addLog('--- Ход '+turn+': твой ход ---',''); }
 }
 
-function showVictory(){ B.isOver=true; document.getElementById('rewGold').textContent='+'+(150+stage*40+loc*20); document.getElementById('rewXp').textContent='+'+(4000+stage*200+loc*100); document.getElementById('modalTitle').textContent='ПОБЕДА!'; document.getElementById('modalSub').textContent=enemyData.name+' повержен LOC'+loc+' STAGE'+stage; document.getElementById('victoryModal').classList.add('show'); renderSkillBar(); }
-function showDefeat(){ B.isOver=true; document.getElementById('modalIcon').textContent='💀'; document.getElementById('modalTitle').textContent='ПОРАЖЕНИЕ!'; document.getElementById('modalSub').textContent='Тебя победил '+enemyData.name; document.getElementById('victoryModal').classList.add('show'); renderSkillBar(); }
+function showVictory(){ isBattleOver=true; document.getElementById('rewGold').textContent='+'+(150+stage*40+loc*20); document.getElementById('rewXp').textContent='+'+(4000+stage*200+loc*100); document.getElementById('modalTitle').textContent='ПОБЕДА!'; document.getElementById('modalSub').textContent='Ты победил • '+enemyData.name+' • LOC'+loc+' STAGE'+stage; document.getElementById('victoryModal').classList.add('show'); renderSkillBar(); }
+function showDefeat(){ isBattleOver=true; document.getElementById('modalIcon').textContent='💀'; document.getElementById('modalTitle').textContent='ПОРАЖЕНИЕ!'; document.getElementById('modalSub').textContent='Тебя победил '+enemyData.name; document.getElementById('victoryModal').classList.add('show'); renderSkillBar(); }
 
 updBars(); renderSkillBar();
-addLog('Бой: '+profileName+' ['+heroData.n+'] vs '+enemyData.name,'');
-addLog('Формула: DMG - DEF, мин 10 | Модули: '+Object.keys(VOLAND_HEROES).length+' героев в assets/js/battle/heroes/','skill');
+addLog('Бой: '+profileName+' ['+heroData.n+'] vs '+enemyData.name+' [LOC '+loc+' STAGE '+stage+']','');
+addLog('Моб UI: hp '+enemyData.hp+'% бар • Реал статы: DEF '+eDef+' DMG '+eDmg+' HP '+eMaxHp+' (руками в page8)','skill');
+addLog('Формула: урон = DMG героя - DEF моба, мин 10','');
 addLog('Пассивка: '+passive.name+' — '+passive.desc,'skill');
-addLog('Q=Атака W,E,R,T=Скилы • Мана +8','');
+addLog('⬇️ Жми: Q=Атака, W,E,R,T=Скилы • Мана +8 за ход','');
+
 document.addEventListener('keydown',e=>{ const k=e.key.toLowerCase(); if(k=='q') useAction(0); if(k=='w') useAction(1); if(k=='e') useAction(2); if(k=='r') useAction(3); if(k=='t') useAction(4); });
 </script>
 </body>
