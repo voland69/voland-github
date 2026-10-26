@@ -71,14 +71,14 @@ const VOLAND_HEROES = {
 },
 'archmage-f': {
   n:'VOLCANIC', role:'MAGE • Archmage - Female',
-  img:'./assets/heroes/mage-f-new.webp',
-  thumb:'./assets/heroes/mage-f-new.webp',
+  img:'./assets/heroes/archmage-f.webp',
+  thumb:'./assets/heroes/archmage-f.webp',
   st:{HP:950,DEF:85,DMG:280,MANA:300,CRIT:22,PARRY:0,DODGE:11},
   sk:[
     ['Сердце Кальдеры','PASSIVE',['./assets/heroes/icon_volcanic_heart.jpg','./assets/heroes/icon_serdtse_kaldery.jpg'],'🌋','Каждое 4 заклинание поджигает землю на 2 раунда нанося 100% урона всем врагам.','КД: 4 • Мана: 20 • Урон: 100% 2 раунда'],
     ['Огненный Шар','1',['./assets/heroes/icon_fireball.jpg','./assets/heroes/icon_ognennyy_shar.jpg'],'🔥','Огненный шар наносит 150% урона + поджог 20% урона на 2 раунда. При крите — все враги получают урон.','КД: 4 раунда • Мана: 15 • Урон: 150% + 20% дот'],
     ['Извержение','2',['./assets/heroes/icon_eruption.jpg','./assets/heroes/icon_izverzhenie.jpg'],'💥','Взрыв под ногами, отбрасывает всех врагов и наносит 200% урона. Оставляет лаву на 3 раунда: 50% урона за раунд всем врагам.','КД: 12 раундов • Мана: 25 • Урон 200% AOE + дот'],
-    ['Метеор','3',['./assets/heroes/icon_meteor.jpg','./assets/heroes/icon_meteor_volcanic.jpg','./assets/heroes/icon_fireball.jpg'],'☄️','Падает метеор нанося 500% урона всем врагам. В следующем раунде ударная волна наносит еще 300% урона всем врагам.','КД: 20 раундов • Мана: 50 • Урон 500% + 300% AOE'],
+    ['Метеор','3',['./assets/heroes/icon_meteor.jpg','./assets/heroes/icon_meteor_volcanic.jpg'],'☄️','Падает метеор нанося 500% урона всем врагам. В следующем раунде ударная волна наносит еще 300% урона всем врагам.','КД: 20 раундов • Мана: 50 • Урон 500% + 300% AOE'],
     ['Судный День','4',['./assets/heroes/icon_judgment_day.jpg','./assets/heroes/icon_sudnyy_den.jpg'],'🌋','ULTIMATE: 4 метеора за 4 раунда по области, каждый 200% урона. Последний — суперметеор 400% + поджог земли 50% урона на 2 раунда.','КД: 25 раундов • Мана: 100 • Урон: 1000% AOE + дот']
   ]
 },
