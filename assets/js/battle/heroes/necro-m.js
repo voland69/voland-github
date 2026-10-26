@@ -27,8 +27,24 @@ window.VOLAND_HERO_ON_TURN_END = function(ctx){
 window.VOLAND_HERO_ON_ENEMY_TURN = function(ctx){
  if(boneShield>0){
    let dmg=Math.max(10, ctx.eDmg - ctx.cur.DEF + (ctx.rand?ctx.rand(-10,10):0));
-   if(dmg<=boneShield){ boneShield-=dmg; ctx.addLog('🛡️ Щит поглотил '+dmg+' ост '+boneShield,'skill'); ctx.updBars(); return true; }
-   else { let over=dmg-boneShield; ctx.addLog('🛡️ Щит разрушен '+boneShield,'skill'); boneShield=0; let exp=Math.max(15, Math.floor(ctx.cur.DMG*3.0)-ctx.eDef); ctx.eHp=Math.max(0, ctx.eHp-exp); ctx.addLog('💥 Взрыв щита '+exp+' AOE','skill'); ctx.updBars(); ctx.hHp=Math.max(0, ctx.hHp-over); return false; }
+   if(dmg<=boneShield){
+    boneShield-=dmg;
+    ctx.addLog('🛡️ Щит поглотил '+dmg+' ост '+boneShield,'skill');
+    ctx.updBars();
+    return true; // полностью поглотил
+   } else {
+    let broken=boneShield;
+    let over=dmg-broken;
+    ctx.addLog('🛡️ Щит разрушен '+broken+' + пробитие '+over,'skill');
+    boneShield=0;
+    let exp=Math.max(15, Math.floor(ctx.cur.DMG*3.0)-window.VB.eDef + (ctx.rand?ctx.rand(-5,5):0));
+    ctx.eHp=Math.max(0, ctx.eHp-exp);
+    ctx.addLog('💥 Взрыв щита '+exp+' AOE [300%]','skill');
+    ctx.hHp=Math.max(0, ctx.hHp-over);
+    if(over>0) ctx.addLog('💥 Пробитие '+over+' в HP','enemy-hit');
+    ctx.updBars();
+    return true; // уже нанесли over, не давать engine бить второй раз
+   }
  }
  return false;
 };
