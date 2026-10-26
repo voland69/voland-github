@@ -69,30 +69,29 @@ window.VOLAND_HERO_ON_TURN_END = function(ctx){
  if(spiritTurns>0){ let spDmg=Math.max(10, cur.DMG - window.VB.eDef + rand(-8,8)); ctx.eHp=Math.max(0, ctx.eHp-spDmg); window.VB.hMana=Math.min(window.VB.hMana+5, cur.MANA); addLog('🔮 Дух '+spDmg+' +5 маны ['+spiritTurns+']','skill'); updBars(); }
 };
 
-// хук перед атакой врага — тут применяем -15% и линк
+// хук перед атакой врага — тут применяем -15% 
 window.VOLAND_HERO_ON_ENEMY_TURN = function(ctx){
- let {cur, addLog, updBars}=ctx;
- let modified=false;
- // страх -15% DMG врага
+ let {addLog}=ctx;
+ // страх -15% DMG врага от базы, не стакать
  if(fearTurns>0){
-  let orig=window.VB.eDmg;
+  let orig=window.VB.baseEDmg;
   let reduced=Math.floor(orig*0.85);
-  // временно меняем eDmg для расчета в engine? engine берет window.VB.eDmg? Он берет локальный eDmg, но мы перехватим через VB.eDmg если engine использует
-  // для лога покажем
   addLog('💜 Страх: урон врага -15% ('+orig+'→'+reduced+') ['+fearTurns+']','hit');
-  // сохраним редукцию в VB для engine? engine использует локальный eDmg, но мы можем патчить через ctx модификацию — сделаем через window.VB.eDmg и пусть engine берет его если есть fear
   window.VB.eDmg = reduced;
-  modified=true;
- }
- // линк обрабатывается после атаки врага в engine? мы сделаем в ON_ROUND? лучше обработать в ON_ENEMY_TURN после того как engine посчитает? Пока оставим логику отражения в ON_TURN_END? Нет, нужно после урона.
- // Чтобы отразить, мы подпишемся на изменение hHp: в engine после атаки hHp уже уменьшен, мы можем отразить часть
- // Для простоты — если линк активен, отражаем 30% от текущего eDmg
- if(linkTurns>0){
-  // отражение произойдет в engine после атаки — мы тут только подсказку
-  // реальный отраж+хил сделаем в ON_ROUND_START? сделаем в этом хуке после атаки врага — engine вызывает хук ДО атаки, поэтому отражение сделаем в ON_ROUND_END через сохранение последнего урона
-  window.VB._linkActive = true;
  }
  return false; // не скипаем ход врага
+};
+
+// мгновенный отраж+хил сразу после удара врага
+window.VOLAND_HERO_ON_ENEMY_HIT = function(ctx){
+ if(linkTurns>0 && ctx.dmgToHero>0){
+  let refl=Math.floor(ctx.dmgToHero*0.3);
+  let heal=Math.floor(ctx.dmgToHero*0.3);
+  window.VB.eHp=Math.max(0, window.VB.eHp-refl);
+  window.VB.hHp=Math.min(window.VB.hMax||9999, window.VB.hHp+heal);
+  window.VB.addLog('💀 Линк: отраж '+refl+' + хил '+heal+' (30% от '+ctx.dmgToHero+')','skill');
+  window.VB.updBars();
+ }
 };
 
 window.VOLAND_HERO_ON_ROUND_END = function(){
@@ -100,16 +99,6 @@ window.VOLAND_HERO_ON_ROUND_END = function(){
  if(fearTurns>0){ fearTurns--; if(fearTurns==0){ window.VB.addLog('💜 Страх кончился','hit'); window.VB.eDmg = window.VB.baseEDmg; } }
  if(spiritTurns>0){ spiritTurns--; if(spiritTurns==0) window.VB.addLog('🔮 Дух исчез','hit'); }
  if(linkTurns>0){ 
-  // если был урон врага, отражаем
-  if(window.VB._lastEnemyDmg && window.VB._linkActive){
-   let refl=Math.floor(window.VB._lastEnemyDmg*0.3);
-   let heal=Math.floor(window.VB._lastEnemyDmg*0.3);
-   window.VB.eHp=Math.max(0, window.VB.eHp-refl);
-   window.VB.hHp=Math.min(window.VB.hMax||9999, window.VB.hHp+heal);
-   window.VB.addLog('💀 Линк: отраж '+refl+' + хил '+heal,'skill');
-   window.VB.updBars();
-  }
-  window.VB._linkActive=false;
   linkTurns--; if(linkTurns==0) window.VB.addLog('💀 Линк кончился','hit'); 
  }
 };
