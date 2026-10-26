@@ -66,7 +66,7 @@ const VOLAND_HEROES = {
     ['Аннигиляция Времени','4',['./assets/heroes/icon_annigilyatsiya_vremeni.jpg'],'🌌','ULTIMATE: Замораживает время на 3 раунда (враги не могут двигаться/атаковать) (стан), затем взрыв на +350% урона всем.','КД: 25 раундов • Мана: 50 • Урон: 350% + контроль 3 раундов']
   ]
 },
-'archmage-f': {
+'mage-f-new': {
   n:'VOLCANIC', role:'MAGE • Archmage - Female',
   img:'./assets/heroes/mage-f-new.webp',
   thumb:'./assets/heroes/mage-f-new.webp',
