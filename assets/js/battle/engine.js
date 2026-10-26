@@ -145,6 +145,10 @@ function enemyTurn(){
  window.VB._lastEnemyDmg = dmgToHero;
  hHp=Math.max(0,hHp-dmgToHero);
  addLog('💥 '+enemyData.name+' бьет тебя на '+dmgToHero+' — HP '+hHp+'/'+hMax,'enemy-hit');
+ // instant link reflect - если есть у героя
+ if(window.VOLAND_HERO_ON_ENEMY_HIT){
+  try{ window.VOLAND_HERO_ON_ENEMY_HIT({dmgToHero, cur, eDef, eDmg: effectiveDmg, addLog, updBars, rand}); }catch(e){ console.log('link err',e); }
+ }
  updBars();
  if(hHp<=0){ addLog('❌ ПОРАЖЕНИЕ!','lose'); showDefeat(); return; }
  endRound();
