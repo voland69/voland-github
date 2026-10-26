@@ -1,8 +1,5 @@
-// VOLAND DB v2 - SAFEGUARD MODE - 8 HEROES - VOLCANIC TRUE SKILLS
+// VOLAND DB v1 - единый источник данных для всех страниц
 // TRUE SKILLS from user HTML - no invention
-// VOLCANIC stats from screenshot: HP 950, DEF 85, DMG 280, MANA 300, CRIT 22%, DODGE 11%
-// Skills from Mage-F-New.html
-
 const VOLAND_HEROES = {
 'necro-f-new': {
   n:'AMETHYST', role:'MAGE • Necro - Female',
@@ -49,7 +46,7 @@ const VOLAND_HEROES = {
   thumb:'./assets/heroes/archer-m.webp',
   st:{HP:1020,DEF:95,DMG:230,MANA:210,CRIT:20,PARRY:0,DODGE:18},
   sk:[
-    ['Метка Тени','PASSIVE',['./assets/heroes/icon_ten.jpg','./assets/heroes/icon_metka_teni.jpg'],'👁️','Каждая 2-я атака накладывает Метку Тени на 3 раунда. Отмеченные цели получают +200% урона от твоих стрел. Убийство отмеченной цели восстанавливает 15 маны.','КД: — • Мана: 0'],
+    ['Метка Тени','PASSIVE',['./assets/heroes/icon_ten.jpg','./assets/heroes/icon_metka_teni.jpg'],'👁️','Каждая 4-я атака накладывает Метку Тени на 2 раунда. Отмеченные цели получают +100% урона от твоих стрел. Убийство отмеченной цели восстанавливает 15 маны.','КД: — • Мана: 0 • +100% 2 раунда'],
     ['Беглый выстрел','1',['./assets/heroes/icon_temnaya_strela.jpg','./assets/heroes/icon_beglyy_vystrel.jpg'],'🏹','Стреляет по ближайшему врагу, нанося 200% урона.','КД: 3 раунда • Мана: 5 • Урон: 200%'],
     ['Шаг в Ничто','2',['./assets/heroes/icon_tenevoy_pryzhok.jpg','./assets/heroes/icon_shag_v_nichto.jpg'],'🌑','Становится невидимым на 3 раунда. Следующая атака в инвизе критует гарантированно и снимает эффект инвиза.','КД: 20 раундов • Мана: 25'],
     ['Призрачная Стрела','3',['./assets/heroes/icon_set_teney.jpg','./assets/heroes/icon_prizrachnaya_strela.jpg'],'💫','Выпускает стрелу, проходящую сквозь врагов. Наносит +140% урона и оглушает на 1 раунд с вероятностью 33%. Пронзает до 3 целей.','КД: 5 раундов • Мана: 20 • Урон: 185×1.4'],
@@ -63,23 +60,23 @@ const VOLAND_HEROES = {
   st:{HP:900,DEF:80,DMG:260,MANA:320,CRIT:18,PARRY:0,DODGE:10},
   sk:[
     ['Искривление Времени','PASSIVE',['./assets/heroes/icon_mudrost.jpg','./assets/heroes/icon_iskrivlenie_vremeni.jpg'],'⏳','Каждое заклинание увеличивает базовый урон на 10%, стакается 5 раундов. При 5 стаках всё следующее заклинание кастуется +50% урона.','Стаки: 5 раундов • Бонус: +50% базового урона'],
-    ['Временная Петля','1',['./assets/heroes/icon_vremennaya_petlya.jpg'],'⏰','Наносит 180% урона и откатывает КД случайного скилла на 1 раунд','КД: 4 раунда • Мана: 15 • Урон: 180%'],
-    ['Хроносфера','2',['./assets/heroes/icon_khronosfera.jpg'],'🔵','Купол на 3 раунда: враги внутри -30% скорости, ты +20% урона','КД: 12 раундов • Мана: 30 • Контроль: -30% скорости врага'],
-    ['Разлом Времени','3',['./assets/heroes/icon_razlom_vremeni.jpg'],'💥','Разрывает время: 250% урона всем + 20% шанс стана','КД: 15 раундов • Мана: 35 • AOE 250%'],
-    ['Коллапс Вечности','4',['./assets/heroes/icon_kollaps_vechnosti.jpg'],'🌌','ULTIMATE: Останавливает время на 2 раунда, ты бьешь без ответа +400% урона','КД: 30 раундов • Мана: 100 • Урон: 400% + стоп-тайм']
+    ['Ледяное Копье','1',['./assets/heroes/icon_ledyanoe_kopye.jpg'],'❄️','Бросает копье льда, наносит 220% урона и замедляет врага на 30% на 2 раунда.','КД: 3 раунда • Мана: 15 • Урон: 220%'],
+    ['Огненный Шар','2',['./assets/heroes/icon_ognennyy_shar.jpg'],'🔥','Шар огня наносит 300% урона по области и поджигает врагов на 3 раунда.','КД: 8 раундов • Мана: 25 • Урон: 300% AOE'],
+    ['Щит Маны','3',['./assets/heroes/icon_shchit_many.jpg'],'🛡️','Создает щит из маны: 25% макс HP на 3 раунда. Пока щит активен, мана не тратится.','КД: 15 раундов • Мана: 30 • Щит: 25% HP'],
+    ['Армагеддон','4',['./assets/heroes/icon_armageddon.jpg'],'🌌','ULTIMATE: Призывает метеориты, наносят 800% урона всем врагам и стан на 1 раунд.','КД: 25 раундов • Мана: 100 • Урон: 800% + стан']
   ]
 },
 'archmage-f': {
-  n:'VOLCANIC', role:'MAGE • Archmage - Female',
+  n:'FROST WEAVER', role:'MAGE • Archmage - Female',
   img:'./assets/heroes/archmage-f.webp',
   thumb:'./assets/heroes/archmage-f.webp',
-  st:{HP:950,DEF:85,DMG:280,MANA:300,CRIT:22,PARRY:0,DODGE:11},
+  st:{HP:880,DEF:75,DMG:270,MANA:340,CRIT:20,PARRY:0,DODGE:12},
   sk:[
-    ['Сердце Кальдеры','PASSIVE',['./assets/heroes/icon_volcanic_heart.jpg','./assets/heroes/icon_serdtse_kaldery.jpg'],'🌋','Каждое 4 заклинание поджигает землю на 2 раунда нанося 100% урона всем врагам.','КД: 4 • Мана: 20 • Урон: 100% 2 раунда'],
-    ['Огненный Шар','1',['./assets/heroes/icon_fireball.jpg','./assets/heroes/icon_ognennyy_shar.jpg'],'🔥','Огненный шар наносит 150% урона + поджог 20% урона на 2 раунда. При крите — все враги получают урон.','КД: 4 раунда • Мана: 15 • Урон: 150% + 20% дот'],
-    ['Извержение','2',['./assets/heroes/icon_eruption.jpg','./assets/heroes/icon_izverzhenie.jpg'],'💥','Взрыв под ногами, отбрасывает всех врагов и наносит 200% урона. Оставляет лаву на 3 раунда: 50% урона за раунд всем врагам.','КД: 12 раундов • Мана: 25 • Урон 200% AOE + дот'],
-    ['Метеор','3',['./assets/heroes/icon_meteor.jpg','./assets/heroes/icon_meteor_volcanic.jpg'],'☄️','Падает метеор нанося 500% урона всем врагам. В следующем раунде ударная волна наносит еще 300% урона всем врагам.','КД: 20 раундов • Мана: 50 • Урон 500% + 300% AOE'],
-    ['Судный День','4',['./assets/heroes/icon_judgment_day.jpg','./assets/heroes/icon_sudnyy_den.jpg'],'🌋','ULTIMATE: 4 метеора за 4 раунда по области, каждый 200% урона. Последний — суперметеор 400% + поджог земли 50% урона на 2 раунда.','КД: 25 раундов • Мана: 100 • Урон: 1000% AOE + дот']
+    ['Ледяное Сердце','PASSIVE',['./assets/heroes/icon_ledyanoe_serdtse.jpg'],'💎','Каждое заклинание льда накладывает Холод: -10% скорости врага, стакается до 3 раз. При 3 стаках враг замораживается на 1 раунд.','Заморозка при 3 стаках'],
+    ['Сосулька','1',['./assets/heroes/icon_sosulka.jpg'],'🧊','Бросает сосульку, наносит 200% урона + Холод.','КД: 2 раунда • Мана: 10 • Урон: 200%'],
+    ['Вьюга','2',['./assets/heroes/icon_vyuga.jpg'],'🌨️','Вьюга наносит 250% урона всем и накладывает 2 стака Холода.','КД: 8 раундов • Мана: 20 • Урон: 250% AOE'],
+    ['Ледяная Глыба','3',['./assets/heroes/icon_ledyanaya_glyba.jpg'],'🧱','Замораживает врага в глыбе на 2 раунда. Враг не может действовать, но получает -30% урона.','КД: 15 раундов • Мана: 30 • Контроль: 2 раунда'],
+    ['Абсолютный Ноль','4',['./assets/heroes/icon_absolyutnyy_nol.jpg'],'❄️','ULTIMATE: Замораживает всех врагов на 1 раунд и наносит 600% урона. Замороженные получают +50% урона в следующем раунде.','КД: 25 раундов • Мана: 80 • Урон: 600% + стан']
   ]
 },
 'warrior-f': {
@@ -162,15 +159,3 @@ const VOLAND_ENEMIES = {
    {stage:4, name:'ЛЕДЯНОЙ ДРАКОН', eng:'Frost Dragon - BOSS', icon:'🐉', desc:'Босс Льда: Дыхание льда AOE 250% + заморозка', lvl:'BOSS LVL 10', hp:100, hpColor:'#e6d5a0', boss:true},
  ],
 };
-
-// --- SAFEGUARD CHECK - НЕ УДАЛЯТЬ ---
-try{
-  const expected = ['necro-f-new','necro-m','archer-f','archer-m','archmage-m','archmage-f','warrior-f','warrior-m'];
-  const actual = Object.keys(VOLAND_HEROES);
-  const missing = expected.filter(k=>!actual.includes(k));
-  if(missing.length>0){
-    console.error('❌ VOLAND DB ERROR: Потеряны герои:', missing, 'Ожидалось 8, сейчас', actual.length);
-  }else{
-    console.log('✅ VOLAND DB OK: 8 героев - VOLCANIC TRUE SKILLS OK');
-  }
-}catch(e){ console.warn('DB check failed', e); }
