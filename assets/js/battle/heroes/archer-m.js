@@ -1,4 +1,4 @@
-// DARK RANGER archer-m - rework: 7x180% zalp per-arrow log, 200% prizrachnaya, invis crit for skills, mark +100%
+// DARK RANGER archer-m - fix: metka only +100% dmg, no crit on 4th, only 1 arrow gets bonus
 (function(){
 let markTurns=0, invisTurns=0, attackCount=0;
 
@@ -83,7 +83,7 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
   updBars(); return true;
  }
 
- // T - Залп Бездны 7x180% - каждая стрела отдельно
+ // T - Залп Бездны 7x180% - метка только +100% на 1 стрелу, без крита на 4-й
  if(sk.name.includes('Залп')){
   if(ctx.hMana<sk.mana){ addLog('⛔ Не хватает маны!','lose'); return false; }
   attackCount++;
@@ -92,29 +92,26 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
   let wasInvis = invisTurns>0;
   ctx.hMana-=sk.mana; ctx.cooldowns[idx]=sk.cd||25;
   let total=0, critCount=0;
-  addLog('🌌 '+sk.name+' → 7 стрел по 180%'+(markActive?' +МЕТКА':'')+(wasInvis?' +ИНВИЗ':'')+(isFourth?' [4-я]':''),'skill');
+  let hasBonus = markActive || isFourth; // если есть метка или это 4-я атака - 1 стрела получит +100%
+  addLog('🌌 '+sk.name+' → 7 стрел по 180%'+(hasBonus?' +МЕТКА 1 стрела':'')+(wasInvis?' +ИНВИЗ 1 крит':'')+(isFourth?' [4-я]':''),'skill');
   for(let i=0;i<7;i++){
     let isFirst = i===0;
     let curMult = 1.8;
-    if(markActive && !isFourth){
-      curMult += 1.0;
-    } else if(isFourth && isFirst){
-      curMult += 1.0;
-    } else if(markActive && isFourth){
-      if(isFirst) curMult += 1.0;
+    // только 1-я стрела получает +100% если есть метка или 4-я атака
+    if(hasBonus && isFirst){
+      curMult += 1.0; // 280% на 1-й
     }
+    // крит: только инвиз дает гарант крит на 1-й, 4-я крит не дает
     let isCrit = false;
     if(wasInvis && isFirst) isCrit=true;
-    else if(wasInvis && !isFirst) isCrit = Math.random()*100 < cur.CRIT;
-    else if(isFourth && isFirst) isCrit=true;
     else isCrit = Math.random()*100 < cur.CRIT;
 
     let d = Math.max(5, Math.floor(cur.DMG*curMult) - eDef + rand(-8,8));
     if(isCrit){ d=Math.floor(d*1.4); critCount++; }
     total+=d;
     ctx.eHp = Math.max(0, ctx.eHp - d);
-    let tag = '['+Math.round(curMult*100)+'%'+(markActive && ((!isFourth) || isFirst) ? '+МЕТКА':'')+']';
-    addLog('  🏹 Стрела '+(i+1)+' → '+d+' '+tag+(isCrit?' CRIT'+(wasInvis && isFirst ? ' ИНВИЗ':'')+(isFourth && isFirst ? ' 4-я':'') : ''),'skill');
+    let tag = '['+Math.round(curMult*100)+'%'+(hasBonus && isFirst ? '+МЕТКА':'')+']';
+    addLog('  🏹 Стрела '+(i+1)+' → '+d+' '+tag+(isCrit?' CRIT'+(wasInvis && isFirst ? ' ИНВИЗ':'') : ''),'skill');
     await new Promise(r=>setTimeout(r,70));
     updBars();
     if(ctx.eHp<=0) break;
