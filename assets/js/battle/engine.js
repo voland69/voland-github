@@ -178,8 +178,8 @@ window.tryNav=tryNav;
 
 function loadHeroModule(){
  const s=document.createElement('script');
- s.src='./assets/js/battle/heroes/'+heroId+'.js';
- s.onload=()=>{ addLog('✨ Механика героя '+heroData.n+' загружена из heroes/'+heroId+'.js','skill'); renderSkillBar(); };
+ s.src='./assets/js/battle/heroes/'+heroId+'.js?v='+Date.now();
+ s.onload=()=>{ addLog('✨ Механика героя '+heroData.n+' загружена из heroes/'+heroId+'.js?v=anti-cache','skill'); renderSkillBar(); };
  s.onerror=()=>{ addLog('ℹ️ Нет отдельной механики для '+heroId+' — используется база DMG-DEF','hit'); };
  document.head.appendChild(s);
 }
