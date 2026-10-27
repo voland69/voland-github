@@ -1,4 +1,4 @@
-// DARK RANGER archer-m - rework: 7x180% zalp, 200% prizrachnaya, invis crit for skills, mark +100% to skill
+// DARK RANGER archer-m - rework: 7x180% zalp per-arrow log, 200% prizrachnaya, invis crit for skills, mark +100%
 (function(){
 let markTurns=0, invisTurns=0, attackCount=0;
 
@@ -14,12 +14,11 @@ setTimeout(()=>{ if(window.VB) window.VB.extraStat=extra; },100);
 window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
  let {cur, eDef, activeSkills, rand, addLog, updBars, setEnemyStun}=ctx;
 
- // Q - обычная атака
  if(idx===0){
   attackCount++;
   let isFourth = (attackCount%4===0);
   let markActive = markTurns>0;
-  let mult = 1.0 + (markActive ? 1.0 : 0); // +100% если метка
+  let mult = 1.0 + (markActive ? 1.0 : 0);
   let base = Math.max(10, Math.floor(cur.DMG*mult) - eDef + rand(-12,12));
   let forceCrit = invisTurns>0;
   let isCrit = forceCrit || (Math.random()*100 < cur.CRIT);
@@ -36,7 +35,6 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
  let sk=activeSkills[idx-1];
  if(!sk) return false;
 
- // W - Беглый выстрел 200% (+100% метка =300%)
  if(sk.name.includes('Беглый')){
   if(ctx.hMana<sk.mana){ addLog('⛔ Не хватает маны!','lose'); return false; }
   attackCount++;
@@ -56,7 +54,6 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
   updBars(); return true;
  }
 
- // E - Шаг в Ничто - инвиз 3р
  if(sk.name.includes('Шаг')){
   if(ctx.hMana<sk.mana){ addLog('⛔ Не хватает маны!','lose'); return false; }
   ctx.hMana-=sk.mana; ctx.cooldowns[idx]=sk.cd||20;
@@ -65,7 +62,6 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
   updBars(); return true;
  }
 
- // R - Призрачная Стрела 200% (+100% метка =300%) + 33% стан
  if(sk.name.includes('Призрачная')){
   if(ctx.hMana<sk.mana){ addLog('⛔ Не хватает маны!','lose'); return false; }
   attackCount++;
@@ -87,41 +83,45 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
   updBars(); return true;
  }
 
- // T - Залп Бездны 7x180% (1260%)
+ // T - Залп Бездны 7x180% - каждая стрела отдельно
  if(sk.name.includes('Залп')){
   if(ctx.hMana<sk.mana){ addLog('⛔ Не хватает маны!','lose'); return false; }
   attackCount++;
   let isFourth = (attackCount%4===0);
   let markActive = markTurns>0;
   let wasInvis = invisTurns>0;
+  ctx.hMana-=sk.mana; ctx.cooldowns[idx]=sk.cd||25;
   let total=0, critCount=0;
+  addLog('🌌 '+sk.name+' → 7 стрел по 180%'+(markActive?' +МЕТКА':'')+(wasInvis?' +ИНВИЗ':'')+(isFourth?' [4-я]':''),'skill');
   for(let i=0;i<7;i++){
     let isFirst = i===0;
     let curMult = 1.8;
-    // метка: если была активна до каста - все стрелы +100%, если это 4-я атака - только 1 стрела +100%
     if(markActive && !isFourth){
-      curMult += 1.0; // 180+100=280% каждая
+      curMult += 1.0;
     } else if(isFourth && isFirst){
-      curMult += 1.0; // только 1-я стрела +100% при 4-й атаке
+      curMult += 1.0;
     } else if(markActive && isFourth){
-      // если и метка была и это 4-я - тоже только 1-я +100% чтобы не апать 7x
       if(isFirst) curMult += 1.0;
     }
     let isCrit = false;
-    if(wasInvis && isFirst) isCrit=true; // инвиз: только 1-я стрела гарант крит
+    if(wasInvis && isFirst) isCrit=true;
     else if(wasInvis && !isFirst) isCrit = Math.random()*100 < cur.CRIT;
-    else if(isFourth && isFirst) isCrit=true; // 4-я атака залп: 1 стрела 100% крит
+    else if(isFourth && isFirst) isCrit=true;
     else isCrit = Math.random()*100 < cur.CRIT;
 
     let d = Math.max(5, Math.floor(cur.DMG*curMult) - eDef + rand(-8,8));
     if(isCrit){ d=Math.floor(d*1.4); critCount++; }
     total+=d;
+    ctx.eHp = Math.max(0, ctx.eHp - d);
+    let tag = '['+Math.round(curMult*100)+'%'+(markActive && ((!isFourth) || isFirst) ? '+МЕТКА':'')+']';
+    addLog('  🏹 Стрела '+(i+1)+' → '+d+' '+tag+(isCrit?' CRIT'+(wasInvis && isFirst ? ' ИНВИЗ':'')+(isFourth && isFirst ? ' 4-я':'') : ''),'skill');
+    await new Promise(r=>setTimeout(r,70));
+    updBars();
+    if(ctx.eHp<=0) break;
   }
-  if(wasInvis){ invisTurns=0; addLog('🌑 Инвиз снят, крит 1 стрела!','skill'); }
-  ctx.hMana-=sk.mana; ctx.cooldowns[idx]=sk.cd||25;
-  ctx.eHp = Math.max(0, ctx.eHp - total);
+  if(wasInvis){ invisTurns=0; addLog('🌑 Инвиз снят','skill'); }
   if(markActive && ctx.eHp<=0){ ctx.hMana = Math.min(ctx.hMaxMana, ctx.hMana+15); addLog('👁️ Убийство метки +15 маны','skill'); }
-  addLog('🌌 '+sk.name+' 7 стрел → '+total+' ['+(markActive?'+МЕТКА ':'')+'180%×7'+(markActive && !isFourth?' +100%':'')+'] критов:'+critCount+(wasInvis?' +инвиз 1 крит':'')+(isFourth?' [4-я 1 крит]':''),'skill');
+  addLog('🌌 '+sk.name+' итого '+total+' (критов '+critCount+'/7)','skill');
   if(isFourth){ markTurns=2; addLog('👁️ Метка Тени наложена 2р +100%','skill'); }
   updBars(); return true;
  }
@@ -132,7 +132,7 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
 window.VOLAND_HERO_ON_ENEMY_TURN = function(ctx){
  if(invisTurns>0){
   ctx.addLog('🌑 Враг не видит тебя (инвиз '+invisTurns+') — промах!','skill');
-  return true; // скипаем удар врага
+  return true;
  }
  return false;
 };
