@@ -28,7 +28,7 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
   ctx.eHp = Math.max(0, ctx.eHp - base);
   if(markActive && ctx.eHp<=0){ ctx.hMana = Math.min(ctx.hMaxMana, ctx.hMana+15); addLog('👁️ Убийство метки +15 маны','skill'); }
   addLog('🏹 Атака '+(markActive?'+МЕТКА ':'')+base+(isCrit? (wasInvis?' CRIT ИНВИЗ':' CRIT') : '')+(isFourth?' [4-я → МЕТКА]':''),'hit');
-  if(isFourth){ markTurns=2; addLog('👁️ Метка Тени наложена 2р +100%','skill'); }
+  if(isFourth){ markTurns=3; addLog('👁️ Метка Тени наложена 2р +100%','skill'); }
   ctx.cooldowns[0]=1; updBars(); return true;
  }
 
@@ -50,7 +50,7 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
   ctx.eHp = Math.max(0, ctx.eHp - base);
   if(markActive && ctx.eHp<=0){ ctx.hMana = Math.min(ctx.hMaxMana, ctx.hMana+15); addLog('👁️ Убийство метки +15 маны','skill'); }
   addLog('🏹 '+sk.name+' '+(markActive?'+МЕТКА ':'')+base+' ['+Math.round(mult*100)+'%]'+(isCrit? (wasInvis?' CRIT ИНВИЗ':' CRIT'):'')+(isFourth?' [4-я]':''),'skill');
-  if(isFourth){ markTurns=2; addLog('👁️ Метка Тени наложена 2р +100%','skill'); }
+  if(isFourth){ markTurns=3; addLog('👁️ Метка Тени наложена 2р +100%','skill'); }
   updBars(); return true;
  }
 
@@ -79,7 +79,7 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
   if(markActive && ctx.eHp<=0){ ctx.hMana = Math.min(ctx.hMaxMana, ctx.hMana+15); addLog('👁️ Убийство метки +15 маны','skill'); }
   addLog('💫 '+sk.name+' '+(markActive?'+МЕТКА ':'')+base+' ['+Math.round(mult*100)+'%]'+(isCrit? (wasInvis?' CRIT ИНВИЗ':' CRIT'):'')+(doStun?' +стан!':'')+(isFourth?' [4-я]':''),'skill');
   if(doStun) setEnemyStun(1);
-  if(isFourth){ markTurns=2; addLog('👁️ Метка Тени наложена 2р +100%','skill'); }
+  if(isFourth){ markTurns=3; addLog('👁️ Метка Тени наложена 2р +100%','skill'); }
   updBars(); return true;
  }
 
@@ -119,7 +119,7 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
   if(wasInvis){ invisTurns=0; addLog('🌑 Инвиз снят','skill'); }
   if(markActive && ctx.eHp<=0){ ctx.hMana = Math.min(ctx.hMaxMana, ctx.hMana+15); addLog('👁️ Убийство метки +15 маны','skill'); }
   addLog('🌌 '+sk.name+' итого '+total+' (критов '+critCount+'/7)','skill');
-  if(isFourth){ markTurns=2; addLog('👁️ Метка Тени наложена 2р +100%','skill'); }
+  if(isFourth){ markTurns=3; addLog('👁️ Метка Тени наложена 2р +100%','skill'); }
   updBars(); return true;
  }
 
