@@ -161,6 +161,13 @@ function endRound(){
  updBars(); renderSkillBar();
  if(hHp<=0){ addLog('❌ ПОРАЖЕНИЕ!','lose'); showDefeat(); } else { addLog('--- Ход '+turn+': твой ход ---',''); }
  if(window.VOLAND_HERO_ON_ROUND_END) window.VOLAND_HERO_ON_ROUND_END({turn});
+ // для героев с отложенным станом (Буря Стрел)
+ if(window.VB && window.VB._setStun){
+  enemyStun = Math.max(enemyStun, window.VB._setStun);
+  addLog('💫 Стан от скила '+window.VB._setStun+'р','skill');
+  window.VB._setStun=0;
+  updBars();
+ }
 }
 
 function showVictory(){ isBattleOver=true; document.getElementById('rewGold').textContent='+'+(150+stage*40+loc*20); document.getElementById('rewXp').textContent='+'+(4000+stage*200+loc*100); document.getElementById('modalTitle').textContent='ПОБЕДА!'; document.getElementById('modalSub').textContent='Ты победил • '+enemyData.name+' • LOC'+loc+' STAGE'+stage; document.getElementById('victoryModal').classList.add('show'); renderSkillBar(); }
