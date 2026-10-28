@@ -38,7 +38,7 @@ let turn=1, enemyStun=0, cooldowns=[0,0,0,0,0], isBattleOver=false;
 let spellCount=0;
 
 // общие статусы - могут использоваться героями
-window.VB={eDef, get eDmg(){return eDmg}, set eDmg(v){eDmg=v}, baseEDmg, eMaxHp, get eHp(){return eHp}, set eHp(v){eHp=v}, get hHp(){return hHp}, set hHp(v){hHp=v}, get hMana(){return hMana}, set hMana(v){hMana=v}, get hMax(){return hMax}, cur, heroData, enemyData, loc, stage, _lastEnemyDmg:0, _linkActive:false};
+window.VB={eDef, get eDmg(){return eDmg}, set eDmg(v){eDmg=v}, baseEDmg, eMaxHp, get eHp(){return eHp}, set eHp(v){eHp=v}, get hHp(){return hHp}, set hHp(v){hHp=v}, get hMana(){return hMana}, set hMana(v){hMana=v}, get hMax(){return hMax}, set hMax(v){hMax=v}, cur, heroData, enemyData, loc, stage, _lastEnemyDmg:0, _linkActive:false};
 
 function rand(a,b){return Math.floor(Math.random()*(b-a+1))+a}
 const logZone=document.getElementById('logZone');
