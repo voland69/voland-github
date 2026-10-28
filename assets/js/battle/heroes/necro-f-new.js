@@ -3,7 +3,7 @@
 let fearTurns=0, prisonTurns=0, prisonMult=3.0, linkTurns=0, spiritTurns=0, spellCounter=0;
 function extraStat(){
  let s=[];
- if(fearTurns>0) s.push('💜СТРАХ '+fearTurns+'(-15% DMG врага)');
+ if(fearTurns>0) s.push('💜СТРАХ '+fearTurns+'(-20% DMG врага)');
  if(prisonTurns>0) s.push('👻ТЮРЬМА '+prisonTurns+' x'+prisonMult);
  if(spiritTurns>0) s.push('🔮ДУХ '+spiritTurns+' (100%+5 маны)');
  if(linkTurns>0) s.push('💀ЛИНК '+linkTurns+' (30% отраж+хил)');
@@ -23,10 +23,10 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
    let base=Math.floor(cur.DMG*2.0); base=Math.max(15, base - eDef + rand(-10,10));
    if(Math.random()*100<cur.CRIT) base=Math.floor(base*1.4);
    ctx.eHp=Math.max(0, ctx.eHp-base);
-   fearTurns=4; // -15% урона врага 4 хода (из правок)
+   fearTurns=2; // -20% 2р
    ctx.hMana=Math.min(ctx.hMaxMana, ctx.hMana+5);
    spellCounter++;
-   addLog('💜 '+sk.name+' [200%] → '+base+' + СТРАХ -15% 4х +5 маны','skill'); 
+   addLog('💜 '+sk.name+' [200%] → '+base+' + СТРАХ -20% 2р +5 маны','skill'); 
    if(spellCounter%3===0){ spiritTurns=3; addLog('🔮 Шепот Аметиста: дух 3 раунда 100% урона +5 маны/раунд','crit'); }
    updBars(); return true;
  }
@@ -69,14 +69,14 @@ window.VOLAND_HERO_ON_TURN_END = function(ctx){
  if(spiritTurns>0){ let spDmg=Math.max(10, cur.DMG - window.VB.eDef + rand(-8,8)); ctx.eHp=Math.max(0, ctx.eHp-spDmg); window.VB.hMana=Math.min(window.VB.hMana+5, cur.MANA); addLog('🔮 Дух '+spDmg+' +5 маны ['+spiritTurns+']','skill'); updBars(); }
 };
 
-// хук перед атакой врага — тут применяем -15% 
+// хук перед атакой врага — тут применяем -20% 
 window.VOLAND_HERO_ON_ENEMY_TURN = function(ctx){
  let {addLog}=ctx;
- // страх -15% DMG врага от базы, не стакать
+ // страх -20% DMG врага от базы, не стакать
  if(fearTurns>0){
   let orig=window.VB.baseEDmg;
-  let reduced=Math.floor(orig*0.85);
-  addLog('💜 Страх: урон врага -15% ('+orig+'→'+reduced+') ['+fearTurns+']','hit');
+  let reduced=Math.floor(orig*0.80);
+  addLog('💜 Страх: урон врага -20% ('+orig+'→'+reduced+') ['+fearTurns+']','hit');
   window.VB.eDmg = reduced;
  }
  return false; // не скипаем ход врага
