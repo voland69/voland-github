@@ -1,4 +1,4 @@
-// IRON VOW warrior-f - fix: passive HP<30% +50% dmg +30% lifesteal, 2x110%, shield block, call 400%, alpha +50% HP +30% + bleed
+// IRON VOW warrior-f - fix2: bleed 1 timer, no duplicate, ends with alpha, HP setter fixed
 (function(){
 let wolfShield=0;
 let alphaTurns=0;
@@ -8,9 +8,9 @@ let lastCur=null;
 
 function extra(){
   let s=[];
-  if(wolfShield>0) s.push('🛡️ВОЛК '+wolfShield+' 50% блок');
-  if(alphaTurns>0) s.push('🌕АЛЬФА '+alphaTurns+' +30% +50% HP');
-  if(bleedTurns>0) s.push('🩸КРОВ '+bleedTurns+' 100%');
+  if(wolfShield>0) s.push('🛡️ВОЛК '+wolfShield+' 50%');
+  if(alphaTurns>0) s.push('🌕АЛЬФА '+alphaTurns+' +30%');
+  if(bleedTurns>0) s.push('🩸КРОВ '+bleedTurns);
   return s.join(' ');
 }
 setTimeout(()=>{ if(window.VB) window.VB.extraStat=extra; },100);
@@ -26,7 +26,7 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
  lastCur=cur;
  let sk = activeSkills[idx-1];
 
- // Q - базовая атака 100% (с пассивкой и альфой)
+ // Q базовая 100%
  if(idx===0){
    let mult = 1.0;
    if(alphaTurns>0) mult *= 1.3;
@@ -35,17 +35,20 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
    let base = Math.max(10, Math.floor(cur.DMG*mult) - eDef + rand(-10,10));
    let isCrit = Math.random()*100 < cur.CRIT;
    if(isCrit) base = Math.floor(base*1.5);
-   ctx.eHp = Math.max(0, ctx.eHp - base);
-   if(low){
-     let heal = Math.floor(base*0.3);
-     ctx.hHp = Math.min(ctx.hMax, ctx.hHp + heal);
-     addLog('🗡️ Атака '+base+(isCrit?' CRIT':'')+(alphaTurns>0?' +30% альфа':'')+' +50% Клятва Стаи + хил '+heal+' [HP<30%]','hit');
-   } else {
-     addLog('🗡️ Атака '+base+(isCrit?' CRIT':'')+(alphaTurns>0?' +30% альфа':''),'hit');
-   }
+   // bleed extra 100% во время альфы - мгновенно
+   let bleedExtra = 0;
    if(alphaTurns>0){
-     bleedTurns = 3;
-     addLog('🩸 Кровотечение 100% 3р от альфы','skill');
+     bleedExtra = Math.max(5, Math.floor(cur.DMG*1.0) + rand(-5,5));
+     if(isCrit) bleedExtra = Math.floor(bleedExtra*1.4);
+   }
+   let total = base + bleedExtra;
+   ctx.eHp = Math.max(0, ctx.eHp - total);
+   if(low){
+     let heal = Math.floor(total*0.3);
+     ctx.hHp = Math.min(window.VB.hMax, ctx.hHp + heal);
+     addLog('🗡️ Атака '+base+(bleedExtra?' + кров '+bleedExtra:'')+' = '+total+(isCrit?' CRIT':'')+(alphaTurns>0?' +30% альфа':'')+' +50% стаи + хил '+heal,'hit');
+   } else {
+     addLog('🗡️ Атака '+base+(bleedExtra?' + кров '+bleedExtra+' = '+total:'')+(isCrit?' CRIT':'')+(alphaTurns>0?' +30% альфа':''),'hit');
    }
    ctx.cooldowns[0]=1;
    updBars(); return true;
@@ -54,7 +57,6 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
  if(!sk) return false;
  if(ctx.hMana < sk.mana){ addLog('⛔ Не хватает маны!','lose'); return false; }
 
- // W - Рассекающий Волк 2x110% = 220%
  if(sk.name.includes('Рассекающий')){
    ctx.hMana-=sk.mana; ctx.cooldowns[idx]=sk.cd||3;
    let mult1 = 1.1, mult2 = 1.1;
@@ -67,73 +69,65 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
    let isCrit2 = Math.random()*100 < cur.CRIT;
    if(isCrit1) base1 = Math.floor(base1*1.4);
    if(isCrit2) base2 = Math.floor(base2*1.4);
-   let total = base1+base2;
+   let bleedExtra = 0;
+   if(alphaTurns>0){
+     bleedExtra = Math.max(5, Math.floor(cur.DMG*1.0) + rand(-5,5));
+   }
+   let total = base1+base2+bleedExtra;
    ctx.eHp = Math.max(0, ctx.eHp - total);
    let heal = 0;
    if(low){
      heal = Math.floor(total*0.3);
-     ctx.hHp = Math.min(ctx.hMax, ctx.hHp + heal);
+     ctx.hHp = Math.min(window.VB.hMax, ctx.hHp + heal);
    }
-   addLog('🗡️ '+sk.name+' '+base1+' + '+base2+' = '+total+' [110%+110%'+(alphaTurns>0?' +30% альфа':'')+(low?' +50% стаи':'')+']'+(isCrit1||isCrit2?' CRIT':'')+(low?' + хил '+heal:''),'skill');
-   if(alphaTurns>0){
-     bleedTurns = 3;
-     addLog('🩸 Кровотечение 100% 3р','skill');
-   }
+   addLog('🗡️ '+sk.name+' '+base1+' + '+base2+(bleedExtra?' + кров '+bleedExtra:'')+' = '+total+' [110%+110%'+(alphaTurns>0?' +30% +кров':'')+(low?' +50% стаи':'')+']'+(isCrit1||isCrit2?' CRIT':'')+(low?' + хил '+heal:''),'skill');
    updBars(); return true;
  }
 
- // E - Щит Волчьего Вожака 4р блок 50% + контра 350%
  if(sk.name.includes('Щит')){
    ctx.hMana-=sk.mana; ctx.cooldowns[idx]=sk.cd||15;
-   wolfShield = 5; // 4р с учетом нового порядка engine
+   wolfShield = 5;
    addLog('🛡️ '+sk.name+' щит 4р блок 50% + контра 350%','skill');
    updBars(); return true;
  }
 
- // R - Зов Стаи стан 1 + 200% AOE, оглушенный x2 = 400% для Титана
  if(sk.name.includes('Зов')){
    ctx.hMana-=sk.mana; ctx.cooldowns[idx]=sk.cd||15;
-   let mult = 2.0;
-   if(alphaTurns>0) mult*=1.3;
-   let low = isLowHP();
-   if(low) mult*=1.5;
-   // для одиночной цели - 400% (200% + x2)
    let totalMult = 4.0;
    if(alphaTurns>0) totalMult*=1.3;
+   let low = isLowHP();
    if(low) totalMult*=1.5;
    let base = Math.max(10, Math.floor(cur.DMG*totalMult) - eDef + rand(-10,10));
    let isCrit = Math.random()*100 < cur.CRIT;
    if(isCrit) base = Math.floor(base*1.4);
-   ctx.eHp = Math.max(0, ctx.eHp - base);
+   let bleedExtra = 0;
+   if(alphaTurns>0){
+     bleedExtra = Math.max(5, Math.floor(cur.DMG*1.0) + rand(-5,5));
+   }
+   let total = base + bleedExtra;
+   ctx.eHp = Math.max(0, ctx.eHp - total);
    setEnemyStun(1);
    let heal = 0;
    if(low){
-     heal = Math.floor(base*0.3);
-     ctx.hHp = Math.min(ctx.hMax, ctx.hHp + heal);
+     heal = Math.floor(total*0.3);
+     ctx.hHp = Math.min(window.VB.hMax, ctx.hHp + heal);
    }
-   addLog('🐾 '+sk.name+' стан 1р + '+base+' ['+Math.round(totalMult*100)+'% 200%x2]'+(isCrit?' CRIT':'')+(alphaTurns>0?' +30%':'')+(low?' +50% стаи + хил '+heal:''),'skill');
-   if(alphaTurns>0){
-     bleedTurns = 3;
-     addLog('🩸 Кровотечение 100% 3р','skill');
-   }
+   addLog('🐾 '+sk.name+' стан 1р + '+base+(bleedExtra?' + кров '+bleedExtra+' = '+total:'')+' ['+Math.round(totalMult*100)+'% 200%x2]'+(isCrit?' CRIT':'')+(low?' +50% стаи + хил '+heal:''),'skill');
    updBars(); return true;
  }
 
- // T - Альфа Хищник 5р +50% HP +30% урон + кровотечение 100%
  if(sk.name.includes('Альфа')){
    ctx.hMana-=sk.mana; ctx.cooldowns[idx]=sk.cd||20;
-   alphaTurns = 6; // 5р
-   // +50% макс HP
    if(alphaHPBonus==0){
-     alphaHPBonus = Math.floor(ctx.hMax*0.5);
-     ctx.hMax = ctx.hMax + alphaHPBonus;
-     ctx.hHp = ctx.hHp + alphaHPBonus;
-     window.VB.hMax = ctx.hMax;
-     addLog('🌕 '+sk.name+' +50% HP +'+alphaHPBonus+' → HP '+ctx.hHp+'/'+ctx.hMax+' +30% урон 5р + кров','skill');
+     alphaHPBonus = Math.floor(window.VB.hMax*0.5);
+     window.VB.hMax = window.VB.hMax + alphaHPBonus;
+     window.VB.hHp = window.VB.hHp + alphaHPBonus;
+     addLog('🌕 '+sk.name+' +50% HP +'+alphaHPBonus+' → HP '+window.VB.hHp+'/'+window.VB.hMax+' +30% урон 5р + кров 100%','skill');
    } else {
      addLog('🌕 '+sk.name+' уже активен '+alphaTurns+'р','skill');
    }
-   bleedTurns = 3;
+   alphaTurns = 6;
+   bleedTurns = 6; // кров 5р вместе с альфой
    updBars(); return true;
  }
 
@@ -147,7 +141,7 @@ window.VOLAND_HERO_ON_ENEMY_TURN = function(ctx){
    window.VB.eHp = Math.max(0, window.VB.eHp - base);
    window.VB.addLog('🐺 Щит Вожака блок! Контра '+base+' [350%]','skill');
    window.VB.updBars();
-   return true; // скип урона врага
+   return true;
  }
  return false;
 };
@@ -161,7 +155,6 @@ window.VOLAND_HERO_ON_ROUND_END = function(){
    alphaTurns--;
    if(alphaTurns==0){
      if(window.VB) window.VB.addLog('🌕 Альфа кончилась','hit');
-     // снять +50% HP
      if(alphaHPBonus>0 && window.VB){
        window.VB.hMax = Math.max(100, window.VB.hMax - alphaHPBonus);
        window.VB.hHp = Math.min(window.VB.hHp, window.VB.hMax);
@@ -169,9 +162,14 @@ window.VOLAND_HERO_ON_ROUND_END = function(){
        alphaHPBonus=0;
        window.VB.updBars();
      }
+     // кровь кончается вместе с альфой
+     if(bleedTurns>0){
+       bleedTurns=0;
+       if(window.VB) window.VB.addLog('🩸 Кровотечение кончилось (альфа кончилась)','hit');
+     }
    }
  }
- if(bleedTurns>0){
+ if(bleedTurns>0 && alphaTurns>0){
    let cur = lastCur || (window.VB && window.VB.cur);
    if(cur){
      let base = Math.max(5, Math.floor(cur.DMG*1.0) + (Math.floor(Math.random()*11)-5));
@@ -181,7 +179,7 @@ window.VOLAND_HERO_ON_ROUND_END = function(){
      window.VB.updBars();
    }
    bleedTurns--;
-   if(bleedTurns==0 && window.VB) window.VB.addLog('🩸 Кровотечение кончилось','hit');
+   if(bleedTurns==0 && window.VB && alphaTurns>0) window.VB.addLog('🩸 Кровотечение кончилось','hit');
  }
 };
 
