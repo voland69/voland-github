@@ -1,4 +1,4 @@
-// AZURE SAGE archmage-m - fix: +10% per stack, sphere DoT, DEF -20%, annihilation delay
+// AZURE SAGE archmage-m - fix2: sphere 1 hit per round, no double victory
 (function(){
 let stacks=0, stacksTimer=0;
 let defDebuffTurns=0;
@@ -17,16 +17,14 @@ function extra(){
 setTimeout(()=>{ if(window.VB) window.VB.extraStat=extra; },100);
 
 window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
- if(idx===0) return false; // базовая атака не стакает пассивку
+ if(idx===0) return false;
  let {cur, eDef, activeSkills, rand, addLog, updBars, setEnemyStun}=ctx;
  lastCur=cur;
  let sk=activeSkills[idx-1];
  if(!sk) return false;
  if(ctx.hMana < sk.mana){ addLog('⛔ Не хватает маны!','lose'); return false; }
 
- // эффективный DEF с учетом дебафа -20%
  let effDef = defDebuffTurns>0 ? Math.floor(eDef*0.8) : eDef;
-
  let baseMult = sk.dmgPct ? sk.dmgPct/100 : 2.5;
  let mult = baseMult;
  let isEmpowered = stacks>=5;
@@ -41,31 +39,25 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
    bonusFromStacks = stacks*10;
  }
 
- // Ледяное Копье 250%
+ // Ледяное Копье 250% + DEF -20%
  if(sk.name.includes('Копье') || sk.name.includes('Кольцо') || sk.name.toLowerCase().includes('копье')){
-   if(ctx.hMana < sk.mana){ addLog('⛔ Не хватает маны!','lose'); return false; }
    ctx.hMana-=sk.mana; ctx.cooldowns[idx]=sk.cd||3;
    let base = Math.max(10, Math.floor(cur.DMG*mult) - effDef + rand(-10,10));
    let isCrit = Math.random()*100 < cur.CRIT;
    if(isCrit) base = Math.floor(base*1.4);
    ctx.eHp = Math.max(0, ctx.eHp - base);
-   defDebuffTurns = 4; // 3 раунда с учетом декремента
+   defDebuffTurns = 4;
    addLog('❄️ '+sk.name+' ['+Math.round(mult*100)+'%'+(bonusFromStacks?' +'+bonusFromStacks+'% стаки':'')+'] '+base+(isCrit?' CRIT':'')+' DEF-20% 3р стаки '+ (isEmpowered?1:Math.min(5,stacks+1)),'skill');
-   // стаки
    if(isEmpowered){ stacks=1; } else { stacks=Math.min(5, stacks+1); }
    stacksTimer=5;
    updBars(); return true;
  }
 
- // Сфера Бури 160% - 3 раунда
+ // Сфера Бури 160% - 3 раунда по 1 удару в раунд (без мгновенного урона)
  if(sk.name.includes('Сфер')){
    ctx.hMana-=sk.mana; ctx.cooldowns[idx]=sk.cd||10;
-   let base = Math.max(10, Math.floor(cur.DMG*mult) - effDef + rand(-10,10));
-   let isCrit = Math.random()*100 < cur.CRIT;
-   if(isCrit) base = Math.floor(base*1.4);
-   ctx.eHp = Math.max(0, ctx.eHp - base);
-   sphereTurns = 2; // еще 2 тика после текущего (итого 3)
-   addLog('⚡ '+sk.name+' ['+Math.round(mult*100)+'%'+(bonusFromStacks?' +'+bonusFromStacks+'%':'')+'] '+base+(isCrit?' CRIT':'')+' + сфера 2р стаки '+(isEmpowered?1:Math.min(5,stacks+1)),'skill');
+   sphereTurns = 3; // 3 тика, по 1 в конце каждого раунда
+   addLog('⚡ '+sk.name+' создана! 3 раунда по ['+Math.round(mult*100)+'%'+(bonusFromStacks?' +'+bonusFromStacks+'%':'')+'] + сфера 3р стаки '+(isEmpowered?1:Math.min(5,stacks+1)),'skill');
    if(isEmpowered){ stacks=1; } else { stacks=Math.min(5, stacks+1); }
    stacksTimer=5;
    updBars(); return true;
@@ -87,11 +79,9 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
  // Аннигиляция Времени 350% с задержкой 3р стан 3р
  if(sk.name.includes('Аннигиляция') || sk.name.includes('Времени')){
    ctx.hMana-=sk.mana; ctx.cooldowns[idx]=sk.cd||25;
-   // стан 3 раунда сразу
    setEnemyStun(3);
    annihilationTimer = 3;
-   annihilationMult = baseMult; // 3.5
-   // учитываем стаки для будущего взрыва? взрыв получит стаки на момент взрыва, не сейчас
+   annihilationMult = baseMult;
    addLog('🌌 '+sk.name+' → время заморожено 3р! Взрыв '+Math.round(baseMult*100)+'% через 3р'+(bonusFromStacks?' (+'+bonusFromStacks+'% стаки)':'')+' стаки '+(isEmpowered?1:Math.min(5,stacks+1)),'skill');
    if(isEmpowered){ stacks=1; } else { stacks=Math.min(5, stacks+1); }
    stacksTimer=5;
@@ -105,7 +95,6 @@ window.VOLAND_HERO_ON_ROUND_END = function(){
  let cur = lastCur || (window.VB && window.VB.cur);
  if(!cur) return;
 
- // стаки таймер
  if(stacksTimer>0){
    stacksTimer--;
    if(stacksTimer==0 && stacks>0){
@@ -114,19 +103,19 @@ window.VOLAND_HERO_ON_ROUND_END = function(){
    }
  }
 
- // DEF дебаф
  if(defDebuffTurns>0){
    defDebuffTurns--;
    if(defDebuffTurns==0 && window.VB) window.VB.addLog('❄️ DEF дебаф кончился','hit');
  }
 
- // Сфера тики
+ // Сфера - 1 тик в конце раунда
  if(sphereTurns>0){
    let eDef = window.VB ? window.VB.eDef : 200;
    let effDef = defDebuffTurns>0 ? Math.floor(eDef*0.8) : eDef;
    let mult = sphereMult;
-   // сфера тоже получает бонус от стаков на момент тика?
    if(stacks>0) mult *= (1 + stacks*0.1);
+   // если 5 стаков, взрыв сферы тоже +50%?
+   if(stacks>=5) mult *= 1.5;
    let base = Math.max(10, Math.floor(cur.DMG*mult) - effDef + (Math.floor(Math.random()*21)-10));
    if(Math.random()*100 < cur.CRIT) base = Math.floor(base*1.4);
    window.VB.eHp = Math.max(0, window.VB.eHp - base);
@@ -136,7 +125,7 @@ window.VOLAND_HERO_ON_ROUND_END = function(){
    if(sphereTurns==0 && window.VB) window.VB.addLog('⚡ Сфера кончилась','hit');
  }
 
- // Аннигиляция взрыв после 3р
+ // Аннигиляция взрыв
  if(annihilationTimer>0){
    annihilationTimer--;
    if(annihilationTimer==0){
@@ -150,9 +139,7 @@ window.VOLAND_HERO_ON_ROUND_END = function(){
      window.VB.eHp = Math.max(0, window.VB.eHp - base);
      window.VB.addLog('🌌 Аннигиляция ВРЕМЕНИ ВЗРЫВ ['+Math.round(mult*100)+'%] '+base,'skill');
      window.VB.updBars();
-     if(window.VB.eHp<=0){
-       window.VB.addLog('✅ ПОБЕДА!','win');
-     }
+     // победу теперь делает engine.js, тут не логим ПОБЕДА!
    } else {
      if(window.VB) window.VB.addLog('🌌 Аннигиляция тик... взрыв через '+annihilationTimer+'р','skill');
    }
