@@ -1,4 +1,4 @@
-// IRON VOW warrior-f - FINAL v2: bleed 50% true, Zov 200%+200% two hits
+// IRON VOW warrior-f - clean version for antivirus
 (function(){
 let wolfShield=0;
 let alphaTurns=0;
@@ -7,11 +7,11 @@ let lastCur=null;
 
 function extra(){
   let s=[];
-  if(wolfShield>0) s.push('🛡️ВОЛК '+wolfShield+' 50%');
-  if(alphaTurns>0) s.push('🌕АЛЬФА '+alphaTurns+' +30%');
+  if(wolfShield>0) s.push('VOLK '+wolfShield+' 50%');
+  if(alphaTurns>0) s.push('ALFA '+alphaTurns+' +30%');
   return s.join(' ');
 }
-setTimeout(()=>{ if(window.VB) window.VB.extraStat=extra; },100);
+setTimeout(function(){ if(window.VB) window.VB.extraStat=extra; },100);
 
 function isLowHP(){
   let hHp = window.VB ? window.VB.hHp : 0;
@@ -20,11 +20,16 @@ function isLowHP(){
 }
 
 window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
- let {cur, eDef, activeSkills, rand, addLog, updBars, setEnemyStun}=ctx;
+ let cur = ctx.cur;
+ let eDef = ctx.eDef;
+ let activeSkills = ctx.activeSkills;
+ let rand = ctx.rand;
+ let addLog = ctx.addLog;
+ let updBars = ctx.updBars;
+ let setEnemyStun = ctx.setEnemyStun;
  lastCur=cur;
  let sk = activeSkills[idx-1];
 
- // Q базовая 100%
  if(idx===0){
    let low = isLowHP();
    let mult = 1.0;
@@ -46,15 +51,15 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
      let heal = Math.floor(total*0.3);
      window.VB.hHp = Math.min(window.VB.hMax, window.VB.hHp + heal);
      if(bleedExtra>0){
-       addLog('🗡️ Атака '+base+' +30% альфа + кров '+bleedExtra+' true = '+total+(isCrit?' CRIT':'')+' +50% стаи + хил '+heal,'hit');
+       addLog('Ataka '+base+' +30% alfa + krov '+bleedExtra+' pure = '+total+(isCrit?' CRIT':'')+' +50% stai + hil '+heal,'hit');
      } else {
-       addLog('🗡️ Атака '+base+(isCrit?' CRIT':'')+' +50% стаи + хил '+heal+' [HP<30%]','hit');
+       addLog('Ataka '+base+(isCrit?' CRIT':'')+' +50% stai + hil '+heal,'hit');
      }
    } else {
      if(bleedExtra>0){
-       addLog('🗡️ Атака '+base+' + кров '+bleedExtra+' true = '+total+(isCrit?' CRIT':'')+' [100%+30%+50% true]','hit');
+       addLog('Ataka '+base+' + krov '+bleedExtra+' pure = '+total+(isCrit?' CRIT':'')+' [100%+30%+50% pure]','hit');
      } else {
-       addLog('🗡️ Атака '+base+(isCrit?' CRIT':''),'hit');
+       addLog('Ataka '+base+(isCrit?' CRIT':''),'hit');
      }
    }
    ctx.cooldowns[0]=1;
@@ -62,9 +67,9 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
  }
 
  if(!sk) return false;
- if(ctx.hMana < sk.mana){ addLog('⛔ Не хватает маны!','lose'); return false; }
+ if(ctx.hMana < sk.mana){ addLog('No mana!','lose'); return false; }
 
- if(sk.name.includes('Рассекающий')){
+ if(sk.name.includes('Rassekayushchiy') || sk.name.includes('Рассекающий')){
    ctx.hMana-=sk.mana; ctx.cooldowns[idx]=sk.cd||3;
    let low = isLowHP();
    let m1 = 2.0, m2 = 2.0;
@@ -91,21 +96,21 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
      window.VB.hHp = Math.min(window.VB.hMax, window.VB.hHp + heal);
    }
    if(bleedExtra>0){
-     addLog('🗡️ '+sk.name+' '+base1+' + '+base2+' + кров '+bleedExtra+' true = '+total+' [200%+200%+30%+50% true]'+(isCrit1||isCrit2?' CRIT':'')+(low?' +50% стаи + хил '+heal:''),'skill');
+     addLog(sk.name+' '+base1+' + '+base2+' + krov '+bleedExtra+' pure = '+total+' [200%+200%+30%+50% pure]'+(isCrit1||isCrit2?' CRIT':'')+(low?' +50% stai + hil '+heal:''),'skill');
    } else {
-     addLog('🗡️ '+sk.name+' '+base1+' + '+base2+' = '+total+' [200%+200%'+(low?' +50% стаи':'')+']'+(isCrit1||isCrit2?' CRIT':'')+(low?' + хил '+heal:''),'skill');
+     addLog(sk.name+' '+base1+' + '+base2+' = '+total+' [200%+200%'+(low?' +50% stai':'')+']'+(isCrit1||isCrit2?' CRIT':'')+(low?' + hil '+heal:''),'skill');
    }
    updBars(); return true;
  }
 
- if(sk.name.includes('Щит')){
+ if(sk.name.includes('Shchit') || sk.name.includes('Щит')){
    ctx.hMana-=sk.mana; ctx.cooldowns[idx]=sk.cd||15;
    wolfShield = 5;
-   addLog('🛡️ '+sk.name+' щит 4р блок 50% + контра 350%','skill');
+   addLog(sk.name+' shchit 4r blok 50% + kontra 350%','skill');
    updBars(); return true;
  }
 
- if(sk.name.includes('Зов')){
+ if(sk.name.includes('Zov') || sk.name.includes('Зов')){
    ctx.hMana-=sk.mana; ctx.cooldowns[idx]=sk.cd||15;
    let low = isLowHP();
    let m = 2.0;
@@ -132,22 +137,22 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
      window.VB.hHp = Math.min(window.VB.hMax, window.VB.hHp + heal);
    }
    if(bleedExtra>0){
-     addLog('🐾 '+sk.name+' стан 1р + '+base1+' + '+base2+' + кров '+bleedExtra+' true = '+total+' [200%×1.3 + 200%×1.3 + 50% true]'+(isCrit1||isCrit2?' CRIT':'')+(low?' +50% стаи + хил '+heal:''),'skill');
+     addLog(sk.name+' stan 1r + '+base1+' + '+base2+' + krov '+bleedExtra+' pure = '+total+' [200%x1.3 + 200%x1.3 + 50% pure]'+(isCrit1||isCrit2?' CRIT':'')+(low?' +50% stai + hil '+heal:''),'skill');
    } else {
-     addLog('🐾 '+sk.name+' стан 1р + '+base1+' + '+base2+' = '+total+' [200% + 200% 2 раза]'+(isCrit1||isCrit2?' CRIT':'')+(low?' + хил '+heal:''),'skill');
+     addLog(sk.name+' stan 1r + '+base1+' + '+base2+' = '+total+' [200% + 200% 2 raza]'+(isCrit1||isCrit2?' CRIT':'')+(low?' + hil '+heal:''),'skill');
    }
    updBars(); return true;
  }
 
- if(sk.name.includes('Альфа')){
+ if(sk.name.includes('Alfa') || sk.name.includes('Альфа')){
    ctx.hMana-=sk.mana; ctx.cooldowns[idx]=sk.cd||20;
    if(alphaHPBonus==0){
      alphaHPBonus = Math.floor(window.VB.hMax*0.5);
      window.VB.hMax = window.VB.hMax + alphaHPBonus;
      window.VB.hHp = window.VB.hHp + alphaHPBonus;
-     addLog('🌕 '+sk.name+' +50% HP +'+alphaHPBonus+' → HP '+window.VB.hHp+'/'+window.VB.hMax+' +30% урон 5р + кров 50% true от атак','skill');
+     addLog(sk.name+' +50% HP +'+alphaHPBonus+' -> HP '+window.VB.hHp+'/'+window.VB.hMax+' +30% uron 5r + krov 50% pure ot atak','skill');
    } else {
-     addLog('🌕 '+sk.name+' уже активен '+alphaTurns+'р','skill');
+     addLog(sk.name+' uzhe aktiven '+alphaTurns+'r','skill');
    }
    alphaTurns = 5;
    updBars(); return true;
@@ -161,7 +166,7 @@ window.VOLAND_HERO_ON_ENEMY_TURN = function(ctx){
    let base = Math.max(10, Math.floor(ctx.cur.DMG*3.5) - (window.VB ? window.VB.eDef : 10) + (Math.floor(Math.random()*21)-10));
    if(Math.random()*100 < ctx.cur.CRIT) base = Math.floor(base*1.4);
    window.VB.eHp = Math.max(0, window.VB.eHp - base);
-   window.VB.addLog('🐺 Щит Вожака блок! Контра '+base+' [350%]','skill');
+   window.VB.addLog('Volk shchit blok! Kontra '+base+' [350%]','skill');
    window.VB.updBars();
    return true;
  }
@@ -171,16 +176,16 @@ window.VOLAND_HERO_ON_ENEMY_TURN = function(ctx){
 window.VOLAND_HERO_ON_ROUND_END = function(){
  if(wolfShield>0){
    wolfShield--;
-   if(wolfShield==0 && window.VB) window.VB.addLog('🛡️ Щит Вожака кончился','hit');
+   if(wolfShield==0 && window.VB) window.VB.addLog('Shchit Volka konchilsya','hit');
  }
  if(alphaTurns>0){
    alphaTurns--;
    if(alphaTurns==0){
-     if(window.VB) window.VB.addLog('🌕 Альфа кончилась','hit');
+     if(window.VB) window.VB.addLog('Alfa konchilas','hit');
      if(alphaHPBonus>0 && window.VB){
        window.VB.hMax = Math.max(100, window.VB.hMax - alphaHPBonus);
        window.VB.hHp = Math.min(window.VB.hHp, window.VB.hMax);
-       window.VB.addLog('🌕 -'+alphaHPBonus+' HP (конец альфы) → '+window.VB.hHp+'/'+window.VB.hMax,'hit');
+       window.VB.addLog('-'+alphaHPBonus+' HP (konec alfy) -> '+window.VB.hHp+'/'+window.VB.hMax,'hit');
        alphaHPBonus=0;
        window.VB.updBars();
      }
