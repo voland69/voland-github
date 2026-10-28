@@ -91,9 +91,9 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
      window.VB.hHp = Math.min(window.VB.hMax, window.VB.hHp + heal);
    }
    if(bleedExtra>0){
-     addLog('🗡️ '+sk.name+' '+base1+' + '+base2+' + кров '+bleedExtra+' true = '+total+' [110%+110%+30%+50% true]'+(isCrit1||isCrit2?' CRIT':'')+(low?' +50% стаи + хил '+heal:''),'skill');
+     addLog('🗡️ '+sk.name+' '+base1+' + '+base2+' + кров '+bleedExtra+' true = '+total+' [200%+200%+30%+50% true]'+(isCrit1||isCrit2?' CRIT':'')+(low?' +50% стаи + хил '+heal:''),'skill');
    } else {
-     addLog('🗡️ '+sk.name+' '+base1+' + '+base2+' = '+total+' [110%+110%'+(low?' +50% стаи':'')+']'+(isCrit1||isCrit2?' CRIT':'')+(low?' + хил '+heal:''),'skill');
+     addLog('🗡️ '+sk.name+' '+base1+' + '+base2+' = '+total+' [200%+200%'+(low?' +50% стаи':'')+']'+(isCrit1||isCrit2?' CRIT':'')+(low?' + хил '+heal:''),'skill');
    }
    updBars(); return true;
  }
