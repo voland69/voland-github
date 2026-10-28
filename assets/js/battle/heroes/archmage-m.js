@@ -79,10 +79,10 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
  // Аннигиляция Времени 350% с задержкой 3р стан 3р
  if(sk.name.includes('Аннигиляция') || sk.name.includes('Времени')){
    ctx.hMana-=sk.mana; ctx.cooldowns[idx]=sk.cd||25;
-   setEnemyStun(3);
+   setEnemyStun(2);
    annihilationTimer = 3;
    annihilationMult = baseMult;
-   addLog('🌌 '+sk.name+' → время заморожено 3р! Взрыв '+Math.round(baseMult*100)+'% через 3р'+(bonusFromStacks?' (+'+bonusFromStacks+'% стаки)':'')+' стаки '+(isEmpowered?1:Math.min(5,stacks+1)),'skill');
+   addLog('🌌 '+sk.name+' → время заморожено 2р! Взрыв '+Math.round(baseMult*100)+'% через 3р'+(bonusFromStacks?' (+'+bonusFromStacks+'% стаки)':'')+' стаки '+(isEmpowered?1:Math.min(5,stacks+1)),'skill');
    if(isEmpowered){ stacks=1; } else { stacks=Math.min(5, stacks+1); }
    stacksTimer=5;
    updBars(); return true;
