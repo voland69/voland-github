@@ -77,12 +77,12 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
   updBars(); return true;
  }
 
- // T - Буря Стрел 12 стрел за 3р по 150% + 25% стан
+ // T - Буря Стрел 9 стрел за 3р по 150% + 25% стан
  if(sk.name.includes('Буря')){
   ctx.hMana-=sk.mana; ctx.cooldowns[idx]=sk.cd||25;
   stormTurns=3;
-  stormLeft=12;
-  addLog('🌪️ '+sk.name+' → 12 стрел за 3р по 150% + 25% стан','skill');
+  stormLeft=9;
+  addLog('🌪️ '+sk.name+' → 9 стрел за 3р по 150% + 25% стан','skill');
   updBars(); return true;
  }
 
