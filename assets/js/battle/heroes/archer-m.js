@@ -93,10 +93,10 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
   ctx.hMana-=sk.mana; ctx.cooldowns[idx]=sk.cd||25;
   let total=0, critCount=0;
   let hasBonus = markActive || isFourth; // если есть метка или это 4-я атака - 1 стрела получит +100%
-  addLog('🌌 '+sk.name+' → 7 стрел по 180%'+(hasBonus?' +МЕТКА 1 стрела':'')+(wasInvis?' +ИНВИЗ 1 крит':'')+(isFourth?' [4-я]':''),'skill');
+  addLog('🌌 '+sk.name+' → 7 стрел по 200%'+(hasBonus?' +МЕТКА 1 стрела':'')+(wasInvis?' +ИНВИЗ 1 крит':'')+(isFourth?' [4-я]':''),'skill');
   for(let i=0;i<7;i++){
     let isFirst = i===0;
-    let curMult = 1.8;
+    let curMult = 2.0;
     // только 1-я стрела получает +100% если есть метка или 4-я атака
     if(hasBonus && isFirst){
       curMult += 1.0; // 280% на 1-й
