@@ -12,7 +12,7 @@ function extra(){
   let s=[];
   if(bastionTurns>0) s.push('🛡️БАСТИОН '+bastionTurns+' 50%');
   if(avatarTurns>0) s.push('👑АВАТАР '+avatarTurns+' неуязв');
-  if(avatarDmgTurns>0) s.push('⚔️+300% '+avatarDmgTurns);
+  if(avatarDmgTurns>0) s.push('⚔️+200% '+avatarDmgTurns);
   if(passiveShield>0) s.push('🛡️ЩИТ '+passiveShield+' '+passiveShieldTurns+'р');
   if(window.VB){
     let hpPct = window.VB.hHp / window.VB.hMax * 100;
@@ -38,12 +38,12 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
 
  if(idx===0){
    let mult = 1.0;
-   if(avatarDmgTurns>0) mult += 3.0;
+   if(avatarDmgTurns>0) mult += 2.0;
    let base = Math.max(10, Math.floor(cur.DMG*mult) - eDef + rand(-10,10));
    let isCrit = Math.random()*100 < cur.CRIT;
    if(isCrit) base = Math.floor(base*1.5);
    ctx.eHp = Math.max(0, ctx.eHp - base);
-   addLog('⚔️ Атака '+base+(mult>1?' ['+Math.round(mult*100)+'% +300% аватар]':'')+(isCrit?' CRIT':''),'hit');
+   addLog('⚔️ Атака '+base+(mult>1?' ['+Math.round(mult*100)+'% +200% аватар]':'')+(isCrit?' CRIT':''),'hit');
    ctx.cooldowns[0]=1;
    updBars(); return true;
  }
@@ -54,13 +54,13 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
  if(sk.name.includes('Льва')){
    ctx.hMana-=sk.mana; ctx.cooldowns[idx]=sk.cd||8;
    let mult = 2.0;
-   if(avatarDmgTurns>0) mult += 3.0;
+   if(avatarDmgTurns>0) mult += 2.0;
    let base = Math.max(10, Math.floor(cur.DMG*mult) - eDef + rand(-10,10));
    let isCrit = Math.random()*100 < cur.CRIT;
    if(isCrit) base = Math.floor(base*1.4);
    ctx.eHp = Math.max(0, ctx.eHp - base);
    setEnemyStun(1);
-   addLog('⚔️ Удар Льва '+base+' ['+Math.round(mult*100)+'%'+(avatarDmgTurns>0?' +300% аватар':'')+'] стан 1р'+(isCrit?' CRIT':''),'skill');
+   addLog('⚔️ Удар Льва '+base+' ['+Math.round(mult*100)+'%'+(avatarDmgTurns>0?' +200% аватар':'')+'] стан 1р'+(isCrit?' CRIT':''),'skill');
    updBars(); return true;
  }
 
@@ -74,12 +74,12 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
  if(sk.name.includes('Рассекающий')){
    ctx.hMana-=sk.mana; ctx.cooldowns[idx]=sk.cd||3;
    let mult = 2.0;
-   if(avatarDmgTurns>0) mult += 3.0;
+   if(avatarDmgTurns>0) mult += 2.0;
    let base = Math.max(10, Math.floor(cur.DMG*mult) - eDef + rand(-10,10));
    let isCrit = Math.random()*100 < cur.CRIT;
    if(isCrit) base = Math.floor(base*1.4);
    ctx.eHp = Math.max(0, ctx.eHp - base);
-   addLog('📯 Рассекающий удар '+base+' ['+Math.round(mult*100)+'%'+(avatarDmgTurns>0?' +300% аватар':'')+']'+(isCrit?' CRIT':''),'skill');
+   addLog('📯 Рассекающий удар '+base+' ['+Math.round(mult*100)+'%'+(avatarDmgTurns>0?' +200% аватар':'')+']'+(isCrit?' CRIT':''),'skill');
    updBars(); return true;
  }
 
@@ -97,7 +97,7 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
      avatarHPBonus = Math.floor(window.VB.hMax*0.5);
      window.VB.hMax = window.VB.hMax + avatarHPBonus;
      window.VB.hHp = window.VB.hHp + avatarHPBonus;
-     addLog('👑 +50% HP +'+avatarHPBonus+' → HP '+window.VB.hHp+'/'+window.VB.hMax+' неуязв 2р +300% урон 3р','skill');
+     addLog('👑 +50% HP +'+avatarHPBonus+' → HP '+window.VB.hHp+'/'+window.VB.hMax+' неуязв 2р +200% урон 3р','skill');
    } else {
      addLog('👑 Аватар уже активен неуязв '+avatarTurns+'р +300% '+avatarDmgTurns+'р','skill');
    }
@@ -171,7 +171,7 @@ window.VOLAND_HERO_ON_ROUND_END = function(){
  if(avatarDmgTurns>0){
    avatarDmgTurns--;
    if(avatarDmgTurns==0 && window.VB){
-     window.VB.addLog('⚔️ +300% урон кончился','hit');
+     window.VB.addLog('⚔️ +200% урон кончился','hit');
      if(avatarHPBonus>0){
        window.VB.hMax = Math.max(100, window.VB.hMax - avatarHPBonus);
        window.VB.hHp = Math.min(window.VB.hHp, window.VB.hMax);
