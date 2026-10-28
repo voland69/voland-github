@@ -174,7 +174,24 @@ function endRound(){
  addLog('--- Ход '+turn+': твой ход ---','');
 }
 
-function showVictory(){ isBattleOver=true; document.getElementById('rewGold').textContent='+'+(150+stage*40+loc*20); document.getElementById('rewXp').textContent='+'+(4000+stage*200+loc*100); document.getElementById('modalTitle').textContent='ПОБЕДА!'; document.getElementById('modalSub').textContent='Ты победил • '+enemyData.name+' • LOC'+loc+' STAGE'+stage; document.getElementById('victoryModal').classList.add('show'); renderSkillBar(); }
+function showVictory(){
+  isBattleOver=true;
+  document.getElementById('rewGold').textContent='+'+(150+stage*40+loc*20);
+  document.getElementById('rewXp').textContent='+'+(4000+stage*200+loc*100);
+  document.getElementById('modalTitle').textContent='ПОБЕДА!';
+  document.getElementById('modalSub').textContent='Ты победил • '+enemyData.name+' • LOC'+loc+' STAGE'+stage;
+  document.getElementById('victoryModal').classList.add('show');
+  renderSkillBar();
+  // stats: kills
+  try{
+    if(typeof volandAddKill==='function') volandAddKill();
+    else {
+      let saves=JSON.parse(localStorage.getItem('voland_v1_saves')||'[]');
+      let idx=parseInt(localStorage.getItem('voland_v1_active')||'0');
+      if(saves[idx]){ saves[idx].kills=(saves[idx].kills||0)+1; localStorage.setItem('voland_v1_saves', JSON.stringify(saves)); }
+    }
+  }catch(e){}
+}
 function showDefeat(){ isBattleOver=true; document.getElementById('modalIcon').textContent='💀'; document.getElementById('modalTitle').textContent='ПОРАЖЕНИЕ!'; document.getElementById('modalSub').textContent='Тебя победил '+enemyData.name; document.getElementById('victoryModal').classList.add('show'); renderSkillBar(); }
 
 function tryNav(url){ if(!isBattleOver){ addLog('⛔ Нельзя выйти из боя! Закончи бой','lose'); return; } location.href=url; }
