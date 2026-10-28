@@ -17,11 +17,11 @@ html,body{height:100%;background:#080a0e;color:#d8d2b8;font-family:Inter,Arial,s
 .top-title{font-family:'Cinzel Decorative',serif;font-size:18px;letter-spacing:.35em;color:#e6d5a0;font-weight:900}
 .top-sub{font-size:8px;color:#6a7a8a;font-family:'JetBrains Mono',monospace;letter-spacing:.15em}
 .main{flex:1;display:flex;overflow:hidden}
-.hero-grid{width:280px;min-width:280px;background:rgba(14,18,24,.85);border-right:1px solid #1e2a32;padding:10px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px;overflow:auto;align-content:start}
-.hero-card{background:#151c24;border:1px solid #232f3a;border-radius:10px;padding:8px;cursor:pointer;transition:.2s;display:flex;flex-direction:column;align-items:center;gap:6px}
+.hero-grid{width:280px;min-width:280px;background:rgba(14,18,24,.85);border-right:1px solid #1e2a32;padding:10px;display:grid;grid-template-columns:repeat(2,1fr);gap:12px;overflow:auto;align-content:start}
+.hero-card{background:#151c24;border:1px solid #232f3a;border-radius:10px;padding:8px 8px 10px;cursor:pointer;transition:.2s;display:flex;flex-direction:column;align-items:center;gap:6px}
 .hero-card:hover{border-color:#e6d5a0;transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.4)}
 .hero-card.active{border-color:#e6d5a0;background:#1e2f3e;box-shadow:0 0 16px rgba(230,213,160,.2)}
-.hero-card img{width:100%;height:90px;object-fit:cover;border-radius:6px;border:1px solid #1e2a32}
+.hero-card img{width:100%;height:110px;object-fit:cover;object-position:top center;border-radius:8px;border:1px solid #1e2a32;background:#0a0e14}
 .hero-card-name{font-size:9px;font-weight:800;color:#e6d5a0;letter-spacing:.1em;text-align:center;font-family:'JetBrains Mono',monospace}
 .hero-card-role{font-size:6px;color:#6a7a8a;letter-spacing:.05em;text-align:center}
 .center{flex:1;display:flex;background:#000;position:relative;overflow:hidden}
@@ -164,6 +164,44 @@ btn.onclick = ()=>{
   const name = inp.value.trim();
   if (name.length<3) return;
   try {
+    let slotParam = new URLSearchParams(location.search).get('slot');
+    let slot = slotParam!==null ? parseInt(slotParam) : null;
+    let saves = [];
+    try{ saves = JSON.parse(localStorage.getItem('voland_v1_saves')||'[]'); }catch(e){ saves=[]; }
+    if(!Array.isArray(saves)) saves=[];
+    // if slot specified and empty, use it, otherwise append or replace oldest
+    let newSave = {hero: selectedId, name: name, equip: {}, created: Date.now(), kills:0, quests:0, quests_total:40, pvp:0};
+    if(slot!==null && !isNaN(slot) && slot>=0 && slot<3){
+      saves[slot]=newSave;
+      // fill gaps with null? compact to keep order but keep index
+      // ensure array length 3 max with empty slots preserved as null for UI
+      let compact=[];
+      for(let i=0;i<3;i++){ if(saves[i]) compact.push(saves[i]); }
+      // if slot was empty and we inserted at specific index, we need to place correctly
+      // simpler: rebuild array with slot placement
+      let tmp=[null,null,null];
+      try{ let existing=JSON.parse(localStorage.getItem('voland_v1_saves')||'[]'); if(Array.isArray(existing)){ for(let i=0;i<Math.min(existing.length,3);i++) if(existing[i]) tmp[i]=existing[i]; } }catch(e){}
+      tmp[slot]=newSave;
+      saves = tmp.filter(x=>x!==null);
+      // but to keep slot index, we store sparse? For simplicity store compact and set active to last added
+      // Actually store as array of up to 3 where index = slot if possible
+      let finalSaves=[null,null,null];
+      // load again to place
+      try{ let raw=JSON.parse(localStorage.getItem('voland_v1_saves')||'[]'); if(Array.isArray(raw)){ for(let i=0;i<Math.min(raw.length,3);i++) finalSaves[i]=raw[i]; } }catch(e){}
+      finalSaves[slot]=newSave;
+      saves = finalSaves.filter(x=>x!==null);
+      // find active index of newSave
+      let activeIdx = saves.findIndex(s=>s && s.name===name && s.hero===selectedId && s.created===newSave.created);
+      if(activeIdx===-1) activeIdx = saves.length-1;
+      localStorage.setItem('voland_v1_saves', JSON.stringify(saves));
+      localStorage.setItem('voland_v1_active', activeIdx.toString());
+    } else {
+      if(saves.length>=3){ saves.shift(); }
+      saves.push(newSave);
+      localStorage.setItem('voland_v1_saves', JSON.stringify(saves));
+      localStorage.setItem('voland_v1_active', (saves.length-1).toString());
+    }
+    // legacy keys for compat
     localStorage.setItem('voland_v1_hero', selectedId);
     localStorage.setItem('voland_v1_name', name);
     localStorage.setItem('voland_hero', selectedId);
