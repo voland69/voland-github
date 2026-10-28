@@ -67,7 +67,7 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
  if(sk.name.includes('Рассекающий')){
    ctx.hMana-=sk.mana; ctx.cooldowns[idx]=sk.cd||3;
    let low = isLowHP();
-   let m1 = 1.1, m2 = 1.1;
+   let m1 = 2.0, m2 = 2.0;
    if(alphaTurns>0){ m1*=1.3; m2*=1.3; }
    if(low){ m1*=1.5; m2*=1.5; }
    let base1 = Math.max(5, Math.floor(cur.DMG*m1) - eDef + rand(-8,8));
