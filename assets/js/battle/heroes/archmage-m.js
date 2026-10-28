@@ -1,21 +1,162 @@
-// AZURE SAGE archmage-m - стаки времени
+// AZURE SAGE archmage-m - fix: +10% per stack, sphere DoT, DEF -20%, annihilation delay
 (function(){
-let stacks=0;
-function extra(){ return stacks>0?'⏳СТАКИ '+stacks:''; }
+let stacks=0, stacksTimer=0;
+let defDebuffTurns=0;
+let sphereTurns=0, sphereMult=1.6;
+let annihilationTimer=0, annihilationMult=3.5;
+let lastCur=null;
+
+function extra(){
+  let s=[];
+  if(stacks>0) s.push('⏳СТАКИ '+stacks+' +'+(stacks*10)+'%'+(stacksTimer>0?' '+stacksTimer+'р':''));
+  if(defDebuffTurns>0) s.push('❄️DEF-20% '+defDebuffTurns);
+  if(sphereTurns>0) s.push('⚡СФЕРА '+sphereTurns);
+  if(annihilationTimer>0) s.push('🌌ВЗРЫВ '+annihilationTimer);
+  return s.join(' ');
+}
 setTimeout(()=>{ if(window.VB) window.VB.extraStat=extra; },100);
+
 window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
- if(idx===0) return false;
+ if(idx===0) return false; // базовая атака не стакает пассивку
  let {cur, eDef, activeSkills, rand, addLog, updBars, setEnemyStun}=ctx;
+ lastCur=cur;
  let sk=activeSkills[idx-1];
- if(ctx.hMana<sk.mana) return false;
- ctx.hMana-=sk.mana; ctx.cooldowns[idx]=sk.cd||3;
- let mult = sk.dmgPct?sk.dmgPct/100:2.5;
- if(stacks>=5){ mult*=1.5; addLog('⏳ 5 стаков! +50% урона','skill'); stacks=0; }
- let base=Math.floor(cur.DMG*mult); base=Math.max(10, base - eDef + rand(-10,10));
- if(Math.random()*100<cur.CRIT) base=Math.floor(base*1.4);
- ctx.eHp=Math.max(0, ctx.eHp-base);
- if(sk.hasStun) setEnemyStun(3);
- stacks=Math.min(5, stacks+1);
- addLog('⚡ '+sk.name+' ['+Math.round(mult*100)+'%] '+base+' стаки '+stacks,'skill'); updBars(); return true;
+ if(!sk) return false;
+ if(ctx.hMana < sk.mana){ addLog('⛔ Не хватает маны!','lose'); return false; }
+
+ // эффективный DEF с учетом дебафа -20%
+ let effDef = defDebuffTurns>0 ? Math.floor(eDef*0.8) : eDef;
+
+ let baseMult = sk.dmgPct ? sk.dmgPct/100 : 2.5;
+ let mult = baseMult;
+ let isEmpowered = stacks>=5;
+ let bonusFromStacks = 0;
+
+ if(isEmpowered){
+   mult *= 1.5;
+   bonusFromStacks = 50;
+   addLog('⏳ 5 стаков! След заклинание +50% урона','skill');
+ } else if(stacks>0){
+   mult *= (1 + stacks*0.1);
+   bonusFromStacks = stacks*10;
+ }
+
+ // Ледяное Копье 250%
+ if(sk.name.includes('Копье') || sk.name.includes('Кольцо') || sk.name.toLowerCase().includes('копье')){
+   if(ctx.hMana < sk.mana){ addLog('⛔ Не хватает маны!','lose'); return false; }
+   ctx.hMana-=sk.mana; ctx.cooldowns[idx]=sk.cd||3;
+   let base = Math.max(10, Math.floor(cur.DMG*mult) - effDef + rand(-10,10));
+   let isCrit = Math.random()*100 < cur.CRIT;
+   if(isCrit) base = Math.floor(base*1.4);
+   ctx.eHp = Math.max(0, ctx.eHp - base);
+   defDebuffTurns = 4; // 3 раунда с учетом декремента
+   addLog('❄️ '+sk.name+' ['+Math.round(mult*100)+'%'+(bonusFromStacks?' +'+bonusFromStacks+'% стаки':'')+'] '+base+(isCrit?' CRIT':'')+' DEF-20% 3р стаки '+ (isEmpowered?1:Math.min(5,stacks+1)),'skill');
+   // стаки
+   if(isEmpowered){ stacks=1; } else { stacks=Math.min(5, stacks+1); }
+   stacksTimer=5;
+   updBars(); return true;
+ }
+
+ // Сфера Бури 160% - 3 раунда
+ if(sk.name.includes('Сфер')){
+   ctx.hMana-=sk.mana; ctx.cooldowns[idx]=sk.cd||10;
+   let base = Math.max(10, Math.floor(cur.DMG*mult) - effDef + rand(-10,10));
+   let isCrit = Math.random()*100 < cur.CRIT;
+   if(isCrit) base = Math.floor(base*1.4);
+   ctx.eHp = Math.max(0, ctx.eHp - base);
+   sphereTurns = 2; // еще 2 тика после текущего (итого 3)
+   addLog('⚡ '+sk.name+' ['+Math.round(mult*100)+'%'+(bonusFromStacks?' +'+bonusFromStacks+'%':'')+'] '+base+(isCrit?' CRIT':'')+' + сфера 2р стаки '+(isEmpowered?1:Math.min(5,stacks+1)),'skill');
+   if(isEmpowered){ stacks=1; } else { stacks=Math.min(5, stacks+1); }
+   stacksTimer=5;
+   updBars(); return true;
+ }
+
+ // Лавина 300%
+ if(sk.name.includes('Лавина')){
+   ctx.hMana-=sk.mana; ctx.cooldowns[idx]=sk.cd||15;
+   let base = Math.max(10, Math.floor(cur.DMG*mult) - effDef + rand(-10,10));
+   let isCrit = Math.random()*100 < cur.CRIT;
+   if(isCrit) base = Math.floor(base*1.4);
+   ctx.eHp = Math.max(0, ctx.eHp - base);
+   addLog('🏔️ '+sk.name+' ['+Math.round(mult*100)+'%'+(bonusFromStacks?' +'+bonusFromStacks+'%':'')+'] '+base+(isCrit?' CRIT':'')+' стаки '+(isEmpowered?1:Math.min(5,stacks+1)),'skill');
+   if(isEmpowered){ stacks=1; } else { stacks=Math.min(5, stacks+1); }
+   stacksTimer=5;
+   updBars(); return true;
+ }
+
+ // Аннигиляция Времени 350% с задержкой 3р стан 3р
+ if(sk.name.includes('Аннигиляция') || sk.name.includes('Времени')){
+   ctx.hMana-=sk.mana; ctx.cooldowns[idx]=sk.cd||25;
+   // стан 3 раунда сразу
+   setEnemyStun(3);
+   annihilationTimer = 3;
+   annihilationMult = baseMult; // 3.5
+   // учитываем стаки для будущего взрыва? взрыв получит стаки на момент взрыва, не сейчас
+   addLog('🌌 '+sk.name+' → время заморожено 3р! Взрыв '+Math.round(baseMult*100)+'% через 3р'+(bonusFromStacks?' (+'+bonusFromStacks+'% стаки)':'')+' стаки '+(isEmpowered?1:Math.min(5,stacks+1)),'skill');
+   if(isEmpowered){ stacks=1; } else { stacks=Math.min(5, stacks+1); }
+   stacksTimer=5;
+   updBars(); return true;
+ }
+
+ return false;
 };
+
+window.VOLAND_HERO_ON_ROUND_END = function(){
+ let cur = lastCur || (window.VB && window.VB.cur);
+ if(!cur) return;
+
+ // стаки таймер
+ if(stacksTimer>0){
+   stacksTimer--;
+   if(stacksTimer==0 && stacks>0){
+     stacks=0;
+     if(window.VB) window.VB.addLog('⏳ Стаки кончились','hit');
+   }
+ }
+
+ // DEF дебаф
+ if(defDebuffTurns>0){
+   defDebuffTurns--;
+   if(defDebuffTurns==0 && window.VB) window.VB.addLog('❄️ DEF дебаф кончился','hit');
+ }
+
+ // Сфера тики
+ if(sphereTurns>0){
+   let eDef = window.VB ? window.VB.eDef : 200;
+   let effDef = defDebuffTurns>0 ? Math.floor(eDef*0.8) : eDef;
+   let mult = sphereMult;
+   // сфера тоже получает бонус от стаков на момент тика?
+   if(stacks>0) mult *= (1 + stacks*0.1);
+   let base = Math.max(10, Math.floor(cur.DMG*mult) - effDef + (Math.floor(Math.random()*21)-10));
+   if(Math.random()*100 < cur.CRIT) base = Math.floor(base*1.4);
+   window.VB.eHp = Math.max(0, window.VB.eHp - base);
+   window.VB.addLog('⚡ Сфера Бури тик ['+Math.round(mult*100)+'%] '+base+' ['+sphereTurns+'р]','skill');
+   window.VB.updBars();
+   sphereTurns--;
+   if(sphereTurns==0 && window.VB) window.VB.addLog('⚡ Сфера кончилась','hit');
+ }
+
+ // Аннигиляция взрыв после 3р
+ if(annihilationTimer>0){
+   annihilationTimer--;
+   if(annihilationTimer==0){
+     let eDef = window.VB ? window.VB.eDef : 200;
+     let effDef = defDebuffTurns>0 ? Math.floor(eDef*0.8) : eDef;
+     let mult = annihilationMult;
+     if(stacks>0) mult *= (1 + stacks*0.1);
+     if(stacks>=5){ mult *= 1.5; window.VB.addLog('⏳ 5 стаков! Взрыв +50%','skill'); }
+     let base = Math.max(10, Math.floor(cur.DMG*mult) - effDef + (Math.floor(Math.random()*21)-10));
+     if(Math.random()*100 < cur.CRIT) base = Math.floor(base*1.4);
+     window.VB.eHp = Math.max(0, window.VB.eHp - base);
+     window.VB.addLog('🌌 Аннигиляция ВРЕМЕНИ ВЗРЫВ ['+Math.round(mult*100)+'%] '+base,'skill');
+     window.VB.updBars();
+     if(window.VB.eHp<=0){
+       window.VB.addLog('✅ ПОБЕДА!','win');
+     }
+   } else {
+     if(window.VB) window.VB.addLog('🌌 Аннигиляция тик... взрыв через '+annihilationTimer+'р','skill');
+   }
+ }
+};
+
 })();
