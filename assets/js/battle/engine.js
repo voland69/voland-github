@@ -162,12 +162,16 @@ function enemyTurn(){
 }
 
 function endRound(){
+ // сначала все доты / таймеры конца раунда
+ if(window.VOLAND_HERO_ON_ROUND_END) window.VOLAND_HERO_ON_ROUND_END({turn});
+ // победа от дота / взрыва с задержкой
+ if(eHp<=0){ addLog('✅ ПОБЕДА! '+enemyData.name+' убит!','win'); showVictory(); return; }
+ if(hHp<=0){ addLog('❌ ПОРАЖЕНИЕ!','lose'); showDefeat(); return; }
  turn++;
  for(let i=0;i<cooldowns.length;i++){ if(cooldowns[i]>0) cooldowns[i]--; }
  hMana=Math.min(hMaxMana,hMana+8);
  updBars(); renderSkillBar();
- if(hHp<=0){ addLog('❌ ПОРАЖЕНИЕ!','lose'); showDefeat(); } else { addLog('--- Ход '+turn+': твой ход ---',''); }
- if(window.VOLAND_HERO_ON_ROUND_END) window.VOLAND_HERO_ON_ROUND_END({turn});
+ addLog('--- Ход '+turn+': твой ход ---','');
 }
 
 function showVictory(){ isBattleOver=true; document.getElementById('rewGold').textContent='+'+(150+stage*40+loc*20); document.getElementById('rewXp').textContent='+'+(4000+stage*200+loc*100); document.getElementById('modalTitle').textContent='ПОБЕДА!'; document.getElementById('modalSub').textContent='Ты победил • '+enemyData.name+' • LOC'+loc+' STAGE'+stage; document.getElementById('victoryModal').classList.add('show'); renderSkillBar(); }
