@@ -7,23 +7,28 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,sans-serif;overflow:hidden}
+html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,sans-serif;overflow:auto}
 .bg{position:fixed;inset:0;z-index:0}
 .bg img{width:100%;height:100%;object-fit:cover}
-.bg:after{content:"";position:absolute;inset:0;background:rgba(8,8,10,.78)}
-.wrap{position:fixed;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:20px}
+.bg:after{content:"";position:absolute;inset:0;background:rgba(8,8,10,.82)}
+.wrap{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:30px 20px;min-height:100vh}
 .logo{font-family:'Cinzel Decorative',serif;font-size:48px;letter-spacing:.4em;color:#e6d5a0;font-weight:900;text-shadow:0 0 20px rgba(230,213,160,.4)}
 .sub{margin-top:12px;font-size:9px;letter-spacing:.3em;color:#6a7a8a;font-family:'JetBrains Mono',monospace}
-.hero-preview{margin-top:30px;display:flex;gap:20px;align-items:center;background:rgba(20,28,36,.6);border:1px solid #2a3a4a;border-radius:12px;padding:18px 24px;backdrop-filter:blur(4px)}
-.hero-preview img{width:80px;height:80px;border-radius:10px;object-fit:cover;border:1px solid #2a3a4a}
-.hero-info{line-height:1.6}
-.hero-name{font-family:'Cinzel Decorative',serif;color:#e6d5a0;font-size:16px;letter-spacing:.2em}
-.hero-stats{font-size:9px;color:#8a9a6a;font-family:'JetBrains Mono',monospace;margin-top:4px}
-.btn{margin-top:20px;padding:14px 28px;border:1px solid #3a4a5a;background:#1a252f;color:#e6d5a0;font-size:10px;letter-spacing:.25em;font-family:'JetBrains Mono',monospace;border-radius:8px;cursor:pointer;transition:.2s}
-.btn:hover{border-color:#e6d5a0;box-shadow:0 0 16px rgba(230,213,160,.2);transform:translateY(-1px)}
+.saves-grid{margin-top:30px;display:grid;grid-template-columns:repeat(3,1fr);gap:18px;max-width:900px;width:100%}
+.save-card{background:rgba(20,28,36,.7);border:1px solid #2a3a4a;border-radius:14px;padding:20px;display:flex;flex-direction:column;align-items:center;gap:14px;backdrop-filter:blur(6px);transition:.2s;min-height:280px;justify-content:center}
+.save-card:hover{border-color:#3a4a5a;transform:translateY(-2px)}
+.save-card.active{border-color:#e6d5a0;box-shadow:0 0 20px rgba(230,213,160,.2)}
+.save-card.empty{border-style:dashed;opacity:.7}
+.save-card img{width:140px;height:140px;border-radius:12px;object-fit:contain;background:rgba(0,0,0,.3);border:1px solid #2a3a4a;padding:4px}
+.save-card.empty img{object-fit:cover;opacity:.5}
+.hero-info{line-height:1.5;text-align:center}
+.hero-name{font-family:'Cinzel Decorative',serif;color:#e6d5a0;font-size:14px;letter-spacing:.2em;font-weight:900}
+.hero-stats{font-size:8px;color:#8a9a6a;font-family:'JetBrains Mono',monospace;margin-top:6px;line-height:1.6}
+.btn{margin-top:10px;padding:12px 20px;border:1px solid #3a4a5a;background:#1a252f;color:#e6d5a0;font-size:9px;letter-spacing:.2em;font-family:'JetBrains Mono',monospace;border-radius:8px;cursor:pointer;transition:.2s;text-align:center;width:100%}
+.btn:hover{border-color:#e6d5a0;box-shadow:0 0 12px rgba(230,213,160,.2)}
 .btn.primary{background:#e6d5a0;color:#121214;font-weight:800;border-color:#e6d5a0}
-.btn.danger{background:transparent;border-color:#5a2a2a;color:#8a5a5a}
-.btns{display:flex;gap:12px;margin-top:10px}
+.btn.danger{background:transparent;border-color:#5a2a2a;color:#8a5a5a;font-size:8px}
+.btn.danger:hover{border-color:#8a3a3a;color:#c07070}
 .note{margin-top:24px;font-size:7px;color:#4a5a6a;font-family:'JetBrains Mono',monospace;letter-spacing:.1em;text-align:center}
 </style>
 </head>
@@ -31,42 +36,68 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 <div class="bg"><img src="./assets/heroes/bg-battlefield.webp" onerror="this.style.display='none'"></div>
 <div class="wrap">
   <div class="logo">VOLAND</div>
-  <div class="sub">DARK FANTASY • RPG • v1.0 STABLE</div>
-  <div id="content"></div>
-  <div class="note">Сохранение хранится в браузере (localStorage) • Работает всегда • ./assets/</div>
+  <div class="sub">DARK FANTASY • RPG • v1.0 STABLE • 3 HERO SLOTS</div>
+  <div id="content" style="width:100%;max-width:900px"></div>
+  <div class="note">Сохранение хранится в браузере (localStorage) • 3 слота • ./assets/</div>
 </div>
 <script src="./assets/js/db.js"></script>
 <script src="./assets/js/storage.js"></script>
 <script>
 function render(){
-  const has = volandHasSave();
+  const saves = volandGetSaves();
   const c = document.getElementById('content');
-  if (has){
-    const {cur, heroId, hero} = volandCalcStats();
-    const name = volandGetName();
+  if(saves.length===0){
     c.innerHTML = `
-      <div class="hero-preview">
-        <img src="${hero.img}" onerror="this.src='./assets/heroes/warrior-f.webp'">
-        <div class="hero-info">
-          <div class="hero-name">${name.toUpperCase()}</div>
-          <div class="hero-stats">${hero.n} • ${hero.role}<br>HP ${cur.HP} • DMG ${cur.DMG} • DEF ${cur.DEF} • MANA ${cur.MANA}<br>CRIT ${cur.CRIT}% • DODGE ${cur.DODGE}%</div>
+      <div style="margin-top:30px;text-align:center;max-width:500px;margin-left:auto;margin-right:auto;background:rgba(20,28,36,.6);border:1px solid #2a3a4a;border-radius:12px;padding:24px">
+        <div style="font-size:11px;color:#9a9a7a;line-height:1.7;font-family:'JetBrains Mono',monospace">Добро пожаловать в VOLAND.<br>Создай до 3 героев. Каждый со своим прогрессом.<br>Выбирай любого для продолжения.</div>
+      </div>
+      <div style="display:flex;justify-content:center;margin-top:20px">
+        <div class="save-card empty" style="max-width:280px">
+          <img src="./assets/heroes/warrior-f.webp">
+          <div class="hero-info"><div class="hero-name">НОВЫЙ ГЕРОЙ</div><div class="hero-stats">Пустой слот • Создай первого</div></div>
+          <div class="btn primary" onclick="location.href='./page2.html?slot=0'">CREATE HERO → SELECT</div>
         </div>
-      </div>
-      <div class="btns">
-        <div class="btn primary" onclick="location.href='./page3.html'">CONTINUE → HERO</div>
-        <div class="btn" onclick="location.href='./page6.html'">BATTLEFIELD</div>
-      </div>
-      <div class="btns">
-        <div class="btn danger" onclick="if(confirm('Точно начать заново? Прогресс шмота сотрется!')){localStorage.clear(); location.href='./page2.html';}">NEW GAME (WIPE)</div>
       </div>
     `;
   } else {
-    c.innerHTML = `
-      <div style="margin-top:30px;text-align:center;max-width:420px;background:rgba(20,28,36,.5);border:1px solid #2a3a4a;border-radius:12px;padding:20px">
-        <div style="font-size:11px;color:#9a9a7a;line-height:1.6;font-family:'JetBrains Mono',monospace">Добро пожаловать в VOLAND.<br>Твоя история начинается с выбора героя.<br>1 раз выберешь — дальше всегда стартуешь с HERO.</div>
-      </div>
-      <div class="btn primary" onclick="location.href='./page2.html'">START ADVENTURE → SELECT HERO</div>
-    `;
+    let html = '<div class="saves-grid">';
+    for(let i=0;i<3;i++){
+      let s = saves[i];
+      if(s){
+        let hero = VOLAND_HEROES[s.hero];
+        let cur = {...hero.st};
+        // calc equip bonus if any
+        if(s.equip){
+          for(let slot in s.equip){
+            let item = VOLAND_ITEMS.find(x=>x.id===s.equip[slot]);
+            if(item){ for(let k in item.bonus) cur[k]=(cur[k]||0)+item.bonus[k]; }
+          }
+        }
+        let active = (i===volandGetActiveIndex()) ? 'active' : '';
+        html += `
+          <div class="save-card ${active}">
+            <img src="${hero.img}" onerror="this.src='./assets/heroes/warrior-f.webp'">
+            <div class="hero-info">
+              <div class="hero-name">${(s.name||'').toUpperCase()}</div>
+              <div class="hero-stats">${hero.n} • ${hero.role}<br>HP ${cur.HP} • DMG ${cur.DMG} • DEF ${cur.DEF}<br>MANA ${cur.MANA} • CRIT ${cur.CRIT}% • SLOT ${i+1}</div>
+            </div>
+            <div class="btn primary" onclick="localStorage.setItem('voland_v1_active','${i}'); location.href='./page3.html'">CONTINUE → HERO ${i+1}</div>
+            <div class="btn danger" onclick="if(confirm('Удалить героя ${s.name}?')){ let sv=volandGetSaves(); sv.splice(${i},1); localStorage.setItem('voland_v1_saves', JSON.stringify(sv)); if(parseInt(localStorage.getItem('voland_v1_active')||'0')>=sv.length) localStorage.setItem('voland_v1_active','0'); location.reload(); }">DELETE SLOT ${i+1}</div>
+          </div>
+        `;
+      } else {
+        html += `
+          <div class="save-card empty">
+            <img src="./assets/heroes/warrior-f.webp" style="filter:grayscale(1)">
+            <div class="hero-info"><div class="hero-name">ПУСТОЙ СЛОТ ${i+1}</div><div class="hero-stats">Свободно • Создай героя</div></div>
+            <div class="btn primary" onclick="location.href='./page2.html?slot=${i}'">CREATE HERO ${i+1} → SELECT</div>
+          </div>
+        `;
+      }
+    }
+    html += '</div>';
+    html += `<div style="display:flex;gap:12px;justify-content:center;margin-top:22px"><div class="btn danger" style="max-width:280px" onclick="if(confirm('Точно стереть всех 3 героев?')){localStorage.clear(); location.reload();}">WIPE ALL 3 SLOTS</div></div>`;
+    c.innerHTML = html;
   }
 }
 render();
