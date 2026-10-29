@@ -74,13 +74,11 @@ function startBattle(stage){
 }
 
 const REAL_STATS = {
- 1:{hp:4000,def:100,dmg:150},
- 2:{hp:3000,def:200,dmg:150},
- 3:{hp:4000,def:150,dmg:200},
- 4:{hp:6000,def:200,dmg:250}
+ 1:{1:{hp:4000,def:100,dmg:150},2:{hp:3000,def:200,dmg:150},3:{hp:4000,def:150,dmg:200},4:{hp:6000,def:200,dmg:250}},
+ 2:{1:{hp:5000,def:150,dmg:250},2:{hp:5000,def:150,dmg:300},3:{hp:7000,def:300,dmg:250},4:{hp:10000,def:350,dmg:300}}
 };
 document.getElementById('stagesGrid').innerHTML=enemies.map(e=>{
- let rs = REAL_STATS[e.stage] || {hp:2000,def:100,dmg:150};
+ let rs = (REAL_STATS[locId] && REAL_STATS[locId][e.stage]) || (REAL_STATS[1] && REAL_STATS[1][e.stage]) || {hp:2000,def:100,dmg:150};
  let iconHtml = e.img ? `<img src="${e.img}" alt="${e.name}">` : `<div style="font-size:48px">${e.icon}</div>`;
  return `
  <div class="card ${e.boss?'boss':''}" onclick="startBattle(${e.stage})">
