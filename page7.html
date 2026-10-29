@@ -25,7 +25,7 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 .card.boss{border-color:rgba(224,80,80,.45)}
 .card .icon{flex:1;width:100%;height:100%;margin:0;display:flex;align-items:center;justify-content:center;position:relative}
 .card .icon img{width:100%;height:100%;object-fit:cover;display:block}
-.card .name{position:absolute;bottom:0;left:0;right:0;padding:14px 8px;background:linear-gradient(transparent,rgba(0,0,0,.85));font:700 12px Inter,sans-serif;color:#e6d5a0;text-transform:uppercase;z-index:2;letter-spacing:.05em}
+.card .name{position:absolute;bottom:0;left:0;right:0;padding:14px 8px 10px;background:linear-gradient(transparent,rgba(0,0,0,.9));font:700 12px Inter,sans-serif;color:#e6d5a0;text-transform:uppercase;z-index:2;letter-spacing:.05em;line-height:1.3}
 .card .eng,.card .desc,.card .lvl,.card .track,.card .hint,.card .num{display:none}
 
 .right{width:200px;min-width:200px;background:rgba(14,20,26,.92);border-left:1px solid rgba(30,42,50,.5);display:flex;flex-direction:column}
@@ -73,12 +73,19 @@ function startBattle(stage){
  location.href='./page8.html?loc='+locId+'&stage='+stage;
 }
 
+const REAL_STATS = {
+ 1:{hp:4000,def:100,dmg:150},
+ 2:{hp:3000,def:200,dmg:150},
+ 3:{hp:4000,def:150,dmg:200},
+ 4:{hp:6000,def:200,dmg:250}
+};
 document.getElementById('stagesGrid').innerHTML=enemies.map(e=>{
+ let rs = REAL_STATS[e.stage] || {hp:2000,def:100,dmg:150};
  let iconHtml = e.img ? `<img src="${e.img}" alt="${e.name}">` : `<div style="font-size:48px">${e.icon}</div>`;
  return `
  <div class="card ${e.boss?'boss':''}" onclick="startBattle(${e.stage})">
   <div class="icon">${iconHtml}</div>
-  <div class="name">${e.name}</div>
+  <div class="name">${e.name}<span style="display:block;margin-top:4px;font:400 8px 'JetBrains Mono',monospace;color:#8ab0d0;letter-spacing:.1em">HP ${rs.hp} • DEF ${rs.def} • DMG ${rs.dmg}</span></div>
  </div>
 `;
 }).join('');
