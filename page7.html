@@ -43,7 +43,7 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 </style>
 </head>
 <body>
-<div class="bg"><img src="./assets/heroes/bg-battlefield.webp" onerror="this.style.display='none'"></div>
+<div class="bg"><img src="./assets/enemies/bg-desert-dark.jpg" onerror="this.src='./assets/heroes/bg-battlefield.webp'"></div>
 <div class="wrap">
 <div class="left-nav">
 <div onclick="location.href='./page3.html'"><div class="nav-item">👤</div><div class="nav-label">HERO</div></div>
@@ -78,10 +78,12 @@ function startBattle(stage){
  location.href='./page8.html?loc='+locId+'&stage='+stage;
 }
 
-document.getElementById('stagesGrid').innerHTML=enemies.map(e=>`
+document.getElementById('stagesGrid').innerHTML=enemies.map(e=>{
+ let iconHtml = e.img ? `<img src="${e.img}" style="width:72px;height:72px;object-fit:cover;border-radius:10px;border:1px solid #2a3a4a">` : e.icon;
+ return `
  <div class="card ${e.boss?'boss':''}" onclick="startBattle(${e.stage})">
   <div class="num">STAGE ${e.stage}${e.boss?' • BOSS':''}</div>
-  <div class="icon">${e.icon}</div>
+  <div class="icon">${iconHtml}</div>
   <div class="name">${e.name}</div>
   <div class="eng">${e.eng}</div>
   <div class="desc">${e.desc}</div>
@@ -89,7 +91,8 @@ document.getElementById('stagesGrid').innerHTML=enemies.map(e=>`
   <div class="track"><div class="fill" style="width:${e.hp}%;background:${e.hpColor||'#3ad080'}"></div></div>
   <div class="hint">▶ CLICK TO FIGHT • HP ${e.hp}% bar</div>
  </div>
-`).join('');
+`;
+}).join('');
 
 // подсветка LOC1 STAGE4 для проверки синхронизации
 try{
