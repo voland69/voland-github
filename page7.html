@@ -24,7 +24,7 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 .card:hover{transform:translateY(-4px);border-color:#e6d5a0;box-shadow:0 12px 28px rgba(0,0,0,.5),0 0 16px rgba(230,213,160,.18)}
 .card.boss{border-color:rgba(224,80,80,.45)}
 .card .icon{flex:1;width:100%;height:100%;margin:0;display:flex;align-items:center;justify-content:center;position:relative}
-.card .icon img{width:100%;height:70%;object-fit:cover;display:block}
+.card .icon img{width:100%;height:100%;object-fit:cover;display:block}
 .card .name{position:absolute;bottom:0;left:0;right:0;padding:14px 8px 10px;background:linear-gradient(transparent,rgba(0,0,0,.9));font:700 12px Inter,sans-serif;color:#e6d5a0;text-transform:uppercase;z-index:2;letter-spacing:.05em;line-height:1.3}
 .card .eng,.card .desc,.card .lvl,.card .track,.card .hint,.card .num{display:none}
 
@@ -77,25 +77,36 @@ const FOREST_FALLBACK = [
    {stage:4, name:'ШИПОВАЯ ДРИАДА', eng:'Thorn Dryad - BOSS', icon:'🌹', img:'./assets/enemies/thorn-dryad.webp', desc:'Босс Леса', lvl:'BOSS LVL 8', hp:100, hpColor:'#e6d5a0', boss:true},
 ];
 
+const FROST_FALLBACK = [
+   {stage:1, name:'ЛЕДЯНОЙ ПРИЗРАК', eng:'Ice Wraith', icon:'👻', img:'./assets/enemies/ice-wraith.webp', desc:'Призрак льда', lvl:'LVL 3', hp:50, hpColor:'#6ab0ff'},
+   {stage:2, name:'МОРОЗНЫЙ КЛЫК', eng:'Frostfang Wolf', icon:'🐺', img:'./assets/enemies/frostfang-wolf.webp', desc:'Укус мороза', lvl:'LVL 5', hp:70, hpColor:'#a0a0ff'},
+   {stage:3, name:'ЛЕДЯНОЙ ТРОЛЛЬ', eng:'Frost Troll', icon:'🧌', img:'./assets/enemies/frost-troll.webp', desc:'Ледяная броня', lvl:'LVL 7', hp:85, hpColor:'#3ad080'},
+   {stage:4, name:'МОРОЗНЫЙ ПАУК', eng:'Frost Spider - BOSS', icon:'🕷️', img:'./assets/enemies/frost-spider.webp', desc:'Босс Льда', lvl:'BOSS LVL 10', hp:100, hpColor:'#e6d5a0', boss:true},
+];
+
 try{
  if(window.VOLAND_ENEMIES && VOLAND_ENEMIES[locId]){
   enemies=VOLAND_ENEMIES[locId];
+ } else if(locId==3){
+  enemies=FROST_FALLBACK;
  } else if(locId==2){
   enemies=FOREST_FALLBACK;
  } else {
   enemies=DESERT_FALLBACK;
  }
- locData=(window.VOLAND_LOCATIONS&&VOLAND_LOCATIONS.find(l=>l.id==locId))|| (locId==2 ? {name:'ТЕМНЫЙ ЛЕС',eng:'DARK FOREST',img:'./assets/enemies/bg-dark-forest.webp'} : {name:'ПУСТЫНЯ',eng:'DESERT',img:'./assets/enemies/bg-desert-dark.jpg'});
+ locData=(window.VOLAND_LOCATIONS&&VOLAND_LOCATIONS.find(l=>l.id==locId))|| (locId==3 ? {name:'ЛЕДЯНЫЕ ЗЕМЛИ',eng:'FROSTLANDS',img:'./assets/enemies/bg-frostlands.webp'} : locId==2 ? {name:'ТЕМНЫЙ ЛЕС',eng:'DARK FOREST',img:'./assets/enemies/bg-dark-forest.webp'} : {name:'ПУСТЫНЯ',eng:'DESERT',img:'./assets/enemies/bg-desert-dark.jpg'});
 }catch(e){
- enemies= (locId==2 ? FOREST_FALLBACK : DESERT_FALLBACK);
- locData= locId==2 ? {name:'ТЕМНЫЙ ЛЕС',eng:'DARK FOREST',img:'./assets/enemies/bg-dark-forest.webp'} : {name:'ПУСТЫНЯ',eng:'DESERT',img:'./assets/enemies/bg-desert-dark.jpg'};
+ if(locId==3) enemies=FROST_FALLBACK;
+ else if(locId==2) enemies=FOREST_FALLBACK;
+ else enemies=DESERT_FALLBACK;
+ locData= locId==3 ? {name:'ЛЕДЯНЫЕ ЗЕМЛИ',eng:'FROSTLANDS',img:'./assets/enemies/bg-frostlands.webp'} : locId==2 ? {name:'ТЕМНЫЙ ЛЕС',eng:'DARK FOREST',img:'./assets/enemies/bg-dark-forest.webp'} : {name:'ПУСТЫНЯ',eng:'DESERT',img:'./assets/enemies/bg-desert-dark.jpg'};
 }
 
 document.getElementById('locTitle').innerHTML=locData.name+'<span id="locSub">'+locData.eng+' • '+enemies.length+' STAGES • CLICK TO FIGHT</span>';
 try{
  let bgEl=document.getElementById('bgImg');
  if(bgEl){
-  let bgSrc = locData.img || (locId==2 ? './assets/enemies/bg-dark-forest.webp' : './assets/enemies/bg-desert-dark.jpg');
+  let bgSrc = locData.img || (locId==3 ? './assets/enemies/bg-frostlands.webp' : locId==2 ? './assets/enemies/bg-dark-forest.webp' : './assets/enemies/bg-desert-dark.jpg');
   bgEl.src=bgSrc;
  }
 }catch(e){}
@@ -111,7 +122,8 @@ function startBattle(stage){
 
 const REAL_STATS = {
  1:{1:{hp:4000,def:100,dmg:150},2:{hp:3000,def:200,dmg:150},3:{hp:4000,def:150,dmg:200},4:{hp:6000,def:200,dmg:250}},
- 2:{1:{hp:5000,def:150,dmg:250},2:{hp:5000,def:150,dmg:300},3:{hp:7000,def:300,dmg:250},4:{hp:10000,def:350,dmg:300}}
+ 2:{1:{hp:5000,def:150,dmg:250},2:{hp:5000,def:150,dmg:300},3:{hp:7000,def:300,dmg:250},4:{hp:10000,def:350,dmg:300}},
+ 3:{1:{hp:7000,def:200,dmg:250},2:{hp:7000,def:200,dmg:350},3:{hp:10000,def:300,dmg:300},4:{hp:13000,def:400,dmg:400}}
 };
 document.getElementById('stagesGrid').innerHTML=enemies.map(e=>{
  let rs = (REAL_STATS[locId] && REAL_STATS[locId][e.stage]) || (REAL_STATS[1] && REAL_STATS[1][e.stage]) || {hp:2000,def:100,dmg:150};
