@@ -31,7 +31,12 @@ document.getElementById('heroRole').textContent=heroData.n+' • '+heroData.role
 // DESERT LOC1: Мышь 4000/100/150, Скорп 3000/200/150, Змея 4000/150/200, Титан 6000/200/250
 // FOREST LOC2: Призрак 5000/150/250, Волк 5000/150/300, Голем 7000/300/250, Дриада 10000/350/300
 let eDef, eDmg, eMaxHp;
-if(loc==2){
+if(loc==3){
+  // ЛЕДЯНЫЕ ЗЕМЛИ LOC3
+  eDef = stage==4 ? 400 : stage==3 ? 300 : stage==2 ? 200 : 200;
+  eDmg = stage==4 ? 400 : stage==3 ? 300 : stage==2 ? 350 : 250;
+  eMaxHp = stage==4 ? 13000 : stage==3 ? 10000 : stage==2 ? 7000 : 7000;
+} else if(loc==2){
   // ТЕМНЫЙ ЛЕС
   eDef = stage==4 ? 350 : stage==3 ? 300 : stage==2 ? 150 : 150;
   eDmg = stage==4 ? 300 : stage==3 ? 250 : stage==2 ? 300 : 250;
