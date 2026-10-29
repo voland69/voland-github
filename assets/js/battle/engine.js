@@ -27,12 +27,22 @@ document.getElementById('heroIcon').innerHTML='<img src="'+heroData.img+'" onerr
 document.getElementById('heroName').textContent=profileName.toUpperCase();
 document.getElementById('heroRole').textContent=heroData.n+' • '+heroData.role;
 
-// РЕАЛЬНЫЕ СТАТЫ - РУКАМИ, x2 HP по просьбе пользователя 2026-10-29
-// Stage1 Мышь 4000/100/150, Stage2 Скорп 3000/200/150, Stage3 Змея 4000/150/200, Stage4 Титан 6000/200/250
-const eDef = stage==4 ? 200 : stage==3 ? 150 : stage==2 ? 200 : 100;
-let eDmg = stage==4 ? 250 : stage==3 ? 200 : stage==2 ? 150 : 150;
+// РЕАЛЬНЫЕ СТАТЫ - РУКАМИ
+// DESERT LOC1: Мышь 4000/100/150, Скорп 3000/200/150, Змея 4000/150/200, Титан 6000/200/250
+// FOREST LOC2: Призрак 5000/150/250, Волк 5000/150/300, Голем 7000/300/250, Дриада 10000/350/300
+let eDef, eDmg, eMaxHp;
+if(loc==2){
+  // ТЕМНЫЙ ЛЕС
+  eDef = stage==4 ? 350 : stage==3 ? 300 : stage==2 ? 150 : 150;
+  eDmg = stage==4 ? 300 : stage==3 ? 250 : stage==2 ? 300 : 250;
+  eMaxHp = stage==4 ? 10000 : stage==3 ? 7000 : stage==2 ? 5000 : 5000;
+} else {
+  // ПУСТЫНЯ LOC1
+  eDef = stage==4 ? 200 : stage==3 ? 150 : stage==2 ? 200 : 100;
+  eDmg = stage==4 ? 250 : stage==3 ? 200 : stage==2 ? 150 : 150;
+  eMaxHp = stage==4 ? 6000 : stage==3 ? 4000 : stage==2 ? 3000 : 4000;
+}
 const baseEDmg = eDmg;
-const eMaxHp = stage==4 ? 6000 : stage==3 ? 4000 : stage==2 ? 3000 : 4000;
 
 let eHp=eMaxHp, hHp=cur.HP, hMax=cur.HP, hMana=cur.MANA, hMaxMana=cur.MANA;
 let turn=1, enemyStun=0, cooldowns=[0,0,0,0,0], isBattleOver=false;
