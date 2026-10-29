@@ -38,7 +38,7 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 </style>
 </head>
 <body>
-<div class="bg"><img src="./assets/enemies/bg-desert-dark.jpg" onerror="this.src='./assets/heroes/bg-battlefield.webp'"></div>
+<div class="bg"><img id="bgImg" src="./assets/enemies/bg-desert-dark.jpg" onerror="this.src='./assets/heroes/bg-battlefield.webp'"></div>
 <div class="wrap">
 <div class="left-nav">
 <div onclick="location.href='./page3.html'"><div class="nav-item">👤</div><div class="nav-label">HERO</div></div>
@@ -63,6 +63,14 @@ let locId=parseInt(p.get('loc')||localStorage.getItem('voland_location')||'1');
 let enemies=(window.VOLAND_ENEMIES&&VOLAND_ENEMIES[locId])?VOLAND_ENEMIES[locId]:VOLAND_ENEMIES[1];
 let locData=(window.VOLAND_LOCATIONS&&VOLAND_LOCATIONS.find(l=>l.id==locId))||{name:'ПУСТЫНЯ',eng:'DESERT'};
 document.getElementById('locTitle').innerHTML=locData.name+'<span id="locSub">'+locData.eng+' • '+enemies.length+' STAGES • CLICK TO FIGHT</span>';
+try{
+ let bgEl=document.getElementById('bgImg');
+ if(bgEl){
+  let bgSrc = locData.img || (locId==2 ? './assets/enemies/bg-dark-forest.webp' : './assets/enemies/bg-desert-dark.jpg');
+  bgEl.src=bgSrc;
+ }
+}catch(e){}
+
 
 function startBattle(stage){
  try{
