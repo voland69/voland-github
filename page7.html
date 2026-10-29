@@ -10,7 +10,7 @@
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,sans-serif;overflow:hidden}
 .bg{position:fixed;inset:0;z-index:0}.bg img{width:100%;height:100%;object-fit:cover;opacity:.9}
-.bg:after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.15)}
+.bg:after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.45)}
 .wrap{position:fixed;inset:0;display:flex;z-index:2}
 .left-nav{width:68px;min-width:68px;background:rgba(18,24,30,.35);border-right:1px solid rgba(30,42,50,.5);display:flex;flex-direction:column;align-items:center;padding:12px 6px;gap:18px}
 .nav-item{width:48px;height:48px;background:#1a252f;border:1px solid #2a3a4a;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;opacity:.6;transition:.2s}
@@ -26,6 +26,9 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 .card .icon{flex:1;width:100%;height:100%;margin:0;display:flex;align-items:center;justify-content:center;position:relative}
 .card .icon img{width:100%;height:100%;object-fit:cover;display:block}
 .card .name{position:absolute;bottom:0;left:0;right:0;padding:14px 8px 10px;background:linear-gradient(transparent,rgba(0,0,0,.9));font:700 12px Inter,sans-serif;color:#e6d5a0;text-transform:uppercase;z-index:2;letter-spacing:.05em;line-height:1.3}
+.boss-badge{position:absolute;top:8px;right:8px;z-index:3;background:rgba(180,30,30,.9);border:1px solid #ff4040;color:#fff;font:900 11px 'JetBrains Mono',monospace;padding:4px 8px;border-radius:6px;letter-spacing:.12em;box-shadow:0 2px 8px rgba(0,0,0,.6)}
+.card.boss{border-color:#ff4040;box-shadow:0 0 12px rgba(255,60,60,.3)}
+
 .card .eng,.card .desc,.card .lvl,.card .track,.card .hint,.card .num{display:none}
 
 .right{width:200px;min-width:200px;background:rgba(14,20,26,.92);border-left:1px solid rgba(30,42,50,.5);display:flex;flex-direction:column}
@@ -38,7 +41,7 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 </style>
 </head>
 <body>
-<div class="bg"><img src="./assets/enemies/bg-desert-dark.jpg" onerror="this.src='./assets/heroes/bg-battlefield.webp'"></div>
+<div class="bg"><img id="bgImg" src="./assets/enemies/bg-desert-dark.jpg" onerror="this.src='./assets/heroes/bg-battlefield.webp'"></div>
 <div class="wrap">
 <div class="left-nav">
 <div onclick="location.href='./page3.html'"><div class="nav-item">👤</div><div class="nav-label">HERO</div></div>
@@ -62,6 +65,10 @@ const p=new URLSearchParams(location.search);
 let locId=parseInt(p.get('loc')||localStorage.getItem('voland_location')||'1');
 let enemies=(window.VOLAND_ENEMIES&&VOLAND_ENEMIES[locId])?VOLAND_ENEMIES[locId]:VOLAND_ENEMIES[1];
 let locData=(window.VOLAND_LOCATIONS&&VOLAND_LOCATIONS.find(l=>l.id==locId))||{name:'ПУСТЫНЯ',eng:'DESERT'};
+// set bg image by location
+let bgMap={1:'./assets/enemies/bg-desert-dark.jpg',2:'./assets/enemies/bg-dark-forest.webp'};
+let bgSrc = (locData.img || bgMap[locId] || './assets/enemies/bg-desert-dark.jpg');
+let bgEl=document.getElementById('bgImg'); if(bgEl) bgEl.src=bgSrc;
 document.getElementById('locTitle').innerHTML=locData.name+'<span id="locSub">'+locData.eng+' • '+enemies.length+' STAGES • CLICK TO FIGHT</span>';
 
 function startBattle(stage){
@@ -73,17 +80,26 @@ function startBattle(stage){
  location.href='./page8.html?loc='+locId+'&stage='+stage;
 }
 
-const REAL_STATS = {
+const REAL_STATS_LOC1 = {
  1:{hp:4000,def:100,dmg:150},
  2:{hp:3000,def:200,dmg:150},
  3:{hp:4000,def:150,dmg:200},
  4:{hp:6000,def:200,dmg:250}
 };
+const REAL_STATS_LOC2 = {
+ 1:{hp:5000,def:150,dmg:250},
+ 2:{hp:5000,def:150,dmg:300},
+ 3:{hp:7000,def:300,dmg:250},
+ 4:{hp:10000,def:350,dmg:300}
+};
+const REAL_STATS = locId==2 ? REAL_STATS_LOC2 : REAL_STATS_LOC1;
 document.getElementById('stagesGrid').innerHTML=enemies.map(e=>{
  let rs = REAL_STATS[e.stage] || {hp:2000,def:100,dmg:150};
  let iconHtml = e.img ? `<img src="${e.img}" alt="${e.name}">` : `<div style="font-size:48px">${e.icon}</div>`;
+ let bossBadge = e.boss ? `<div class="boss-badge">BOSS</div>` : '';
  return `
  <div class="card ${e.boss?'boss':''}" onclick="startBattle(${e.stage})">
+  ${bossBadge}
   <div class="icon">${iconHtml}</div>
   <div class="name">${e.name}<span style="display:block;margin-top:4px;font:400 8px 'JetBrains Mono',monospace;color:#8ab0d0;letter-spacing:.1em">HP ${rs.hp} • DEF ${rs.def} • DMG ${rs.dmg}</span></div>
  </div>
