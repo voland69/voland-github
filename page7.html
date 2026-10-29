@@ -60,8 +60,33 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 <script>
 const p=new URLSearchParams(location.search);
 let locId=parseInt(p.get('loc')||localStorage.getItem('voland_location')||'1');
-let enemies=(window.VOLAND_ENEMIES&&VOLAND_ENEMIES[locId])?VOLAND_ENEMIES[locId]:VOLAND_ENEMIES[1];
-let locData=(window.VOLAND_LOCATIONS&&VOLAND_LOCATIONS.find(l=>l.id==locId))||{name:'ПУСТЫНЯ',eng:'DESERT'};
+let enemies;
+let locData;
+
+// fallback forest mobs from assets/enemies
+const FOREST_FALLBACK = [
+   {stage:1, name:'ЛЕСНОЙ ПРИЗРАК', eng:'Forest Wraith', icon:'👻', img:'./assets/enemies/forest-wraith.webp', desc:'Призрак леса, игнор 20% брони. Урон 180%', lvl:'LVL 2', hp:50, hpColor:'#6ab0ff'},
+   {stage:2, name:'ТЕНЕВОЙ ВОЛК', eng:'Shadow Wolf', icon:'🐺', img:'./assets/enemies/shadow-wolf.webp', desc:'Прыжок из тени, крит +25%. Урон 200%', lvl:'LVL 4', hp:70, hpColor:'#a0a0ff'},
+   {stage:3, name:'МШИСТЫЙ ГОЛЕМ', eng:'Moss Golem', icon:'🪨', img:'./assets/enemies/moss-golem.webp', desc:'Каменная кожа + шипы, отражение 15%. Урон 220%', lvl:'LVL 6', hp:85, hpColor:'#3ad080'},
+   {stage:4, name:'ШИПОВАЯ ДРИАДА', eng:'Thorn Dryad - BOSS', icon:'🌹', img:'./assets/enemies/thorn-dryad.webp', desc:'Босс Леса: Шипы + яд AOE, реген 5% в раунд. Урон 300%', lvl:'BOSS LVL 8', hp:100, hpColor:'#e6d5a0', boss:true},
+];
+
+try{
+ if(window.VOLAND_ENEMIES && VOLAND_ENEMIES[locId]){
+  enemies=VOLAND_ENEMIES[locId];
+ } else if(locId==2){
+  enemies=FOREST_FALLBACK;
+ } else if(window.VOLAND_ENEMIES && VOLAND_ENEMIES[1]){
+  enemies=VOLAND_ENEMIES[1];
+ } else {
+  enemies=FOREST_FALLBACK;
+ }
+ locData=(window.VOLAND_LOCATIONS&&VOLAND_LOCATIONS.find(l=>l.id==locId))|| (locId==2 ? {name:'ТЕМНЫЙ ЛЕС',eng:'DARK FOREST',img:'./assets/enemies/bg-dark-forest.webp'} : {name:'ПУСТЫНЯ',eng:'DESERT',img:'./assets/enemies/bg-desert-dark.jpg'});
+}catch(e){
+ enemies= (locId==2 ? FOREST_FALLBACK : FOREST_FALLBACK);
+ locData= locId==2 ? {name:'ТЕМНЫЙ ЛЕС',eng:'DARK FOREST',img:'./assets/enemies/bg-dark-forest.webp'} : {name:'ПУСТЫНЯ',eng:'DESERT',img:'./assets/enemies/bg-desert-dark.jpg'};
+}
+
 document.getElementById('locTitle').innerHTML=locData.name+'<span id="locSub">'+locData.eng+' • '+enemies.length+' STAGES • CLICK TO FIGHT</span>';
 try{
  let bgEl=document.getElementById('bgImg');
@@ -70,7 +95,6 @@ try{
   bgEl.src=bgSrc;
  }
 }catch(e){}
-
 
 function startBattle(stage){
  try{
@@ -87,7 +111,7 @@ const REAL_STATS = {
 };
 document.getElementById('stagesGrid').innerHTML=enemies.map(e=>{
  let rs = (REAL_STATS[locId] && REAL_STATS[locId][e.stage]) || (REAL_STATS[1] && REAL_STATS[1][e.stage]) || {hp:2000,def:100,dmg:150};
- let iconHtml = e.img ? `<img src="${e.img}" alt="${e.name}">` : `<div style="font-size:48px">${e.icon}</div>`;
+ let iconHtml = e.img ? `<img src="${e.img}" alt="${e.name}" onerror="this.parentNode.innerHTML='${e.icon}'">` : `<div style="font-size:48px">${e.icon}</div>`;
  return `
  <div class="card ${e.boss?'boss':''}" onclick="startBattle(${e.stage})">
   <div class="icon">${iconHtml}</div>
@@ -96,7 +120,7 @@ document.getElementById('stagesGrid').innerHTML=enemies.map(e=>{
 `;
 }).join('');
 
-// подсветка LOC1 STAGE4 для проверки синхронизации
+// подсветка
 try{
  if(locId==1){
   const el=document.querySelectorAll('.card')[3];
