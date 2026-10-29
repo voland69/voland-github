@@ -78,7 +78,7 @@ function render(){
  if(!a.length) a=[{id:1,name:'ПУСТЫНЯ',eng:'DESERT',icon:'🏜️',type:'Жара • Песок'},{id:2,name:'ТЕМНЫЙ ЛЕС',eng:'DARK FOREST',icon:'🌲',type:'Тень • Яд'},{id:3,name:'ЛЕДЯНЫЕ ЗЕМЛИ',eng:'FROSTLANDS',icon:'❄️',type:'Холод • Лед'}];
  if(!s.length) s=[{id:4,name:'БОЛОТО',eng:'SWAMP',icon:'🐊'},{id:5,name:'ВУЛКАН',eng:'VOLCANO',icon:'🌋'},{id:6,name:'РУИНЫ',eng:'RUINS',icon:'🏛️'}];
  const top=a.map((l,i)=>{
-  let fallback = l.id==1 ? './assets/enemies/bg-desert-dark.jpg' : l.id==2 ? './assets/enemies/bg-dark-forest.webp' : null;
+  let fallback = l.id==1 ? './assets/enemies/bg-desert-dark.jpg' : l.id==2 ? './assets/enemies/bg-dark-forest.webp' : l.id==3 ? './assets/enemies/bg-frostlands.webp' : null;
   let img = l.img || fallback;
   let hasBg = !!img;
   let bgStyle = hasBg ? `background: linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.65)), url('${img}') center/cover no-repeat` : '';
