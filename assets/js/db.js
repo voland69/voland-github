@@ -130,7 +130,7 @@ const VOLAND_ITEMS_MAP = {
 
 const VOLAND_LOCATIONS = [
  {id:1, name:'ПУСТЫНЯ', eng:'DESERT', icon:'🏜️', img:'./assets/enemies/bg-desert-dark.jpg', type:'Жара • Песок', active:true},
- {id:2, name:'ТЕМНЫЙ ЛЕС', eng:'DARK FOREST', icon:'🌲', type:'Тень • Яд', active:true},
+ {id:2, name:'ТЕМНЫЙ ЛЕС', eng:'DARK FOREST', icon:'🌲', img:'./assets/enemies/bg-dark-forest.webp', type:'Тень • Яд', active:true},
  {id:3, name:'ЛЕДЯНЫЕ ЗЕМЛИ', eng:'FROSTLANDS', icon:'❄️', type:'Холод • Лед', active:true},
  {id:4, name:'БОЛОТО', eng:'SWAMP', icon:'🐊', type:'SOON', active:false},
  {id:5, name:'ВУЛКАН', eng:'VOLCANO', icon:'🌋', type:'SOON', active:false},
@@ -147,10 +147,10 @@ const VOLAND_ENEMIES = {
    {stage:4, name:'ТИТАН ДЮН', eng:'Dune Tyrant - BOSS', icon:'👹', img:'./assets/enemies/dune-tyrant.jpg', desc:'Босс Пустыни: Песчаная буря + оглушение AOE. Урон 300%', lvl:'BOSS LVL 7', hp:100, hpColor:'#e6d5a0', boss:true},
  ],
 2: [
-   {stage:1, name:'ЛЕСНОЙ ЗАЯЦ', eng:'Forest Hare', icon:'🐰', desc:'Быстрый, уворот +10%. Почти не бьет', lvl:'LVL 2', hp:45, hpColor:'#3ad080'},
-   {stage:2, name:'ТЕНЕВОЙ ВОЛК', eng:'Shadow Wolf', icon:'🐺', desc:'Прыжок из тени, крит +15%', lvl:'LVL 4', hp:70, hpColor:'#d0b040'},
-   {stage:3, name:'ШИПАСТЫЙ МЕДВЕДЬ', eng:'Thorn Bear', icon:'🐻', desc:'Колючая шкура, отражает 20% урона', lvl:'LVL 6', hp:88, hpColor:'#e05050'},
-   {stage:4, name:'ДРЕВНИЙ ЭНТ', eng:'Ancient Ent - BOSS', icon:'🌳', desc:'Босс Леса: Корни + реген. Хил 5% в раунд', lvl:'BOSS LVL 8', hp:100, hpColor:'#e6d5a0', boss:true},
+   {stage:1, name:'ЛЕСНОЙ ПРИЗРАК', eng:'Forest Wraith', icon:'👻', img:'./assets/enemies/forest-wraith.webp', desc:'Призрак леса, игнор 20% брони. Урон 180%', lvl:'LVL 2', hp:50, hpColor:'#6ab0ff'},
+   {stage:2, name:'ТЕНЕВОЙ ВОЛК', eng:'Shadow Wolf', icon:'🐺', img:'./assets/enemies/shadow-wolf.webp', desc:'Прыжок из тени, крит +25%. Урон 200%', lvl:'LVL 4', hp:70, hpColor:'#a0a0ff'},
+   {stage:3, name:'МШИСТЫЙ ГОЛЕМ', eng:'Moss Golem', icon:'🪨', img:'./assets/enemies/moss-golem.webp', desc:'Каменная кожа + шипы, отражение 15%. Урон 220%', lvl:'LVL 6', hp:85, hpColor:'#3ad080'},
+   {stage:4, name:'ШИПОВАЯ ДРИАДА', eng:'Thorn Dryad - BOSS', icon:'🌹', img:'./assets/enemies/thorn-dryad.webp', desc:'Босс Леса: Шипы + яд AOE, реген 5% в раунд. Урон 300%', lvl:'BOSS LVL 8', hp:100, hpColor:'#e6d5a0', boss:true},
  ],
 3: [
    {stage:1, name:'СНЕЖНЫЙ КРОЛИК', eng:'Snow Bunny', icon:'❄️🐰', desc:'Милый, но кусает за палец', lvl:'LVL 3', hp:50, hpColor:'#3ad080'},
