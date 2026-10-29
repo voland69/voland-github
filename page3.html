@@ -34,7 +34,6 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
 .extra-label{font-size:7px;letter-spacing:.2em;color:#6a7a8a;font-family:'JetBrains Mono',monospace;text-transform:uppercase}
 .extra-value{margin-top:6px;font-size:18px;font-weight:800;color:#e6d5a0;font-family:'JetBrains Mono',monospace}
 .extra-sub{margin-top:4px;font-size:8px;color:#8a9a6a;font-family:'JetBrains Mono',monospace}
-
 .bar-row{display:flex;align-items:center;gap:12px}
 .bar-label{width:60px;font-size:9px;letter-spacing:.15em;color:#6a7a8a;text-align:right;font-family:'JetBrains Mono',monospace}
 .bar-track{flex:1;height:18px;background:#0a0e14;border-radius:3px;overflow:hidden;border:1px solid #1e2a32;position:relative}
@@ -62,6 +61,7 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
     <div onclick="location.href='./page4.html'"><div class="nav-item">🎒</div><div class="nav-label">BAG</div></div>
     <div onclick="location.href='./page5.html'"><div class="nav-item">📜</div><div class="nav-label">SKILLS</div></div>
     <div onclick="location.href='./page6.html'"><div class="nav-item">⚔️</div><div class="nav-label">BATTLE</div></div>
+    <div onclick="location.href='./page9.html'"><div class="nav-item">🎯</div><div class="nav-label">MISSIONS</div></div>
     <div onclick="location.href='./index.html'"><div class="nav-item">🗺️</div><div class="nav-label">MAP</div></div>
   </div>
   <div class="hero-panel">
@@ -108,14 +108,31 @@ document.getElementById('statsGrid').innerHTML = `
   <div class="stat-card"><div class="stat-label">${cur.PARRY>0?'PARRY':'DODGE'}</div><div class="stat-value">${cur.PARRY>0?cur.PARRY:cur.DODGE}%</div><div class="stat-bonus">${bonus.PARRY||bonus.DODGE? '+'+(bonus.PARRY||bonus.DODGE)+'%':''}</div></div>
 `;
 
+let totalXp = 0;
+try{ totalXp = typeof volandGetXp==='function'?volandGetXp():0; }catch(e){ totalXp=0; }
+function getLevelInfo(xp){
+  let thresholds=[0,1000,3000,6000];
+  let nextAdd=4000;
+  while(thresholds.length<100){
+    thresholds.push(thresholds[thresholds.length-1]+nextAdd);
+    nextAdd+=1000;
+  }
+  for(let i=0;i<thresholds.length-1;i++){
+    if(xp>=thresholds[i] && xp<thresholds[i+1]){
+      return {lvl:i+1, cur:xp-thresholds[i], need:thresholds[i+1]-thresholds[i], pct:Math.floor((xp-thresholds[i])/(thresholds[i+1]-thresholds[i])*100), total:xp};
+    }
+  }
+  let last=thresholds[thresholds.length-1];
+  return {lvl:thresholds.length, cur:xp-last, need:10000, pct:100, total:xp};
+}
+let lvInfo=getLevelInfo(totalXp);
 document.getElementById('barsPanel').innerHTML = `
   <div class="bar-row"><div class="bar-label">HP</div><div class="bar-track"><div class="bar-fill hp" style="width:100%">${cur.HP} / ${cur.HP}</div></div></div>
   <div class="bar-row"><div class="bar-label">MANA</div><div class="bar-track"><div class="bar-fill mana" style="width:100%">${cur.MANA} / ${cur.MANA}</div></div></div>
   <div class="bar-row"><div class="bar-label">STAMINA</div><div class="bar-track"><div class="bar-fill stamina" style="width:100%">100 / 100</div></div></div>
-  <div class="bar-row"><div class="bar-label">XP</div><div class="bar-track"><div class="bar-fill xp" style="width:64%">LVL 7 - 6420 / 10000 XP</div></div></div>
+  <div class="bar-row"><div class="bar-label">XP</div><div class="bar-track"><div class="bar-fill xp" style="width:${lvInfo.pct}%">LVL ${lvInfo.lvl} - ${lvInfo.cur} / ${lvInfo.need} XP (${lvInfo.total})</div></div></div>
 `;
 
-// 4 new windows
 let playHours = volandGetPlaytimeHours();
 let playText = playHours<1 ? '<1h' : playHours+'h';
 let quests = volandGetQuests();
@@ -123,36 +140,11 @@ let kills = volandGetKills();
 let pvp = volandGetPvp();
 
 document.getElementById('extraGrid').innerHTML = `
-  <div class="extra-card">
-    <div class="extra-icon">⏱️</div>
-    <div class="extra-label">TIME PLAYED</div>
-    <div class="extra-value">${playText}</div>
-    <div class="extra-sub">${playHours*60} min • since ${new Date((volandGetCurrentSave()?.created||Date.now())).toLocaleDateString()}</div>
-  </div>
-  <div class="extra-card">
-    <div class="extra-icon">📜</div>
-    <div class="extra-label">QUESTS</div>
-    <div class="extra-value">${quests.done}/${quests.total}</div>
-    <div class="extra-sub">${Math.round(quests.done/quests.total*100)}% completed</div>
-  </div>
-  <div class="extra-card">
-    <div class="extra-icon">💀</div>
-    <div class="extra-label">MOB KILLS</div>
-    <div class="extra-value">${kills}</div>
-    <div class="extra-sub">monsters slain</div>
-  </div>
-  <div class="extra-card">
-    <div class="extra-icon">⚔️</div>
-    <div class="extra-label">PVP WINS</div>
-    <div class="extra-value">${pvp}</div>
-    <div class="extra-sub">arena victories</div>
-  </div>
+  <div class="extra-card"><div class="extra-icon">⏱️</div><div class="extra-label">TIME PLAYED</div><div class="extra-value">${playText}</div><div class="extra-sub">${playHours*60} min • since ${new Date((volandGetCurrentSave()?.created||Date.now())).toLocaleDateString()}</div></div>
+  <div class="extra-card"><div class="extra-icon">📜</div><div class="extra-label">QUESTS</div><div class="extra-value">${quests.done}/${quests.total}</div><div class="extra-sub">${Math.round(quests.done/quests.total*100)}% completed</div></div>
+  <div class="extra-card"><div class="extra-icon">💀</div><div class="extra-label">MOB KILLS</div><div class="extra-value">${kills}</div><div class="extra-sub">monsters slain</div></div>
+  <div class="extra-card"><div class="extra-icon">⚔️</div><div class="extra-label">PVP WINS</div><div class="extra-value">${pvp}</div><div class="extra-sub">arena victories</div></div>
 `;
-
-
-let bonusText = Object.keys(bonus).length ? 'Бонусы: ' + Object.entries(bonus).map(([k,v])=>k+'+'+v).join(', ') : 'Нет экипированных предметов — иди в BAG';
-console.log('HERO page loaded', heroId, cur, bonus);
 </script>
-
 </body>
 </html>
