@@ -23,6 +23,7 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 .card{position:relative;background:rgba(20,26,34,.88);border:1px solid rgba(122,144,168,.22);border-radius:12px;padding:0;text-align:center;cursor:pointer;transition:.25s;overflow:hidden;min-height:260px;height:300px;display:flex;flex-direction:column}
 .card:hover{transform:translateY(-4px);border-color:#e6d5a0;box-shadow:0 12px 28px rgba(0,0,0,.5),0 0 16px rgba(230,213,160,.18)}
 .card.boss{border-color:rgba(224,80,80,.45)}
+.boss-badge{position:absolute;top:8px;right:8px;background:rgba(180,30,30,.9);color:#fff;font:900 9px 'JetBrains Mono',monospace;letter-spacing:.15em;padding:4px 7px;border-radius:4px;z-index:3;box-shadow:0 2px 8px rgba(0,0,0,.5);border:1px solid rgba(255,100,100,.5)}
 .card .icon{flex:1;width:100%;height:100%;margin:0;display:flex;align-items:center;justify-content:center;position:relative;padding:0;overflow:hidden}
 .card .icon img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block}
 .card .name{position:absolute;bottom:0;left:0;right:0;padding:14px 8px 10px;background:linear-gradient(transparent,rgba(0,0,0,.9));font:700 12px Inter,sans-serif;color:#e6d5a0;text-transform:uppercase;z-index:2;letter-spacing:.05em;line-height:1.3}
@@ -61,28 +62,24 @@ const p=new URLSearchParams(location.search);
 let locId=parseInt(p.get('loc')||localStorage.getItem('voland_location')||'1');
 let enemies;
 let locData;
-
 const DESERT_FALLBACK = [
    {stage:1, name:'ПЕСЧАНАЯ МЫШЬ', eng:'Sand Gerbil', icon:'🐭', img:'./assets/enemies/sand-gerbil.jpg', desc:'Грызун пустыни', lvl:'LVL 1', hp:40, hpColor:'#3ad080'},
    {stage:2, name:'ПУСТЫННЫЙ СКОРПИОН', eng:'Desert Scorpion', icon:'🦂', img:'./assets/enemies/desert-scorpion.jpg', desc:'Ядовитое жало', lvl:'LVL 3', hp:65, hpColor:'#d0b040'},
    {stage:3, name:'ЗМЕЯ ТРЕЩЕТКА', eng:'Rattlesnake', icon:'🐍', img:'./assets/enemies/rattlesnake.jpg', desc:'Ядовитый укус', lvl:'LVL 5', hp:85, hpColor:'#e05050'},
    {stage:4, name:'ТИТАН ДЮН', eng:'Dune Tyrant - BOSS', icon:'👹', img:'./assets/enemies/dune-tyrant.jpg', desc:'Босс Пустыни', lvl:'BOSS LVL 7', hp:100, hpColor:'#e6d5a0', boss:true},
 ];
-
 const FOREST_FALLBACK = [
    {stage:1, name:'ЛЕСНОЙ ПРИЗРАК', eng:'Forest Wraith', icon:'👻', img:'./assets/enemies/forest-wraith.webp', desc:'Призрак леса', lvl:'LVL 2', hp:50, hpColor:'#6ab0ff'},
    {stage:2, name:'ТЕНЕВОЙ ВОЛК', eng:'Shadow Wolf', icon:'🐺', img:'./assets/enemies/shadow-wolf.webp', desc:'Прыжок из тени', lvl:'LVL 4', hp:70, hpColor:'#a0a0ff'},
    {stage:3, name:'МШИСТЫЙ ГОЛЕМ', eng:'Moss Golem', icon:'🪨', img:'./assets/enemies/moss-golem.webp', desc:'Каменная кожа', lvl:'LVL 6', hp:85, hpColor:'#3ad080'},
    {stage:4, name:'ШИПОВАЯ ДРИАДА', eng:'Thorn Dryad - BOSS', icon:'🌹', img:'./assets/enemies/thorn-dryad.webp', desc:'Босс Леса', lvl:'BOSS LVL 8', hp:100, hpColor:'#e6d5a0', boss:true},
 ];
-
 const FROST_FALLBACK = [
    {stage:1, name:'ЛЕДЯНОЙ ПРИЗРАК', eng:'Ice Wraith', icon:'👻', img:'./assets/enemies/ice-wraith.webp', desc:'Призрак льда', lvl:'LVL 3', hp:50, hpColor:'#6ab0ff'},
    {stage:2, name:'МОРОЗНЫЙ КЛЫК', eng:'Frostfang Wolf', icon:'🐺', img:'./assets/enemies/frostfang-wolf.webp', desc:'Укус мороза', lvl:'LVL 5', hp:70, hpColor:'#a0a0ff'},
    {stage:3, name:'ЛЕДЯНОЙ ТРОЛЛЬ', eng:'Frost Troll', icon:'🧌', img:'./assets/enemies/frost-troll.webp', desc:'Ледяная броня', lvl:'LVL 7', hp:85, hpColor:'#3ad080'},
    {stage:4, name:'МОРОЗНЫЙ ПАУК', eng:'Frost Spider - BOSS', icon:'🕷️', img:'./assets/enemies/frost-spider.webp', desc:'Босс Льда', lvl:'BOSS LVL 10', hp:100, hpColor:'#e6d5a0', boss:true},
 ];
-
 try{
  if(window.VOLAND_ENEMIES && VOLAND_ENEMIES[locId]){
   enemies=VOLAND_ENEMIES[locId];
@@ -100,7 +97,6 @@ try{
  else enemies=DESERT_FALLBACK;
  locData= locId==3 ? {name:'ЛЕДЯНЫЕ ЗЕМЛИ',eng:'FROSTLANDS',img:'./assets/enemies/bg-frostlands.webp'} : locId==2 ? {name:'ТЕМНЫЙ ЛЕС',eng:'DARK FOREST',img:'./assets/enemies/bg-dark-forest.webp'} : {name:'ПУСТЫНЯ',eng:'DESERT',img:'./assets/enemies/bg-desert-dark.jpg'};
 }
-
 document.getElementById('locTitle').innerHTML=locData.name+'<span id="locSub">'+locData.eng+' • '+enemies.length+' STAGES • CLICK TO FIGHT</span>';
 try{
  let bgEl=document.getElementById('bgImg');
@@ -109,7 +105,6 @@ try{
   bgEl.src=bgSrc;
  }
 }catch(e){}
-
 function startBattle(stage){
  try{
   localStorage.setItem('voland_location',String(locId));
@@ -118,7 +113,6 @@ function startBattle(stage){
  }catch(e){}
  location.href='./page8.html?loc='+locId+'&stage='+stage;
 }
-
 const REAL_STATS = {
  1:{1:{hp:4000,def:100,dmg:150},2:{hp:3000,def:200,dmg:150},3:{hp:4000,def:150,dmg:200},4:{hp:6000,def:200,dmg:250}},
  2:{1:{hp:5000,def:150,dmg:250},2:{hp:5000,def:150,dmg:300},3:{hp:7000,def:300,dmg:250},4:{hp:10000,def:350,dmg:300}},
@@ -129,6 +123,7 @@ document.getElementById('stagesGrid').innerHTML=enemies.map(e=>{
  let iconHtml = e.img ? `<img src="${e.img}" alt="${e.name}" onerror="this.parentNode.innerHTML='${e.icon}'">` : `<div style="font-size:48px">${e.icon}</div>`;
  return `
  <div class="card ${e.boss?'boss':''}" onclick="startBattle(${e.stage})">
+  ${e.boss ? '<div class="boss-badge">BOSS</div>' : ''}
   <div class="icon">${iconHtml}</div>
   <div class="name">${e.name}<span style="display:block;margin-top:4px;font:400 8px 'JetBrains Mono',monospace;color:#8ab0d0;letter-spacing:.1em">HP ${rs.hp} • DEF ${rs.def} • DMG ${rs.dmg}</span></div>
  </div>
