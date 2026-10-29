@@ -131,7 +131,7 @@ const VOLAND_ITEMS_MAP = {
 const VOLAND_LOCATIONS = [
  {id:1, name:'ПУСТЫНЯ', eng:'DESERT', icon:'🏜️', img:'./assets/enemies/bg-desert-dark.jpg', type:'Жара • Песок', active:true},
  {id:2, name:'ТЕМНЫЙ ЛЕС', eng:'DARK FOREST', icon:'🌲', img:'./assets/enemies/bg-dark-forest.webp', type:'Тень • Яд', active:true},
- {id:3, name:'ЛЕДЯНЫЕ ЗЕМЛИ', eng:'FROSTLANDS', icon:'❄️', type:'Холод • Лед', active:true},
+ {id:3, name:'ЛЕДЯНЫЕ ЗЕМЛИ', eng:'FROSTLANDS', icon:'❄️', img:'./assets/enemies/bg-frostlands.webp', type:'Холод • Лед', active:true},
  {id:4, name:'БОЛОТО', eng:'SWAMP', icon:'🐊', type:'SOON', active:false},
  {id:5, name:'ВУЛКАН', eng:'VOLCANO', icon:'🌋', type:'SOON', active:false},
  {id:6, name:'РУИНЫ', eng:'RUINS', icon:'🏛️', type:'SOON', active:false},
@@ -153,9 +153,9 @@ const VOLAND_ENEMIES = {
    {stage:4, name:'ШИПОВАЯ ДРИАДА', eng:'Thorn Dryad - BOSS', icon:'🌹', img:'./assets/enemies/thorn-dryad.webp', desc:'Босс Леса: Шипы + яд AOE, реген 5% в раунд. Урон 300%', lvl:'BOSS LVL 8', hp:100, hpColor:'#e6d5a0', boss:true},
  ],
 3: [
-   {stage:1, name:'СНЕЖНЫЙ КРОЛИК', eng:'Snow Bunny', icon:'❄️🐰', desc:'Милый, но кусает за палец', lvl:'LVL 3', hp:50, hpColor:'#3ad080'},
-   {stage:2, name:'ЛЕДЯНОЙ ВОЛК', eng:'Ice Wolf', icon:'🐺', desc:'Заморозка: -20% скорости на 2 раунда', lvl:'LVL 5', hp:72, hpColor:'#6ab0ff'},
-   {stage:3, name:'ЙЕТИ', eng:'Frost Yeti', icon:'🦧', desc:'Морозный рев: -15% урона врага', lvl:'LVL 7', hp:90, hpColor:'#e05050'},
-   {stage:4, name:'ЛЕДЯНОЙ ДРАКОН', eng:'Frost Dragon - BOSS', icon:'🐉', desc:'Босс Льда: Дыхание льда AOE 250% + заморозка', lvl:'BOSS LVL 10', hp:100, hpColor:'#e6d5a0', boss:true},
+   {stage:1, name:'ЛЕДЯНОЙ ПРИЗРАК', eng:'Ice Wraith', icon:'👻', img:'./assets/enemies/ice-wraith.webp', desc:'Призрак льда, заморозка 20% шанс. Урон 180%', lvl:'LVL 3', hp:50, hpColor:'#6ab0ff'},
+   {stage:2, name:'МОРОЗНЫЙ КЛЫК', eng:'Frostfang Wolf', icon:'🐺', img:'./assets/enemies/frostfang-wolf.webp', desc:'Укус мороза, крит +25%. Урон 200%', lvl:'LVL 5', hp:70, hpColor:'#a0a0ff'},
+   {stage:3, name:'ЛЕДЯНОЙ ТРОЛЛЬ', eng:'Frost Troll', icon:'🧌', img:'./assets/enemies/frost-troll.webp', desc:'Ледяная броня, блок 20%. Урон 220%', lvl:'LVL 7', hp:85, hpColor:'#3ad080'},
+   {stage:4, name:'МОРОЗНЫЙ ПАУК', eng:'Frost Spider - BOSS', icon:'🕷️', img:'./assets/enemies/frost-spider.webp', desc:'Босс Льда: Паутина + яд AOE, реген 5% в раунд. Урон 300%', lvl:'BOSS LVL 10', hp:100, hpColor:'#e6d5a0', boss:true},
  ],
 };
