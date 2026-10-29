@@ -126,7 +126,38 @@ let inv = [];
 function rebuildInv(){
   const ids = new Set(Object.values(equipped).map(i=>i.id));
   inv = [];
-  VOLAND_ITEMS.forEach(it=>{ if(!ids.has(it.id)) inv.push(it); });
+  // resources - stackable up to 100
+  try{
+    if(typeof volandGetResources==='function' && window.VOLAND_RESOURCES){
+      let res = volandGetResources();
+      for(let rid in res){
+        let cnt = res[rid]||0;
+        if(cnt>0){
+          let rdef = VOLAND_RESOURCES.find(r=>r.id===rid);
+          if(rdef){
+            inv.push({id:rid, icon:rdef.icon, name:rdef.name, desc:cnt+'/100 • '+rdef.desc, isResource:true, count:cnt});
+          }
+        }
+      }
+    }
+  }catch(e){}
+  // dropped equip from bosses - individual
+  try{
+    if(typeof volandGetInventory==='function'){
+      let dropped = volandGetInventory();
+      for(let d of dropped){
+        let item = VOLAND_ITEMS.find(i=>i.id===d.id);
+        if(item && !ids.has(item.id)){
+          // check not already in inv as resource
+          inv.push({...item, isDropped:true, dropTime:d.time});
+        }
+      }
+    }
+  }catch(e){}
+  VOLAND_ITEMS.forEach(it=>{ if(!ids.has(it.id)) { 
+    // avoid duplicate if already added as dropped
+    if(!inv.find(x=>x && x.id===it.id && !x.isResource)) inv.push(it); 
+  }});
   while(inv.length<50) inv.push(null);
 }
 rebuildInv();
@@ -171,7 +202,17 @@ function renderInv(){
   for(let i=0;i<50;i++){
     const cell=document.createElement('div'); cell.className='inv-cell';
     const it=inv[i];
-    if(it){ cell.classList.add('has-item'); cell.innerHTML=`<div class="item-icon">${it.icon}</div><div class="item-name">${it.name}</div><div class="item-bonus">${it.desc}</div>`; cell.onclick=()=>equipItem(it,i); }
+    if(it){ 
+      cell.classList.add('has-item'); 
+      if(it.isResource){
+        cell.innerHTML=`<div class="item-icon">${it.icon}</div><div class="item-name">${it.name}</div><div class="item-bonus">${it.count}/100</div><div style="font:700 8px JetBrains Mono;color:#e6d5a0;position:absolute;bottom:2px;right:4px">${it.count}</div>`;
+        cell.style.position='relative';
+        cell.onclick=()=>{ log(it.name+': '+it.count+'/100 — стак до 100'); };
+      } else {
+        cell.innerHTML=`<div class="item-icon">${it.icon}</div><div class="item-name">${it.name}</div><div class="item-bonus">${it.desc}</div>`; 
+        cell.onclick=()=>equipItem(it,i); 
+      }
+    }
     else cell.classList.add('empty');
     invGrid.appendChild(cell);
   }
