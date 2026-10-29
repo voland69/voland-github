@@ -27,12 +27,12 @@ document.getElementById('heroIcon').innerHTML='<img src="'+heroData.img+'" onerr
 document.getElementById('heroName').textContent=profileName.toUpperCase();
 document.getElementById('heroRole').textContent=heroData.n+' • '+heroData.role;
 
-// РЕАЛЬНЫЕ СТАТЫ - РУКАМИ, новые по скринам пользователя
-// Stage1 Мышь 2000/100/150, Stage2 Скорп 1500/200/150, Stage3 Червь 2000/150/200, Stage4 Титан 3000/200/250
+// РЕАЛЬНЫЕ СТАТЫ - РУКАМИ, x2 HP по просьбе пользователя 2026-10-29
+// Stage1 Мышь 4000/100/150, Stage2 Скорп 3000/200/150, Stage3 Змея 4000/150/200, Stage4 Титан 6000/200/250
 const eDef = stage==4 ? 200 : stage==3 ? 150 : stage==2 ? 200 : 100;
 let eDmg = stage==4 ? 250 : stage==3 ? 200 : stage==2 ? 150 : 150;
 const baseEDmg = eDmg;
-const eMaxHp = stage==4 ? 3000 : stage==3 ? 2000 : stage==2 ? 1500 : 2000;
+const eMaxHp = stage==4 ? 6000 : stage==3 ? 4000 : stage==2 ? 3000 : 4000;
 
 let eHp=eMaxHp, hHp=cur.HP, hMax=cur.HP, hMana=cur.MANA, hMaxMana=cur.MANA;
 let turn=1, enemyStun=0, cooldowns=[0,0,0,0,0], isBattleOver=false;
@@ -67,7 +67,7 @@ function updBars(){
  document.getElementById('heroManaBar').style.width=Math.max(0,hMana/hMaxMana*100)+'%';
  document.getElementById('heroManaBar').textContent='MANA '+hMana+'/'+hMaxMana;
  document.getElementById('enemyHpBar').style.width=Math.max(0,eHp/eMaxHp*100)+'%';
- document.getElementById('enemyHpBar').textContent='HP '+eHp+'/'+eMaxHp+' ('+enemyData.hp+'% bar)';
+ document.getElementById('enemyHpBar').textContent='HP '+eHp+'/'+eMaxHp;
  let stat='DEF '+eDef+' • DMG '+eDmg;
  if(enemyStun>0) stat+=' • STUN '+enemyStun;
  if(window.VB.extraStat) stat+=' • '+window.VB.extraStat();
