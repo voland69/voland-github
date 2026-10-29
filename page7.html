@@ -63,12 +63,18 @@ let locId=parseInt(p.get('loc')||localStorage.getItem('voland_location')||'1');
 let enemies;
 let locData;
 
-// fallback forest mobs from assets/enemies
+const DESERT_FALLBACK = [
+   {stage:1, name:'ПЕСЧАНАЯ МЫШЬ', eng:'Sand Gerbil', icon:'🐭', img:'./assets/enemies/sand-gerbil.jpg', desc:'Грызун пустыни', lvl:'LVL 1', hp:40, hpColor:'#3ad080'},
+   {stage:2, name:'ПУСТЫННЫЙ СКОРПИОН', eng:'Desert Scorpion', icon:'🦂', img:'./assets/enemies/desert-scorpion.jpg', desc:'Ядовитое жало', lvl:'LVL 3', hp:65, hpColor:'#d0b040'},
+   {stage:3, name:'ЗМЕЯ ТРЕЩЕТКА', eng:'Rattlesnake', icon:'🐍', img:'./assets/enemies/rattlesnake.jpg', desc:'Ядовитый укус', lvl:'LVL 5', hp:85, hpColor:'#e05050'},
+   {stage:4, name:'ТИТАН ДЮН', eng:'Dune Tyrant - BOSS', icon:'👹', img:'./assets/enemies/dune-tyrant.jpg', desc:'Босс Пустыни', lvl:'BOSS LVL 7', hp:100, hpColor:'#e6d5a0', boss:true},
+];
+
 const FOREST_FALLBACK = [
-   {stage:1, name:'ЛЕСНОЙ ПРИЗРАК', eng:'Forest Wraith', icon:'👻', img:'./assets/enemies/forest-wraith.webp', desc:'Призрак леса, игнор 20% брони. Урон 180%', lvl:'LVL 2', hp:50, hpColor:'#6ab0ff'},
-   {stage:2, name:'ТЕНЕВОЙ ВОЛК', eng:'Shadow Wolf', icon:'🐺', img:'./assets/enemies/shadow-wolf.webp', desc:'Прыжок из тени, крит +25%. Урон 200%', lvl:'LVL 4', hp:70, hpColor:'#a0a0ff'},
-   {stage:3, name:'МШИСТЫЙ ГОЛЕМ', eng:'Moss Golem', icon:'🪨', img:'./assets/enemies/moss-golem.webp', desc:'Каменная кожа + шипы, отражение 15%. Урон 220%', lvl:'LVL 6', hp:85, hpColor:'#3ad080'},
-   {stage:4, name:'ШИПОВАЯ ДРИАДА', eng:'Thorn Dryad - BOSS', icon:'🌹', img:'./assets/enemies/thorn-dryad.webp', desc:'Босс Леса: Шипы + яд AOE, реген 5% в раунд. Урон 300%', lvl:'BOSS LVL 8', hp:100, hpColor:'#e6d5a0', boss:true},
+   {stage:1, name:'ЛЕСНОЙ ПРИЗРАК', eng:'Forest Wraith', icon:'👻', img:'./assets/enemies/forest-wraith.webp', desc:'Призрак леса', lvl:'LVL 2', hp:50, hpColor:'#6ab0ff'},
+   {stage:2, name:'ТЕНЕВОЙ ВОЛК', eng:'Shadow Wolf', icon:'🐺', img:'./assets/enemies/shadow-wolf.webp', desc:'Прыжок из тени', lvl:'LVL 4', hp:70, hpColor:'#a0a0ff'},
+   {stage:3, name:'МШИСТЫЙ ГОЛЕМ', eng:'Moss Golem', icon:'🪨', img:'./assets/enemies/moss-golem.webp', desc:'Каменная кожа', lvl:'LVL 6', hp:85, hpColor:'#3ad080'},
+   {stage:4, name:'ШИПОВАЯ ДРИАДА', eng:'Thorn Dryad - BOSS', icon:'🌹', img:'./assets/enemies/thorn-dryad.webp', desc:'Босс Леса', lvl:'BOSS LVL 8', hp:100, hpColor:'#e6d5a0', boss:true},
 ];
 
 try{
@@ -76,14 +82,12 @@ try{
   enemies=VOLAND_ENEMIES[locId];
  } else if(locId==2){
   enemies=FOREST_FALLBACK;
- } else if(window.VOLAND_ENEMIES && VOLAND_ENEMIES[1]){
-  enemies=VOLAND_ENEMIES[1];
  } else {
-  enemies=FOREST_FALLBACK;
+  enemies=DESERT_FALLBACK;
  }
  locData=(window.VOLAND_LOCATIONS&&VOLAND_LOCATIONS.find(l=>l.id==locId))|| (locId==2 ? {name:'ТЕМНЫЙ ЛЕС',eng:'DARK FOREST',img:'./assets/enemies/bg-dark-forest.webp'} : {name:'ПУСТЫНЯ',eng:'DESERT',img:'./assets/enemies/bg-desert-dark.jpg'});
 }catch(e){
- enemies= (locId==2 ? FOREST_FALLBACK : FOREST_FALLBACK);
+ enemies= (locId==2 ? FOREST_FALLBACK : DESERT_FALLBACK);
  locData= locId==2 ? {name:'ТЕМНЫЙ ЛЕС',eng:'DARK FOREST',img:'./assets/enemies/bg-dark-forest.webp'} : {name:'ПУСТЫНЯ',eng:'DESERT',img:'./assets/enemies/bg-desert-dark.jpg'};
 }
 
@@ -119,14 +123,6 @@ document.getElementById('stagesGrid').innerHTML=enemies.map(e=>{
  </div>
 `;
 }).join('');
-
-// подсветка
-try{
- if(locId==1){
-  const el=document.querySelectorAll('.card')[3];
-  if(el){ el.style.outline='1px solid #e6d5a0'; }
- }
-}catch(e){}
 </script>
 </body>
 </html>
