@@ -168,3 +168,116 @@ function volandGetQuests(){ try{ let cur=volandGetCurrentSave(); if(cur) return 
 function volandGetPvp(){ try{ let cur=volandGetCurrentSave(); if(cur) return cur.pvp||0; return parseInt(localStorage.getItem(VOLAND_KEYS.pvp)||'0'); }catch(e){return 0;} }
 
 function volandAddKill(){ try{ let saves=volandGetSaves(); let idx=volandGetActiveIndex(); if(saves[idx]){ saves[idx].kills=(saves[idx].kills||0)+1; volandSaveSaves(saves);} }catch(e){} }
+
+
+function volandGetMissionStats(){
+ try{
+  let raw = localStorage.getItem('voland_missions_stats');
+  let s = raw ? JSON.parse(raw) : {};
+  return {
+   kill_loc: s.kill_loc || {1:0,2:0,3:0},
+   kill_boss: s.kill_boss || 0,
+   kill_boss_diff: s.kill_boss_diff || [],
+   login_days: s.login_days || [],
+   ult_uses: s.ult_uses || 0,
+   win_streak: s.win_streak || 0,
+   max_win_streak: s.max_win_streak || 0,
+   collect_green: s.collect_green || 0,
+   collect_blue: s.collect_blue || 0,
+   collect_legend: s.collect_legend || 0,
+   equip_dmg_max: s.equip_dmg_max || 0
+  };
+ }catch(e){ return {kill_loc:{1:0,2:0,3:0},kill_boss:0,kill_boss_diff:[],login_days:[],ult_uses:0,win_streak:0,max_win_streak:0,collect_green:0,collect_blue:0,collect_legend:0,equip_dmg_max:0}; }
+}
+
+function volandSaveMissionStats(stats){
+ try{ localStorage.setItem('voland_missions_stats', JSON.stringify(stats)); }catch(e){}
+}
+
+function volandGetMissionsDone(){
+ try{
+  let raw = localStorage.getItem('voland_missions_done');
+  return raw ? JSON.parse(raw) : [];
+ }catch(e){ return []; }
+}
+
+function volandSaveMissionsDone(done){
+ try{ localStorage.setItem('voland_missions_done', JSON.stringify(done)); }catch(e){}
+}
+
+function volandIsMissionUnlocked(mission, doneList){
+ if(!mission.prev) return true;
+ return doneList.includes(mission.prev);
+}
+
+function volandGetMissionProgress(mission){
+ let stats = volandGetMissionStats();
+ switch(mission.type){
+  case 'kill_mob': return Math.min(stats.kill_loc[mission.loc]||0, mission.target);
+  case 'kill_boss': return Math.min(stats.kill_boss||0, mission.target);
+  case 'kill_boss_diff': return Math.min((stats.kill_boss_diff||[]).length, mission.target);
+  case 'login': return Math.min((stats.login_days||[]).length, mission.target);
+  case 'ult': return Math.min(stats.ult_uses||0, mission.target);
+  case 'win_streak': return Math.min(stats.max_win_streak||0, mission.target);
+  case 'collect_green': return Math.min(stats.collect_green||0, mission.target);
+  case 'collect_blue': return Math.min(stats.collect_blue||0, mission.target);
+  case 'collect_legend': return Math.min(stats.collect_legend||0, mission.target);
+  case 'equip_dmg': return Math.min(stats.equip_dmg_max||0, mission.target);
+  default: return 0;
+ }
+}
+
+function volandUpdateMissionStat(type, loc, value){
+ let stats = volandGetMissionStats();
+ if(type==='kill_mob' && loc){
+  stats.kill_loc[loc] = (stats.kill_loc[loc]||0) + value;
+ } else if(type==='kill_boss'){
+  stats.kill_boss = (stats.kill_boss||0) + value;
+ } else if(type==='kill_boss_diff'){
+  if(!stats.kill_boss_diff.includes(value)) stats.kill_boss_diff.push(value);
+ } else if(type==='login'){
+  let day = new Date().toISOString().slice(0,10);
+  if(!stats.login_days.includes(day)) stats.login_days.push(day);
+ } else if(type==='ult'){
+  stats.ult_uses = (stats.ult_uses||0) + value;
+ } else if(type==='win_streak'){
+  if(value>0){
+   stats.win_streak = (stats.win_streak||0) + 1;
+   stats.max_win_streak = Math.max(stats.max_win_streak||0, stats.win_streak);
+  } else {
+   stats.win_streak = 0;
+  }
+ } else if(type==='collect_green'){
+  stats.collect_green = value;
+ } else if(type==='collect_blue'){
+  stats.collect_blue = value;
+ } else if(type==='collect_legend'){
+  stats.collect_legend = value;
+ } else if(type==='equip_dmg'){
+  stats.equip_dmg_max = Math.max(stats.equip_dmg_max||0, value);
+ }
+ volandSaveMissionStats(stats);
+}
+
+function volandCheckMissions(){
+ try{
+  if(!window.VOLAND_MISSIONS) return [];
+  let done = volandGetMissionsDone();
+  let newly = [];
+  for(let m of VOLAND_MISSIONS){
+   if(done.includes(m.id)) continue;
+   if(!volandIsMissionUnlocked(m, done)) continue;
+   let prog = volandGetMissionProgress(m);
+   if(prog >= m.target){
+    done.push(m.id);
+    newly.push(m);
+   }
+  }
+  if(newly.length) volandSaveMissionsDone(done);
+  return newly;
+ }catch(e){ return []; }
+}
+
+// init login tracking
+try{ volandUpdateMissionStat('login'); }catch(e){}
+
