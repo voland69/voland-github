@@ -21,8 +21,8 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 .head-sub{margin-left:14px;font:400 9px 'JetBrains Mono',monospace;letter-spacing:.25em;color:#6a7a8a}
 .arena{flex:0 0 380px;display:flex;align-items:center;justify-content:center;gap:32px;padding:16px 24px}
 .card{width:340px;background:rgba(18,24,33,.88);border:1px solid rgba(50,60,75,.6);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;align-items:center}
-.card-icon{width:72px;height:72px;border-radius:12px;background:#0a0e14;border:1px solid #2a3a4a;display:flex;align-items:center;justify-content:center;font-size:36px;overflow:hidden}
-.card-icon img{width:100%;height:100%;object-fit:cover}
+.card-icon{width:80px;height:96px;border-radius:12px;background:#0a0e14;border:1px solid #2a3a4a;display:flex;align-items:center;justify-content:center;font-size:36px;overflow:hidden}
+.card-icon img{width:100%;height:100%;object-fit:cover;object-position:top center}
 .card-name{margin-top:8px;font:700 12px 'Cinzel Decorative',serif;letter-spacing:.15em;color:#e6d5a0;text-align:center}
 .card-role{margin-top:4px;font:400 8px 'JetBrains Mono',monospace;letter-spacing:.2em;color:#6a7a8a;text-transform:uppercase}
 .bar-wrap{width:100%;margin-top:10px;display:flex;flex-direction:column;gap:6px}
@@ -82,7 +82,7 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 <div class="skill-bar" id="skillBar"></div>
 </div>
 </div>
-<div class="modal-overlay" id="victoryModal"><div class="modal"><div id="modalIcon" style="font-size:36px">🏆</div><div class="modal-title" id="modalTitle">ПОБЕДА!</div><div class="modal-sub" id="modalSub">Ты победил</div><div class="rewards"><div class="reward"><div>🪙</div><div class="reward-val gold" id="rewGold">+190</div><div class="reward-lbl">GOLD</div></div><div class="reward"><div>⭐</div><div class="reward-val xp" id="rewXp">+4200</div><div class="reward-lbl">XP</div></div><div class="reward"><div>📦</div><div class="reward-val" id="rewLoot">1</div><div class="reward-lbl">LOOT</div></div></div><div class="modal-btns"><button class="btn" onclick="location.reload()">✕ БИТЬ СНОВА</button><button class="btn gold" onclick="location.href='./page7.html?loc='+(localStorage.getItem('voland_location')||'1')">✓ К МОБАМ</button></div></div></div>
+<div class="modal-overlay" id="victoryModal"><div class="modal"><div id="modalIcon" style="font-size:36px">🏆</div><div class="modal-title" id="modalTitle">ПОБЕДА!</div><div class="modal-sub" id="modalSub">Ты победил</div><div class="rewards"><div class="reward"><div>🪙</div><div class="reward-val gold" id="rewGold">+190</div><div class="reward-lbl">GOLD</div></div><div class="reward"><div>⭐</div><div class="reward-val xp" id="rewXp">+4200</div><div class="reward-lbl">XP</div></div><div class="reward"><div>📦</div><div class="reward-val" id="rewLoot">1</div><div class="reward-lbl">LOOT</div></div></div><div class="modal-btns"><button class="btn" onclick="location.reload()">✕ БИТЬ СНОВА</button><button class="btn gold" onclick="location.href='./page7.html?loc='+loc">✓ К МОБАМ</button></div></div></div>
 <script src="./assets/js/db.js"></script>
 <script src="./assets/js/storage.js"></script>
 <script src="./assets/js/config.js"></script>
