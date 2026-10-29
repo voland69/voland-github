@@ -211,26 +211,29 @@ function showVictory(){
     }
     if(typeof volandAddGold==='function') volandAddGold(goldReward);
     if(typeof volandAddXp==='function') volandAddXp(xpReward);
+    let droppedLoot=[];
     addLog('💰 +'+goldReward+' золота • ✨ +'+xpReward+' XP за '+enemyData.name,'win');
-    // resources drops
+    // resources drops - quartz/wood/diamond 10%, fang 5%, essence 5%, boss double
     if(enemyData.drops && enemyData.drops.length){
       for(let d of enemyData.drops){
         if(Math.random() < d.chance){
           if(typeof volandAddResource==='function') volandAddResource(d.id, 1);
           let resName = d.id;
+          let resIcon = '📦';
           try{
             if(window.VOLAND_RESOURCES){
               let r = VOLAND_RESOURCES.find(x=>x.id===d.id);
-              if(r) resName = r.name;
+              if(r){ resName = r.name; resIcon = r.icon||'📦'; }
             }
           }catch(e){}
+          droppedLoot.push(resIcon+' '+resName);
           addLog('📦 Дроп: '+resName+' x1 (шанс '+(d.chance*100)+'%)','skill');
           let subEl=document.getElementById('modalSub');
           if(subEl) subEl.textContent+=' • 📦 '+resName;
         }
       }
     }
-    // equip drop from boss - very small chance
+    // equip drop from boss - Titan 5%, Dryad 6%, Spider 7%
     if(enemyData.boss && enemyData.equipChance){
       if(Math.random() < enemyData.equipChance){
         try{
@@ -238,6 +241,7 @@ function showVictory(){
           if(items.length){
             let randomItem = items[Math.floor(Math.random()*items.length)];
             if(typeof volandAddToInventory==='function') volandAddToInventory(randomItem.id);
+            droppedLoot.push('🎁 '+randomItem.name);
             addLog('🎁 РЕДКИЙ ДРОП! Шмотка: '+randomItem.name+' ('+randomItem.id+') шанс '+(enemyData.equipChance*100)+'%)','win');
             let subEl=document.getElementById('modalSub');
             if(subEl) subEl.textContent+=' • 🎁 '+randomItem.name;
@@ -245,6 +249,20 @@ function showVictory(){
         }catch(e){}
       }
     }
+    // show loot in 3rd box - what exactly dropped
+    try{
+      let lootEl=document.getElementById('rewLoot');
+      if(lootEl){
+        if(droppedLoot.length){
+          lootEl.innerHTML = droppedLoot.slice(0,3).join('<br>');
+          lootEl.style.fontSize='9px';
+          lootEl.title = droppedLoot.join(', ');
+        } else {
+          lootEl.textContent='—';
+          lootEl.title='Ничего не выпало';
+        }
+      }
+    }catch(e){}
     if(typeof volandUpdateMissionStat==='function'){
       volandUpdateMissionStat('kill_mob', loc, 1);
       if(stage==4){
