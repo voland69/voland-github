@@ -193,19 +193,57 @@ function endRound(){
 
 function showVictory(){
   isBattleOver=true;
-  document.getElementById('rewGold').textContent='+'+(150+stage*40+loc*20);
-  document.getElementById('rewXp').textContent='+'+(4000+stage*200+loc*100);
+  let goldReward = enemyData.gold || (5 + stage*2 + loc*2);
+  let xpReward = enemyData.xp || (80 + stage*30 + loc*20);
+  document.getElementById('rewGold').textContent='+'+goldReward+' GOLD';
+  document.getElementById('rewXp').textContent='+'+xpReward+' XP';
   document.getElementById('modalTitle').textContent='ПОБЕДА!';
   document.getElementById('modalSub').textContent='Ты победил • '+enemyData.name+' • LOC'+loc+' STAGE'+stage;
   document.getElementById('victoryModal').classList.add('show');
   renderSkillBar();
-  // stats: kills + missions
+  // stats: kills + missions + economy
   try{
     if(typeof volandAddKill==='function') volandAddKill();
     else {
       let saves=JSON.parse(localStorage.getItem('voland_v1_saves')||'[]');
       let idx=parseInt(localStorage.getItem('voland_v1_active')||'0');
       if(saves[idx]){ saves[idx].kills=(saves[idx].kills||0)+1; localStorage.setItem('voland_v1_saves', JSON.stringify(saves)); }
+    }
+    if(typeof volandAddGold==='function') volandAddGold(goldReward);
+    if(typeof volandAddXp==='function') volandAddXp(xpReward);
+    addLog('💰 +'+goldReward+' золота • ✨ +'+xpReward+' XP за '+enemyData.name,'win');
+    // resources drops
+    if(enemyData.drops && enemyData.drops.length){
+      for(let d of enemyData.drops){
+        if(Math.random() < d.chance){
+          if(typeof volandAddResource==='function') volandAddResource(d.id, 1);
+          let resName = d.id;
+          try{
+            if(window.VOLAND_RESOURCES){
+              let r = VOLAND_RESOURCES.find(x=>x.id===d.id);
+              if(r) resName = r.name;
+            }
+          }catch(e){}
+          addLog('📦 Дроп: '+resName+' x1 (шанс '+(d.chance*100)+'%)','skill');
+          let subEl=document.getElementById('modalSub');
+          if(subEl) subEl.textContent+=' • 📦 '+resName;
+        }
+      }
+    }
+    // equip drop from boss - very small chance
+    if(enemyData.boss && enemyData.equipChance){
+      if(Math.random() < enemyData.equipChance){
+        try{
+          let items = window.VOLAND_ITEMS||[];
+          if(items.length){
+            let randomItem = items[Math.floor(Math.random()*items.length)];
+            if(typeof volandAddToInventory==='function') volandAddToInventory(randomItem.id);
+            addLog('🎁 РЕДКИЙ ДРОП! Шмотка: '+randomItem.name+' ('+randomItem.id+') шанс '+(enemyData.equipChance*100)+'%)','win');
+            let subEl=document.getElementById('modalSub');
+            if(subEl) subEl.textContent+=' • 🎁 '+randomItem.name;
+          }
+        }catch(e){}
+      }
     }
     if(typeof volandUpdateMissionStat==='function'){
       volandUpdateMissionStat('kill_mob', loc, 1);
@@ -217,12 +255,22 @@ function showVictory(){
       if(typeof volandCheckMissions==='function'){
         let newly = volandCheckMissions();
         if(newly && newly.length){
-          let names = newly.map(m=>m.name).join(', ');
-          addLog('🎯 Миссия выполнена: '+names+'!','win');
+          let totalGold=0, totalXp=0;
+          let names=[];
+          for(let m of newly){
+            names.push(m.name);
+            if(m.reward){
+              if(m.reward.gold){ totalGold+=m.reward.gold; if(typeof volandAddGold==='function') volandAddGold(m.reward.gold); }
+              if(m.reward.xp){ totalXp+=m.reward.xp; if(typeof volandAddXp==='function') volandAddXp(m.reward.xp); }
+            }
+          }
+          addLog('🎯 Миссия выполнена: '+names.join(', ')+'! +'+totalGold+' GOLD +'+totalXp+' XP','win');
+          let subEl=document.getElementById('modalSub');
+          if(subEl) subEl.textContent+=' • 🎯 '+names.join(', ')+' +'+totalGold+'G +'+totalXp+'XP';
         }
       }
     }
-  }catch(e){}
+  }catch(e){ addLog('ERR econ: '+e.message,'lose'); }
 }
 function showDefeat(){ isBattleOver=true; document.getElementById('modalIcon').textContent='💀'; document.getElementById('modalTitle').textContent='ПОРАЖЕНИЕ!'; document.getElementById('modalSub').textContent='Тебя победил '+enemyData.name; document.getElementById('victoryModal').classList.add('show'); renderSkillBar(); try{ if(typeof volandUpdateMissionStat==='function'){ volandUpdateMissionStat('win_streak', null, 0); } }catch(e){} }
 
