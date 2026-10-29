@@ -125,6 +125,7 @@ async function useAction(idx){
   cooldowns[0]=1;
  }else{
   const sk=activeSkills[idx-1];
+  try{ if(sk.num=='4' && typeof volandUpdateMissionStat==='function'){ volandUpdateMissionStat('ult', null, 1); } }catch(e){}
   if(hMana<sk.mana){ addLog('⛔ Не хватает маны! Нужно '+sk.mana,'lose'); return; }
   hMana-=sk.mana; cooldowns[idx]=sk.cd||1; if(cooldowns[idx]==0) cooldowns[idx]=1;
   let mult=getMult(sk, idx-1);
@@ -198,7 +199,7 @@ function showVictory(){
   document.getElementById('modalSub').textContent='Ты победил • '+enemyData.name+' • LOC'+loc+' STAGE'+stage;
   document.getElementById('victoryModal').classList.add('show');
   renderSkillBar();
-  // stats: kills
+  // stats: kills + missions
   try{
     if(typeof volandAddKill==='function') volandAddKill();
     else {
@@ -206,9 +207,24 @@ function showVictory(){
       let idx=parseInt(localStorage.getItem('voland_v1_active')||'0');
       if(saves[idx]){ saves[idx].kills=(saves[idx].kills||0)+1; localStorage.setItem('voland_v1_saves', JSON.stringify(saves)); }
     }
+    if(typeof volandUpdateMissionStat==='function'){
+      volandUpdateMissionStat('kill_mob', loc, 1);
+      if(stage==4){
+        volandUpdateMissionStat('kill_boss', null, 1);
+        volandUpdateMissionStat('kill_boss_diff', null, enemyData.name);
+      }
+      volandUpdateMissionStat('win_streak', null, 1);
+      if(typeof volandCheckMissions==='function'){
+        let newly = volandCheckMissions();
+        if(newly && newly.length){
+          let names = newly.map(m=>m.name).join(', ');
+          addLog('🎯 Миссия выполнена: '+names+'!','win');
+        }
+      }
+    }
   }catch(e){}
 }
-function showDefeat(){ isBattleOver=true; document.getElementById('modalIcon').textContent='💀'; document.getElementById('modalTitle').textContent='ПОРАЖЕНИЕ!'; document.getElementById('modalSub').textContent='Тебя победил '+enemyData.name; document.getElementById('victoryModal').classList.add('show'); renderSkillBar(); }
+function showDefeat(){ isBattleOver=true; document.getElementById('modalIcon').textContent='💀'; document.getElementById('modalTitle').textContent='ПОРАЖЕНИЕ!'; document.getElementById('modalSub').textContent='Тебя победил '+enemyData.name; document.getElementById('victoryModal').classList.add('show'); renderSkillBar(); try{ if(typeof volandUpdateMissionStat==='function'){ volandUpdateMissionStat('win_streak', null, 0); } }catch(e){} }
 
 function tryNav(url){ if(!isBattleOver){ addLog('⛔ Нельзя выйти из боя! Закончи бой','lose'); return; } location.href=url; }
 window.tryNav=tryNav;
