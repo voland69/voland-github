@@ -19,7 +19,7 @@ let locData=(VOLAND_LOCATIONS&&VOLAND_LOCATIONS.find(l=>l.id==loc))||{name:'ПУ
 
 document.getElementById('locTitle').textContent=locData.name;
 document.getElementById('stageTitle').textContent='STAGE '+stage+' • '+enemyData.name;
-document.getElementById('enemyIcon').textContent=enemyData.icon;
+if(enemyData.img){ document.getElementById('enemyIcon').innerHTML='<img src="'+enemyData.img+'" style="width:100%;height:100%;object-fit:cover;border-radius:8px" onerror="this.parentNode.textContent=\''+enemyData.icon+'\'">'; } else { document.getElementById('enemyIcon').textContent=enemyData.icon; }
 document.getElementById('enemyName').textContent=enemyData.name;
 document.getElementById('enemyEng').textContent=enemyData.eng;
 document.getElementById('enemyDesc').textContent=enemyData.desc;
@@ -27,11 +27,12 @@ document.getElementById('heroIcon').innerHTML='<img src="'+heroData.img+'" onerr
 document.getElementById('heroName').textContent=profileName.toUpperCase();
 document.getElementById('heroRole').textContent=heroData.n+' • '+heroData.role;
 
-// РЕАЛЬНЫЕ СТАТЫ - РУКАМИ, hp из db.js = % для бара UI
-const eDef = stage==4 ? 200 : stage==3 ? 30 : stage==2 ? 20 : 10;
-let eDmg = stage==4 ? 230 : stage==3 ? 200 : stage==2 ? 100 : 50;
+// РЕАЛЬНЫЕ СТАТЫ - РУКАМИ, новые по скринам пользователя
+// Stage1 Мышь 2000/100/150, Stage2 Скорп 1500/200/150, Stage3 Червь 2000/150/200, Stage4 Титан 3000/200/250
+const eDef = stage==4 ? 200 : stage==3 ? 150 : stage==2 ? 200 : 100;
+let eDmg = stage==4 ? 250 : stage==3 ? 200 : stage==2 ? 150 : 150;
 const baseEDmg = eDmg;
-const eMaxHp = stage==4 ? 2400 : stage==3 ? 1500 : stage==2 ? 1000 : 400;
+const eMaxHp = stage==4 ? 3000 : stage==3 ? 2000 : stage==2 ? 1500 : 2000;
 
 let eHp=eMaxHp, hHp=cur.HP, hMax=cur.HP, hMana=cur.MANA, hMaxMana=cur.MANA;
 let turn=1, enemyStun=0, cooldowns=[0,0,0,0,0], isBattleOver=false;
