@@ -80,7 +80,7 @@ function render(){
  const top=a.map((l,i)=>{
   let img = l.img || (l.id==1 ? './assets/enemies/bg-desert-dark.jpg' : null);
   let hasBg = !!img;
-  let bgStyle = hasBg ? `background: linear-gradient(rgba(0,0,0,.15),rgba(0,0,0,.15)), url('${img}') center/cover no-repeat` : '';
+  let bgStyle = hasBg ? `background: linear-gradient(rgba(0,0,0,.05),rgba(0,0,0,.05)), url('${img}') center/cover no-repeat` : '';
   let iconHtml = hasBg ? '' : `<div class="loc-icon">${l.icon}</div>`;
   return `<div class="loc-card ${hasBg?'has-bg':''}" style="${bgStyle}" onclick="pickLoc('${l.id}')">${iconHtml}<div class="loc-name">${l.name}<span>${l.eng}</span></div><div class="loc-lvl">LVL ${LVLS[i]} • ENTER</div></div>`;
  }).join('');
