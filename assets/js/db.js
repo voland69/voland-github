@@ -129,7 +129,7 @@ const VOLAND_ITEMS_MAP = {
 };
 
 const VOLAND_LOCATIONS = [
- {id:1, name:'ПУСТЫНЯ', eng:'DESERT', icon:'🏜️', type:'Жара • Песок', active:true},
+ {id:1, name:'ПУСТЫНЯ', eng:'DESERT', icon:'🏜️', img:'./assets/enemies/bg-desert-dark.jpg', type:'Жара • Песок', active:true},
  {id:2, name:'ТЕМНЫЙ ЛЕС', eng:'DARK FOREST', icon:'🌲', type:'Тень • Яд', active:true},
  {id:3, name:'ЛЕДЯНЫЕ ЗЕМЛИ', eng:'FROSTLANDS', icon:'❄️', type:'Холод • Лед', active:true},
  {id:4, name:'БОЛОТО', eng:'SWAMP', icon:'🐊', type:'SOON', active:false},
@@ -141,10 +141,10 @@ const VOLAND_LOCATIONS = [
 
 const VOLAND_ENEMIES = {
 1: [
-   {stage:1, name:'ПЕСЧАНАЯ МЫШЬ', eng:'Sand Gerbil', icon:'🐭', desc:'Безобидный грызун, ворует крошки. Урон 10%', lvl:'LVL 1', hp:40, hpColor:'#3ad080'},
-   {stage:2, name:'ПУСТЫННЫЙ СКОРПИОН', eng:'Desert Scorpion', icon:'🦂', desc:'Ядовитое жало, стан 20% шанс. Урон 60%', lvl:'LVL 3', hp:65, hpColor:'#d0b040'},
-   {stage:3, name:'ДЕТЕНЫШ ЧЕРВЯ', eng:'Sandworm Cub', icon:'🐛', desc:'Глотает целиком, игнор 15% брони. Урон 140%', lvl:'LVL 5', hp:85, hpColor:'#e05050'},
-   {stage:4, name:'ТИТАН ДЮН', eng:'Dune Tyrant - BOSS', icon:'👹', desc:'Босс Пустыни: Песчаная буря + оглушение AOE. Урон 300%', lvl:'BOSS LVL 7', hp:100, hpColor:'#e6d5a0', boss:true},
+   {stage:1, name:'ПЕСЧАНАЯ МЫШЬ', eng:'Sand Gerbil', icon:'🐭', img:'./assets/enemies/sand-gerbil.jpg', desc:'Безобидный грызун, ворует крошки. Урон 10%', lvl:'LVL 1', hp:40, hpColor:'#3ad080'},
+   {stage:2, name:'ПУСТЫННЫЙ СКОРПИОН', eng:'Desert Scorpion', icon:'🦂', img:'./assets/enemies/desert-scorpion.jpg', desc:'Ядовитое жало, стан 20% шанс. Урон 60%', lvl:'LVL 3', hp:65, hpColor:'#d0b040'},
+   {stage:3, name:'ЗМЕЯ ТРЕЩЕТКА', eng:'Rattlesnake', icon:'🐍', img:'./assets/enemies/rattlesnake.jpg', desc:'Ядовитый укус, яд 25% на 3 раунда. Урон 140%', lvl:'LVL 5', hp:85, hpColor:'#e05050'},
+   {stage:4, name:'ТИТАН ДЮН', eng:'Dune Tyrant - BOSS', icon:'👹', img:'./assets/enemies/dune-tyrant.jpg', desc:'Босс Пустыни: Песчаная буря + оглушение AOE. Урон 300%', lvl:'BOSS LVL 7', hp:100, hpColor:'#e6d5a0', boss:true},
  ],
 2: [
    {stage:1, name:'ЛЕСНОЙ ЗАЯЦ', eng:'Forest Hare', icon:'🐰', desc:'Быстрый, уворот +10%. Почти не бьет', lvl:'LVL 2', hp:45, hpColor:'#3ad080'},
