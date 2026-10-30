@@ -126,62 +126,40 @@ let inv = [];
 function rebuildInv(){
   const ids = new Set(Object.values(equipped).map(i=>i.id));
   inv = [];
-  // GOLD as first cell with emoji - temporary, later real icon
-  try{
-    if(typeof volandGetGold==='function'){
-      let gold = volandGetGold();
-      if(gold>0){
-        inv.push({id:'gold', icon:'🪙', name:'Золото', desc: gold+' GOLD • валюта', isResource:true, isGold:true, count:gold});
-      }
-    }
-  }catch(e){}
-  // resources - stackable up to 100 with emoji icons
+  // resources - stackable up to 100
   try{
     if(typeof volandGetResources==='function' && window.VOLAND_RESOURCES){
       let res = volandGetResources();
-      // order: quartz, wood, diamond, fang, essence
-      let order = ['quartz','wood','diamond','fang','essence'];
-      for(let rid of order){
+      for(let rid in res){
         let cnt = res[rid]||0;
         if(cnt>0){
           let rdef = VOLAND_RESOURCES.find(r=>r.id===rid);
           if(rdef){
-            inv.push({id:rid, icon:rdef.icon||'📦', name:rdef.name, desc:cnt+'/100 • '+rdef.desc, isResource:true, count:cnt});
+            inv.push({id:rid, icon:rdef.icon, name:rdef.name, desc:cnt+'/100 • '+rdef.desc, isResource:true, count:cnt});
           }
-        }
-      }
-      // any other resources
-      for(let rid in res){
-        if(order.includes(rid)) continue;
-        let cnt = res[rid]||0;
-        if(cnt>0){
-          let rdef = VOLAND_RESOURCES.find(r=>r.id===rid);
-          inv.push({id:rid, icon:rdef?rdef.icon:'📦', name:rdef?rdef.name:rid, desc:cnt+'/100', isResource:true, count:cnt});
         }
       }
     }
   }catch(e){}
-  // dropped equip from bosses - individual with emoji
+  // dropped equip from bosses - individual
   try{
     if(typeof volandGetInventory==='function'){
       let dropped = volandGetInventory();
       for(let d of dropped){
         let item = VOLAND_ITEMS.find(i=>i.id===d.id);
         if(item && !ids.has(item.id)){
+          // check not already in inv as resource
           inv.push({...item, isDropped:true, dropTime:d.time});
         }
       }
     }
   }catch(e){}
-  // remaining items to fill up to 50
   VOLAND_ITEMS.forEach(it=>{ if(!ids.has(it.id)) { 
+    // avoid duplicate if already added as dropped
     if(!inv.find(x=>x && x.id===it.id && !x.isResource)) inv.push(it); 
   }});
   while(inv.length<50) inv.push(null);
-  // trim to 50
-  inv = inv.slice(0,50);
 }
-
 rebuildInv();
 
 const invGrid=document.getElementById('invGrid');
@@ -221,7 +199,6 @@ function renderBars(){
 function log(m){const d=document.createElement('div'); d.className='sys-msg'; d.textContent=m; chatBody.appendChild(d); chatBody.scrollTop=9999;}
 function renderInv(){
   invGrid.innerHTML='';
-  updateInvTitle();
   for(let i=0;i<50;i++){
     const cell=document.createElement('div'); cell.className='inv-cell';
     const it=inv[i];
