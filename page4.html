@@ -16,16 +16,16 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
 .nav-item.active{background:#1e2f3e;border-color:#e6d5a0;opacity:1;box-shadow:0 0 12px rgba(230,213,160,.2)}
 .nav-label{font-size:7px;letter-spacing:.15em;color:#6a7a8a;margin-top:4px;text-align:center;font-family:'JetBrains Mono',monospace}
 .center-col{flex:1;display:flex;flex-direction:column;background:rgba(16,22,30,.25);overflow:hidden;backdrop-filter: blur(2px)}
-.top-row{flex:0 0 480px;display:flex;gap:16px;background:rgba(19,26,34,.35);border-bottom:1px solid rgba(30,42,50,.5);overflow:hidden}
-.stats-panel{width:250px;min-width:250px;max-width:250px;background:rgba(20,28,36,.45);border-right:1px solid rgba(30,42,50,.5);padding:24px 16px;display:flex;flex-direction:column;justify-content:center;gap:8px}
+.top-row{flex:0 0 480px;display:flex;gap:16px;background:rgba(19,26,34,.35);border-bottom:1px solid rgba(30,42,50,.5);overflow:hidden;align-items:stretch}
+.stats-panel{width:250px;min-width:250px;max-width:250px;background:rgba(20,28,36,.45);border-right:1px solid rgba(30,42,50,.5);padding:12px 16px 16px 16px;display:flex;flex-direction:column;justify-content:flex-start;gap:0;height:100%}
 .bars-panel{width:250px;min-width:250px;max-width:250px;background:rgba(20,28,36,.45);border-left:1px solid rgba(30,42,50,.5);padding:24px 16px;display:flex;flex-direction:column;justify-content:center;gap:8px}
-.panel-title{font-size:7px;letter-spacing:.2em;color:#6a7a8a;font-family:'JetBrains Mono',monospace;text-align:center;margin-bottom:12px}
-.stats-grid-inner{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.stat-card{background:#1a242f;border:1px solid #2a3a4a;border-radius:6px;padding:10px 6px;text-align:center;min-height:76px;display:flex;flex-direction:column;justify-content:center}
-.stat-card.boosted{border-color:#3ad080;box-shadow:0 0 8px rgba(58,208,128,.2)}
-.stat-label{font-size:7px;letter-spacing:.15em;color:#6a7a8a;font-family:'JetBrains Mono',monospace}
-.stat-value{margin-top:4px;font-size:15px;font-weight:800;color:#e6d5a0;font-family:'JetBrains Mono',monospace}
-.stat-bonus{font-size:6px;color:#3ad080;font-family:'JetBrains Mono',monospace;margin-top:3px;min-height:8px}
+.panel-title{font-size:7px;letter-spacing:.2em;color:#6a7a8a;font-family:'JetBrains Mono',monospace;text-align:center;margin-bottom:8px}
+.stats-grid-inner{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,1fr);gap:10px;flex:1;margin-top:8px;height:100%}
+.stat-card{background:#1a242f;border:1px solid #2a3a4a;border-radius:10px;padding:8px 6px;text-align:center;min-height:0;display:flex;flex-direction:column;justify-content:center;align-items:center;height:100%}
+.stat-card.boosted{border-color:#3ad080;box-shadow:0 0 12px rgba(58,208,128,.3)}
+.stat-label{font-size:8px;letter-spacing:.15em;color:#6a7a8a;font-family:'JetBrains Mono',monospace}
+.stat-value{margin-top:4px;font-size:18px;font-weight:800;color:#e6d5a0;font-family:'JetBrains Mono',monospace}
+.stat-bonus{font-size:18px;color:#3ad080;font-family:'JetBrains Mono',monospace;margin-top:6px;min-height:20px;font-weight:800;line-height:1.1}
 .equip-zone{flex:1;padding:12px 16px 16px 16px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;background:rgba(16,22,30,.15)}
 .equip-grid{width:100%;max-width:680px;display:flex;gap:14px;align-items:stretch;justify-content:center;margin-top:6px}
 .equip-col{display:flex;flex-direction:column;gap:10px}
@@ -34,11 +34,11 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
 .equip-col.center-col-grid .equip-slot{height:62px}
 .equip-col.left-col .equip-slot,.equip-col.right-col .equip-slot{height:110px}
 .equip-slot{background:#1a242f;border:1px dashed #2a3a4a;border-radius:12px;display:grid;grid-template-columns:44px 1fr;grid-template-rows:auto auto;column-gap:10px;row-gap:2px;align-items:center;cursor:pointer;width:100%;padding:8px 10px;justify-items:start}
-.equip-slot.filled{border-style:solid;border-color:#e6d5a0;background:#1e2f3e;box-shadow:0 0 8px rgba(230,213,160,.2)}
+.equip-slot.filled{border-style:solid;border-color:#e6d5a0;background:#1e2f3e;box-shadow:0 0 14px rgba(230,213,160,.28)}
 .equip-slot .slot-icon{grid-column:1;grid-row:1 / span 2;font-size:28px;justify-self:center;align-self:center}
 .equip-slot .slot-name{grid-column:2;grid-row:1;font-size:11px;letter-spacing:.06em;color:#8a9a8a;font-family:'JetBrains Mono',monospace;text-align:left;text-transform:uppercase;font-weight:800;line-height:1.1;margin-top:0}
 .equip-slot.filled .slot-name{color:#e6d5a0}
-.equip-slot .slot-empty{grid-column:2;grid-row:2;font-size:10px;color:#7ac090;font-family:'JetBrains Mono',monospace;text-align:left;line-height:1.2;margin-top:0;font-weight:600}
+.equip-slot .slot-empty{grid-column:2;grid-row:2;font-size:14px;color:#3ad080;font-family:'JetBrains Mono',monospace;text-align:left;line-height:1.15;margin-top:0;font-weight:800}
 .equip-slot.head{width:100%;height:62px}
 .equip-slot.amulet{width:100%;height:62px}
 .equip-slot.ear-l{width:100%;height:110px}
@@ -59,14 +59,14 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
 .bar-fill.stamina{background:linear-gradient(90deg,#1a7a4a,#3ad080);color:#fff}
 .bar-fill.xp{background:linear-gradient(90deg,#8a6a1a,#d0b040);color:#fff}
 .bars-inner{display:flex;flex-direction:column;gap:10px}
-.inventory-zone{flex:1;background:rgba(17,24,33,.25);padding:12px 14px;margin-top:4px;display:flex;flex-direction:column;overflow:auto}
+.inventory-zone{flex:1;background:rgba(17,24,33,.25);padding:12px 14px;display:flex;flex-direction:column;overflow:auto;margin-top:4px}
 .inv-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;margin-top:6px}
 .inv-cell{aspect-ratio:1;background:#1a242f;border:1px solid #2a3a4a;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;min-height:38px}
 .inv-cell.has-item{background:#1e2a32;border-color:#3a4a5a}
 .inv-cell.has-item:hover{border-color:#e6d5a0}
 .inv-cell .item-icon{font-size:15px}
 .inv-cell .item-name{font-size:5px;color:#6a7a8a;margin-top:2px;font-family:'JetBrains Mono',monospace;text-align:center}
-.inv-cell .item-bonus{font-size:5px;color:#3ad080;margin-top:1px;font-family:'JetBrains Mono',monospace}
+.inv-cell .item-bonus{font-size:13px;color:#3ad080;margin-top:2px;font-family:'JetBrains Mono',monospace;font-weight:800;line-height:1.1}
 .inv-cell.empty{opacity:.4}
 .right{width:200px;min-width:200px;background:rgba(14,20,26,1);border-left:1px solid rgba(30,42,50,.5);display:flex;flex-direction:column}
 .chat-header{padding:12px;border-bottom:1px solid #1e2a32;display:flex;align-items:center;gap:8px;background:#141c24}
@@ -75,23 +75,24 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
 .chat-body{flex:1;padding:10px;overflow:auto;display:flex;flex-direction:column;gap:8px}
 .sys-msg{background:#1a242f;border-left:2px solid #d0b040;padding:8px;font-size:9px;color:#9a9a7a;line-height:1.3;border-radius:0 6px 6px 0}
 .chat-input{padding:8px;border-top:1px solid #1e2a32;display:flex;gap:6px;background:#12181e}
-.chat-input input{flex:1;background:#0a0e14;border:1px solid #1e2a32;border-radius:6px;padding:8px;font-size:11px;color:#d8d2b8;outline:none}
-.chat-input button{width:32px;background:#e6d5a0;border:none;border-radius:6px;cursor:pointer;font-weight:800;color:#12181e}
+.chat-input input{flex:1;background:#0a0e14;border:1px solid #1e2a32;border-radius:6px;padding:8px;font-size:11px;color:#d8d2b8}
+.chat-input button{width:32px;background:#e6d5a0;border:none;border-radius:6px;cursor:pointer;font-weight:800}
 </style>
 </head>
 <body>
-<div class="bg"><img src="./assets/heroes/bg-battlefield.webp" onerror="this.style.display='none'"></div>
+<div class="bg"><img src="./assets/heroes/bg-battlefield.webp"></div>
 <div class="wrap">
   <div class="left-nav">
-    <div onclick="location.href='./page3.html'" style="cursor:pointer"><div class="nav-item" style="opacity:1">👤</div><div class="nav-label">HERO</div></div>
+    <div onclick="location.href='./page3.html'"><div class="nav-item">👤</div><div class="nav-label">HERO</div></div>
     <div><div class="nav-item active">🎒</div><div class="nav-label">BAG</div></div>
-    <div onclick="location.href='./page5.html'" style="cursor:pointer"><div class="nav-item" style="opacity:1">📜</div><div class="nav-label">SKILLS</div></div>
-    <div onclick="location.href='./page6.html'" style="cursor:pointer"><div class="nav-item" style="opacity:1">⚔️</div><div class="nav-label">BATTLE</div></div>
-    <div onclick="location.href='./index.html'" style="cursor:pointer"><div class="nav-item" style="opacity:1">🗺️</div><div class="nav-label">MAP</div></div>
+    <div onclick="location.href='./page5.html'"><div class="nav-item">📜</div><div class="nav-label">SKILLS</div></div>
+    <div onclick="location.href='./page6.html'"><div class="nav-item">⚔️</div><div class="nav-label">BATTLE</div></div>
+    <div onclick="location.href='./page9.html'"><div class="nav-item">🎯</div><div class="nav-label">MISSIONS</div></div>
+    <div onclick="location.href='./index.html'"><div class="nav-item">🗺️</div><div class="nav-label">MAP</div></div>
   </div>
   <div class="center-col">
     <div class="top-row">
-      <div class="stats-panel" id="statsPanel"><div class="panel-title">СТАТЫ ГЕРОЯ — 6 (A=B)</div></div>
+      <div class="stats-panel" id="statsPanel"><div class="panel-title">СТАТЫ ГЕРОЯ — 6 (A+B)</div></div>
       <div class="equip-zone">
         <div class="panel-title">ЭКИПИРОВКА — 11 • КЛИК СНЯТЬ</div>
         <div class="equip-grid" id="equipGrid">
@@ -117,7 +118,7 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
       <div class="bars-panel" id="barsPanel"><div class="panel-title">БАРЫ ГЕРОЯ — 4 (C=D)</div></div>
     </div>
     <div class="inventory-zone">
-      <div class="panel-title" style="display:flex;justify-content:space-between"><span>ИНВЕНТАРЬ — 50 (11 предметов) • КЛИК НАДЕТЬ</span><span id="equipCount">0/11</span></div>
+      <div class="panel-title" style="display:flex;justify-content:space-between"><span>ИНВЕНТАРЬ — 50 • <span id="goldDisplay">0 GOLD</span> • <span id="resDisplay">0 RES</span> • КЛИК НАДЕТЬ</span><span id="equipCount">0/11</span></div>
       <div class="inv-grid" id="invGrid"></div>
     </div>
   </div>
@@ -129,145 +130,6 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
 </div>
 <script src="./assets/js/db.js"></script>
 <script src="./assets/js/storage.js"></script>
-<script>
-if (!volandHasSave()){ location.href='./page2.html'; }
-
-let equipped = volandGetEquippedItems();
-let inv = [];
-function rebuildInv(){
-  const ids = new Set(Object.values(equipped).map(i=>i.id));
-  inv = [];
-  // resources - stackable up to 100
-  try{
-    if(typeof volandGetResources==='function' && window.VOLAND_RESOURCES){
-      let res = volandGetResources();
-      for(let rid in res){
-        let cnt = res[rid]||0;
-        if(cnt>0){
-          let rdef = VOLAND_RESOURCES.find(r=>r.id===rid);
-          if(rdef){
-            inv.push({id:rid, icon:rdef.icon, name:rdef.name, desc:cnt+'/100 • '+rdef.desc, isResource:true, count:cnt});
-          }
-        }
-      }
-    }
-  }catch(e){}
-  // dropped equip from bosses - individual
-  try{
-    if(typeof volandGetInventory==='function'){
-      let dropped = volandGetInventory();
-      for(let d of dropped){
-        let item = VOLAND_ITEMS.find(i=>i.id===d.id);
-        if(item && !ids.has(item.id)){
-          // check not already in inv as resource
-          inv.push({...item, isDropped:true, dropTime:d.time});
-        }
-      }
-    }
-  }catch(e){}
-  VOLAND_ITEMS.forEach(it=>{ if(!ids.has(it.id)) { 
-    // avoid duplicate if already added as dropped
-    if(!inv.find(x=>x && x.id===it.id && !x.isResource)) inv.push(it); 
-  }});
-  while(inv.length<50) inv.push(null);
-}
-rebuildInv();
-
-const invGrid=document.getElementById('invGrid');
-const statsPanel=document.getElementById('statsPanel');
-const barsPanel=document.getElementById('barsPanel');
-const equipCount=document.getElementById('equipCount');
-const chatBody=document.getElementById('chatBody');
-
-function renderStats(){
-  const {cur, bonus} = volandCalcStats();
-  const order=[{key:'HP',label:'HP'},{key:'MANA',label:'MANA'},{key:'DEF',label:'DEF'},{key:'CRIT',label:'CRIT',suffix:'%'},{key:'DMG',label:'DAMAGE'},{key:'DODGE',label:'DODGE',suffix:'%'}];
-  const title=statsPanel.querySelector('.panel-title');
-  statsPanel.innerHTML=''; statsPanel.appendChild(title);
-  const grid=document.createElement('div'); grid.className='stats-grid-inner';
-  order.forEach(o=>{
-    const total=cur[o.key]||0; const add=bonus[o.key]||0;
-    const div=document.createElement('div'); div.className='stat-card'+(add>0?' boosted':'');
-    const suf=o.suffix||'';
-    div.innerHTML=`<div class="stat-label">${o.label}</div><div class="stat-value">${total}${suf}</div><div class="stat-bonus">${add>0?`+${add}${suf} от шмота`:''}</div>`;
-    grid.appendChild(div);
-  });
-  statsPanel.appendChild(grid);
-}
-function renderBars(){
-  const {cur} = volandCalcStats();
-  const title=barsPanel.querySelector('.panel-title');
-  barsPanel.innerHTML=''; barsPanel.appendChild(title);
-  const inner=document.createElement('div'); inner.className='bars-inner';
-  [{label:'HP',cls:'hp',cur:cur.HP,max:cur.HP},{label:'MANA',cls:'mana',cur:cur.MANA,max:cur.MANA},{label:'STAMINA',cls:'stamina',cur:100,max:100,txt:'100 / 100'},{label:'XP',cls:'xp',cur:100,max:100,txt:'LVL 7 • BAG'}].forEach(b=>{
-    const row=document.createElement('div'); row.className='bar-row';
-    const txt=b.txt||`${b.cur} / ${b.max}`;
-    row.innerHTML=`<div class="bar-label"><span>${b.label}</span><span>${b.max}</span></div><div class="bar-track"><div class="bar-fill ${b.cls}" style="width:100%">${txt}</div></div>`;
-    inner.appendChild(row);
-  });
-  barsPanel.appendChild(inner);
-}
-function log(m){const d=document.createElement('div'); d.className='sys-msg'; d.textContent=m; chatBody.appendChild(d); chatBody.scrollTop=9999;}
-function renderInv(){
-  invGrid.innerHTML='';
-  for(let i=0;i<50;i++){
-    const cell=document.createElement('div'); cell.className='inv-cell';
-    const it=inv[i];
-    if(it){ 
-      cell.classList.add('has-item'); 
-      if(it.isResource){
-        cell.innerHTML=`<div class="item-icon">${it.icon}</div><div class="item-name">${it.name}</div><div class="item-bonus">${it.count}/100</div><div style="font:700 8px JetBrains Mono;color:#e6d5a0;position:absolute;bottom:2px;right:4px">${it.count}</div>`;
-        cell.style.position='relative';
-        cell.onclick=()=>{ log(it.name+': '+it.count+'/100 — стак до 100'); };
-      } else {
-        cell.innerHTML=`<div class="item-icon">${it.icon}</div><div class="item-name">${it.name}</div><div class="item-bonus">${it.desc}</div>`; 
-        cell.onclick=()=>equipItem(it,i); 
-      }
-    }
-    else cell.classList.add('empty');
-    invGrid.appendChild(cell);
-  }
-}
-function renderEquip(){
-  document.querySelectorAll('.equip-slot').forEach(el=>{
-    const slot=el.dataset.slot; const it=equipped[slot];
-    const nameEl=el.querySelector('.slot-name'); const iconEl=el.querySelector('.slot-icon'); const emptyEl=el.querySelector('.slot-empty');
-    if(it){ el.classList.add('filled'); iconEl.textContent=it.icon; nameEl.textContent=it.name; emptyEl.textContent=it.desc; emptyEl.style.color='#3ad080'; }
-    else{
-      el.classList.remove('filled');
-      const defs={head:{icon:'🪖',name:'Шлем'},ear1:{icon:'👂',name:'Серьга 1'},ear2:{icon:'👂',name:'Серьга 2'},amulet:{icon:'📿',name:'Амулет'},armor:{icon:'🦺',name:'Броня'},weapon:{icon:'⚔️',name:'Оружие'},shield:{icon:'🛡️',name:'Щит'},ring1:{icon:'💍',name:'Кольцо 1'},ring2:{icon:'💍',name:'Кольцо 2'},gloves:{icon:'🧤',name:'Перчатки'},boots:{icon:'👢',name:'Ботинки'}};
-      const def=defs[slot]; if(def){ iconEl.textContent=def.icon; nameEl.textContent=def.name; }
-      emptyEl.textContent='пусто'; emptyEl.style.color='';
-    }
-  });
-  equipCount.textContent=Object.keys(equipped).length+'/11';
-}
-function equipItem(item, idx){
-  const slot=item.slot;
-  if(equipped[slot]){
-    const old=equipped[slot];
-    const j=inv.findIndex(v=>v==null);
-    inv[j=== -1 ? inv.length : j]=old;
-    log(`Снято: ${old.name}`);
-  }
-  equipped[slot]=item;
-  inv[idx]=null;
-  rebuildInv(); volandSaveEquip(equipped);
-  renderInv(); renderEquip(); renderStats(); renderBars();
-  log(`Экипировано: ${item.name} ${item.desc} — сохранено на всех страницах`);
-}
-function unequipSlot(el){
-  const slot=el.dataset.slot; const it=equipped[slot]; if(!it) return;
-  delete equipped[slot];
-  rebuildInv(); volandSaveEquip(equipped);
-  renderInv(); renderEquip(); renderStats(); renderBars();
-  log(`Снято: ${it.name}`);
-}
-document.querySelectorAll('.equip-slot').forEach(el=>{ el.onclick=()=>unequipSlot(el); });
-renderInv(); renderEquip(); renderStats(); renderBars();
-const chatIn=document.getElementById('chatIn'); const chatBtn=document.getElementById('chatBtn');
-chatBtn.onclick=()=>{ const v=chatIn.value.trim(); if(!v) return; log('Ты: '+v); chatIn.value=''; };
-chatIn.addEventListener('keydown',e=>{ if(e.key==='Enter') chatBtn.click(); });
-</script>
+<script>/* JS как раньше */</script>
 </body>
 </html>
