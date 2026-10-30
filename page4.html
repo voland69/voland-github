@@ -130,6 +130,144 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
 </div>
 <script src="./assets/js/db.js"></script>
 <script src="./assets/js/storage.js"></script>
-<script>/* JS как раньше */</script>
+<script>
+if (!volandHasSave()){ location.href='./page2.html'; }
+let equipped = volandGetEquippedItems();
+let inv = [];
+function rebuildInv(){
+  const ids = new Set(Object.values(equipped).map(i=>i.id));
+  inv = [];
+  try{
+    if(typeof volandGetResources==='function' && window.VOLAND_RESOURCES){
+      let res = volandGetResources();
+      for(let rid in res){
+        let cnt = res[rid]||0;
+        if(cnt>0){
+          let rdef = VOLAND_RESOURCES.find(r=>r.id===rid);
+          if(rdef){ inv.push({id:rid, icon:rdef.icon, name:rdef.name, desc:cnt+'/100 • '+rdef.desc, isResource:true, count:cnt}); }
+        }
+      }
+    }
+  }catch(e){}
+  try{
+    if(typeof volandGetInventory==='function'){
+      let dropped = volandGetInventory();
+      for(let d of dropped){
+        let item = VOLAND_ITEMS.find(i=>i.id===d.id);
+        if(item && !ids.has(item.id)){ inv.push({...item, isDropped:true, dropTime:d.time}); }
+      }
+    }
+  }catch(e){}
+  VOLAND_ITEMS.forEach(it=>{ if(!ids.has(it.id)){ if(!inv.find(x=>x && x.id===it.id && !x.isResource)) inv.push(it); }});
+  while(inv.length<50) inv.push(null);
+}
+rebuildInv();
+const invGrid=document.getElementById('invGrid');
+const statsPanel=document.getElementById('statsPanel');
+const barsPanel=document.getElementById('barsPanel');
+const equipCount=document.getElementById('equipCount');
+const chatBody=document.getElementById('chatBody');
+function renderStats(){
+  const {cur, bonus} = volandCalcStats();
+  const order=[{key:'HP',label:'HP'},{key:'MANA',label:'MANA'},{key:'DEF',label:'DEF'},{key:'CRIT',label:'CRIT',suffix:'%'},{key:'DMG',label:'DAMAGE'},{key:'DODGE',label:'DODGE',suffix:'%'}];
+  const title=statsPanel.querySelector('.panel-title');
+  statsPanel.innerHTML=''; statsPanel.appendChild(title);
+  const grid=document.createElement('div'); grid.className='stats-grid-inner';
+  order.forEach(o=>{
+    const total=cur[o.key]||0; const add=bonus[o.key]||0;
+    const div=document.createElement('div'); div.className='stat-card'+(add>0?' boosted':'');
+    const suf=o.suffix||'';
+    div.innerHTML=`<div class="stat-label">${o.label}</div><div class="stat-value">${total}${suf}</div><div class="stat-bonus">${add>0?`+${add}${suf} от шмота`:''}</div>`;
+    grid.appendChild(div);
+  });
+  statsPanel.appendChild(grid);
+}
+function renderBars(){
+  const {cur} = volandCalcStats();
+  const title=barsPanel.querySelector('.panel-title');
+  barsPanel.innerHTML=''; barsPanel.appendChild(title);
+  const inner=document.createElement('div'); inner.className='bars-inner';
+  [{label:'HP',cls:'hp',cur:cur.HP,max:cur.HP},{label:'MANA',cls:'mana',cur:cur.MANA,max:cur.MANA},{label:'STAMINA',cls:'stamina',cur:100,max:100,txt:'100 / 100'},{label:'XP',cls:'xp',cur:100,max:100,txt:'LVL 7 • BAG'}].forEach(b=>{
+    const row=document.createElement('div'); row.className='bar-row';
+    const txt=b.txt||`${b.cur} / ${b.max}`;
+    row.innerHTML=`<div class="bar-label"><span>${b.label}</span><span>${b.max}</span></div><div class="bar-track"><div class="bar-fill ${b.cls}" style="width:100%">${txt}</div></div>`;
+    inner.appendChild(row);
+  });
+  barsPanel.appendChild(inner);
+}
+function log(m){const d=document.createElement('div'); d.className='sys-msg'; d.textContent=m; chatBody.appendChild(d); chatBody.scrollTop=9999;}
+function updateGoldRes(){
+  try{
+    let gold = typeof volandGetGold==='function'?volandGetGold():0;
+    let res = typeof volandGetResources==='function'?volandGetResources():{};
+    let resCount = Object.values(res).reduce((a,b)=>a+b,0);
+    let goldEl=document.getElementById('goldDisplay');
+    let resEl=document.getElementById('resDisplay');
+    if(goldEl) goldEl.textContent=gold+' GOLD';
+    if(resEl) resEl.textContent=resCount+' RES';
+  }catch(e){}
+}
+function renderInv(){
+  try{updateGoldRes();}catch(e){}
+  invGrid.innerHTML='';
+  for(let i=0;i<50;i++){
+    const cell=document.createElement('div'); cell.className='inv-cell';
+    const it=inv[i];
+    if(it){ 
+      cell.classList.add('has-item'); 
+      if(it.isResource){
+        cell.innerHTML=`<div class="item-icon">${it.icon}</div><div class="item-name">${it.name}</div><div class="item-bonus">${it.count}/100</div><div style="font:700 8px JetBrains Mono;color:#e6d5a0;position:absolute;bottom:2px;right:4px">${it.count}</div>`;
+        cell.style.position='relative';
+        cell.onclick=()=>{ log(it.name+': '+it.count+'/100 — стак до 100'); };
+      } else {
+        cell.innerHTML=`<div class="item-icon">${it.icon}</div><div class="item-name">${it.name}</div><div class="item-bonus">${it.desc}</div>`; 
+        cell.onclick=()=>equipItem(it,i); 
+      }
+    }
+    else cell.classList.add('empty');
+    invGrid.appendChild(cell);
+  }
+}
+function renderEquip(){
+  document.querySelectorAll('.equip-slot').forEach(el=>{
+    const slot=el.dataset.slot; const it=equipped[slot];
+    const nameEl=el.querySelector('.slot-name'); const iconEl=el.querySelector('.slot-icon'); const emptyEl=el.querySelector('.slot-empty');
+    if(it){ el.classList.add('filled'); iconEl.textContent=it.icon; nameEl.textContent=it.name; emptyEl.textContent=it.desc; emptyEl.style.color='#3ad080'; }
+    else{
+      el.classList.remove('filled');
+      const defs={head:{icon:'🪖',name:'Шлем'},ear1:{icon:'👂',name:'Серьга 1'},ear2:{icon:'👂',name:'Серьга 2'},amulet:{icon:'📿',name:'Амулет'},armor:{icon:'🦺',name:'Броня'},weapon:{icon:'⚔️',name:'Оружие'},shield:{icon:'🛡️',name:'Щит'},ring1:{icon:'💍',name:'Кольцо 1'},ring2:{icon:'💍',name:'Кольцо 2'},gloves:{icon:'🧤',name:'Перчатки'},boots:{icon:'👢',name:'Ботинки'}};
+      const def=defs[slot]; if(def){ iconEl.textContent=def.icon; nameEl.textContent=def.name; }
+      emptyEl.textContent='пусто'; emptyEl.style.color='';
+    }
+  });
+  equipCount.textContent=Object.keys(equipped).length+'/11';
+}
+function equipItem(item, idx){
+  const slot=item.slot;
+  if(equipped[slot]){
+    const old=equipped[slot];
+    const j=inv.findIndex(v=>v==null);
+    inv[j=== -1 ? inv.length : j]=old;
+    log(`Снято: ${old.name}`);
+  }
+  equipped[slot]=item;
+  inv[idx]=null;
+  rebuildInv(); volandSaveEquip(equipped);
+  renderInv(); renderEquip(); renderStats(); renderBars();
+  log(`Экипировано: ${item.name} ${item.desc} — сохранено на всех страницах`);
+}
+function unequipSlot(el){
+  const slot=el.dataset.slot; const it=equipped[slot]; if(!it) return;
+  delete equipped[slot];
+  rebuildInv(); volandSaveEquip(equipped);
+  renderInv(); renderEquip(); renderStats(); renderBars();
+  log(`Снято: ${it.name}`);
+}
+document.querySelectorAll('.equip-slot').forEach(el=>{ el.onclick=()=>unequipSlot(el); });
+renderInv(); renderEquip(); renderStats(); renderBars();
+const chatIn=document.getElementById('chatIn'); const chatBtn=document.getElementById('chatBtn');
+chatBtn.onclick=()=>{ const v=chatIn.value.trim(); if(!v) return; log('Ты: '+v); chatIn.value=''; };
+chatIn.addEventListener('keydown',e=>{ if(e.key==='Enter') chatBtn.click(); });
+</script>
 </body>
 </html>
