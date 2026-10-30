@@ -1,5 +1,4 @@
-// VOLAND BATTLE ENGINE v1 - база, чистый старт
-// DMG-DEF+rand, полоски HP/MANA, QWER, win/lose, грузит механику героя из heroes/${heroId}.js
+// VOLAND BATTLE ENGINE v1 - base + economy + manual claim + 50% defeat
 (function(){
 if(typeof volandHasSave==='function' && !volandHasSave()) location.href='./page2.html';
 const p=new URLSearchParams(location.search);
@@ -27,22 +26,16 @@ document.getElementById('heroIcon').innerHTML='<img src="'+heroData.img+'" onerr
 document.getElementById('heroName').textContent=profileName.toUpperCase();
 document.getElementById('heroRole').textContent=heroData.n+' • '+heroData.role;
 
-// РЕАЛЬНЫЕ СТАТЫ - РУКАМИ
-// DESERT LOC1: Мышь 4000/100/150, Скорп 3000/200/150, Змея 4000/150/200, Титан 6000/200/250
-// FOREST LOC2: Призрак 5000/150/250, Волк 5000/150/300, Голем 7000/300/250, Дриада 10000/350/300
 let eDef, eDmg, eMaxHp;
 if(loc==3){
-  // ЛЕДЯНЫЕ ЗЕМЛИ LOC3
   eDef = stage==4 ? 400 : stage==3 ? 300 : stage==2 ? 200 : 200;
   eDmg = stage==4 ? 400 : stage==3 ? 300 : stage==2 ? 350 : 250;
   eMaxHp = stage==4 ? 13000 : stage==3 ? 10000 : stage==2 ? 7000 : 7000;
 } else if(loc==2){
-  // ТЕМНЫЙ ЛЕС
   eDef = stage==4 ? 350 : stage==3 ? 300 : stage==2 ? 150 : 150;
   eDmg = stage==4 ? 300 : stage==3 ? 250 : stage==2 ? 300 : 250;
   eMaxHp = stage==4 ? 10000 : stage==3 ? 7000 : stage==2 ? 5000 : 5000;
 } else {
-  // ПУСТЫНЯ LOC1
   eDef = stage==4 ? 200 : stage==3 ? 150 : stage==2 ? 200 : 100;
   eDmg = stage==4 ? 250 : stage==3 ? 200 : stage==2 ? 150 : 150;
   eMaxHp = stage==4 ? 6000 : stage==3 ? 4000 : stage==2 ? 3000 : 4000;
@@ -53,7 +46,6 @@ let eHp=eMaxHp, hHp=cur.HP, hMax=cur.HP, hMana=cur.MANA, hMaxMana=cur.MANA;
 let turn=1, enemyStun=0, cooldowns=[0,0,0,0,0], isBattleOver=false;
 let spellCount=0;
 
-// общие статусы - могут использоваться героями
 window.VB={eDef, get eDmg(){return eDmg}, set eDmg(v){eDmg=v}, baseEDmg, eMaxHp, get eHp(){return eHp}, set eHp(v){eHp=v}, get hHp(){return hHp}, set hHp(v){hHp=v}, get hMana(){return hMana}, set hMana(v){hMana=v}, get hMax(){return hMax}, set hMax(v){hMax=v}, cur, heroData, enemyData, loc, stage, _lastEnemyDmg:0, _linkActive:false};
 
 function rand(a,b){return Math.floor(Math.random()*(b-a+1))+a}
@@ -101,20 +93,12 @@ function renderSkillBar(){
   const iconPath=s.icons&&s.icons[0]?s.icons[0]:'';
   let iconHtml=iconPath?'<img src="'+iconPath+'" onerror="this.style.display=\'none\'; this.parentNode.textContent=\''+s.emoji+'\'">' : (s.emoji||'⚔️');
   btn.innerHTML='<div class="skill-icon">'+iconHtml+'</div><div class="skill-name">'+(s.isAttack?'АТАКА':s.name.toUpperCase().slice(0,12))+'</div><div class="skill-cost '+(s.mana==0?'zero':'')+'">'+(s.isAttack?'0':s.mana)+'</div><div class="skill-key">'+s.key+'</div>'+(cd>0?'<div class="skill-cd">'+cd+'</div>':'');
-  btn.title=s.isAttack?'Атака DMG '+cur.DMG+' - DEF '+eDef+' + rand' : s.name+'\n'+s.desc+'\n'+s.short;
   bar.appendChild(btn);
  });
 }
-window.VB.renderSkillBar=renderSkillBar;
 
-async function useAction(idx){
- if(isBattleOver) return; if(cooldowns[idx]>0) return;
- // хук героя
- if(window.VOLAND_HERO_USE_SKILL){
-   let handled = await window.VOLAND_HERO_USE_SKILL(idx, {cur, eDef, eDmg, eMaxHp, get eHp(){return eHp}, set eHp(v){eHp=v}, get hHp(){return hHp}, set hHp(v){hHp=v}, get hMana(){return hMana}, set hMana(v){hMana=v}, hMax, hMaxMana, enemyData, heroData, activeSkills, getMult, rand, addLog, updBars, cooldowns, turn, spellCount, enemyStun, setEnemyStun:v=>enemyStun=v, isBattleOver, allSkills});
-   if(handled){ spellCount++; afterHeroAction(); return; }
- }
- // база
+function useAction(idx){
+ if(isBattleOver) return;
  let dmg=0, isCrit=false;
  if(idx===0){
   isCrit=Math.random()*100<cur.CRIT;
@@ -125,7 +109,6 @@ async function useAction(idx){
   cooldowns[0]=1;
  }else{
   const sk=activeSkills[idx-1];
-  try{ if(sk.num=='4' && typeof volandUpdateMissionStat==='function'){ volandUpdateMissionStat('ult', null, 1); } }catch(e){}
   if(hMana<sk.mana){ addLog('⛔ Не хватает маны! Нужно '+sk.mana,'lose'); return; }
   hMana-=sk.mana; cooldowns[idx]=sk.cd||1; if(cooldowns[idx]==0) cooldowns[idx]=1;
   let mult=getMult(sk, idx-1);
@@ -144,7 +127,6 @@ async function useAction(idx){
 
 function afterHeroAction(){
  spellCount++;
- // хук конца хода героя
  if(window.VOLAND_HERO_ON_TURN_END) window.VOLAND_HERO_ON_TURN_END({cur, eDef, eDmg, eMaxHp, get eHp(){return eHp}, set eHp(v){eHp=v}, get hHp(){return hHp}, set hHp(v){hHp=v}, get hMana(){return hMana}, set hMana(v){hMana=v}, hMax, hMaxMana, addLog, updBars, rand, enemyData, turn});
  if(eHp<=0){ addLog('✅ ПОБЕДА!','win'); showVictory(); return; }
  setTimeout(enemyTurn, 400);
@@ -152,7 +134,6 @@ function afterHeroAction(){
 
 function enemyTurn(){
  if(isBattleOver) return;
- // мгновенный стан от скилов типа Буря Стрел - должен сработать ДО проверки стана
  if(window.VB && window.VB._setStun){
   enemyStun = Math.max(enemyStun, window.VB._setStun);
   addLog('💫 Стан от скила '+window.VB._setStun+'р','skill');
@@ -164,14 +145,13 @@ function enemyTurn(){
    if(skip){ endRound(); return; }
  }
  if(enemyStun>0){ addLog('💤 '+enemyData.name+' оглушен, пропускает ход [стан '+enemyStun+'→'+(enemyStun-1)+']','hit'); enemyStun--; endRound(); return; }
- let effectiveDmg = window.VB.eDmg; // может быть снижен страхом -15%
+ let effectiveDmg = window.VB.eDmg;
  let dmgToHero=Math.max(10, effectiveDmg - cur.DEF + rand(-10,10));
  window.VB._lastEnemyDmg = dmgToHero;
  hHp=Math.max(0,hHp-dmgToHero);
  addLog('💥 '+enemyData.name+' бьет тебя на '+dmgToHero+' — HP '+hHp+'/'+hMax,'enemy-hit');
- // instant link reflect - если есть у героя
  if(window.VOLAND_HERO_ON_ENEMY_HIT){
-  try{ window.VOLAND_HERO_ON_ENEMY_HIT({dmgToHero, cur, eDef, eDmg: effectiveDmg, addLog, updBars, rand}); }catch(e){ console.log('link err',e); }
+  try{ window.VOLAND_HERO_ON_ENEMY_HIT({dmgToHero, cur, eDef, eDmg: effectiveDmg, addLog, updBars, rand}); }catch(e){}
  }
  updBars();
  if(hHp<=0){ addLog('❌ ПОРАЖЕНИЕ!','lose'); showDefeat(); return; }
@@ -179,9 +159,7 @@ function enemyTurn(){
 }
 
 function endRound(){
- // сначала все доты / таймеры конца раунда
  if(window.VOLAND_HERO_ON_ROUND_END) window.VOLAND_HERO_ON_ROUND_END({turn});
- // победа от дота / взрыва с задержкой
  if(eHp<=0){ addLog('✅ ПОБЕДА! '+enemyData.name+' убит!','win'); showVictory(); return; }
  if(hHp<=0){ addLog('❌ ПОРАЖЕНИЕ!','lose'); showDefeat(); return; }
  turn++;
@@ -195,45 +173,30 @@ function showVictory(){
   isBattleOver=true;
   let goldReward = enemyData.gold || (5 + stage*2 + loc*2);
   let xpReward = enemyData.xp || (80 + stage*30 + loc*20);
-  document.getElementById('rewGold').textContent='+'+goldReward+' GOLD';
-  document.getElementById('rewXp').textContent='+'+xpReward+' XP';
+  let goldEl=document.getElementById('rewGold'); if(goldEl) goldEl.textContent='+'+goldReward+' GOLD';
+  let xpEl=document.getElementById('rewXp'); if(xpEl) xpEl.textContent='+'+xpReward+' XP';
   document.getElementById('modalTitle').textContent='ПОБЕДА!';
   document.getElementById('modalSub').textContent='Ты победил • '+enemyData.name+' • LOC'+loc+' STAGE'+stage;
   document.getElementById('victoryModal').classList.add('show');
   renderSkillBar();
-  // stats: kills + missions + economy
   try{
     if(typeof volandAddKill==='function') volandAddKill();
-    else {
-      let saves=JSON.parse(localStorage.getItem('voland_v1_saves')||'[]');
-      let idx=parseInt(localStorage.getItem('voland_v1_active')||'0');
-      if(saves[idx]){ saves[idx].kills=(saves[idx].kills||0)+1; localStorage.setItem('voland_v1_saves', JSON.stringify(saves)); }
-    }
     if(typeof volandAddGold==='function') volandAddGold(goldReward);
     if(typeof volandAddXp==='function') volandAddXp(xpReward);
     let droppedLoot=[];
     addLog('💰 +'+goldReward+' золота • ✨ +'+xpReward+' XP за '+enemyData.name,'win');
-    // resources drops - quartz/wood/diamond 10%, fang 5%, essence 5%, boss double
     if(enemyData.drops && enemyData.drops.length){
       for(let d of enemyData.drops){
         if(Math.random() < d.chance){
           if(typeof volandAddResource==='function') volandAddResource(d.id, 1);
-          let resName = d.id;
-          let resIcon = '📦';
-          try{
-            if(window.VOLAND_RESOURCES){
-              let r = VOLAND_RESOURCES.find(x=>x.id===d.id);
-              if(r){ resName = r.name; resIcon = r.icon||'📦'; }
-            }
-          }catch(e){}
+          let resName = d.id; let resIcon = '📦';
+          try{ if(window.VOLAND_RESOURCES){ let r = VOLAND_RESOURCES.find(x=>x.id===d.id); if(r){ resName = r.name; resIcon = r.icon||'📦'; } } }catch(e){}
           droppedLoot.push(resIcon+' '+resName);
           addLog('📦 Дроп: '+resName+' x1 (шанс '+(d.chance*100)+'%)','skill');
-          let subEl=document.getElementById('modalSub');
-          if(subEl) subEl.textContent+=' • 📦 '+resName;
+          let subEl=document.getElementById('modalSub'); if(subEl) subEl.textContent+=' • 📦 '+resName;
         }
       }
     }
-    // equip drop from boss - Titan 5%, Dryad 6%, Spider 7%
     if(enemyData.boss && enemyData.equipChance){
       if(Math.random() < enemyData.equipChance){
         try{
@@ -243,24 +206,16 @@ function showVictory(){
             if(typeof volandAddToInventory==='function') volandAddToInventory(randomItem.id);
             droppedLoot.push('🎁 '+randomItem.name);
             addLog('🎁 РЕДКИЙ ДРОП! Шмотка: '+randomItem.name+' ('+randomItem.id+') шанс '+(enemyData.equipChance*100)+'%)','win');
-            let subEl=document.getElementById('modalSub');
-            if(subEl) subEl.textContent+=' • 🎁 '+randomItem.name;
+            let subEl=document.getElementById('modalSub'); if(subEl) subEl.textContent+=' • 🎁 '+randomItem.name;
           }
         }catch(e){}
       }
     }
-    // show loot in 3rd box - what exactly dropped
     try{
       let lootEl=document.getElementById('rewLoot');
       if(lootEl){
-        if(droppedLoot.length){
-          lootEl.innerHTML = droppedLoot.slice(0,3).join('<br>');
-          lootEl.style.fontSize='9px';
-          lootEl.title = droppedLoot.join(', ');
-        } else {
-          lootEl.textContent='—';
-          lootEl.title='Ничего не выпало';
-        }
+        if(droppedLoot.length){ lootEl.innerHTML = droppedLoot.slice(0,3).join('<br>'); lootEl.style.fontSize='9px'; lootEl.title = droppedLoot.join(', '); }
+        else { lootEl.textContent='—'; lootEl.title='Ничего не выпало'; }
       }
     }catch(e){}
     if(typeof volandUpdateMissionStat==='function'){
@@ -271,26 +226,35 @@ function showVictory(){
       }
       volandUpdateMissionStat('win_streak', null, 1);
       if(typeof volandCheckMissions==='function'){
-        let newly = volandCheckMissions();
-        if(newly && newly.length){
-          let totalGold=0, totalXp=0;
-          let names=[];
-          for(let m of newly){
-            names.push(m.name);
-            if(m.reward){
-              if(m.reward.gold){ totalGold+=m.reward.gold; if(typeof volandAddGold==='function') volandAddGold(m.reward.gold); }
-              if(m.reward.xp){ totalXp+=m.reward.xp; if(typeof volandAddXp==='function') volandAddXp(m.reward.xp); }
-            }
-          }
-          addLog('🎯 Миссия выполнена: '+names.join(', ')+'! +'+totalGold+' GOLD +'+totalXp+' XP','win');
-          let subEl=document.getElementById('modalSub');
-          if(subEl) subEl.textContent+=' • 🎯 '+names.join(', ')+' +'+totalGold+'G +'+totalXp+'XP';
+        let ready = volandCheckMissions();
+        if(ready && ready.length){
+          let names=[]; for(let m of ready){ names.push(m.name); }
+          addLog('🎯 Миссия готова к сбору: '+names.join(', ')+'! Иди в MISSIONS → ЗАБРАТЬ','win');
+          let subEl=document.getElementById('modalSub'); if(subEl) subEl.textContent+=' • 🎯 ГОТОВО: '+names.join(', ');
         }
       }
     }
   }catch(e){ addLog('ERR econ: '+e.message,'lose'); }
 }
-function showDefeat(){ isBattleOver=true; document.getElementById('modalIcon').textContent='💀'; document.getElementById('modalTitle').textContent='ПОРАЖЕНИЕ!'; document.getElementById('modalSub').textContent='Тебя победил '+enemyData.name; document.getElementById('victoryModal').classList.add('show'); renderSkillBar(); try{ if(typeof volandUpdateMissionStat==='function'){ volandUpdateMissionStat('win_streak', null, 0); } }catch(e){} }
+
+function showDefeat(){
+  isBattleOver=true;
+  let baseXp = enemyData.xp || (80 + stage*30 + loc*20);
+  let xpReward = Math.floor(baseXp * 0.5);
+  document.getElementById('modalIcon').textContent='💀';
+  document.getElementById('modalTitle').textContent='ПОРАЖЕНИЕ!';
+  document.getElementById('modalSub').textContent='Тебя победил '+enemyData.name+' • 50% XP • без золота и лута';
+  let goldEl=document.getElementById('rewGold'); if(goldEl) goldEl.textContent='—';
+  let xpEl=document.getElementById('rewXp'); if(xpEl) xpEl.textContent='+'+xpReward+' XP';
+  let lootEl=document.getElementById('rewLoot'); if(lootEl) lootEl.textContent='—';
+  document.getElementById('victoryModal').classList.add('show');
+  renderSkillBar();
+  try{
+    if(typeof volandAddXp==='function') volandAddXp(xpReward);
+    addLog('💀 Поражение: +'+xpReward+' XP (50% от '+baseXp+') • без золота и лута','lose');
+    if(typeof volandUpdateMissionStat==='function'){ volandUpdateMissionStat('win_streak', null, 0); }
+  }catch(e){}
+}
 
 function tryNav(url){ if(!isBattleOver){ addLog('⛔ Нельзя выйти из боя! Закончи бой','lose'); return; } location.href=url; }
 window.tryNav=tryNav;
