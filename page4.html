@@ -1,262 +1,67 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>VOLAND - BAG</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
-*{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") center/cover no-repeat fixed #0a0e14;color:#d8d2b8;font-family:Inter,Arial,sans-serif;overflow:hidden}
-.bg{position:fixed;inset:0;z-index:0}.bg img{width:100%;height:100%;object-fit:cover}
-.wrap{position:fixed;inset:0;display:flex;z-index:2}
-.left-nav{width:68px;min-width:68px;background:rgba(18,24,30,.35);border-right:1px solid rgba(30,42,50,.5);display:flex;flex-direction:column;align-items:center;padding:12px 6px;gap:18px;backdrop-filter: blur(2px)}
-.nav-item{width:48px;height:48px;background:#1a252f;border:1px solid #2a3a4a;border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0.6;transition:.2s;font-size:20px}
-.nav-item.active{background:#1e2f3e;border-color:#e6d5a0;opacity:1;box-shadow:0 0 12px rgba(230,213,160,.2)}
-.nav-label{font-size:7px;letter-spacing:.15em;color:#6a7a8a;margin-top:4px;text-align:center;font-family:'JetBrains Mono',monospace}
-.center-col{flex:1;display:flex;flex-direction:column;background:rgba(16,22,30,.25);overflow:hidden;backdrop-filter: blur(2px)}
-.top-row{flex:0 0 440px;display:flex;gap:16px;background:rgba(19,26,34,.35);border-bottom:1px solid rgba(30,42,50,.5);overflow:hidden}
-.stats-panel{width:250px;min-width:250px;max-width:250px;background:rgba(20,28,36,.45);border-right:1px solid rgba(30,42,50,.5);padding:24px 16px;display:flex;flex-direction:column;justify-content:center;gap:8px}
-.bars-panel{width:250px;min-width:250px;max-width:250px;background:rgba(20,28,36,.45);border-left:1px solid rgba(30,42,50,.5);padding:24px 16px;display:flex;flex-direction:column;justify-content:center;gap:8px}
-.panel-title{font-size:7px;letter-spacing:.2em;color:#6a7a8a;font-family:'JetBrains Mono',monospace;text-align:center;margin-bottom:12px}
-.stats-grid-inner{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.stat-card{background:#1a242f;border:1px solid #2a3a4a;border-radius:6px;padding:10px 6px;text-align:center;min-height:76px;display:flex;flex-direction:column;justify-content:center}
-.stat-card.boosted{border-color:#3ad080;box-shadow:0 0 8px rgba(58,208,128,.2)}
-.stat-label{font-size:7px;letter-spacing:.15em;color:#6a7a8a;font-family:'JetBrains Mono',monospace}
-.stat-value{margin-top:4px;font-size:15px;font-weight:800;color:#e6d5a0;font-family:'JetBrains Mono',monospace}
-.stat-bonus{font-size:6px;color:#3ad080;font-family:'JetBrains Mono',monospace;margin-top:3px;min-height:8px}
-.equip-zone{flex:1;padding:24px 16px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(16,22,30,.15)}
-.equip-grid{width:100%;max-width:360px;display:grid;grid-template-columns:62px 1fr 62px;grid-template-rows:56px 34px 100px 42px 40px;gap:5px 8px;align-items:center;justify-items:center}
-.equip-slot{background:#1a242f;border:1px dashed #2a3a4a;border-radius:7px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;width:100%;height:100%}
-.equip-slot.filled{border-style:solid;border-color:#e6d5a0;background:#1e2f3e;box-shadow:0 0 8px rgba(230,213,160,.2)}
-.equip-slot .slot-icon{font-size:16px}
-.equip-slot .slot-name{font-size:6px;letter-spacing:.1em;color:#8a9a8a;margin-top:2px;font-family:'JetBrains Mono',monospace;text-align:center;text-transform:uppercase}
-.equip-slot.filled .slot-name{color:#e6d5a0}
-.equip-slot .slot-empty{font-size:5px;color:#4a5a6a;margin-top:1px;font-family:'JetBrains Mono',monospace}
-.equip-slot.head{grid-column:2;grid-row:1;width:62px;height:56px}
-.equip-slot.amulet{grid-column:2;grid-row:2;width:86px;height:30px}
-.equip-slot.ear-l{grid-column:1;grid-row:1}
-.equip-slot.ear-r{grid-column:3;grid-row:1}
-.equip-slot.weapon{grid-column:1;grid-row:3}
-.equip-slot.armor{grid-column:2;grid-row:3;height:100px;background:#1e2a32}
-.equip-slot.shield{grid-column:3;grid-row:3}
-.equip-slot.ring1{grid-column:1;grid-row:4}
-.equip-slot.gloves{grid-column:2;grid-row:4;width:100%}
-.equip-slot.ring2{grid-column:3;grid-row:4}
-.equip-slot.boots{grid-column:2;grid-row:5;width:100%;height:36px}
-.bar-row{display:flex;flex-direction:column;gap:5px}
-.bar-label{font-size:7px;letter-spacing:.15em;color:#6a7a8a;font-family:'JetBrains Mono',monospace;display:flex;justify-content:space-between}
-.bar-track{height:24px;background:#0a0e14;border-radius:5px;overflow:hidden;border:1px solid #1e2a32}
-.bar-fill{height:100%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;font-family:'JetBrains Mono',monospace}
-.bar-fill.hp{background:linear-gradient(90deg,#b33030,#e05050);color:#fff}
-.bar-fill.mana{background:linear-gradient(90deg,#1a4a9a,#2a6ad0);color:#fff}
-.bar-fill.stamina{background:linear-gradient(90deg,#1a7a4a,#3ad080);color:#fff}
-.bar-fill.xp{background:linear-gradient(90deg,#8a6a1a,#d0b040);color:#fff}
-.bars-inner{display:flex;flex-direction:column;gap:10px}
-.inventory-zone{flex:1;background:rgba(17,24,33,.25);padding:10px 14px;display:flex;flex-direction:column;overflow:auto}
-.inv-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;margin-top:6px}
-.inv-cell{aspect-ratio:1;background:#1a242f;border:1px solid #2a3a4a;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;min-height:38px}
-.inv-cell.has-item{background:#1e2a32;border-color:#3a4a5a}
-.inv-cell.has-item:hover{border-color:#e6d5a0}
-.inv-cell .item-icon{font-size:15px}
-.inv-cell .item-name{font-size:5px;color:#6a7a8a;margin-top:2px;font-family:'JetBrains Mono',monospace;text-align:center}
-.inv-cell .item-bonus{font-size:5px;color:#3ad080;margin-top:1px;font-family:'JetBrains Mono',monospace}
-.inv-cell.empty{opacity:.4}
-.right{width:200px;min-width:200px;background:rgba(14,20,26,1);border-left:1px solid rgba(30,42,50,.5);display:flex;flex-direction:column}
-.chat-header{padding:12px;border-bottom:1px solid #1e2a32;display:flex;align-items:center;gap:8px;background:#141c24}
-.dot{width:8px;height:8px;border-radius:50%;background:#3ad080;box-shadow:0 0 6px #3ad080}
-.chat-title{font-size:9px;letter-spacing:.2em;color:#6a7a8a;font-family:'JetBrains Mono',monospace}
-.chat-body{flex:1;padding:10px;overflow:auto;display:flex;flex-direction:column;gap:8px}
-.sys-msg{background:#1a242f;border-left:2px solid #d0b040;padding:8px;font-size:9px;color:#9a9a7a;line-height:1.3;border-radius:0 6px 6px 0}
-.chat-input{padding:8px;border-top:1px solid #1e2a32;display:flex;gap:6px;background:#12181e}
-.chat-input input{flex:1;background:#0a0e14;border:1px solid #1e2a32;border-radius:6px;padding:8px;font-size:11px;color:#d8d2b8;outline:none}
-.chat-input button{width:32px;background:#e6d5a0;border:none;border-radius:6px;cursor:pointer;font-weight:800;color:#12181e}
-</style>
-</head>
-<body>
-<div class="bg"><img src="./assets/heroes/bg-battlefield.webp" onerror="this.style.display='none'"></div>
-<div class="wrap">
-  <div class="left-nav">
-    <div onclick="location.href='./page3.html'" style="cursor:pointer"><div class="nav-item" style="opacity:1">👤</div><div class="nav-label">HERO</div></div>
-    <div><div class="nav-item active">🎒</div><div class="nav-label">BAG</div></div>
-    <div onclick="location.href='./page5.html'" style="cursor:pointer"><div class="nav-item" style="opacity:1">📜</div><div class="nav-label">SKILLS</div></div>
-    <div onclick="location.href='./page6.html'" style="cursor:pointer"><div class="nav-item" style="opacity:1">⚔️</div><div class="nav-label">BATTLE</div></div>
-    <div onclick="location.href='./index.html'" style="cursor:pointer"><div class="nav-item" style="opacity:1">🗺️</div><div class="nav-label">MAP</div></div>
-  </div>
-  <div class="center-col">
-    <div class="top-row">
-      <div class="stats-panel" id="statsPanel"><div class="panel-title">СТАТЫ ГЕРОЯ — 6 (A=B)</div></div>
-      <div class="equip-zone">
-        <div class="panel-title">ЭКИПИРОВКА — 11 • КЛИК СНЯТЬ</div>
-        <div class="equip-grid" id="equipGrid">
-          <div class="equip-slot ear-l" data-slot="ear1"><div class="slot-icon">👂</div><div class="slot-name">Серьга 1</div><div class="slot-empty">пусто</div></div>
-          <div class="equip-slot head" data-slot="head"><div class="slot-icon">🪖</div><div class="slot-name">Шлем</div><div class="slot-empty">пусто</div></div>
-          <div class="equip-slot ear-r" data-slot="ear2"><div class="slot-icon">👂</div><div class="slot-name">Серьга 2</div><div class="slot-empty">пусто</div></div>
-          <div class="equip-slot amulet" data-slot="amulet"><div class="slot-icon">📿</div><div class="slot-name">Амулет</div><div class="slot-empty">пусто</div></div>
-          <div class="equip-slot weapon" data-slot="weapon"><div class="slot-icon">⚔️</div><div class="slot-name">Оружие</div><div class="slot-empty">пусто</div></div>
-          <div class="equip-slot armor" data-slot="armor"><div class="slot-icon">🦺</div><div class="slot-name">Броня</div><div class="slot-empty">пусто</div></div>
-          <div class="equip-slot shield" data-slot="shield"><div class="slot-icon">🛡️</div><div class="slot-name">Щит</div><div class="slot-empty">пусто</div></div>
-          <div class="equip-slot ring1" data-slot="ring1"><div class="slot-icon">💍</div><div class="slot-name">Кольцо 1</div><div class="slot-empty">пусто</div></div>
-          <div class="equip-slot gloves" data-slot="gloves"><div class="slot-icon">🧤</div><div class="slot-name">Перчатки</div><div class="slot-empty">пусто</div></div>
-          <div class="equip-slot ring2" data-slot="ring2"><div class="slot-icon">💍</div><div class="slot-name">Кольцо 2</div><div class="slot-empty">пусто</div></div>
-          <div class="equip-slot boots" data-slot="boots"><div class="slot-icon">👢</div><div class="slot-name">Ботинки</div><div class="slot-empty">пусто</div></div>
-        </div>
-      </div>
-      <div class="bars-panel" id="barsPanel"><div class="panel-title">БАРЫ ГЕРОЯ — 4 (C=D)</div></div>
-    </div>
-    <div class="inventory-zone">
-      <div class="panel-title" style="display:flex;justify-content:space-between"><span>ИНВЕНТАРЬ — 50 (11 предметов) • КЛИК НАДЕТЬ</span><span id="equipCount">0/11</span></div>
-      <div class="inv-grid" id="invGrid"></div>
-    </div>
-  </div>
-  <div class="right">
-    <div class="chat-header"><div class="dot"></div><div class="chat-title">CHAT + ЛОГИ v1</div></div>
-    <div class="chat-body" id="chatBody"><div class="sys-msg">Система: Шмот сохраняется между страницами (v1) — стабильно</div></div>
-    <div class="chat-input"><input id="chatIn" placeholder="..."><button id="chatBtn">▶</button></div>
-  </div>
-</div>
-<script src="./assets/js/db.js"></script>
-<script src="./assets/js/storage.js"></script>
+<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Cache-Control" content="no-store"><title>VOLAND — Сумка</title><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet"><style>
+:root{--bg:#080a08;--p:#0e100e;--c:#0a0c0a;--l:#1e2e1e;--l2:#2a5a3a;--g:#d0b040;--gr:#3ad080;--t:#c8d0c8;--d:#5a7a5a}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--t);font-family:Inter,sans-serif;display:flex;min-height:100vh}
+.nav{width:64px;background:#0c0e0c;border-right:1px solid var(--l);display:flex;flex-direction:column;align-items:center;padding:16px 0;gap:12px;flex-shrink:0}
+.ni{width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:8px;background:#121412;border:1px solid var(--l);font-size:20px;text-decoration:none;color:#6a8a6a}
+.ni.a{background:#1a2a1a;border-color:var(--l2);color:#e0e8e0;box-shadow:0 0 12px rgba(58,208,128,.18)}
+.main{flex:1;display:flex;flex-direction:column;padding:14px;gap:12px;overflow:auto}
+.top{display:flex;gap:12px;align-items:stretch}
+.sp{width:280px;flex-shrink:0;background:var(--p);border:1px solid var(--l);border-radius:10px;padding:12px;display:flex;flex-direction:column}
+.sg{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,1fr);gap:8px;flex:1}
+.sb{background:#121412;border:1px solid var(--l);border-radius:6px;padding:8px 10px;display:flex;flex-direction:column;justify-content:center}
+.sb.b{border-color:var(--gr);box-shadow:0 0 8px rgba(58,208,128,.22)}
+.sl{font-family:'JetBrains Mono';font-size:9px;color:var(--d);text-transform:uppercase;letter-spacing:.08em}
+.sv{font-family:'JetBrains Mono';font-size:16px;font-weight:700;color:#e0e8e0;margin-top:2px}
+.ez{flex:1;background:var(--p);border:1px solid var(--l);border-radius:10px;padding:12px;display:flex;flex-direction:column}
+.eh{font-family:'JetBrains Mono';font-size:11px;letter-spacing:.12em;color:var(--d);text-transform:uppercase;margin-bottom:10px;display:flex;justify-content:space-between}
+.eg{display:flex;gap:8px;flex:1}
+.ec{display:flex;flex-direction:column;gap:8px;flex:1}.ec.ct{flex:1.15}
+.es{background:#121412;border:1px solid var(--l);border-radius:6px;display:flex;align-items:center;padding:0 10px;gap:10px;cursor:pointer}
+.es:hover{border-color:var(--l2)}.es.cs{height:78px}.es.ss{height:136px}.es.f{background:#141e14;border-color:var(--l2)}
+.si{width:28px;height:28px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:18px;background:var(--c);border-radius:4px;border:1px solid var(--l)}
+.sn{font-family:'JetBrains Mono';font-size:11px;text-transform:uppercase;color:#8aaa8a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb2{font-family:'JetBrains Mono';font-size:10px;color:var(--gr);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bp{width:250px;flex-shrink:0;background:var(--p);border:1px solid var(--l);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:12px}
+.bl{font-family:'JetBrains Mono';font-size:9px;color:var(--d);text-transform:uppercase;display:flex;justify-content:space-between}
+.bt{height:8px;background:#121412;border:1px solid var(--l);border-radius:999px;overflow:hidden;margin-top:4px}
+.bf{height:100%;background:linear-gradient(90deg,var(--gr),#2aaa60);transition:width .3s}.bf.gold{background:linear-gradient(90deg,#d0b040,#a08020)}.bf.xp{background:linear-gradient(90deg,#6a8aff,#4a5ad0)}
+.inv{background:var(--p);border:1px solid var(--l);border-radius:10px;padding:12px}
+.it{font-family:'JetBrains Mono';font-size:12px;letter-spacing:.08em;color:#8aaa8a;text-transform:uppercase;margin-bottom:12px}
+.ig{display:grid;grid-template-columns:repeat(10,1fr);gap:6px}
+.ic{aspect-ratio:1;background:var(--c);border:1px solid var(--l);border-radius:6px;display:flex;align-items:center;justify-content:center;position:relative;cursor:pointer;transition:.15s}
+.ic:hover{border-color:var(--l2)}.ic.hi{background:#121412;border-color:#2a3a2a}.ic.hi.resource{border-color:#2a5a3a}.ic.hi.gold{border-color:#d0b040;box-shadow:0 0 10px rgba(208,176,64,.35),inset 0 0 8px rgba(208,176,64,.1)}.ic.hi.equip{border-color:#3a4a6a}
+.ii{font-size:20px;line-height:1;pointer-events:none}
+.ict{position:absolute;bottom:2px;right:3px;font-family:'JetBrains Mono';font-size:8px;font-weight:700;color:#e0e8e0;background:rgba(0,0,0,.75);padding:1px 3px;border-radius:3px;line-height:1.2;min-width:10px;text-align:center}
+@media(max-width:1100px){.top{flex-direction:column}.sp,.bp{width:100%}.ig{grid-template-columns:repeat(5,1fr)}}
+</style></head><body>
+<div class="nav"><a class="ni" href="page3.html">🧙</a><a class="ni a" href="page4.html">🎒</a><a class="ni" href="page6.html">🗺️</a><a class="ni" href="page7.html">👹</a><a class="ni" href="page8.html">⚔️</a><a class="ni" href="page9.html">🎯</a></div>
+<div class="main"><div class="top"><div class="sp"><div class="eh"><span>ХАРАКТЕРИСТИКИ</span><span id="lv">LVL1</span></div><div class="sg" id="sg"></div></div>
+<div class="ez"><div class="eh"><span>ЭКИПИРОВКА 11</span><span style="font-size:9px">КЛИК СНЯТЬ</span></div><div class="eg"><div class="ec" id="cL"></div><div class="ec ct" id="cC"></div><div class="ec" id="cR"></div></div></div>
+<div class="bp"><div><div class="bl"><span>HP</span><span id="hpT">100/100</span></div><div class="bt"><div class="bf" id="hpB" style="width:100%"></div></div></div>
+<div><div class="bl"><span>ЗОЛОТО</span><span id="gT">0</span></div><div class="bt"><div class="bf gold" id="gB" style="width:10%"></div></div></div>
+<div><div class="bl"><span>XP</span><span id="xT">0/1000</span></div><div class="bt"><div class="bf xp" id="xB" style="width:0%"></div></div></div>
+<div style="font-family:'JetBrains Mono';font-size:9px;color:var(--d);line-height:1.4" id="summ"></div></div></div>
+<div class="inv"><div class="it" id="it">ИНВЕНТАРЬ - 0/50 - 0 GOLD - 0 RES - КЛИК НАДЕТЬ</div><div class="ig" id="ig"></div></div></div>
+<script src="assets/js/config.js?v=6"></script><script src="assets/js/db.js?v=6"></script><script src="assets/js/storage.js?v=6"></script>
 <script>
-if (!volandHasSave()){ location.href='./page2.html'; }
-
-let equipped = volandGetEquippedItems();
-let inv = [];
-function rebuildInv(){
-  const ids = new Set(Object.values(equipped).map(i=>i.id));
-  inv = [];
-  // resources - stackable up to 100
-  try{
-    if(typeof volandGetResources==='function' && window.VOLAND_RESOURCES){
-      let res = volandGetResources();
-      for(let rid in res){
-        let cnt = res[rid]||0;
-        if(cnt>0){
-          let rdef = VOLAND_RESOURCES.find(r=>r.id===rid);
-          if(rdef){
-            inv.push({id:rid, icon:rdef.icon, name:rdef.name, desc:cnt+'/100 • '+rdef.desc, isResource:true, count:cnt});
-          }
-        }
-      }
-    }
-  }catch(e){}
-  // dropped equip from bosses - individual
-  try{
-    if(typeof volandGetInventory==='function'){
-      let dropped = volandGetInventory();
-      for(let d of dropped){
-        let item = VOLAND_ITEMS.find(i=>i.id===d.id);
-        if(item && !ids.has(item.id)){
-          // check not already in inv as resource
-          inv.push({...item, isDropped:true, dropTime:d.time});
-        }
-      }
-    }
-  }catch(e){}
-  VOLAND_ITEMS.forEach(it=>{ if(!ids.has(it.id)) { 
-    // avoid duplicate if already added as dropped
-    if(!inv.find(x=>x && x.id===it.id && !x.isResource)) inv.push(it); 
-  }});
-  while(inv.length<50) inv.push(null);
-}
-rebuildInv();
-
-const invGrid=document.getElementById('invGrid');
-const statsPanel=document.getElementById('statsPanel');
-const barsPanel=document.getElementById('barsPanel');
-const equipCount=document.getElementById('equipCount');
-const chatBody=document.getElementById('chatBody');
-
-function renderStats(){
-  const {cur, bonus} = volandCalcStats();
-  const order=[{key:'HP',label:'HP'},{key:'MANA',label:'MANA'},{key:'DEF',label:'DEF'},{key:'CRIT',label:'CRIT',suffix:'%'},{key:'DMG',label:'DAMAGE'},{key:'DODGE',label:'DODGE',suffix:'%'}];
-  const title=statsPanel.querySelector('.panel-title');
-  statsPanel.innerHTML=''; statsPanel.appendChild(title);
-  const grid=document.createElement('div'); grid.className='stats-grid-inner';
-  order.forEach(o=>{
-    const total=cur[o.key]||0; const add=bonus[o.key]||0;
-    const div=document.createElement('div'); div.className='stat-card'+(add>0?' boosted':'');
-    const suf=o.suffix||'';
-    div.innerHTML=`<div class="stat-label">${o.label}</div><div class="stat-value">${total}${suf}</div><div class="stat-bonus">${add>0?`+${add}${suf} от шмота`:''}</div>`;
-    grid.appendChild(div);
-  });
-  statsPanel.appendChild(grid);
-}
-function renderBars(){
-  const {cur} = volandCalcStats();
-  const title=barsPanel.querySelector('.panel-title');
-  barsPanel.innerHTML=''; barsPanel.appendChild(title);
-  const inner=document.createElement('div'); inner.className='bars-inner';
-  [{label:'HP',cls:'hp',cur:cur.HP,max:cur.HP},{label:'MANA',cls:'mana',cur:cur.MANA,max:cur.MANA},{label:'STAMINA',cls:'stamina',cur:100,max:100,txt:'100 / 100'},{label:'XP',cls:'xp',cur:100,max:100,txt:'LVL 7 • BAG'}].forEach(b=>{
-    const row=document.createElement('div'); row.className='bar-row';
-    const txt=b.txt||`${b.cur} / ${b.max}`;
-    row.innerHTML=`<div class="bar-label"><span>${b.label}</span><span>${b.max}</span></div><div class="bar-track"><div class="bar-fill ${b.cls}" style="width:100%">${txt}</div></div>`;
-    inner.appendChild(row);
-  });
-  barsPanel.appendChild(inner);
-}
-function log(m){const d=document.createElement('div'); d.className='sys-msg'; d.textContent=m; chatBody.appendChild(d); chatBody.scrollTop=9999;}
-function renderInv(){
-  invGrid.innerHTML='';
-  for(let i=0;i<50;i++){
-    const cell=document.createElement('div'); cell.className='inv-cell';
-    const it=inv[i];
-    if(it){ 
-      cell.classList.add('has-item'); 
-      if(it.isResource){
-        cell.innerHTML=`<div class="item-icon">${it.icon}</div><div class="item-name">${it.name}</div><div class="item-bonus">${it.count}/100</div><div style="font:700 8px JetBrains Mono;color:#e6d5a0;position:absolute;bottom:2px;right:4px">${it.count}</div>`;
-        cell.style.position='relative';
-        cell.onclick=()=>{ log(it.name+': '+it.count+'/100 — стак до 100'); };
-      } else {
-        cell.innerHTML=`<div class="item-icon">${it.icon}</div><div class="item-name">${it.name}</div><div class="item-bonus">${it.desc}</div>`; 
-        cell.onclick=()=>equipItem(it,i); 
-      }
-    }
-    else cell.classList.add('empty');
-    invGrid.appendChild(cell);
-  }
-}
-function renderEquip(){
-  document.querySelectorAll('.equip-slot').forEach(el=>{
-    const slot=el.dataset.slot; const it=equipped[slot];
-    const nameEl=el.querySelector('.slot-name'); const iconEl=el.querySelector('.slot-icon'); const emptyEl=el.querySelector('.slot-empty');
-    if(it){ el.classList.add('filled'); iconEl.textContent=it.icon; nameEl.textContent=it.name; emptyEl.textContent=it.desc; emptyEl.style.color='#3ad080'; }
-    else{
-      el.classList.remove('filled');
-      const defs={head:{icon:'🪖',name:'Шлем'},ear1:{icon:'👂',name:'Серьга 1'},ear2:{icon:'👂',name:'Серьга 2'},amulet:{icon:'📿',name:'Амулет'},armor:{icon:'🦺',name:'Броня'},weapon:{icon:'⚔️',name:'Оружие'},shield:{icon:'🛡️',name:'Щит'},ring1:{icon:'💍',name:'Кольцо 1'},ring2:{icon:'💍',name:'Кольцо 2'},gloves:{icon:'🧤',name:'Перчатки'},boots:{icon:'👢',name:'Ботинки'}};
-      const def=defs[slot]; if(def){ iconEl.textContent=def.icon; nameEl.textContent=def.name; }
-      emptyEl.textContent='пусто'; emptyEl.style.color='';
-    }
-  });
-  equipCount.textContent=Object.keys(equipped).length+'/11';
-}
-function equipItem(item, idx){
-  const slot=item.slot;
-  if(equipped[slot]){
-    const old=equipped[slot];
-    const j=inv.findIndex(v=>v==null);
-    inv[j=== -1 ? inv.length : j]=old;
-    log(`Снято: ${old.name}`);
-  }
-  equipped[slot]=item;
-  inv[idx]=null;
-  rebuildInv(); volandSaveEquip(equipped);
-  renderInv(); renderEquip(); renderStats(); renderBars();
-  log(`Экипировано: ${item.name} ${item.desc} — сохранено на всех страницах`);
-}
-function unequipSlot(el){
-  const slot=el.dataset.slot; const it=equipped[slot]; if(!it) return;
-  delete equipped[slot];
-  rebuildInv(); volandSaveEquip(equipped);
-  renderInv(); renderEquip(); renderStats(); renderBars();
-  log(`Снято: ${it.name}`);
-}
-document.querySelectorAll('.equip-slot').forEach(el=>{ el.onclick=()=>unequipSlot(el); });
-renderInv(); renderEquip(); renderStats(); renderBars();
-const chatIn=document.getElementById('chatIn'); const chatBtn=document.getElementById('chatBtn');
-chatBtn.onclick=()=>{ const v=chatIn.value.trim(); if(!v) return; log('Ты: '+v); chatIn.value=''; };
-chatIn.addEventListener('keydown',e=>{ if(e.key==='Enter') chatBtn.click(); });
-</script>
-</body>
-</html>
+const RO=['quartz','wood','diamond','fang','essence'],RI={quartz:'🔷',wood:'🪵',diamond:'💎',fang:'🦷',essence:'💧'};
+const SL=[{i:'head',n:'Шлем',c:'cC',h:'cs',ic:'🪖'},{i:'amulet',n:'Амулет',c:'cC',h:'cs',ic:'📿'},{i:'armor',n:'Броня',c:'cC',h:'cs',ic:'🦺'},{i:'gloves',n:'Перчатки',c:'cC',h:'cs',ic:'🧤'},{i:'boots',n:'Сапоги',c:'cC',h:'cs',ic:'🥾'},{i:'ear1',n:'Серьга L',c:'cL',h:'ss',ic:'💍'},{i:'weapon',n:'Оружие',c:'cL',h:'ss',ic:'🗡️'},{i:'ring1',n:'Кольцо L',c:'cL',h:'ss',ic:'💍'},{i:'ear2',n:'Серьга R',c:'cR',h:'ss',ic:'💍'},{i:'shield',n:'Щит',c:'cR',h:'ss',ic:'🛡️'},{i:'ring2',n:'Кольцо R',c:'cR',h:'ss',ic:'💍'}];
+const ST=['atk','def','hp','mp','spd','crit'];
+function GG(){try{if(typeof volandGetGold==='function')return volandGetGold()}catch(e){}return parseInt(localStorage.getItem('voland_gold')||'0')||0}
+function GR(){try{if(typeof volandGetResources==='function')return volandGetResources()}catch(e){}try{return JSON.parse(localStorage.getItem('voland_resources')||'{}')}catch(e){return{}}}
+function GI(){try{if(typeof volandGetInventory==='function')return volandGetInventory()}catch(e){}try{return JSON.parse(localStorage.getItem('voland_inventory')||'[]')}catch(e){return[]}}
+function GE(){try{if(typeof volandGetEquipped==='function')return volandGetEquipped()}catch(e){}try{return JSON.parse(localStorage.getItem('voland_equip')||'{}')}catch(e){return{}}}
+function GX(){try{if(typeof volandGetXp==='function')return volandGetXp()}catch(e){}return parseInt(localStorage.getItem('voland_xp')||'0')||0}
+function GL(){try{if(typeof volandGetLevelInfo==='function')return volandGetLevelInfo()}catch(e){}let x=GX(),th=[0,1000,3000,6000];for(let i=4;i<50;i++)th.push(th[i-1]+3000+(i-3)*1000);let lv=1;for(let i=0;i<th.length;i++){if(x>=th[i])lv=i+1;else break}let c=th[lv-1]||0,n=th[lv]||c+4000;return{level:lv,cur:x-c,need:n-c,total:x}}
+function SE(o){try{if(typeof volandSaveEquipped==='function'){volandSaveEquipped(o);return}}catch(e){}localStorage.setItem('voland_equip',JSON.stringify(o))}
+function SI(a){try{if(typeof volandSaveInventory==='function'){volandSaveInventory(a);return}}catch(e){}localStorage.setItem('voland_inventory',JSON.stringify(a))}
+function BT(){let s=document.getElementById('sg');s.innerHTML='';ST.forEach(k=>{let d=document.createElement('div');d.className='sb';d.id='s-'+k;d.innerHTML='<div class=sl>'+k+'</div><div class=sv id=v-'+k+'>0</div>';s.appendChild(d)});['cL','cC','cR'].forEach(id=>document.getElementById(id).innerHTML='');SL.forEach(x=>{let p=document.getElementById(x.c),e=document.createElement('div');e.className='es '+x.h;e.dataset.s=x.i;e.innerHTML='<div class=si>'+x.ic+'</div><div style="flex:1;min-width:0"><div class=sn>'+x.n+'</div><div class=sb2 id=b-'+x.i+'>— пусто —</div></div>';e.onclick=()=>UQ(x.i);p.appendChild(e)})}
+function UE(){let e=GE();SL.forEach(s=>{let it=e[s.i],b=document.getElementById('b-'+s.i),el=document.querySelector('.es[data-s="'+s.i+'"]');if(it){el.classList.add('f');b.textContent=(it.bonus||'')+' '+(it.name||'');el.querySelector('.si').textContent=it.icon||s.ic}else{el.classList.remove('f');b.textContent='— пусто —';el.querySelector('.si').textContent=s.ic}})}
+function US(){let e=GE(),base={atk:10,def:10,hp:100,mp:50,spd:10,crit:5},ad={atk:0,def:0,hp:0,mp:0,spd:0,crit:0};Object.values(e).forEach(it=>{if(!it)return;if(it.stats){for(let k in it.stats)ad[k]=(ad[k]||0)+it.stats[k]}else if(it.bonusValue&&it.bonusStat)ad[it.bonusStat]=(ad[it.bonusStat]||0)+it.bonusValue});ST.forEach(k=>{let v=(base[k]||0)+(ad[k]||0);document.getElementById('v-'+k).textContent=v;let box=document.getElementById('s-'+k);if((ad[k]||0)>0)box.classList.add('b');else box.classList.remove('b')});document.getElementById('hpT').textContent=(base.hp+(ad.hp||0))+'/'+(base.hp+(ad.hp||0))}
+function UB(){let g=GG(),li=GL();document.getElementById('gT').textContent=g;document.getElementById('gB').style.width=Math.min(100,g/5)+'%';document.getElementById('xT').textContent=li.cur+'/'+li.need;document.getElementById('xB').style.width=Math.min(100,li.need?li.cur/li.need*100:0)+'%';document.getElementById('lv').textContent='LVL '+li.level;let r=GR(),sum=Object.values(r).reduce((a,b)=>a+(b||0),0);document.getElementById('summ').textContent='Ресурсов '+sum+' • Типов '+(Object.keys(r).filter(k=>r[k]>0).length)+' • Экип '+Object.keys(GE()).filter(k=>GE()[k]).length+'/11'}
+function RB(){let grid=document.getElementById('ig');grid.innerHTML='';let g=GG(),r=GR(),inv=GI(),all=[];if(g>0)all.push({id:'gold',icon:'🪙',name:'Золото',isGold:1,count:g,type:'gold'});RO.forEach(id=>{let c=r[id]||0;if(c>0){let def=(typeof VOLAND_RESOURCES!=='undefined'&&VOLAND_RESOURCES[id])?VOLAND_RESOURCES[id]:{icon:RI[id],name:id};all.push({id,icon:def.icon||RI[id],name:def.name||id,isRes:1,count:c,type:'res'})}});inv.forEach(it=>{if(it)all.push({...it,isEq:1,type:'eq'})});all=all.slice(0,50);let filled=all.length,rt=Object.keys(r).filter(k=>r[k]>0).length;document.getElementById('it').textContent='ИНВЕНТАРЬ - '+filled+'/50 - '+g+' GOLD - '+rt+' RES - КЛИК НАДЕТЬ';for(let i=0;i<50;i++){let cell=document.createElement('div');cell.className='ic';if(i<all.length){let it=all[i];cell.classList.add('hi');if(it.isGold)cell.classList.add('gold');else if(it.isRes)cell.classList.add('resource');else cell.classList.add('equip');cell.innerHTML='<div class=ii>'+(it.icon||'📦')+'</div>'+(it.count>1||it.isGold?'<div class=ict>'+(it.count>99?'99+':it.count)+'</div>':'');cell.title=it.name+' '+(it.count>1?'x'+it.count:'');if(it.isEq)cell.onclick=()=>EQ(it); }grid.appendChild(cell)}}
+function EQ(item){if(!item.slot){let g=SL.find(s=>item.id&&item.id.includes(s.i))||SL.find(s=>s.i==='weapon');item.slot=g.i}let eq=GE(),old=eq[item.slot];eq[item.slot]=item;SE(eq);let inv=GI(),idx=inv.findIndex(x=>x&&x.id===item.id);if(idx>=0){inv.splice(idx,1);SI(inv)}if(old){let inv2=GI();inv2.push(old);SI(inv2)}RF()}
+function UQ(sid){let eq=GE(),it=eq[sid];if(!it)return;delete eq[sid];SE(eq);let inv=GI();inv.push(it);SI(inv);RF()}
+function RF(){UE();US();UB();RB()}
+BT();RF();try{localStorage.setItem('voland_version','6')}catch(e){}
+</script></body></html>
