@@ -6,7 +6,6 @@
 <title>VOLAND - BAG</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") center/cover no-repeat fixed #0a0e14;color:#d8d2b8;font-family:Inter,Arial,sans-serif;overflow:hidden}
 .bg{position:fixed;inset:0;z-index:0}.bg img{width:100%;height:100%;object-fit:cover}
@@ -26,25 +25,25 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
 .stat-label{font-size:8px;letter-spacing:.15em;color:#6a7a8a;font-family:'JetBrains Mono',monospace}
 .stat-value{margin-top:6px;font-size:18px;font-weight:800;color:#e6d5a0;font-family:'JetBrains Mono',monospace}
 .stat-bonus{font-size:11px;color:#3ad080;font-family:'JetBrains Mono',monospace;margin-top:5px;min-height:12px;font-weight:700}
-.equip-zone{flex:1;padding:16px 12px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(16,22,30,.15)}
-.equip-grid{width:100%;max-width:640px;display:grid;grid-template-columns:110px 1fr 110px;grid-template-rows:86px 56px 160px 72px 72px;gap:10px 14px;align-items:stretch;justify-items:stretch}
+.equip-zone{flex:1;padding:32px 16px 24px 16px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;background:rgba(16,22,30,.15)}
+.equip-grid{width:100%;max-width:640px;display:grid;grid-template-columns:110px 1fr 110px;grid-template-rows:76px 76px 110px 76px 76px;gap:12px 14px;align-items:stretch;justify-items:stretch;margin-top:8px}
 .equip-slot{background:#1a242f;border:1px dashed #2a3a4a;border-radius:12px;display:grid;grid-template-columns:44px 1fr;grid-template-rows:auto auto;column-gap:10px;row-gap:2px;align-items:center;cursor:pointer;width:100%;height:100%;padding:8px 10px;justify-items:start}
 .equip-slot.filled{border-style:solid;border-color:#e6d5a0;background:#1e2f3e;box-shadow:0 0 14px rgba(230,213,160,.28)}
-.equip-slot .slot-icon{grid-column:1;grid-row:1 / span 2;font-size:30px;justify-self:center;align-self:center}
+.equip-slot .slot-icon{grid-column:1;grid-row:1 / span 2;font-size:28px;justify-self:center;align-self:center}
 .equip-slot .slot-name{grid-column:2;grid-row:1;font-size:11px;letter-spacing:.06em;color:#8a9a8a;font-family:'JetBrains Mono',monospace;text-align:left;text-transform:uppercase;font-weight:800;line-height:1.1;margin-top:0}
 .equip-slot.filled .slot-name{color:#e6d5a0}
 .equip-slot .slot-empty{grid-column:2;grid-row:2;font-size:10px;color:#7ac090;font-family:'JetBrains Mono',monospace;text-align:left;line-height:1.2;margin-top:0;font-weight:600}
-.equip-slot.head{grid-column:2;grid-row:1;width:100%;height:86px}
-.equip-slot.amulet{grid-column:2;grid-row:2;width:100%;height:56px}
-.equip-slot.ear-l{grid-column:1;grid-row:1}
-.equip-slot.ear-r{grid-column:3;grid-row:1}
-.equip-slot.weapon{grid-column:1;grid-row:3}
-.equip-slot.armor{grid-column:2;grid-row:3;height:160px;background:#1e2a32;grid-template-columns:48px 1fr}
-.equip-slot.shield{grid-column:3;grid-row:3}
-.equip-slot.ring1{grid-column:1;grid-row:4}
-.equip-slot.gloves{grid-column:2;grid-row:4;width:100%;height:72px}
-.equip-slot.ring2{grid-column:3;grid-row:4}
-.equip-slot.boots{grid-column:2;grid-row:5;width:100%;height:72px}
+.equip-slot.head{grid-column:2;grid-row:1;width:100%;height:76px}
+.equip-slot.amulet{grid-column:2;grid-row:2;width:100%;height:76px}
+.equip-slot.ear-l{grid-column:1;grid-row:1;width:100%;height:76px}
+.equip-slot.ear-r{grid-column:3;grid-row:1;width:100%;height:76px}
+.equip-slot.weapon{grid-column:1;grid-row:3;width:100%;height:110px}
+.equip-slot.armor{grid-column:2;grid-row:3;width:100%;height:76px;background:#1e2a32;grid-template-columns:44px 1fr}
+.equip-slot.shield{grid-column:3;grid-row:3;width:100%;height:110px}
+.equip-slot.ring1{grid-column:1;grid-row:4;width:100%;height:76px}
+.equip-slot.gloves{grid-column:2;grid-row:4;width:100%;height:76px}
+.equip-slot.ring2{grid-column:3;grid-row:4;width:100%;height:76px}
+.equip-slot.boots{grid-column:2;grid-row:5;width:100%;height:76px}
 .bar-row{display:flex;flex-direction:column;gap:5px}
 .bar-label{font-size:7px;letter-spacing:.15em;color:#6a7a8a;font-family:'JetBrains Mono',monospace;display:flex;justify-content:space-between}
 .bar-track{height:24px;background:#0a0e14;border-radius:5px;overflow:hidden;border:1px solid #1e2a32}
