@@ -61,26 +61,13 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
 .bars-inner{display:flex;flex-direction:column;gap:10px}
 .inventory-zone{flex:1;background:rgba(17,24,33,.25);padding:12px 14px;display:flex;flex-direction:column;overflow:auto;margin-top:4px}
 .inv-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;margin-top:6px}
-.inv-cell{aspect-ratio:1;background:#1a242f;border:1px solid #2a3a4a;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;min-height:38px;position:relative;overflow:hidden;transition:all .2s}
+.inv-cell{aspect-ratio:1;background:#1a242f;border:1px solid #2a3a4a;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;min-height:38px}
 .inv-cell.has-item{background:#1e2a32;border-color:#3a4a5a}
-.inv-cell.has-item:hover{border-color:#e6d5a0;transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.3)}
-.inv-cell.has-item.resource{border-color:#2a5a3a;background:linear-gradient(135deg,#1e2a32,#121a12)}
-.inv-cell.has-item.resource:hover{border-color:#3a7a4a;box-shadow:0 0 12px rgba(58,208,128,.15)}
-.inv-cell.has-item.gold{border-color:#d0b040;background:linear-gradient(135deg,#1a1810,#16140a);box-shadow:0 0 12px rgba(208,176,64,.35), inset 0 0 12px rgba(208,176,64,.08)}
-.inv-cell.has-item.gold:hover{border-color:#e8c860;box-shadow:0 0 20px rgba(208,176,64,.5), 0 6px 16px rgba(0,0,0,.4);transform:translateY(-2px) scale(1.03)}
-.inv-cell.has-item.equip{border-color:#3a4a6a;background:linear-gradient(135deg,#1e2a32,#12141a)}
-.inv-cell .item-icon{font-size:20px;line-height:1;filter:drop-shadow(0 1px 2px rgba(0,0,0,.5));transition:transform .2s}
-.inv-cell:hover .item-icon{transform:scale(1.1)}
-.inv-cell.has-item.gold .item-icon{filter:drop-shadow(0 0 6px rgba(208,176,64,.6))}
+.inv-cell.has-item:hover{border-color:#e6d5a0}
+.inv-cell .item-icon{font-size:15px}
 .inv-cell .item-name{font-size:5px;color:#6a7a8a;margin-top:2px;font-family:'JetBrains Mono',monospace;text-align:center}
-.inv-cell .item-bonus{font-size:11px;color:#3ad080;margin-top:2px;font-family:'JetBrains Mono',monospace;font-weight:800;line-height:1.1;text-align:center}
-.inv-cell .item-count{position:absolute;bottom:3px;right:4px;font-family:'JetBrains Mono';font-size:8px;font-weight:700;color:#e0e8e0;background:rgba(0,0,0,.82);padding:2px 4px;border-radius:4px;line-height:1.1;min-width:14px;text-align:center;border:1px solid rgba(255,255,255,.1);box-shadow:0 1px 3px rgba(0,0,0,.5);pointer-events:none}
-.inv-cell.has-item.gold .item-count{background:linear-gradient(135deg,#d0b040,#b89630);color:#000;font-weight:800}
-.inv-cell.has-item.resource .item-count{background:rgba(0,0,0,.75)}
-.inv-cell.empty{opacity:.32}
-.inv-cell.rarity-green{border-color:#3ad080}
-.inv-cell.rarity-blue{border-color:#5a8aff;box-shadow:0 0 8px rgba(90,138,255,.2)}
-.inv-cell.rarity-legend{border-color:#d0b040;box-shadow:0 0 12px rgba(208,176,64,.4)}
+.inv-cell .item-bonus{font-size:13px;color:#3ad080;margin-top:2px;font-family:'JetBrains Mono',monospace;font-weight:800;line-height:1.1}
+.inv-cell.empty{opacity:.4}
 .right{width:200px;min-width:200px;background:rgba(14,20,26,1);border-left:1px solid rgba(30,42,50,.5);display:flex;flex-direction:column}
 .chat-header{padding:12px;border-bottom:1px solid #1e2a32;display:flex;align-items:center;gap:8px;background:#141c24}
 .dot{width:8px;height:8px;border-radius:50%;background:#3ad080;box-shadow:0 0 6px #3ad080}
@@ -99,9 +86,9 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
     <div onclick="location.href='./page3.html'"><div class="nav-item">👤</div><div class="nav-label">HERO</div></div>
     <div><div class="nav-item active">🎒</div><div class="nav-label">BAG</div></div>
     <div onclick="location.href='./page5.html'"><div class="nav-item">📜</div><div class="nav-label">SKILLS</div></div>
-    <div onclick="location.href='./page6.html'"><div class="nav-item">⚔</div><div class="nav-label">BATTLE</div></div>
+    <div onclick="location.href='./page6.html'"><div class="nav-item">⚔️</div><div class="nav-label">BATTLE</div></div>
     <div onclick="location.href='./page9.html'"><div class="nav-item">🎯</div><div class="nav-label">MISSIONS</div></div>
-    <div onclick="location.href='./index.html'"><div class="nav-item">🗺</div><div class="nav-label">MAP</div></div>
+    <div onclick="location.href='./index.html'"><div class="nav-item">🗺️</div><div class="nav-label">MAP</div></div>
   </div>
   <div class="center-col">
     <div class="top-row">
@@ -111,7 +98,7 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
         <div class="equip-grid" id="equipGrid">
           <div class="equip-col left-col">
             <div class="equip-slot ear-l" data-slot="ear1"><div class="slot-icon">👂</div><div class="slot-name">Серьга 1</div><div class="slot-empty">пусто</div></div>
-            <div class="equip-slot weapon" data-slot="weapon"><div class="slot-icon">⚔</div><div class="slot-name">Оружие</div><div class="slot-empty">пусто</div></div>
+            <div class="equip-slot weapon" data-slot="weapon"><div class="slot-icon">⚔️</div><div class="slot-name">Оружие</div><div class="slot-empty">пусто</div></div>
             <div class="equip-slot ring1" data-slot="ring1"><div class="slot-icon">💍</div><div class="slot-name">Кольцо 1</div><div class="slot-empty">пусто</div></div>
           </div>
           <div class="equip-col center-col-grid">
@@ -123,7 +110,7 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
           </div>
           <div class="equip-col right-col">
             <div class="equip-slot ear-r" data-slot="ear2"><div class="slot-icon">👂</div><div class="slot-name">Серьга 2</div><div class="slot-empty">пусто</div></div>
-            <div class="equip-slot shield" data-slot="shield"><div class="slot-icon">🛡</div><div class="slot-name">Щит</div><div class="slot-empty">пусто</div></div>
+            <div class="equip-slot shield" data-slot="shield"><div class="slot-icon">🛡️</div><div class="slot-name">Щит</div><div class="slot-empty">пусто</div></div>
             <div class="equip-slot ring2" data-slot="ring2"><div class="slot-icon">💍</div><div class="slot-name">Кольцо 2</div><div class="slot-empty">пусто</div></div>
           </div>
         </div>
@@ -131,7 +118,7 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
       <div class="bars-panel" id="barsPanel"><div class="panel-title">БАРЫ ГЕРОЯ — 4 (C=D)</div></div>
     </div>
     <div class="inventory-zone">
-      <!-- заголовок убран по ТЗ --><span id="equipCount" style="display:none">0/11</span><span id="goldDisplay" style="display:none">0</span><span id="resDisplay" style="display:none">0</span>
+      <div class="panel-title" style="display:flex;justify-content:space-between"><span>ИНВЕНТАРЬ — 50 • <span id="goldDisplay">0 GOLD</span> • <span id="resDisplay">0 RES</span> • КЛИК НАДЕТЬ</span><span id="equipCount">0/11</span></div>
       <div class="inv-grid" id="invGrid"></div>
     </div>
   </div>
@@ -147,26 +134,22 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
 if (!volandHasSave()){ location.href='./page2.html'; }
 let equipped = volandGetEquippedItems();
 let inv = [];
-const RES_ORDER = ['quartz','wood','diamond','fang','essence'];
-const RES_ICONS_FALLBACK = {quartz:'🔷',wood:'🪵',diamond:'💎',fang:'🦷',essence:'💧'};
-const RES_NAMES_FALLBACK = {quartz:'Кварц',wood:'Древесина',diamond:'Алмаз',fang:'Клык',essence:'Эссенция'};
-function getGold(){
-  try{ if(typeof volandGetGold==='function') return volandGetGold(); }catch(e){}
-  try{ return parseInt(localStorage.getItem('voland_gold')||'0')||0; }catch(e){ return 0; }
-}
 function rebuildInv(){
   const ids = new Set(Object.values(equipped).map(i=>i.id));
   inv = [];
+  // золото - одна ячейка бесконечно
   try{
     let gold = getGold();
     if(gold>0){
       inv.push({id:'gold', icon:'🪙', name:'Золото', desc:gold+' GOLD', isGold:true, count:gold, type:'gold', rarity:'gold'});
     }
   }catch(e){}
+  // ресурсы - делим по 99
   try{
     if(typeof volandGetResources==='function'){
       let res = volandGetResources();
-      RES_ORDER.forEach(rid=>{
+      const RES_ORDER_LOCAL = (typeof RES_ORDER !== 'undefined') ? RES_ORDER : ['quartz','wood','diamond','fang','essence'];
+      RES_ORDER_LOCAL.forEach(rid=>{
         let cnt = res[rid]||0;
         if(cnt>0){
           let rdef = null;
@@ -176,18 +159,26 @@ function rebuildInv(){
               else if(VOLAND_RESOURCES[rid]) rdef = VOLAND_RESOURCES[rid];
             }
           }catch(e){}
-          let icon = (rdef && rdef.icon) ? rdef.icon : (RES_ICONS_FALLBACK[rid]||'📦');
-          let name = (rdef && rdef.name) ? rdef.name : (RES_NAMES_FALLBACK[rid]||rid);
-          let desc = (rdef && rdef.desc) ? rdef.desc : name;
-          inv.push({id:rid, icon:icon, name:name, desc:cnt+'/100 • '+desc, isResource:true, count:cnt, type:'resource', resId:rid});
+          let icon = (rdef && rdef.icon) ? rdef.icon : ((typeof RES_ICONS_FALLBACK !== 'undefined' && RES_ICONS_FALLBACK[rid]) ? RES_ICONS_FALLBACK[rid] : '📦');
+          let name = (rdef && rdef.name) ? rdef.name : ((typeof RES_NAMES_FALLBACK !== 'undefined' && RES_NAMES_FALLBACK[rid]) ? RES_NAMES_FALLBACK[rid] : rid);
+          let remaining = cnt;
+          let chunkIdx = 0;
+          while(remaining>0 && inv.length<50){
+            let chunk = Math.min(99, remaining);
+            inv.push({id:rid+'_'+chunkIdx, icon:icon, name:name, desc:name, isResource:true, count:chunk, type:'resource', resId:rid});
+            remaining -= chunk;
+            chunkIdx++;
+          }
         }
       });
     }
-  }catch(e){}
+  }catch(e){ console.log('rebuild res err', e); }
+  // дропнутый шмот
   try{
     if(typeof volandGetInventory==='function'){
       let dropped = volandGetInventory();
       for(let d of dropped){
+        if(inv.length>=50) break;
         let item = null;
         try{ item = VOLAND_ITEMS.find(i=>i.id===d.id); }catch(e){}
         if(item && !ids.has(item.id) && !inv.find(x=>x && x.id===item.id)){
@@ -196,8 +187,10 @@ function rebuildInv(){
       }
     }
   }catch(e){}
+  // весь остальной шмот
   try{
     VOLAND_ITEMS.forEach(it=>{
+      if(inv.length>=50) return;
       if(!ids.has(it.id)){
         if(!inv.find(x=>x && x.id===it.id)){
           inv.push({...it, isEquip:true});
@@ -245,18 +238,13 @@ function renderBars(){
 function log(m){const d=document.createElement('div'); d.className='sys-msg'; d.textContent=m; chatBody.appendChild(d); chatBody.scrollTop=9999;}
 function updateGoldRes(){
   try{
+    let gold = typeof volandGetGold==='function'?volandGetGold():0;
+    let res = typeof volandGetResources==='function'?volandGetResources():{};
+    let resCount = Object.values(res).reduce((a,b)=>a+b,0);
     let goldEl=document.getElementById('goldDisplay');
     let resEl=document.getElementById('resDisplay');
-    if(goldEl){
-      let gold = getGold();
-      goldEl.textContent=gold+' GOLD';
-    }
-    if(resEl){
-      let res = {};
-      try{ if(typeof volandGetResources==='function') res = volandGetResources(); }catch(e){}
-      let resCount = Object.values(res).reduce((a,b)=>a+b,0);
-      resEl.textContent=resCount+' RES';
-    }
+    if(goldEl) goldEl.textContent=gold+' GOLD';
+    if(resEl) resEl.textContent=resCount+' RES';
   }catch(e){}
 }
 function renderInv(){
@@ -267,18 +255,16 @@ function renderInv(){
     const it=inv[i];
     if(it){
       cell.classList.add('has-item');
-      let countVal = it.count||1;
-      let displayCount = countVal>99 ? '99+' : countVal;
       if(it.isGold){
         cell.classList.add('gold');
-        cell.innerHTML=`<div class="item-icon">${it.icon}</div><div class="item-count">${displayCount}</div>`;
-        cell.onclick=()=>{ log('Золото: '+it.count+' — лежит в сумке'); };
+        cell.innerHTML=`<div class="item-icon">${it.icon}</div><div class="item-bonus" style="font-size:10px;font-weight:800;color:#d0b040;margin-top:2px">${it.count}</div>`;
+        cell.onclick=()=>{ log('Золото: '+it.count+' — в одной ячейке бесконечно'); };
         cell.title = it.name+' '+it.count;
       } else if(it.isResource){
         cell.classList.add('resource');
-        cell.innerHTML=`<div class="item-icon">${it.icon}</div><div class="item-name">${it.name}</div><div class="item-bonus">${it.count}/100</div><div class="item-count">${displayCount}</div>`;
-        cell.onclick=()=>{ log(it.name+': '+it.count+'/100 — стак до 100'); };
-        cell.title = it.name+' '+it.count+'/100';
+        cell.innerHTML=`<div class="item-icon">${it.icon}</div><div class="item-bonus" style="font-size:10px;font-weight:800;color:#3ad080;margin-top:2px">${it.count}</div>`;
+        cell.onclick=()=>{ log(it.name+': '+it.count+' — стак 99, при 99+ новая ячейка'); };
+        cell.title = it.name+' '+it.count;
       } else {
         cell.classList.add('equip');
         if(it.rarity==='green') cell.classList.add('rarity-green');
@@ -301,7 +287,7 @@ function renderEquip(){
     if(it){ el.classList.add('filled'); iconEl.textContent=it.icon; nameEl.textContent=it.name; emptyEl.textContent=it.desc; emptyEl.style.color='#3ad080'; }
     else{
       el.classList.remove('filled');
-      const defs={head:{icon:'🪖',name:'Шлем'},ear1:{icon:'👂',name:'Серьга 1'},ear2:{icon:'👂',name:'Серьга 2'},amulet:{icon:'📿',name:'Амулет'},armor:{icon:'🦺',name:'Броня'},weapon:{icon:'⚔',name:'Оружие'},shield:{icon:'🛡',name:'Щит'},ring1:{icon:'💍',name:'Кольцо 1'},ring2:{icon:'💍',name:'Кольцо 2'},gloves:{icon:'🧤',name:'Перчатки'},boots:{icon:'👢',name:'Ботинки'}};
+      const defs={head:{icon:'🪖',name:'Шлем'},ear1:{icon:'👂',name:'Серьга 1'},ear2:{icon:'👂',name:'Серьга 2'},amulet:{icon:'📿',name:'Амулет'},armor:{icon:'🦺',name:'Броня'},weapon:{icon:'⚔️',name:'Оружие'},shield:{icon:'🛡️',name:'Щит'},ring1:{icon:'💍',name:'Кольцо 1'},ring2:{icon:'💍',name:'Кольцо 2'},gloves:{icon:'🧤',name:'Перчатки'},boots:{icon:'👢',name:'Ботинки'}};
       const def=defs[slot]; if(def){ iconEl.textContent=def.icon; nameEl.textContent=def.name; }
       emptyEl.textContent='пусто'; emptyEl.style.color='';
     }
