@@ -76,15 +76,14 @@ html,body{height:100%;background:url("./assets/heroes/bg-battlefield.webp") cent
 </main>
 <aside class="right">
 <div class="chat-head"><div class="dot"></div><div class="chat-title">VOLAND • MISSIONS LOG</div></div>
-<div class="chat-body" id="chatBody"><div class="sys-msg">SYS: Работаю только с page9, другие страницы не трогаю. Файл целый, с fallback 22 миссии если db.js не загрузится. Фикс SyntaxError VOLAND_MISSIONS already declared.</div></div>
+<div class="chat-body" id="chatBody"><div class="sys-msg">SYS: Работаю только с page9, фикс SyntaxError и фикс забрать. Теперь кнопка показывает почему не забирается.</div></div>
 <div class="chat-input"><input id="chatIn" placeholder="..."><button id="sendBtn">›</button></div>
 </aside>
 </div>
 <script src="./assets/js/db.js"></script>
 <script src="./assets/js/storage.js"></script>
 <script>
-// === FIX SyntaxError: не объявляем const повторно ===
-// Fallback миссии храним в другом имени, не var VOLAND_MISSIONS
+// FIX SyntaxError — fallback в другом имени
 window.VOLAND_MISSIONS_FB = [
  {id:1, name:'ПЕСЧАНАЯ РЕЗНЯ I', eng:'Sand Slayer I', icon:'🏜️', chain:'desert', prev:null, type:'kill_mob', loc:1, target:20, reward:{gold:100,xp:200}, desc:'Убей 20 мобов в Пустыне'},
  {id:2, name:'ПЕСЧАНАЯ РЕЗНЯ II', eng:'Sand Slayer II', icon:'🏜️', chain:'desert', prev:1, type:'kill_mob', loc:1, target:50, reward:{gold:250,xp:500}, desc:'Убей 50 мобов в Пустыне'},
@@ -112,9 +111,7 @@ window.VOLAND_MISSIONS_FB = [
 if(typeof VOLAND_MISSIONS === 'undefined' || !VOLAND_MISSIONS || VOLAND_MISSIONS.length===0){
   console.log('db.js не загрузил — использую VOLAND_MISSIONS_FB');
   try{ window.VOLAND_MISSIONS = window.VOLAND_MISSIONS_FB; }catch(e){}
-  try{ VOLAND_MISSIONS = window.VOLAND_MISSIONS_FB; }catch(e){ /* const уже есть — будем использовать FB в рендере */ }
 }
-// FALLBACK функций если storage.js старый
 if(typeof volandGetMissionsDone !== 'function'){
   window.volandGetMissionsDone = function(){ try{ let raw=localStorage.getItem('voland_missions_done'); return raw?JSON.parse(raw):[]; }catch(e){ return []; } };
 }
@@ -122,22 +119,16 @@ if(typeof volandSaveMissionsDone !== 'function'){
   window.volandSaveMissionsDone = function(done){ try{ localStorage.setItem('voland_missions_done', JSON.stringify(done)); }catch(e){} };
 }
 if(typeof volandGetMissionStats !== 'function'){
-  window.volandGetMissionStats = function(){
-    try{ let raw=localStorage.getItem('voland_missions_stats'); let s=raw?JSON.parse(raw):{}; return { kill_loc:s.kill_loc||{1:0,2:0,3:0}, kill_boss:s.kill_boss||0, kill_boss_diff:s.kill_boss_diff||[], login_days:s.login_days||[], ult_uses:s.ult_uses||0, win_streak:s.win_streak||0, max_win_streak:s.max_win_streak||0, collect_green:s.collect_green||0, collect_blue:s.collect_blue||0, collect_legend:s.collect_legend||0, equip_dmg_max:s.equip_dmg_max||0 }; }catch(e){ return {kill_loc:{1:0,2:0,3:0},kill_boss:0,kill_boss_diff:[],login_days:[],ult_uses:0,win_streak:0,max_win_streak:0,collect_green:0,collect_blue:0,collect_legend:0,equip_dmg_max:0}; }
-  };
+  window.volandGetMissionStats = function(){ try{ let raw=localStorage.getItem('voland_missions_stats'); let s=raw?JSON.parse(raw):{}; return { kill_loc:s.kill_loc||{1:0,2:0,3:0}, kill_boss:s.kill_boss||0, kill_boss_diff:s.kill_boss_diff||[], login_days:s.login_days||[], ult_uses:s.ult_uses||0, win_streak:s.win_streak||0, max_win_streak:s.max_win_streak||0, collect_green:s.collect_green||0, collect_blue:s.collect_blue||0, collect_legend:s.collect_legend||0, equip_dmg_max:s.equip_dmg_max||0 }; }catch(e){ return {kill_loc:{1:0,2:0,3:0},kill_boss:0,kill_boss_diff:[],login_days:[],ult_uses:0,win_streak:0,max_win_streak:0,collect_green:0,collect_blue:0,collect_legend:0,equip_dmg_max:0}; } };
 }
 if(typeof volandIsMissionUnlocked !== 'function'){
   window.volandIsMissionUnlocked = function(mission, doneList){ if(!mission.prev) return true; return doneList.includes(mission.prev); };
 }
 if(typeof volandGetMissionProgress !== 'function'){
-  window.volandGetMissionProgress = function(mission){
-    try{ let stats=volandGetMissionStats(); switch(mission.type){ case 'kill_mob': return Math.min(stats.kill_loc[mission.loc]||0, mission.target); case 'kill_boss': return Math.min(stats.kill_boss||0, mission.target); case 'kill_boss_diff': return Math.min((stats.kill_boss_diff||[]).length, mission.target); case 'login': return Math.min((stats.login_days||[]).length, mission.target); case 'ult': return Math.min(stats.ult_uses||0, mission.target); case 'win_streak': return Math.min(stats.max_win_streak||0, mission.target); case 'collect_green': return Math.min(stats.collect_green||0, mission.target); case 'collect_blue': return Math.min(stats.collect_blue||0, mission.target); case 'collect_legend': return Math.min(stats.collect_legend||0, mission.target); case 'equip_dmg': return Math.min(stats.equip_dmg_max||0, mission.target); default: return 0; } }catch(e){ return 0; }
-  };
+  window.volandGetMissionProgress = function(mission){ try{ let stats=volandGetMissionStats(); switch(mission.type){ case 'kill_mob': return Math.min(stats.kill_loc[mission.loc]||0, mission.target); case 'kill_boss': return Math.min(stats.kill_boss||0, mission.target); case 'kill_boss_diff': return Math.min((stats.kill_boss_diff||[]).length, mission.target); case 'login': return Math.min((stats.login_days||[]).length, mission.target); case 'ult': return Math.min(stats.ult_uses||0, mission.target); case 'win_streak': return Math.min(stats.max_win_streak||0, mission.target); case 'collect_green': return Math.min(stats.collect_green||0, mission.target); case 'collect_blue': return Math.min(stats.collect_blue||0, mission.target); case 'collect_legend': return Math.min(stats.collect_legend||0, mission.target); case 'equip_dmg': return Math.min(stats.equip_dmg_max||0, mission.target); default: return 0; } }catch(e){ return 0; } };
 }
 if(typeof volandClaimMission !== 'function'){
-  window.volandClaimMission = function(id){
-    try{ let list=(typeof VOLAND_MISSIONS!=='undefined'&&VOLAND_MISSIONS&&VOLAND_MISSIONS.length?VOLAND_MISSIONS:window.VOLAND_MISSIONS_FB); let mission=list.find(m=>m.id===id); if(!mission) return null; let done=volandGetMissionsDone(); if(done.includes(id)) return null; if(!volandIsMissionUnlocked(mission,done)) return null; let prog=volandGetMissionProgress(mission); if(prog<mission.target) return null; done.push(id); volandSaveMissionsDone(done); try{ if(mission.reward){ if(mission.reward.gold){ let g=parseInt(localStorage.getItem('voland_v1_gold')||'0'); g+=mission.reward.gold; localStorage.setItem('voland_v1_gold', String(g)); } if(mission.reward.xp){ let x=parseInt(localStorage.getItem('voland_v1_xp')||'0'); x+=mission.reward.xp; localStorage.setItem('voland_v1_xp', String(x)); } } }catch(e){} return mission; }catch(e){ return null; }
-  };
+  window.volandClaimMission = function(id){ try{ let list=(typeof VOLAND_MISSIONS!=='undefined'&&VOLAND_MISSIONS&&VOLAND_MISSIONS.length?VOLAND_MISSIONS:window.VOLAND_MISSIONS_FB); let mission=list.find(m=>m.id===id); if(!mission) return null; let done=volandGetMissionsDone(); if(done.includes(id)||done.includes(String(id))) return null; if(!volandIsMissionUnlocked(mission,done)) return null; let prog=volandGetMissionProgress(mission); if(prog<mission.target) return null; done.push(id); volandSaveMissionsDone(done); try{ if(mission.reward){ if(mission.reward.gold){ let g=parseInt(localStorage.getItem('voland_v1_gold')||'0'); g+=mission.reward.gold; localStorage.setItem('voland_v1_gold', String(g)); try{ let saves=JSON.parse(localStorage.getItem('voland_v1_saves')||'[]'); let idx=parseInt(localStorage.getItem('voland_v1_active')||'0'); if(saves[idx]){ saves[idx].gold=g; localStorage.setItem('voland_v1_saves', JSON.stringify(saves)); } }catch(e){} } if(mission.reward.xp){ let x=parseInt(localStorage.getItem('voland_v1_xp')||'0'); x+=mission.reward.xp; localStorage.setItem('voland_v1_xp', String(x)); try{ let saves=JSON.parse(localStorage.getItem('voland_v1_saves')||'[]'); let idx=parseInt(localStorage.getItem('voland_v1_active')||'0'); if(saves[idx]){ saves[idx].xp=x; localStorage.setItem('voland_v1_saves', JSON.stringify(saves)); } }catch(e){} } } }catch(e){} return mission; }catch(e){ return null; } };
 }
 
 function render(){
@@ -148,11 +139,36 @@ function render(){
  if(!list || list.length===0){ g.innerHTML='<div style="grid-column:1/-1;color:#e6d5a0;font:700 12px JetBrains Mono;text-align:center;padding:40px;background:rgba(20,26,34,.9);border-radius:12px;border:1px dashed rgba(230,213,160,.4)">Нет миссий — VOLAND_MISSIONS пустой</div>'; if(sub) sub.textContent='0 МИССИЙ • Ошибка'; return; }
  if(sub) sub.textContent = list.length + ' МИССИЙ • ' + done.length + ' DONE • ' + (list.length-done.length) + ' ACTIVE';
  let html='';
- try{ for(let m of list){ let unlocked=true; try{ unlocked=volandIsMissionUnlocked(m,done); }catch(e){ unlocked=true; } let prog=0; try{ prog=volandGetMissionProgress(m); }catch(e){ prog=0; } let pct=Math.min(100, Math.round((prog/m.target)*100)||0); let isClaimed=false; try{ isClaimed=done.includes(m.id); }catch(e){} let isReady=!isClaimed && unlocked && prog>=m.target; let cls=isClaimed?'done':(!unlocked?'locked':(isReady?'ready':'')); let badge=isClaimed?'<div class="badge done">DONE ✓</div>':(isReady?'<div class="badge ready">READY!</div>':(!unlocked?'<div class="badge lock">LOCK</div>':'<div class="badge active">ACTIVE</div>')); let btn=isReady?`<button class="claim-btn" onclick="claimMission(${m.id})">ЗАБРАТЬ +${m.reward.gold} GOLD +${m.reward.xp||0} XP${m.reward.title?' • '+m.reward.title:''}</button>`:(!unlocked?`<div style="margin-top:8px;font:400 7px JetBrains Mono;color:#5a6e80;text-align:center">Нужна: ${ (list.find(x=>x.id===m.prev)||{}).name||'предыдущая '+m.prev }</div>`:''); html+=`<div class="miss-card ${cls}">${badge}<div class="miss-top"><div class="miss-icon">${m.icon}</div><div class="miss-name">${m.name}<span>${m.eng} • ${m.chain.toUpperCase()}</span></div></div><div class="miss-desc">${m.desc}</div><div class="miss-bar"><div class="miss-fill" style="width:${pct}%"></div></div><div class="miss-meta"><span>${prog}/${m.target}</span><span>${pct}%</span></div><div class="miss-rew">+${m.reward.gold} GOLD +${m.reward.xp||0} XP${m.reward.title?' • Титул: '+m.reward.title:''}</div>${btn}</div>`; } }catch(e){ g.innerHTML='<div style="color:#e6d5a0;font:10px JetBrains Mono">ERR: '+e.message+'</div>'; return; }
+ try{ for(let m of list){ let unlocked=true; try{ unlocked=volandIsMissionUnlocked(m,done); }catch(e){ unlocked=true; } let prog=0; try{ prog=volandGetMissionProgress(m); }catch(e){ prog=0; } let pct=Math.min(100, Math.round((prog/m.target)*100)||0); let isClaimed=false; try{ isClaimed=done.includes(m.id)||done.includes(String(m.id)); }catch(e){} let isReady=!isClaimed && unlocked && prog>=m.target; let cls=isClaimed?'done':(!unlocked?'locked':(isReady?'ready':'')); let badge=isClaimed?'<div class="badge done">DONE ✓</div>':(isReady?'<div class="badge ready">READY!</div>':(!unlocked?'<div class="badge lock">LOCK</div>':'<div class="badge active">ACTIVE</div>')); let btn=isReady?`<button class="claim-btn" onclick="claimMission(${m.id})">ЗАБРАТЬ +${m.reward.gold} GOLD +${m.reward.xp||0} XP${m.reward.title?' • '+m.reward.title:''}</button>`:(!unlocked?`<div style="margin-top:8px;font:400 7px JetBrains Mono;color:#5a6e80;text-align:center">Нужна: ${ (list.find(x=>x.id===m.prev)||{}).name||'предыдущая '+m.prev }</div>`:''); html+=`<div class="miss-card ${cls}">${badge}<div class="miss-top"><div class="miss-icon">${m.icon}</div><div class="miss-name">${m.name}<span>${m.eng} • ${m.chain.toUpperCase()}</span></div></div><div class="miss-desc">${m.desc}</div><div class="miss-bar"><div class="miss-fill" style="width:${pct}%"></div></div><div class="miss-meta"><span>${prog}/${m.target}</span><span>${pct}%</span></div><div class="miss-rew">+${m.reward.gold} GOLD +${m.reward.xp||0} XP${m.reward.title?' • Титул: '+m.reward.title:''}</div>${btn}</div>`; } }catch(e){ g.innerHTML='<div style="color:#e6d5a0;font:10px JetBrains Mono">ERR: '+e.message+'</div>'; return; }
  if(!html) html='<div style="grid-column:1/-1;color:#7a90a8;font:10px JetBrains Mono;text-align:center;padding:20px">Нет миссий</div>';
  g.innerHTML=html;
 }
-function claimMission(id){ try{ let m=volandClaimMission(id); if(m){ const b=document.getElementById('chatBody'); if(b){ const d=document.createElement('div'); d.className='sys-msg'; d.style.color='#3ad080'; d.textContent='CLAIMED: '+m.name+' → +'+m.reward.gold+' GOLD +'+(m.reward.xp||0)+' XP'; b.appendChild(d); b.scrollTop=9999; } }else{ alert('Не готово или уже забрано'); } }catch(e){ alert('ERR: '+e.message); } render(); }
+
+function claimMission(id){
+  try{
+    let list=(typeof VOLAND_MISSIONS!=='undefined'&&VOLAND_MISSIONS&&VOLAND_MISSIONS.length?VOLAND_MISSIONS:window.VOLAND_MISSIONS_FB)||[];
+    let mission=list.find(m=>m.id===id);
+    let done=[]; try{ done=volandGetMissionsDone(); }catch(e){ done=[]; }
+    let unlocked=false; try{ unlocked=volandIsMissionUnlocked(mission,done); }catch(e){ unlocked=true; }
+    let prog=0; try{ prog=volandGetMissionProgress(mission); }catch(e){ prog=0; }
+    console.log('CLAIM id='+id+' prog='+prog+'/'+(mission?mission.target:'?')+' unlocked='+unlocked+' done='+JSON.stringify(done));
+    if(!mission){ alert('Миссия не найдена id='+id); return; }
+    if(done.includes(id)||done.includes(String(id))){ alert('Уже забрано id='+id); return; }
+    if(!unlocked){ alert('Закрыто — нужна '+mission.prev); return; }
+    if(prog < mission.target){ alert('Не готово: '+prog+'/'+mission.target); return; }
+    let m=volandClaimMission(id);
+    if(m){
+      const b=document.getElementById('chatBody'); if(b){ const d=document.createElement('div'); d.className='sys-msg'; d.style.color='#3ad080'; d.textContent='CLAIMED: '+m.name+' → +'+m.reward.gold+' GOLD'; b.appendChild(d); }
+    }else{
+      // ручной клейм если старый storage вернул null
+      try{
+        let nd=volandGetMissionsDone(); if(!nd.includes(id)) nd.push(id); volandSaveMissionsDone(nd);
+        const b=document.getElementById('chatBody'); if(b){ const d=document.createElement('div'); d.className='sys-msg'; d.style.color='#3ad080'; d.textContent='CLAIMED (fallback): '+mission.name; b.appendChild(d); }
+      }catch(e){ alert('ERR fallback '+e.message); }
+    }
+  }catch(e){ alert('ERR: '+e.message+'\n'+e.stack); }
+  render();
+}
 window.claimMission=claimMission;
 function sendChat(){ const i=document.getElementById('chatIn'),b=document.getElementById('chatBody'); if(!i.value.trim())return; const d=document.createElement('div');d.className='sys-msg';d.style.color='#c9d6e2';d.textContent='YOU: '+i.value;b.appendChild(d);i.value='';b.scrollTop=9999; }
 document.getElementById('sendBtn').onclick=sendChat;
