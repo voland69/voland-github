@@ -192,83 +192,46 @@ function endRound(){
 
 function showVictory(){
   isBattleOver=true;
-  // --- FIXED: берем награды из db.js VOLAND_ENEMIES, а не формулой ---
-  let goldReward = (enemyData && enemyData.gold) ? parseInt(enemyData.gold) : 5;
-  let xpReward = (enemyData && enemyData.xp) ? parseInt(enemyData.xp) : 80;
-  document.getElementById('rewGold').textContent='+'+goldReward;
-  document.getElementById('rewXp').textContent='+'+xpReward;
+  document.getElementById('rewGold').textContent='+'+(150+stage*40+loc*20);
+  document.getElementById('rewXp').textContent='+'+(4000+stage*200+loc*100);
   document.getElementById('modalTitle').textContent='ПОБЕДА!';
   document.getElementById('modalSub').textContent='Ты победил • '+enemyData.name+' • LOC'+loc+' STAGE'+stage;
   document.getElementById('victoryModal').classList.add('show');
   renderSkillBar();
-  // --- сохранение золота / XP / ресурсов / дропа ---
+  // stats: kills
   try{
-    // gold + xp via storage
-    if(typeof volandAddGold==='function') volandAddGold(goldReward);
-    if(typeof volandAddXp==='function') volandAddXp(xpReward);
-    // ресурсы и шмот через drop систему
-    if(typeof volandRollDrops==='function' && typeof volandApplyDrops==='function'){
-      let drop = volandRollDrops(enemyData);
-      // перезаписываем gold/xp из db чтобы не дублировать
-      drop.gold = 0; drop.xp = 0;
-      volandApplyDrops(drop);
-      // показать в логе что выпало
-      if(drop.resources && drop.resources.length>0){
-        drop.resources.forEach(r=>{
-          addLog('📦 Дроп: '+r.id+' +1','win');
-        });
-      }
-      if(drop.gear){
-        addLog('🎒 Дроп шмота: '+drop.gear.name,'win');
-      }
-    } else {
-      // fallback старый способ без drop.js - прямой ролл ресурсов
-      if(enemyData && Array.isArray(enemyData.drops)){
-        enemyData.drops.forEach(d=>{
-          if(Math.random() < (d.chance||0)){
-            if(typeof volandAddResource==='function') volandAddResource(d.id, 1);
-            addLog('📦 Дроп: '+d.id+' +1','win');
-          }
-        });
-      }
-      if(enemyData && enemyData.equipChance && Math.random() < enemyData.equipChance){
-        if(typeof VOLAND_ITEMS!=='undefined' && typeof volandAddToInventory==='function'){
-          let pool = VOLAND_ITEMS.filter(it=>it.slot);
-          if(pool.length>0){
-            let pick = pool[Math.floor(Math.random()*pool.length)];
-            volandAddToInventory(pick.id);
-            addLog('🎒 Дроп шмота: '+pick.name,'win');
-          }
-        }
-      }
-    }
-    // kills + missions
     if(typeof volandAddKill==='function') volandAddKill();
     else {
       let saves=JSON.parse(localStorage.getItem('voland_v1_saves')||'[]');
       let idx=parseInt(localStorage.getItem('voland_v1_active')||'0');
       if(saves[idx]){ saves[idx].kills=(saves[idx].kills||0)+1; localStorage.setItem('voland_v1_saves', JSON.stringify(saves)); }
     }
-    if(typeof volandUpdateMissionStat==='function'){
-      volandUpdateMissionStat('kill_mob', loc, 1);
-      if(enemyData && enemyData.boss){
-        volandUpdateMissionStat('kill_boss', null, 1);
-        volandUpdateMissionStat('kill_boss_diff', null, loc+'-'+stage);
-      }
-      if(typeof volandCheckMissions==='function'){
-        let newly = volandCheckMissions();
-        if(newly && newly.length>0){
-          newly.forEach(m=>{
-            addLog('🎯 Миссия выполнена: '+m.name+' +'+m.reward.gold+' GOLD','win');
-            if(m.reward && m.reward.gold && typeof volandAddGold==='function') volandAddGold(m.reward.gold);
-            if(m.reward && m.reward.xp && typeof volandAddXp==='function') volandAddXp(m.reward.xp);
-          });
-        }
-      }
-    }
-  }catch(e){ console.log('victory save error', e); }
+  }catch(e){}
 }
-function showDefeat(){ isBattleOver=true; document.getElementById('modalIcon').textContent='💀'; document.getElementById('modalTitle').textContent='ПОРАЖЕНИЕ!'; document.getElementById('modalSub').textContent='Тебя победил '+enemyData.name; document.getElementById('victoryModal').classList.add('show'); renderSkillBar(); }
+function showDefeat(){ 
+  isBattleOver=true; 
+  document.getElementById('modalIcon').textContent='💀'; 
+  document.getElementById('modalTitle').textContent='ПОРАЖЕНИЕ!'; 
+  document.getElementById('modalSub').textContent='Тебя победил '+enemyData.name;
+  // при поражении - без золота и лута, только 50% XP
+  let xpReward = (enemyData && enemyData.xp) ? Math.floor(parseInt(enemyData.xp)*0.5) : 0;
+  try{
+    let goldEl=document.getElementById('rewGold');
+    let xpEl=document.getElementById('rewXp');
+    let lootEl=document.getElementById('rewLoot');
+    if(goldEl) goldEl.textContent='+0';
+    if(xpEl) xpEl.textContent='+'+xpReward;
+    if(lootEl) lootEl.textContent='0';
+  }catch(e){}
+  try{
+    if(typeof volandAddXp==='function' && xpReward>0) volandAddXp(xpReward);
+    if(typeof volandUpdateMissionStat==='function'){
+      volandUpdateMissionStat('win_streak', null, 0);
+    }
+  }catch(e){}
+  document.getElementById('victoryModal').classList.add('show'); 
+  renderSkillBar(); 
+}
 
 function tryNav(url){ if(!isBattleOver){ addLog('⛔ Нельзя выйти из боя! Закончи бой','lose'); return; } location.href=url; }
 window.tryNav=tryNav;
