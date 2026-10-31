@@ -279,6 +279,188 @@ function volandCheckMissions(){
 }
 
 
+// ===== VOLAND STORAGE v3 - GOLD / XP / RESOURCES / INVENTORY / LEVEL =====
+function volandGetGold(){
+  try{
+    let saves=volandGetSaves();
+    let idx=volandGetActiveIndex();
+    if(saves.length>0 && saves[idx] && typeof saves[idx].gold!=='undefined') return parseInt(saves[idx].gold)||0;
+    let g = localStorage.getItem('voland_v1_gold');
+    return parseInt(g||'0')||0;
+  }catch(e){ return 0; }
+}
+function volandSetGold(amount){
+  try{
+    amount = Math.max(0, parseInt(amount)||0);
+    let saves=volandGetSaves();
+    let idx=volandGetActiveIndex();
+    if(saves.length>0){
+      saves[idx].gold = amount;
+      volandSaveSaves(saves);
+    }
+    localStorage.setItem('voland_v1_gold', String(amount));
+    return amount;
+  }catch(e){ return 0; }
+}
+function volandAddGold(add){
+  try{
+    let cur=volandGetGold();
+    let next=cur + (parseInt(add)||0);
+    return volandSetGold(next);
+  }catch(e){ return 0; }
+}
+function volandGetXp(){
+  try{
+    let saves=volandGetSaves();
+    let idx=volandGetActiveIndex();
+    if(saves.length>0 && saves[idx] && typeof saves[idx].xp!=='undefined') return parseInt(saves[idx].xp)||0;
+    let x = localStorage.getItem('voland_v1_xp');
+    return parseInt(x||'0')||0;
+  }catch(e){ return 0; }
+}
+function volandSetXp(amount){
+  try{
+    amount = Math.max(0, parseInt(amount)||0);
+    let saves=volandGetSaves();
+    let idx=volandGetActiveIndex();
+    if(saves.length>0){
+      saves[idx].xp = amount;
+      volandSaveSaves(saves);
+    }
+    localStorage.setItem('voland_v1_xp', String(amount));
+    return amount;
+  }catch(e){ return 0; }
+}
+function volandSetXpRaw(amount){
+  return volandSetXp(amount);
+}
+function volandGetLevelInfo(totalXp){
+  try{
+    let xp = parseInt(totalXp)||0;
+    if(xp<0) xp=0;
+    let lvl = 1;
+    let accumulated = 0;
+    let need = 1000;
+    while(true){
+      need = (2*lvl - 1)*1000;
+      if(xp < accumulated + need){
+        break;
+      }
+      accumulated += need;
+      lvl++;
+      if(lvl>100) break;
+    }
+    let cur = xp - accumulated;
+    if(cur<0) cur=0;
+    let pct = need>0 ? Math.floor(cur/need*100) : 0;
+    if(pct>100) pct=100;
+    return {lvl:lvl, cur:cur, need:need, pct:pct, total:xp, nextNeed:need-cur, accumulated:accumulated};
+  }catch(e){ return {lvl:1, cur:0, need:1000, pct:0, total:0, nextNeed:1000, accumulated:0}; }
+}
+function volandGetCurrentLevelInfo(){
+  return volandGetLevelInfo(volandGetXp());
+}
+function volandGetLevel(){
+  try{ return volandGetCurrentLevelInfo().lvl; }catch(e){ return 1; }
+}
+function volandGetXpForNext(){
+  try{ return volandGetCurrentLevelInfo().nextNeed; }catch(e){ return 1000; }
+}
+function volandAddXp(amount){
+  try{
+    let cur=volandGetXp();
+    let next=cur + (parseInt(amount)||0);
+    let oldInfo = volandGetLevelInfo(cur);
+    let newAmount = volandSetXp(next);
+    let newInfo = volandGetLevelInfo(newAmount);
+    if(newInfo.lvl > oldInfo.lvl){
+      let diff = newInfo.lvl - oldInfo.lvl;
+      let curPoints = 0;
+      try{
+        let saves=volandGetSaves();
+        let idx=volandGetActiveIndex();
+        if(saves[idx] && typeof saves[idx].stat_points!=='undefined'){
+          curPoints = parseInt(saves[idx].stat_points)||0;
+        } else {
+          curPoints = parseInt(localStorage.getItem('voland_v1_stat_points')||'0')||0;
+        }
+        curPoints += diff;
+        localStorage.setItem('voland_v1_stat_points', String(curPoints));
+        if(saves[idx]){
+          saves[idx].stat_points = curPoints;
+          volandSaveSaves(saves);
+        }
+      }catch(e){}
+    }
+    return newAmount;
+  }catch(e){ return volandSetXp(amount); }
+}
+function volandGetResources(){
+  try{
+    let saves=volandGetSaves();
+    let idx=volandGetActiveIndex();
+    if(saves.length>0 && saves[idx] && saves[idx].resources) return saves[idx].resources;
+    let raw = localStorage.getItem('voland_v1_resources');
+    if(raw) return JSON.parse(raw);
+    return {};
+  }catch(e){ return {}; }
+}
+function volandSetResources(res){
+  try{
+    let cleaned={};
+    for(let k in res){ cleaned[k]=Math.max(0, Math.min(99999, parseInt(res[k])||0)); }
+    let saves=volandGetSaves();
+    let idx=volandGetActiveIndex();
+    if(saves.length>0){
+      saves[idx].resources = cleaned;
+      volandSaveSaves(saves);
+    }
+    localStorage.setItem('voland_v1_resources', JSON.stringify(cleaned));
+    return cleaned;
+  }catch(e){ return {}; }
+}
+function volandAddResource(id, add){
+  try{
+    let res=volandGetResources();
+    let cur=parseInt(res[id]||0);
+    res[id] = Math.min(99999, cur + (parseInt(add)||0));
+    return volandSetResources(res)[id];
+  }catch(e){ return 0; }
+}
+function volandGetInventory(){
+  try{
+    let saves=volandGetSaves();
+    let idx=volandGetActiveIndex();
+    if(saves.length>0 && saves[idx] && saves[idx].inventory) return saves[idx].inventory;
+    let raw = localStorage.getItem('voland_v1_inventory');
+    if(raw) return JSON.parse(raw);
+    return [];
+  }catch(e){ return []; }
+}
+function volandSaveInventory(inv){
+  try{
+    if(!Array.isArray(inv)) inv=[];
+    let saves=volandGetSaves();
+    let idx=volandGetActiveIndex();
+    if(saves.length>0){
+      saves[idx].inventory = inv;
+      volandSaveSaves(saves);
+    }
+    localStorage.setItem('voland_v1_inventory', JSON.stringify(inv));
+    return inv;
+  }catch(e){ return []; }
+}
+function volandAddToInventory(itemId){
+  try{
+    let inv=volandGetInventory();
+    inv.push({id:itemId, time:Date.now()});
+    return volandSaveInventory(inv);
+  }catch(e){ return []; }
+}
+function getGold(){ return volandGetGold(); }
+function getResources(){ return volandGetResources(); }
+
+
 function volandClaimMission(id){
   try{
     if(!window.VOLAND_MISSIONS) return null;
@@ -289,15 +471,12 @@ function volandClaimMission(id){
     if(!volandIsMissionUnlocked(mission, done)) return null;
     let prog = volandGetMissionProgress(mission);
     if(prog < mission.target) return null;
-    // claim
     done.push(id);
     volandSaveMissionsDone(done);
-    // rewards
     if(mission.reward){
       if(mission.reward.gold && typeof volandAddGold==='function') volandAddGold(mission.reward.gold);
       if(mission.reward.xp && typeof volandAddXp==='function') volandAddXp(mission.reward.xp);
       if(mission.reward.title){
-        // save title if system exists
         try{
           let saves=volandGetSaves();
           let idx=volandGetActiveIndex();
@@ -309,7 +488,7 @@ function volandClaimMission(id){
       }
     }
     return mission;
-  }catch(e){ console.log('claim err', e); return null; }
+  }catch(e){ return null; }
 }
 
 // init login tracking
