@@ -96,12 +96,12 @@ let cur = calc.cur;
 let bonus = calc.bonus;
 
 document.getElementById('heroImg').src = heroData.img;
-let lvlForName = (typeof volandGetCurrentLevelInfo==='function' ? volandGetCurrentLevelInfo().lvl : (typeof volandGetLevelInfo==='function' ? volandGetLevelInfo(totalXp).lvl : 1));
+let lvlForName = (typeof volandGetCurrentLevelInfo==='function' ? volandGetCurrentLevelInfo().lvl : lvlInfo.lvl);
 document.getElementById('heroName').textContent = profileName.toUpperCase() + ' LVL ' + lvlForName;
 document.getElementById('heroClass').textContent = heroData.n + ' • ' + heroData.role;
 
 document.getElementById('statsGrid').innerHTML = `
-  <div class="stat-card"><div class="stat-label">HP</div><div class="stat-value">${cur.HP}</div><div class="stat-bonus">${bonus.HP? '+'+bonus.HP+' from items':''}</div></div>
+  <div class="stat-card"><div class="stat-label">HP</div><div class="stat-value">${cur.HP}</div><div class="stat-bonus">${bonus.HP? '+'+bonus.HP:''}</div></div>
   <div class="stat-card"><div class="stat-label">DEF</div><div class="stat-value">${cur.DEF}</div><div class="stat-bonus">${bonus.DEF? '+'+bonus.DEF:''}</div></div>
   <div class="stat-card"><div class="stat-label">DAMAGE</div><div class="stat-value">${cur.DMG}</div><div class="stat-bonus">${bonus.DMG? '+'+bonus.DMG:''}</div></div>
   <div class="stat-card"><div class="stat-label">MANA</div><div class="stat-value">${cur.MANA}</div><div class="stat-bonus">${bonus.MANA? '+'+bonus.MANA:''}</div></div>
@@ -113,12 +113,11 @@ let totalXp = 0;
 try{ totalXp = typeof volandGetXp==='function' ? volandGetXp() : 0; }catch(e){}
 let lvlInfo = typeof volandGetLevelInfo==='function' ? volandGetLevelInfo(totalXp) : {lvl:1,cur:0,need:1000,pct:0,total:totalXp};
 
-// один XP бар - весь опыт сюда, при потолке обнуляется
 document.getElementById('barsPanel').innerHTML = `
   <div class="bar-row"><div class="bar-label">HP</div><div class="bar-track"><div class="bar-fill hp" style="width:100%">${cur.HP} / ${cur.HP}</div></div></div>
   <div class="bar-row"><div class="bar-label">MANA</div><div class="bar-track"><div class="bar-fill mana" style="width:100%">${cur.MANA} / ${cur.MANA}</div></div></div>
   <div class="bar-row"><div class="bar-label">STAMINA</div><div class="bar-track"><div class="bar-fill stamina" style="width:100%">100 / 100</div></div></div>
-  <div class="bar-row"><div class="bar-label">XP - LVL ${lvlInfo.lvl} → ${lvlInfo.lvl+1}</div><div class="bar-track"><div class="bar-fill xp" style="width:${lvlInfo.pct}%">${lvlInfo.cur} / ${lvlInfo.need} • ${lvlInfo.total} TOTAL • ${lvlInfo.pct}%</div></div></div>
+  <div class="bar-row"><div class="bar-label">XP</div><div class="bar-track"><div class="bar-fill xp" style="width:${lvlInfo.pct}%">${lvlInfo.cur} / ${lvlInfo.need}</div></div></div>
 `;
 
 // 4 new windows
