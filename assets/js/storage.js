@@ -1,506 +1,494 @@
-// VOLAND storage.js FULL - 16811 bytes / 496 lines / 47 funcs
-// GOLD, RESOURCES, XP, LEVEL, MISSIONS - FIXED FOR BAG 50 CELLS
-// Contains: volandGetGold, volandAddGold, volandGetResources, volandGetXp, volandAddXp, volandGetLevelInfo, volandClaimMission
-(function() {
-  'use strict';
-  const STORAGE_PREFIX = 'voland_';
-  const STORAGE_KEYS = {
-    GOLD: 'gold',
-    XP: 'xp',
-    LEVEL: 'level',
-    RESOURCES: 'resources',
-    BAG: 'bag',
-    HERO: 'hero',
-    MISSIONS: 'missions',
-    SKILLS: 'skills',
-    STAT_POINTS: 'statPoints',
-  };
-  function internalGet(key, def) {
-    try {
-      const raw = localStorage.getItem(STORAGE_PREFIX + key);
-      if (raw === null) return def;
-      try { return JSON.parse(raw); } catch (e) { return raw; }
-    } catch (err) { return def; }
-  }
-  function internalSet(key, val) {
-    try {
-      const s = typeof val === 'string' ? val : JSON.stringify(val);
-      localStorage.setItem(STORAGE_PREFIX + key, s);
-      return true;
-    } catch (err) { return false; }
-  }
-function volandInit() {
-  // init defaults - gold 0, xp 0, lvl 1, bag 50 cells
-  const hasGold = localStorage.getItem(STORAGE_PREFIX + STORAGE_KEYS.GOLD);
-  if (!hasGold) internalSet(STORAGE_KEYS.GOLD, '0');
-  const hasXp = localStorage.getItem(STORAGE_PREFIX + STORAGE_KEYS.XP);
-  if (!hasXp) internalSet(STORAGE_KEYS.XP, '0');
-  const hasLvl = localStorage.getItem(STORAGE_PREFIX + STORAGE_KEYS.LEVEL);
-  if (!hasLvl) internalSet(STORAGE_KEYS.LEVEL, '1');
-  const hasRes = localStorage.getItem(STORAGE_PREFIX + STORAGE_KEYS.RESOURCES);
-  if (!hasRes) internalSet(STORAGE_KEYS.RESOURCES, '{}');
-  const hasBag = localStorage.getItem(STORAGE_PREFIX + STORAGE_KEYS.BAG);
-  if (!hasBag) internalSet(STORAGE_KEYS.BAG, '[]');
-  const hasStat = localStorage.getItem(STORAGE_PREFIX + STORAGE_KEYS.STAT_POINTS);
-  if (!hasStat) internalSet(STORAGE_KEYS.STAT_POINTS, '0');
-  const hasMis = localStorage.getItem(STORAGE_PREFIX + STORAGE_KEYS.MISSIONS);
-  if (!hasMis) internalSet(STORAGE_KEYS.MISSIONS, '[]');
-  return true;
-}
+// VOLAND STORAGE v2 - 3 saves + backward compat
+const VOLAND_KEYS = {
+  hero: 'voland_v1_hero',
+  name: 'voland_v1_name',
+  equip: 'voland_v1_equip',
+  created: 'voland_v1_created',
+  saves: 'voland_v1_saves',
+  active: 'voland_v1_active',
+  legacy_hero: 'voland_hero',
+  legacy_name: 'voland_name',
+  legacy_equip: 'voland_equip',
+  kills: 'voland_v1_kills',
+  quests: 'voland_v1_quests',
+  quests_total: 'voland_v1_quests_total',
+  pvp: 'voland_v1_pvp',
+  playtime: 'voland_v1_playtime'
+};
 
-function volandSave(key, value) {
-  // save generic key
-  const ok = internalSet(key, value);
-  return ok;
-}
+function volandSafeParse(str, fallback){ try { return JSON.parse(str); } catch(e){ return fallback; } }
 
-function volandLoad(key, defaultValue) {
-  // load generic key with default
-  const val = internalGet(key, defaultValue);
-  return val;
-}
-
-function volandReset() {
-  // full reset - wipe all
-  const allKeys = Object.values(STORAGE_KEYS);
-  allKeys.forEach(function(k) {
-    localStorage.removeItem(STORAGE_PREFIX + k);
-  });
-  volandInit();
-  return true;
-}
-
-function volandGetGold() {
-  // REQUIRED - gold single infinite cell centered
-  const raw = localStorage.getItem(STORAGE_PREFIX + STORAGE_KEYS.GOLD);
-  if (raw === null) return 0;
-  const num = parseInt(raw, 10);
-  if (isNaN(num)) return 0;
-  return num;
-}
-
-function volandAddGold(amount) {
-  // REQUIRED - add gold
-  const cur = volandGetGold();
-  const add = parseInt(amount, 10) || 0;
-  const nxt = cur + add;
-  if (nxt < 0) return cur;
-  internalSet(STORAGE_KEYS.GOLD, String(nxt));
-  return nxt;
-}
-
-function volandSetGold(amount) {
-  // set gold exact
-  const v = Math.max(0, parseInt(amount, 10) || 0);
-  internalSet(STORAGE_KEYS.GOLD, String(v));
-  return v;
-}
-
-function volandGetResources() {
-  // REQUIRED - get resources object
-  const data = internalGet(STORAGE_KEYS.RESOURCES, {});
-  if (typeof data === 'string') {
-    try { return JSON.parse(data); } catch { return {}; }
-  }
-  return data || {};
-}
-
-function volandGetResource(resourceId) {
-  // get one resource count
-  const all = volandGetResources();
-  const val = all[resourceId];
-  if (!val) return 0;
-  return val;
-}
-
-function volandGetResourceCount(resourceId) {
-  // alias count
-  const cnt = volandGetResource(resourceId);
-  return cnt;
-}
-
-function volandAddResource(resourceId, count) {
-  // add resource - BAG split 99 max 120=99+21
-  const allRes = volandGetResources();
-  const toAdd = parseInt(count, 10) || 0;
-  const cur = allRes[resourceId] || 0;
-  const upd = cur + toAdd;
-  if (upd <= 0) {
-    delete allRes[resourceId];
-  } else {
-    allRes[resourceId] = upd;
-  }
-  internalSet(STORAGE_KEYS.RESOURCES, allRes);
-  return allRes[resourceId] || 0;
-}
-
-function volandRemoveResource(resourceId, count) {
-  // remove resource
-  const rem = parseInt(count, 10) || 0;
-  const res = volandAddResource(resourceId, -rem);
-  return res;
-}
-
-function volandSetResources(resourcesObj) {
-  // set all resources
-  const obj = resourcesObj || {};
-  internalSet(STORAGE_KEYS.RESOURCES, obj);
-  return volandGetResources();
-}
-
-function volandGetXp() {
-  // REQUIRED - get xp
-  const raw = localStorage.getItem(STORAGE_PREFIX + STORAGE_KEYS.XP);
-  if (raw === null) return 0;
-  const n = parseInt(raw, 10);
-  return isNaN(n) ? 0 : n;
-}
-
-function volandAddXp(amount) {
-  // REQUIRED - xp formula lvl*2*1000-1000 => 1:1000,2:3000,3:5000 + 1 stat point
-  let curXp = volandGetXp();
-  let curLvl = volandGetLevel();
-  const add = parseInt(amount, 10) || 0;
-  curXp += add;
-  let gained = 0;
-  while (true) {
-    const need = curLvl * 2 * 1000 - 1000;
-    if (curXp >= need) {
-      curXp -= need;
-      curLvl += 1;
-      gained += 1;
-      volandAddStatPoint(1);
-    } else { break; }
-    if (gained > 100) break;
-  }
-  internalSet(STORAGE_KEYS.XP, String(curXp));
-  internalSet(STORAGE_KEYS.LEVEL, String(curLvl));
-  return { xp: curXp, lvl: curLvl, leveled: gained };
-}
-
-function volandSetXp(amount) {
-  // set xp
-  const c = Math.max(0, parseInt(amount, 10) || 0);
-  internalSet(STORAGE_KEYS.XP, String(c));
-  return c;
-}
-
-function volandGetLevel() {
-  // get level from 1
-  const raw = localStorage.getItem(STORAGE_PREFIX + STORAGE_KEYS.LEVEL);
-  if (raw === null) return 1;
-  const p = parseInt(raw, 10) || 1;
-  return Math.max(1, p);
-}
-
-function volandSetLevel(level) {
-  // set level min 1
-  const nl = Math.max(1, parseInt(level, 10) || 1);
-  internalSet(STORAGE_KEYS.LEVEL, String(nl));
-  return nl;
-}
-
-function volandGetLevelInfo() {
-  // REQUIRED - lvl info for single XP bar
-  const lvl = volandGetLevel();
-  const xp = volandGetXp();
-  const need = lvl * 2 * 1000 - 1000;
-  const pct = need > 0 ? Math.min(100, Math.floor((xp / need) * 100)) : 0;
-  return { level: lvl, xp: xp, need: need, percent: pct, next: lvl + 1 };
-}
-
-function volandCheckLevelUp() {
-  // check lvl up
-  const info = volandGetLevelInfo();
-  if (info.xp >= info.need) {
-    return volandAddXp(0);
-  }
-  return null;
-}
-
-function volandGetStatPoints() {
-  // get stat points
-  const raw = localStorage.getItem(STORAGE_PREFIX + STORAGE_KEYS.STAT_POINTS);
-  if (raw === null) return 0;
-  return parseInt(raw, 10) || 0;
-}
-
-function volandAddStatPoint(amount) {
-  // add stat point on lvl up
-  const cur = volandGetStatPoints();
-  const add = parseInt(amount, 10) || 0;
-  const nxt = cur + add;
-  internalSet(STORAGE_KEYS.STAT_POINTS, String(nxt));
-  return nxt;
-}
-
-function volandUseStatPoint(amount) {
-  // use stat point
-  const cur = volandGetStatPoints();
-  const use = parseInt(amount, 10) || 1;
-  if (cur < use) return false;
-  internalSet(STORAGE_KEYS.STAT_POINTS, String(cur - use));
-  return true;
-}
-
-function volandGetHero() {
-  // get hero
-  const hero = internalGet(STORAGE_KEYS.HERO, { name: 'Hero', level: 1 });
-  return hero;
-}
-
-function volandSetHero(heroObj) {
-  // set hero
-  const obj = heroObj || {};
-  internalSet(STORAGE_KEYS.HERO, obj);
-  return volandGetHero();
-}
-
-function volandGetHeroName() {
-  // hero name LVL after name starting 1
-  const hero = volandGetHero();
-  const lvl = volandGetLevel();
-  const base = hero.name || 'Hero';
-  return base + ' LVL ' + lvl;
-}
-
-function volandGetHeroLevel() {
-  // hero lvl alias
-  const lvl = volandGetLevel();
-  return lvl;
-}
-
-function volandGetBag() {
-  // get bag 50 cells
-  const bag = internalGet(STORAGE_KEYS.BAG, []);
-  return bag;
-}
-
-function volandSetBag(bagArray) {
-  // set bag
-  const arr = bagArray || [];
-  internalSet(STORAGE_KEYS.BAG, arr);
-  return volandGetBag();
-}
-
-function volandAddToBag(item) {
-  // add to bag limit 50
-  const bag = volandGetBag();
-  bag.push(item);
-  if (bag.length > 50) bag.length = 50;
-  internalSet(STORAGE_KEYS.BAG, bag);
-  return bag;
-}
-
-function volandRemoveFromBag(index) {
-  // remove from bag by index
-  const bag = volandGetBag();
-  bag.splice(index, 1);
-  internalSet(STORAGE_KEYS.BAG, bag);
-  return bag;
-}
-
-function volandGetBagSize() {
-  // bag size
-  const size = volandGetBag().length;
-  return size;
-}
-
-function volandIsBagFull() {
-  // bag full 50
-  const full = volandGetBagSize() >= 50;
-  return full;
-}
-
-function volandClearBag() {
-  // clear bag
-  internalSet(STORAGE_KEYS.BAG, []);
-  return [];
-}
-
-function volandGetMissions() {
-  // get missions
-  const mis = internalGet(STORAGE_KEYS.MISSIONS, []);
-  return mis;
-}
-
-function volandGetMission(missionId) {
-  // get mission by id
-  const all = volandGetMissions();
-  const found = all.find(function(m) { return m.id === missionId; });
-  return found || null;
-}
-
-function volandClaimMission(missionId) {
-  // REQUIRED - claim gold/xp
-  const ms = volandGetMissions();
-  const m = ms.find(function(x) { return x.id === missionId; });
-  if (!m || m.claimed) return false;
-  m.claimed = true;
-  if (m.rewardGold) volandAddGold(m.rewardGold);
-  if (m.rewardXp) volandAddXp(m.rewardXp);
-  internalSet(STORAGE_KEYS.MISSIONS, ms);
-  return true;
-}
-
-function volandCompleteMission(missionId) {
-  // complete mission
-  const ml = volandGetMissions();
-  const f = ml.find(function(x) { return x.id === missionId; });
-  if (!f) return false;
-  f.completed = true;
-  internalSet(STORAGE_KEYS.MISSIONS, ml);
-  return true;
-}
-
-function volandIsMissionLocked(missionObj) {
-  // locked check opacity .9 for locked
-  if (!missionObj) return true;
-  const req = missionObj.requireLevel;
-  if (req && volandGetLevel() < req) return true;
-  return false;
-}
-
-function volandResetMissions() {
-  // reset missions
-  internalSet(STORAGE_KEYS.MISSIONS, []);
-  return [];
-}
-
-function volandGetSkills() {
-  // get skills
-  const sk = internalGet(STORAGE_KEYS.SKILLS, []);
-  return sk;
-}
-
-function volandGetSkill(skillId) {
-  // get skill
-  const sk = volandGetSkills();
-  const found = sk.find(function(s) { return s.id === skillId; });
-  return found || null;
-}
-
-function volandUnlockSkill(skillId) {
-  // unlock skill
-  const sl = volandGetSkills();
-  if (!sl.includes(skillId)) sl.push(skillId);
-  internalSet(STORAGE_KEYS.SKILLS, sl);
-  return sl;
-}
-
-function volandHasSkill(skillId) {
-  // has skill
-  const has = volandGetSkills().includes(skillId);
-  return has;
-}
-
-function volandGetItem(itemId) {
-  // get item from db.js
+function volandMigrate(){
   try {
-    if (typeof volandDB !== 'undefined' && volandDB.items) {
-      return volandDB.items.find(function(it) { return it.id === itemId; }) || null;
+    // legacy single -> saves array
+    let saves = volandSafeParse(localStorage.getItem(VOLAND_KEYS.saves), null);
+    if(!saves){
+      const oldHero = localStorage.getItem(VOLAND_KEYS.hero) || localStorage.getItem(VOLAND_KEYS.legacy_hero);
+      const oldName = localStorage.getItem(VOLAND_KEYS.name) || localStorage.getItem(VOLAND_KEYS.legacy_name);
+      const oldEquip = localStorage.getItem(VOLAND_KEYS.equip) || localStorage.getItem(VOLAND_KEYS.legacy_equip);
+      const oldCreated = localStorage.getItem(VOLAND_KEYS.created);
+      if(oldHero && oldName && VOLAND_HEROES[oldHero]){
+        saves = [{
+          hero: oldHero,
+          name: oldName,
+          equip: volandSafeParse(oldEquip, {}),
+          created: parseInt(oldCreated||Date.now()),
+          kills: parseInt(localStorage.getItem(VOLAND_KEYS.kills)||'0'),
+          quests: parseInt(localStorage.getItem(VOLAND_KEYS.quests)||'0'),
+          quests_total: parseInt(localStorage.getItem(VOLAND_KEYS.quests_total)||'40'),
+          pvp: parseInt(localStorage.getItem(VOLAND_KEYS.pvp)||'0')
+        }];
+        localStorage.setItem(VOLAND_KEYS.saves, JSON.stringify(saves));
+        localStorage.setItem(VOLAND_KEYS.active, '0');
+      }
     }
-  } catch (e) {}
-  return null;
+  } catch(e){}
+}
+volandMigrate();
+
+function volandGetSaves(){
+  try{
+    let saves = volandSafeParse(localStorage.getItem(VOLAND_KEYS.saves), []);
+    if(!Array.isArray(saves)) saves=[];
+    // filter invalid
+    saves = saves.filter(s=> s && s.hero && s.name && VOLAND_HEROES[s.hero]);
+    return saves.slice(0,3);
+  }catch(e){ return []; }
 }
 
-function volandHasItem(itemId) {
-  // has item in bag
-  const bi = volandGetBag();
-  const has = bi.some(function(it) { return it.id === itemId; });
-  return has;
+function volandSaveSaves(saves){
+  try{ localStorage.setItem(VOLAND_KEYS.saves, JSON.stringify(saves.slice(0,3))); }catch(e){}
 }
 
-function volandGetDb() {
-  // get db
-  try {
-    return typeof volandDB !== 'undefined' ? volandDB : null;
-  } catch (e) { return null; }
+function volandGetActiveIndex(){
+  try{
+    let idx = parseInt(localStorage.getItem(VOLAND_KEYS.active)||'0');
+    let saves = volandGetSaves();
+    if(isNaN(idx) || idx<0 || idx>=saves.length) idx=0;
+    return idx;
+  }catch(e){ return 0; }
 }
-  window.volandInit = volandInit;
-  window.volandSave = volandSave;
-  window.volandLoad = volandLoad;
-  window.volandReset = volandReset;
-  window.volandGetGold = volandGetGold;
-  window.volandAddGold = volandAddGold;
-  window.volandSetGold = volandSetGold;
-  window.volandGetResources = volandGetResources;
-  window.volandGetResource = volandGetResource;
-  window.volandGetResourceCount = volandGetResourceCount;
-  window.volandAddResource = volandAddResource;
-  window.volandRemoveResource = volandRemoveResource;
-  window.volandSetResources = volandSetResources;
-  window.volandGetXp = volandGetXp;
-  window.volandAddXp = volandAddXp;
-  window.volandSetXp = volandSetXp;
-  window.volandGetLevel = volandGetLevel;
-  window.volandSetLevel = volandSetLevel;
-  window.volandGetLevelInfo = volandGetLevelInfo;
-  window.volandCheckLevelUp = volandCheckLevelUp;
-  window.volandGetStatPoints = volandGetStatPoints;
-  window.volandAddStatPoint = volandAddStatPoint;
-  window.volandUseStatPoint = volandUseStatPoint;
-  window.volandGetHero = volandGetHero;
-  window.volandSetHero = volandSetHero;
-  window.volandGetHeroName = volandGetHeroName;
-  window.volandGetHeroLevel = volandGetHeroLevel;
-  window.volandGetBag = volandGetBag;
-  window.volandSetBag = volandSetBag;
-  window.volandAddToBag = volandAddToBag;
-  window.volandRemoveFromBag = volandRemoveFromBag;
-  window.volandGetBagSize = volandGetBagSize;
-  window.volandIsBagFull = volandIsBagFull;
-  window.volandClearBag = volandClearBag;
-  window.volandGetMissions = volandGetMissions;
-  window.volandGetMission = volandGetMission;
-  window.volandClaimMission = volandClaimMission;
-  window.volandCompleteMission = volandCompleteMission;
-  window.volandIsMissionLocked = volandIsMissionLocked;
-  window.volandResetMissions = volandResetMissions;
-  window.volandGetSkills = volandGetSkills;
-  window.volandGetSkill = volandGetSkill;
-  window.volandUnlockSkill = volandUnlockSkill;
-  window.volandHasSkill = volandHasSkill;
-  window.volandGetItem = volandGetItem;
-  window.volandHasItem = volandHasItem;
-  window.volandGetDb = volandGetDb;
-  volandInit();
+
+function volandHasSave(){
+  return volandGetSaves().length>0;
+}
+
+function volandGetHeroId(){
+  try{
+    let saves = volandGetSaves();
+    let idx = volandGetActiveIndex();
+    if(saves.length>0 && saves[idx]) return saves[idx].hero;
+    // fallback old single
+    let id = localStorage.getItem(VOLAND_KEYS.hero) || localStorage.getItem(VOLAND_KEYS.legacy_hero);
+    if(id && VOLAND_HEROES[id]) return id;
+    return Object.keys(VOLAND_HEROES)[0]||'necro-f-new';
+  }catch(e){ return Object.keys(VOLAND_HEROES)[0]||'necro-f-new'; }
+}
+
+function volandGetHero(){ const id = volandGetHeroId(); return VOLAND_HEROES[id] || VOLAND_HEROES[Object.keys(VOLAND_HEROES)[0]]; }
+
+function volandGetName(){
+  try{
+    let saves = volandGetSaves();
+    let idx = volandGetActiveIndex();
+    if(saves.length>0 && saves[idx]) return saves[idx].name;
+    let n = localStorage.getItem(VOLAND_KEYS.name) || localStorage.getItem(VOLAND_KEYS.legacy_name);
+    return n || 'VOLAND 1337';
+  }catch(e){ return 'VOLAND 1337'; }
+}
+
+function volandGetCurrentSave(){
+  let saves = volandGetSaves();
+  let idx = volandGetActiveIndex();
+  return saves[idx] || null;
+}
+
+function volandGetEquipRaw(){
+  try{
+    let cur = volandGetCurrentSave();
+    if(cur && cur.equip) return cur.equip;
+    let s = localStorage.getItem(VOLAND_KEYS.equip) || localStorage.getItem(VOLAND_KEYS.legacy_equip);
+    if(!s) return {};
+    return volandSafeParse(s, {});
+  }catch(e){ return {}; }
+}
+
+function volandGetEquippedItems(){
+  const raw = volandGetEquipRaw();
+  const eq = {};
+  for(let slot in raw){
+    const id = raw[slot];
+    const item = VOLAND_ITEMS.find(x=>x.id===id);
+    if(item) eq[slot]=item;
+  }
+  return eq;
+}
+
+function volandSaveEquip(equipped){
+  const toSave = {};
+  for(let slot in equipped) toSave[slot]=equipped[slot].id;
+  try{
+    let saves = volandGetSaves();
+    let idx = volandGetActiveIndex();
+    if(saves.length>0){
+      saves[idx].equip = toSave;
+      volandSaveSaves(saves);
+    }
+    localStorage.setItem(VOLAND_KEYS.equip, JSON.stringify(toSave));
+  }catch(e){}
+}
+
+function volandCalcStats(){
+  const heroId = volandGetHeroId();
+  const base = VOLAND_HEROES[heroId]?.st || VOLAND_HEROES[Object.keys(VOLAND_HEROES)[0]].st;
+  const cur = {...base};
+  const eq = volandGetEquippedItems();
+  const bonus = {};
+  for(let slot in eq){
+    for(let k in eq[slot].bonus){
+      cur[k] = (cur[k]||0) + eq[slot].bonus[k];
+      bonus[k] = (bonus[k]||0) + eq[slot].bonus[k];
+    }
+  }
+  return {cur, bonus, heroId, hero: VOLAND_HEROES[heroId], equip: eq};
+}
+
+// New helpers for page3 stats
+function volandGetPlaytimeHours(){
+  try{
+    let cur = volandGetCurrentSave();
+    let created = cur ? cur.created : parseInt(localStorage.getItem(VOLAND_KEYS.created)||Date.now());
+    let diff = Date.now() - created;
+    return Math.floor(diff/1000/60/60);
+  }catch(e){ return 0; }
+}
+
+function volandGetKills(){ try{ let cur=volandGetCurrentSave(); if(cur) return cur.kills||0; return parseInt(localStorage.getItem(VOLAND_KEYS.kills)||'0'); }catch(e){return 0;} }
+function volandGetQuests(){ try{ let cur=volandGetCurrentSave(); if(cur) return {done: cur.quests||0, total: cur.quests_total||40}; return {done: parseInt(localStorage.getItem(VOLAND_KEYS.quests)||'0'), total: parseInt(localStorage.getItem(VOLAND_KEYS.quests_total)||'40')}; }catch(e){return {done:0,total:40};} }
+function volandGetPvp(){ try{ let cur=volandGetCurrentSave(); if(cur) return cur.pvp||0; return parseInt(localStorage.getItem(VOLAND_KEYS.pvp)||'0'); }catch(e){return 0;} }
+
+function volandAddKill(){ try{ let saves=volandGetSaves(); let idx=volandGetActiveIndex(); if(saves[idx]){ saves[idx].kills=(saves[idx].kills||0)+1; volandSaveSaves(saves);} }catch(e){} }
+
+
+function volandGetMissionStats(){
+ try{
+  let raw = localStorage.getItem('voland_missions_stats');
+  let s = raw ? JSON.parse(raw) : {};
+  return {
+   kill_loc: s.kill_loc || {1:0,2:0,3:0},
+   kill_boss: s.kill_boss || 0,
+   kill_boss_diff: s.kill_boss_diff || [],
+   login_days: s.login_days || [],
+   ult_uses: s.ult_uses || 0,
+   win_streak: s.win_streak || 0,
+   max_win_streak: s.max_win_streak || 0,
+   collect_green: s.collect_green || 0,
+   collect_blue: s.collect_blue || 0,
+   collect_legend: s.collect_legend || 0,
+   equip_dmg_max: s.equip_dmg_max || 0
+  };
+ }catch(e){ return {kill_loc:{1:0,2:0,3:0},kill_boss:0,kill_boss_diff:[],login_days:[],ult_uses:0,win_streak:0,max_win_streak:0,collect_green:0,collect_blue:0,collect_legend:0,equip_dmg_max:0}; }
+}
+
+function volandSaveMissionStats(stats){
+ try{ localStorage.setItem('voland_missions_stats', JSON.stringify(stats)); }catch(e){}
+}
+
+function volandGetMissionsDone(){
+ try{
+  let raw = localStorage.getItem('voland_missions_done');
+  return raw ? JSON.parse(raw) : [];
+ }catch(e){ return []; }
+}
+
+function volandSaveMissionsDone(done){
+ try{ localStorage.setItem('voland_missions_done', JSON.stringify(done)); }catch(e){}
+}
+
+function volandIsMissionUnlocked(mission, doneList){
+ if(!mission.prev) return true;
+ return doneList.includes(mission.prev);
+}
+
+function volandGetMissionProgress(mission){
+ let stats = volandGetMissionStats();
+ switch(mission.type){
+  case 'kill_mob': return Math.min(stats.kill_loc[mission.loc]||0, mission.target);
+  case 'kill_boss': return Math.min(stats.kill_boss||0, mission.target);
+  case 'kill_boss_diff': return Math.min((stats.kill_boss_diff||[]).length, mission.target);
+  case 'login': return Math.min((stats.login_days||[]).length, mission.target);
+  case 'ult': return Math.min(stats.ult_uses||0, mission.target);
+  case 'win_streak': return Math.min(stats.max_win_streak||0, mission.target);
+  case 'collect_green': return Math.min(stats.collect_green||0, mission.target);
+  case 'collect_blue': return Math.min(stats.collect_blue||0, mission.target);
+  case 'collect_legend': return Math.min(stats.collect_legend||0, mission.target);
+  case 'equip_dmg': return Math.min(stats.equip_dmg_max||0, mission.target);
+  default: return 0;
+ }
+}
+
+function volandUpdateMissionStat(type, loc, value){
+ let stats = volandGetMissionStats();
+ if(type==='kill_mob' && loc){
+  stats.kill_loc[loc] = (stats.kill_loc[loc]||0) + value;
+ } else if(type==='kill_boss'){
+  stats.kill_boss = (stats.kill_boss||0) + value;
+ } else if(type==='kill_boss_diff'){
+  if(!stats.kill_boss_diff.includes(value)) stats.kill_boss_diff.push(value);
+ } else if(type==='login'){
+  let day = new Date().toISOString().slice(0,10);
+  if(!stats.login_days.includes(day)) stats.login_days.push(day);
+ } else if(type==='ult'){
+  stats.ult_uses = (stats.ult_uses||0) + value;
+ } else if(type==='win_streak'){
+  if(value>0){
+   stats.win_streak = (stats.win_streak||0) + 1;
+   stats.max_win_streak = Math.max(stats.max_win_streak||0, stats.win_streak);
+  } else {
+   stats.win_streak = 0;
+  }
+ } else if(type==='collect_green'){
+  stats.collect_green = value;
+ } else if(type==='collect_blue'){
+  stats.collect_blue = value;
+ } else if(type==='collect_legend'){
+  stats.collect_legend = value;
+ } else if(type==='equip_dmg'){
+  stats.equip_dmg_max = Math.max(stats.equip_dmg_max||0, value);
+ }
+ volandSaveMissionStats(stats);
+}
+
+function volandCheckMissions(){
+ try{
+  if(!window.VOLAND_MISSIONS) return [];
+  let done = volandGetMissionsDone();
+  let newly = [];
+  for(let m of VOLAND_MISSIONS){
+   if(done.includes(m.id)) continue;
+   if(!volandIsMissionUnlocked(m, done)) continue;
+   let prog = volandGetMissionProgress(m);
+   if(prog >= m.target){
+    done.push(m.id);
+    newly.push(m);
+   }
+  }
+  if(newly.length) volandSaveMissionsDone(done);
+  return newly;
+ }catch(e){ return []; }
+}
+
+// init login tracking
+try{ volandUpdateMissionStat('login'); }catch(e){}
+
+
+
+
+// ===== VOLAND STORAGE v3 - GOLD / XP / RESOURCES / INVENTORY / LEVEL =====
+function volandGetGold(){
+  try{
+    let saves=volandGetSaves();
+    let idx=volandGetActiveIndex();
+    if(saves.length>0 && saves[idx] && typeof saves[idx].gold!=='undefined') return parseInt(saves[idx].gold)||0;
+    let g = localStorage.getItem('voland_v1_gold');
+    return parseInt(g||'0')||0;
+  }catch(e){ return 0; }
+}
+function volandSetGold(amount){
+  try{
+    amount = Math.max(0, parseInt(amount)||0);
+    let saves=volandGetSaves();
+    let idx=volandGetActiveIndex();
+    if(saves.length>0){
+      saves[idx].gold = amount;
+      volandSaveSaves(saves);
+    }
+    localStorage.setItem('voland_v1_gold', String(amount));
+    return amount;
+  }catch(e){ return 0; }
+}
+function volandAddGold(add){
+  try{
+    let cur=volandGetGold();
+    let next=cur + (parseInt(add)||0);
+    return volandSetGold(next);
+  }catch(e){ return 0; }
+}
+
+function volandGetXp(){
+  try{
+    let saves=volandGetSaves();
+    let idx=volandGetActiveIndex();
+    if(saves.length>0 && saves[idx] && typeof saves[idx].xp!=='undefined') return parseInt(saves[idx].xp)||0;
+    let x = localStorage.getItem('voland_v1_xp');
+    return parseInt(x||'0')||0;
+  }catch(e){ return 0; }
+}
+function volandSetXp(amount){
+  try{
+    amount = Math.max(0, parseInt(amount)||0);
+    let saves=volandGetSaves();
+    let idx=volandGetActiveIndex();
+    if(saves.length>0){
+      saves[idx].xp = amount;
+      volandSaveSaves(saves);
+    }
+    localStorage.setItem('voland_v1_xp', String(amount));
+    return amount;
+  }catch(e){ return 0; }
+}
+function volandAddXp(add){
+  try{
+    let cur=volandGetXp();
+    let next=cur + (parseInt(add)||0);
+    return volandSetXp(next);
+  }catch(e){ return 0; }
+}
+
+function volandGetLevelInfo(totalXp){
+  try{
+    let xp = parseInt(totalXp)||0;
+    if(xp<0) xp=0;
+    let lvl = 1;
+    let accumulated = 0;
+    let need = 1000;
+    while(true){
+      need = (2*lvl - 1)*1000;
+      if(xp < accumulated + need){
+        break;
+      }
+      accumulated += need;
+      lvl++;
+      if(lvl>100) break;
+    }
+    let cur = xp - accumulated;
+    if(cur<0) cur=0;
+    let pct = need>0 ? Math.floor(cur/need*100) : 0;
+    if(pct>100) pct=100;
+    return {lvl:lvl, cur:cur, need:need, pct:pct, total:xp, nextNeed:need-cur, accumulated:accumulated};
+  }catch(e){ return {lvl:1, cur:0, need:1000, pct:0, total:0, nextNeed:1000, accumulated:0}; }
+}
+function volandGetCurrentLevelInfo(){
+  return volandGetLevelInfo(volandGetXp());
+}
+function volandGetLevel(){
+  try{ return volandGetCurrentLevelInfo().lvl; }catch(e){ return 1; }
+}
+function volandCheckLevelUp(oldXp, newXp){
+  try{
+    let oldInfo = volandGetLevelInfo(oldXp);
+    let newInfo = volandGetLevelInfo(newXp);
+    if(newInfo.lvl > oldInfo.lvl){
+      let diff = newInfo.lvl - oldInfo.lvl;
+      let curPoints = 0;
+      let saves = volandGetSaves();
+      let idx = volandGetActiveIndex();
+      if(saves[idx] && typeof saves[idx].stat_points!=='undefined'){
+        curPoints = parseInt(saves[idx].stat_points)||0;
+      } else {
+        curPoints = parseInt(localStorage.getItem('voland_v1_stat_points')||'0')||0;
+      }
+      curPoints += diff;
+      localStorage.setItem('voland_v1_stat_points', String(curPoints));
+      if(saves[idx]){
+        saves[idx].stat_points = curPoints;
+        volandSaveSaves(saves);
+      }
+      return {leveled:true, oldLvl:oldInfo.lvl, newLvl:newInfo.lvl, points:diff, totalPoints:curPoints};
+    }
+    return {leveled:false};
+  }catch(e){ return {leveled:false}; }
+}
+// обертка для volandAddXp чтобы чекать lvl up
+(function(){
+  try{
+    let orig = volandAddXp;
+    window.volandAddXp = function(amount){
+      try{
+        let oldXp = volandGetXp();
+        let newXp = orig(amount);
+        let lvlUp = volandCheckLevelUp(oldXp, newXp);
+        if(lvlUp.leveled){
+          console.log('LEVEL UP! '+lvlUp.oldLvl+' -> '+lvlUp.newLvl);
+        }
+        return newXp;
+      }catch(e){ return orig(amount); }
+    };
+  }catch(e){}
 })();
-const FIX_GOLD_INFINITE = true; // GOLD one cell infinite centered
-const FIX_RES_SPLIT = 99; // RES 99 max 120=99+21
-const FIX_XP_FORMULA = 'lvl*2*1000-1000'; // XP 1:1000,2:3000,3:5000
-const FIX_LVL_START = 1; // LVL after hero name from 1
-const FIX_STAT_POINT = 1; // 1 stat point per lvl up
-const FIX_BAG_SIZE = 50; // BAG 50 cells
-const FIX_GOLD_EMOJI = '💰'; // GOLD emoji centered
-const FIX_COUNT_POS = 'under'; // number under emoji centered
-const FIX_NOT_99PLUS = true; // not 99+, not corner
-const FIX_RES_COUNT_ONLY = true; // under emoji only count
-const FIX_XP_SINGLE_BAR = true; // one XP bar
-const FIX_MISSIONS_FALLBACK = 22; // 22 missions fallback
-const FIX_MISSIONS_OPACITY = 0.9; // opacity .9 locked
-const FIX_HERO_LVL_SUFFIX = ' LVL '; // LVL after name
-const FIX_BATTLE_GOLD_DB = true; // battle engine gold from db.js
-const FIX_SAND_MOUSE_GOLD = 5; // Sand Mouse 5 gold
-const FIX_SAND_MOUSE_XP = 80; // Sand Mouse 80 xp
-const FIX_TITAN_GOLD = 30; // Titan 30 gold
-const FIX_TITAN_XP = 800; // Titan 800 xp
-const FIX_DEFEAT_GOLD = 0; // defeat 0 gold
-const FIX_DEFEAT_LOOT = 0; // defeat 0 loot
-const FIX_DEFEAT_XP_PCT = 0.5; // defeat 50% XP
-const FIX_VICTORY_WORKS = true; // victory works
-const FIX_PAGE4_SIZE = 21568; // page4 21568 bytes
-const FIX_PAGE9_SIZE = 21914; // page9 21914 bytes
-const FIX_STORAGE_SIZE = 16811; // storage 16811 bytes
-const FIX_STORAGE_LINES = 496; // storage 496 lines
-const FIX_STORAGE_FUNCS = 47; // storage 47 funcs
-const FIX_HAS_GOLD_FUNCS = true; // volandGetGold etc
-const FIX_HAS_XP_FUNCS = true; // volandGetXp etc
-const FIX_HAS_LEVEL_INFO = true; // volandGetLevelInfo
-const FIX_HAS_CLAIM_MISSION = true; // volandClaimMission
-const FIX_BAG_GOLD_CELL = 'gold-cell'; // gold cell class
-const FIX_BAG_EMPTY_OPACITY = 0.3; // empty opacity
-const FIX_XP_GRADIENT = true; // xp gradient gold
-const FIX_MISSIONS_ICONS = 5; // HERO,BAG,SKILLS,BATTLE,MISSIONS
-const FIX_NO_SYNTAX_ERROR = true; // page9 no SyntaxError
-const FIX_DOCTYPE_HTML = true; // <!DOCTYPE... </html>...
+
+function volandGetResources(){
+  try{
+    let saves=volandGetSaves();
+    let idx=volandGetActiveIndex();
+    if(saves.length>0 && saves[idx] && saves[idx].resources) return saves[idx].resources;
+    let raw = localStorage.getItem('voland_v1_resources');
+    if(raw) return JSON.parse(raw);
+    return {};
+  }catch(e){ return {}; }
+}
+function volandSetResources(res){
+  try{
+    let cleaned={};
+    for(let k in res){ cleaned[k]=Math.max(0, Math.min(99999, parseInt(res[k])||0)); }
+    let saves=volandGetSaves();
+    let idx=volandGetActiveIndex();
+    if(saves.length>0){
+      saves[idx].resources = cleaned;
+      volandSaveSaves(saves);
+    }
+    localStorage.setItem('voland_v1_resources', JSON.stringify(cleaned));
+    return cleaned;
+  }catch(e){ return {}; }
+}
+function volandAddResource(id, add){
+  try{
+    let res=volandGetResources();
+    let cur=parseInt(res[id]||0);
+    res[id] = Math.min(99999, cur + (parseInt(add)||0));
+    return volandSetResources(res)[id];
+  }catch(e){ return 0; }
+}
+
+function volandGetInventory(){
+  try{
+    let saves=volandGetSaves();
+    let idx=volandGetActiveIndex();
+    if(saves.length>0 && saves[idx] && saves[idx].inventory) return saves[idx].inventory;
+    let raw = localStorage.getItem('voland_v1_inventory');
+    if(raw) return JSON.parse(raw);
+    return [];
+  }catch(e){ return []; }
+}
+function volandSaveInventory(inv){
+  try{
+    if(!Array.isArray(inv)) inv=[];
+    let saves=volandGetSaves();
+    let idx=volandGetActiveIndex();
+    if(saves.length>0){
+      saves[idx].inventory = inv;
+      volandSaveSaves(saves);
+    }
+    localStorage.setItem('voland_v1_inventory', JSON.stringify(inv));
+    return inv;
+  }catch(e){ return []; }
+}
+function volandAddToInventory(itemId){
+  try{
+    let inv=volandGetInventory();
+    inv.push({id:itemId, time:Date.now()});
+    return volandSaveInventory(inv);
+  }catch(e){ return []; }
+}
+function volandRemoveFromInventory(itemId){
+  try{
+    let inv=volandGetInventory();
+    let idx=inv.findIndex(x=>x.id===itemId);
+    if(idx>=0){ inv.splice(idx,1); }
+    return volandSaveInventory(inv);
+  }catch(e){ return []; }
+}
+
+// совместимость для page4
+function getGold(){ return volandGetGold(); }
+function getResources(){ return volandGetResources(); }
