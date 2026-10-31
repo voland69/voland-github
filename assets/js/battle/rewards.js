@@ -1,4 +1,4 @@
-// VOLAND REWARDS & MODALS v1 - victory screen like ¡VICTORIA!
+// VOLAND REWARDS & MODALS v3 - fixed to use VOLAND_ENEMIES gold/xp
 function showVictory(isWin){
   const modal = document.getElementById('victoryModal');
   const box = document.getElementById('victoryBox');
@@ -15,15 +15,48 @@ function showVictory(isWin){
     trophy.textContent='🏆';
     title.textContent='¡VICTORIA!';
     sub.textContent='Has triunfado en el combate • ' + (lastEnemyData?lastEnemyData.name:'');
-    const baseGold = (currentStage||1)*20 + (currentLoc||1)*10 + (lastEnemyData&&lastEnemyData.boss?100:0);
-    const baseXp = (currentStage||1)*500 + (currentLoc||1)*200 + (lastEnemyData&&lastEnemyData.boss?2000:0);
+    // FIXED: берем из db, а не формулой
+    let baseGold = (lastEnemyData && lastEnemyData.gold) ? parseInt(lastEnemyData.gold) : ((currentStage||1)*5 + (currentLoc||1)*2);
+    let baseXp = (lastEnemyData && lastEnemyData.xp) ? parseInt(lastEnemyData.xp) : ((currentStage||1)*50 + (currentLoc||1)*20);
     goldEl.textContent='+'+baseGold;
     xpEl.textContent='+'+baseXp.toLocaleString('es-ES');
-    lootEl.textContent=(lastEnemyData&&lastEnemyData.boss?'1':'0');
-    goldBonus.textContent='+'+Math.floor(baseGold*0.05)+' (5%)';
-    xpBonus.textContent='+'+Math.floor(baseXp*0.26)+' (26%)';
+    // дроп ресурсов
+    let resCount = 0;
+    try{
+      if(lastEnemyData && Array.isArray(lastEnemyData.drops)){
+        lastEnemyData.drops.forEach(d=>{
+          if(Math.random() < (d.chance||0)){
+            if(typeof volandAddResource==='function') volandAddResource(d.id, 1);
+            resCount++;
+          }
+        });
+      }
+      if(lastEnemyData && lastEnemyData.equipChance && Math.random() < lastEnemyData.equipChance){
+        if(typeof VOLAND_ITEMS!=='undefined' && typeof volandAddToInventory==='function'){
+          let pool = VOLAND_ITEMS.filter(it=>it.slot);
+          if(pool.length>0){
+            let pick = pool[Math.floor(Math.random()*pool.length)];
+            volandAddToInventory(pick.id);
+          }
+        }
+      }
+    }catch(e){}
+    lootEl.textContent = resCount>0 ? String(resCount) : (lastEnemyData&&lastEnemyData.boss?'1':'0');
+    if(goldBonus) goldBonus.textContent='+0';
+    if(xpBonus) xpBonus.textContent='+0';
     if (window.volandAddXp) volandAddXp(baseXp);
     if (window.volandAddGold) volandAddGold(baseGold);
+    try{ if(typeof volandAddKill==='function') volandAddKill(); }catch(e){}
+    try{
+      if(typeof volandUpdateMissionStat==='function'){
+        volandUpdateMissionStat('kill_mob', currentLoc, 1);
+        if(lastEnemyData && lastEnemyData.boss){
+          volandUpdateMissionStat('kill_boss', null, 1);
+          volandUpdateMissionStat('kill_boss_diff', null, currentLoc+'-'+currentStage);
+        }
+        if(typeof volandCheckMissions==='function') volandCheckMissions();
+      }
+    }catch(e){}
   } else {
     box.classList.add('defeat');
     trophy.textContent='💀';
@@ -32,8 +65,8 @@ function showVictory(isWin){
     goldEl.textContent='+0';
     xpEl.textContent='+0';
     lootEl.textContent='0';
-    goldBonus.textContent='+0';
-    xpBonus.textContent='+0';
+    if(goldBonus) goldBonus.textContent='+0';
+    if(xpBonus) xpBonus.textContent='+0';
   }
   modal.classList.add('show');
 }
@@ -65,15 +98,9 @@ function closeBattle(){
           <div class="card-lvl">${e.lvl}</div>
           <div class="card-icon">${e.icon}</div>
           <div class="card-name">${e.name}</div>
-          <div class="card-desc">${e.desc}</div>
-          <div class="card-hp"><div class="card-hp-fill" style="width:${e.hp}%; background:${e.boss?'linear-gradient(90deg,#8a6a1a,#d0b040)':''}; background-color:${e.hpColor}"></div></div>
+          <div class="card-reward">+${e.gold} GOLD • +${e.xp} XP</div>
         </div>
       `).join('');
     }
   }
-  logChat('Возврат к выбору мобов');
-}
-function runBattle(){
-  if (battle){ addBattleLog('Ты сбежал из боя с ' + battle.enemy.name, 'sys'); logChat('Сбежал из боя Stage '+battle.enemy.stage); }
-  closeBattle();
 }
