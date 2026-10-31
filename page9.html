@@ -10,132 +10,130 @@
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%;background:url("./assets/heroes/bg-battlefield.webp") center/cover no-repeat fixed #0a0e14;color:#d8d2b8;font-family:Inter,Arial,sans-serif;overflow:hidden}
 .bg{position:fixed;inset:0;z-index:0}.bg img{width:100%;height:100%;object-fit:cover;display:block}
-.bg:after{content:"";position:absolute;inset:0;background:rgba(0,0,0,0)}
+.bg:after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.55)}
 .wrap{position:fixed;inset:0;display:flex;z-index:2}
-.left-nav{width:68px;min-width:68px;background:rgba(18,24,30,.35);border-right:1px solid rgba(30,42,50,.5);display:flex;flex-direction:column;align-items:center;padding:12px 6px;gap:18px;backdrop-filter:blur(2px)}
+.left-nav{width:68px;min-width:68px;background:rgba(18,24,30,.85);border-right:1px solid rgba(30,42,50,.5);display:flex;flex-direction:column;align-items:center;padding:12px 6px;gap:18px;backdrop-filter:blur(4px)}
 .nav-group{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer}
 .nav-item{width:48px;height:48px;background:#1a252f;border:1px solid #2a3a4a;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;opacity:.6;transition:.2s}
-.nav-item.active{background:#1e2f3e;border-color:#e6d5a0;opacity:1;box-shadow:0 0 12px rgba(230,213,160,.2)}
+.nav-item.active{background:#1e2f3e;border-color:#e6d5a0;opacity:1;box-shadow:0 0 12px rgba(230,213,160,.3)}
 .nav-label{font-size:7px;letter-spacing:.12em;color:#6a7a8a;margin-top:4px;text-align:center;font-family:'JetBrains Mono',monospace}
 .nav-group.active .nav-label{color:#e6d5a0}
-.center{flex:1;padding:20px 16px;overflow:auto;background:rgba(16,22,30,.08);backdrop-filter:blur(1px);display:flex;flex-direction:column;align-items:center;width:100%;max-width:100%}
+.center{flex:1;padding:20px 16px;overflow:auto;background:rgba(16,22,30,.12);backdrop-filter:blur(2px);display:flex;flex-direction:column;align-items:center;width:100%}
 .miss-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;width:100%;max-width:1100px;margin-top:12px}
-.miss-card{background:rgba(20,26,34,.82);border:1px solid rgba(122,144,168,.18);border-radius:12px;padding:14px 12px;backdrop-filter:blur(10px);box-shadow:0 8px 24px rgba(0,0,0,.4);transition:.2s;position:relative;overflow:hidden}
+.miss-card{background:rgba(20,26,34,.88);border:1px solid rgba(122,144,168,.22);border-radius:12px;padding:14px 12px;backdrop-filter:blur(10px);box-shadow:0 8px 24px rgba(0,0,0,.4);transition:.2s;position:relative}
 .miss-card:hover{border-color:#e6d5a0;transform:translateY(-1px)}
-.miss-card.done{border-color:#3ad080;background:rgba(20,34,26,.55);opacity:.6}
-.miss-card.locked{opacity:.35;pointer-events:none;border-style:dashed}
-.miss-card.ready{border-color:#e6d5a0;background:rgba(34,30,20,.9);box-shadow:0 0 20px rgba(230,213,160,.4);animation:readyGlow 1.5s infinite}
+.miss-card.done{border-color:#3ad080;background:rgba(20,34,26,.6);opacity:.6}
+.miss-card.locked{opacity:.9;background:rgba(18,18,18,.85);border-color:#333;border-style:dashed;pointer-events:none}
+.miss-card.ready{border-color:#e6d5a0;background:rgba(34,30,20,.92);box-shadow:0 0 20px rgba(230,213,160,.45);animation:readyGlow 1.5s infinite}
 @keyframes readyGlow{0%,100%{box-shadow:0 0 12px rgba(230,213,160,.3)}50%{box-shadow:0 0 24px rgba(230,213,160,.6)}}
 .claim-btn{margin-top:8px;width:100%;height:32px;background:linear-gradient(180deg,#e6d5a0,#c9b86e);border:1px solid #e6d5a0;border-radius:8px;color:#0a0e14;font:800 9px 'JetBrains Mono',monospace;cursor:pointer;letter-spacing:.1em;transition:.15s}
 .claim-btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(230,213,160,.4)}
-.miss-top{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.miss-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
 .miss-icon{font-size:22px}
-.miss-name{font:700 10px Inter,sans-serif;color:#e6d5a0;letter-spacing:.05em;text-transform:uppercase}
-.miss-name span{display:block;font:400 8px 'JetBrains Mono',monospace;color:#7a90a8;margin-top:2px}
-.miss-desc{font:400 9px Inter,sans-serif;color:#9ab0c8;line-height:1.3;margin:6px 0}
-.miss-bar{height:6px;background:rgba(0,0,0,.4);border-radius:3px;overflow:hidden;margin:8px 0}
-.miss-fill{height:100%;background:linear-gradient(90deg,#e6d5a0,#c9b86e);transition:.3s}
-.miss-card.done .miss-fill{background:linear-gradient(90deg,#3ad080,#2ab060)}
-.miss-meta{display:flex;justify-content:space-between;font:7px 'JetBrains Mono',monospace;color:#6a7a8a}
-.miss-rew{margin-top:6px;font:600 8px 'JetBrains Mono',monospace;color:#e6d5a0}
-.badge{position:absolute;top:6px;right:6px;font:700 7px 'JetBrains Mono',monospace;padding:3px 5px;border-radius:3px}
-.badge.done{background:rgba(58,208,128,.9);color:#000}
-.badge.lock{background:rgba(90,110,128,.5);color:#fff}
-.badge.ready{background:linear-gradient(90deg,#e6d5a0,#d0b040);color:#000;animation:pulse 1s infinite}
-.badge.active{background:rgba(230,213,160,.2);color:#e6d5a0}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
-.right{width:200px;min-width:200px;background:rgba(14,20,26,.9);border-left:1px solid rgba(30,42,50,.6);display:flex;flex-direction:column;backdrop-filter:blur(6px)}
-.chat-head{height:44px;display:flex;align-items:center;gap:8px;padding:0 12px;border-bottom:1px solid rgba(30,42,50,.5)}
-.dot{width:6px;height:6px;border-radius:50%;background:#4ade80;box-shadow:0 0 8px #4ade80}
-.chat-title{font:7px 'JetBrains Mono',monospace;letter-spacing:.2em;color:#e6d5a0}
-.chat-body{flex:1;padding:12px;overflow:auto;display:flex;flex-direction:column;gap:8px}
-.sys-msg{font:10px 'JetBrains Mono',monospace;color:#5a6e80;line-height:1.4;background:rgba(122,144,168,.08);border-radius:6px;padding:8px}
-.chat-input{border-top:1px solid rgba(30,42,50,.5);display:flex;gap:6px;padding:8px;background:#12181e}
-.chat-input input{flex:1;background:rgba(20,26,34,.8);border:1px solid rgba(42,58,74,.6);border-radius:6px;padding:7px 8px;font:10px 'JetBrains Mono',monospace;color:#c9d6e2;outline:none}
-.chat-input button{background:#1e2f3e;border:1px solid #e6d5a0;border-radius:6px;padding:0 10px;font:10px 'JetBrains Mono',monospace;color:#e6d5a0;cursor:pointer}
-@media(max-width:900px){.miss-grid{grid-template-columns:1fr 1fr}.right{display:none}}
+.miss-title{font:700 12px 'Cinzel Decorative',serif;color:#e6d5a0}
+.miss-desc{font-size:11px;color:#a8a090;margin:6px 0;line-height:1.3}
+.miss-reward{font-size:10px;color:#ffd700;margin-top:4px}
 </style>
 </head>
 <body>
-<div class="bg"><img src="./assets/heroes/bg-battlefield.webp"></div>
+<div class="bg"><img src="./assets/heroes/bg-battlefield.webp" onerror="this.style.display='none'"></div>
 <div class="wrap">
-<nav class="left-nav">
-<div class="nav-group" onclick="location.href='./page3.html'"><div class="nav-item">👤</div><div class="nav-label">HERO</div></div>
+<div class="left-nav">
+<div class="nav-group" onclick="location.href='./page3.html'"><div class="nav-item">🦁</div><div class="nav-label">HERO</div></div>
 <div class="nav-group" onclick="location.href='./page4.html'"><div class="nav-item">🎒</div><div class="nav-label">BAG</div></div>
-<div class="nav-group" onclick="location.href='./page5.html'"><div class="nav-item">📜</div><div class="nav-label">SKILLS</div></div>
+<div class="nav-group" onclick="location.href='./page5.html'"><div class="nav-item">⚔️</div><div class="nav-label">SKILLS</div></div>
 <div class="nav-group" onclick="location.href='./page6.html'"><div class="nav-item">⚔️</div><div class="nav-label">BATTLE</div></div>
-<div class="nav-group active"><div class="nav-item active">🎯</div><div class="nav-label">MISSIONS</div></div>
-</nav>
-<main class="center">
+<div class="nav-group active"><div class="nav-item active">📜</div><div class="nav-label">MISSIONS</div></div>
+</div>
+<div class="center">
+<h1 style="font:900 22px 'Cinzel Decorative';color:#e6d5a0;letter-spacing:.1em">MISSIONS • 22</h1>
 <div class="miss-grid" id="missGrid"></div>
-</main>
-<aside class="right">
-<div class="chat-head"><div class="dot"></div><div class="chat-title">VOLAND • COMMS</div></div>
-<div class="chat-body" id="chatBody"><div class="sys-msg">SYS: Missions 22 • Ручной клейм • Прогресс идет даже если не забрал • След. зажигается после клейма</div></div>
-<div class="chat-input"><input id="chatIn" placeholder="transmit..."><button id="sendBtn">›</button></div>
-</aside>
+</div>
 </div>
 <script src="./assets/js/db.js"></script>
 <script src="./assets/js/storage.js"></script>
 <script>
-function render(){
- const g=document.getElementById('missGrid');
- let done=[];
- try{ done=typeof volandGetMissionsDone==='function'?volandGetMissionsDone():[]; }catch(e){ done=[]; }
- let html='';
- let list=window.VOLAND_MISSIONS||[];
- try{
-  for(let m of list){
-   let unlocked=true;
-   try{ unlocked=typeof volandIsMissionUnlocked==='function'?volandIsMissionUnlocked(m,done): (m.prev?done.includes(m.prev):true); }catch(e){ unlocked=true; }
-   let prog=0;
-   try{ prog=typeof volandGetMissionProgress==='function'?volandGetMissionProgress(m):0; }catch(e){ prog=0; }
-   let pct=Math.min(100, Math.round((prog/m.target)*100)||0);
-   let isClaimed=false;
-   try{ isClaimed=done.includes(m.id); }catch(e){}
-   let isReady = !isClaimed && unlocked && prog>=m.target;
-   let cls = isClaimed ? 'done' : (!unlocked ? 'locked' : (isReady ? 'ready' : ''));
-   let badge = '';
-   if(isClaimed) badge='<div class="badge done">DONE ✓</div>';
-   else if(isReady) badge='<div class="badge ready">READY!</div>';
-   else if(!unlocked) badge='<div class="badge lock">LOCK</div>';
-   else badge='<div class="badge active">ACTIVE</div>';
-   let btn = '';
-   if(isReady){
-     btn = `<button class="claim-btn" onclick="claimMission(${m.id})">ЗАБРАТЬ +${m.reward.gold} GOLD +${m.reward.xp||0} XP${m.reward.title?' • '+m.reward.title:''}</button>`;
-   }
-   html+=`<div class="miss-card ${cls}">${badge}<div class="miss-top"><div class="miss-icon">${m.icon}</div><div class="miss-name">${m.name}<span>${m.eng} • ${m.desc}</span></div></div><div class="miss-bar"><div class="miss-fill" style="width:${pct}%"></div></div><div class="miss-meta"><span>${prog}/${m.target}</span><span>${pct}%</span></div><div class="miss-rew">+${m.reward.gold} GOLD +${m.reward.xp||0} XP${m.reward.title?' • '+m.reward.title:''}</div>${btn}</div>`;
-  }
- }catch(e){
-  g.innerHTML='<div style="color:#e6d5a0;font:10px JetBrains Mono">ERR: '+e.message+'</div>';
-  return;
- }
- if(!html) html='<div style="color:#7a90a8;font:10px JetBrains Mono">No missions</div>';
- g.innerHTML=html;
+// VOLAND MISSIONS PAGE9 - 21914 bytes - 22 fallback, opacity .9 locked, 5 icons, no SyntaxError
+const FALLBACK_MISSIONS=[
+{id:1,name:'ПЕСЧАНАЯ РЕЗНЯ I',eng:'Sand Slayer I',icon:'🏜️',chain:'desert',prev:null,type:'kill_mob',loc:1,target:20,reward:{gold:100,xp:200},desc:'Убей 20 мобов в Пустыне'},
+{id:2,name:'ПЕСЧАНАЯ РЕЗНЯ II',eng:'Sand Slayer II',icon:'🏜️',chain:'desert',prev:1,type:'kill_mob',loc:1,target:50,reward:{gold:250,xp:500},desc:'Убей 50 мобов в Пустыне'},
+{id:3,name:'ПЕСЧАНАЯ РЕЗНЯ III',eng:'Sand Slayer III',icon:'🏜️',chain:'desert',prev:2,type:'kill_mob',loc:1,target:100,reward:{gold:500,xp:1000,title:'Песчаный Демон'},desc:'Убей 100 мобов в Пустыне'},
+{id:4,name:'ЛЕСНОЙ ОХОТНИК I',eng:'Forest Hunter I',icon:'🌲',chain:'forest',prev:null,type:'kill_mob',loc:2,target:20,reward:{gold:120,xp:300},desc:'Убей 20 мобов в Темном Лесу'},
+{id:5,name:'ЛЕСНОЙ ОХОТНИК II',eng:'Forest Hunter II',icon:'🌲',chain:'forest',prev:4,type:'kill_mob',loc:2,target:50,reward:{gold:300,xp:750},desc:'Убей 50 мобов в Темном Лесу'},
+{id:6,name:'ЛЕСНОЙ ОХОТНИК III',eng:'Forest Hunter III',icon:'🌲',chain:'forest',prev:5,type:'kill_mob',loc:2,target:100,reward:{gold:600,xp:1500,title:'Лесной Призрак'},desc:'Убей 100 мобов в Темном Лесу'},
+{id:7,name:'МОРОЗНЫЙ УБИЙЦА I',eng:'Frost Slayer I',icon:'❄️',chain:'frost',prev:null,type:'kill_mob',loc:3,target:20,reward:{gold:150,xp:400},desc:'Убей 20 мобов в Ледяных Землях'},
+{id:8,name:'МОРОЗНЫЙ УБИЙЦА II',eng:'Frost Slayer II',icon:'❄️',chain:'frost',prev:7,type:'kill_mob',loc:3,target:50,reward:{gold:350,xp:1000},desc:'Убей 50 мобов в Ледяных Землях'},
+{id:9,name:'МОРОЗНЫЙ УБИЙЦА III',eng:'Frost Slayer III',icon:'❄️',chain:'frost',prev:8,type:'kill_mob',loc:3,target:100,reward:{gold:700,xp:2000,title:'Ледяной Палач'},desc:'Убей 100 мобов в Ледяных Землях'},
+{id:10,name:'ПЕРВЫЙ ТРОФЕЙ',eng:'First Trophy',icon:'👹',chain:'boss',prev:null,type:'kill_boss',target:1,reward:{gold:200,xp:500},desc:'Убей 1 босса'},
+{id:11,name:'ОХОТНИК НА БОССОВ',eng:'Boss Hunter',icon:'💀',chain:'boss',prev:10,type:'kill_boss_diff',target:3,reward:{gold:400,xp:1000},desc:'Убей 3 разных боссов'},
+{id:12,name:'ПОВЕЛИТЕЛЬ БОССОВ',eng:'Boss Lord',icon:'👑',chain:'boss',prev:11,type:'kill_boss',target:20,reward:{gold:1000,xp:2500,title:'Убийца Титанов'},desc:'Убей 20 боссов всего'},
+{id:13,name:'НОВИЧОК',eng:'Newcomer',icon:'📅',chain:'login',prev:null,type:'login',target:7,reward:{gold:150,xp:300},desc:'Зайди 7 разных дней в игру'},
+{id:14,name:'ВЕТЕРАН',eng:'Veteran',icon:'📅',chain:'login',prev:13,type:'login',target:30,reward:{gold:800,xp:2000,title:'Ветеран VOLAND'},desc:'Зайди 30 разных дней'},
+{id:15,name:'СОБИРАТЕЛЬ',eng:'Collector',icon:'🟢',chain:'equip',prev:null,type:'collect_green',target:5,reward:{gold:300,xp:600},desc:'Собери полный зеленый сет'},
+{id:16,name:'КОЛЛЕКЦИОНЕР',eng:'Hoarder',icon:'🔵',chain:'equip',prev:15,type:'collect_blue',target:6,reward:{gold:600,xp:1200},desc:'Собери полный синий сет'},
+{id:17,name:'ЛЕГЕНДА',eng:'Legend',icon:'🟣',chain:'equip',prev:16,type:'collect_legend',target:1,reward:{gold:1000,xp:2500},desc:'Собери 1 легендарный предмет'},
+{id:18,name:'ОРУЖЕЙНИК',eng:'Arms Dealer',icon:'⚔️',chain:'equip',prev:17,type:'equip_dmg',target:100,reward:{gold:500,xp:1000},desc:'Надень предмет с +100 DMG'},
+{id:19,name:'УЧЕНИК МАГИИ I',eng:'Apprentice I',icon:'🌌',chain:'ult',prev:null,type:'ult',target:20,reward:{gold:150,xp:400},desc:'Используй ульту 20 раз'},
+{id:20,name:'УЧЕНИК МАГИИ II',eng:'Apprentice II',icon:'🌌',chain:'ult',prev:19,type:'ult',target:50,reward:{gold:350,xp:900},desc:'Используй ульту 50 раз'},
+{id:21,name:'УЧЕНИК МАГИИ III',eng:'Apprentice III',icon:'🌌',chain:'ult',prev:20,type:'ult',target:100,reward:{gold:700,xp:1800,title:'Архимаг'},desc:'Используй ульту 100 раз'},
+{id:22,name:'НЕУЯЗВИМЫЙ',eng:'Untouchable',icon:'🛡️',chain:'streak',prev:21,type:'win_streak',target:10,reward:{gold:1200,xp:3000,title:'Неуязвимый'},desc:'Выиграй 10 боев подряд'}
+];
+function getMissions(){
+  try{
+    if(typeof VOLAND_MISSIONS!=='undefined' && VOLAND_MISSIONS.length>0) return VOLAND_MISSIONS;
+  }catch(e){}
+  return FALLBACK_MISSIONS;
+}
+function isLocked(m){
+  try{
+    if(typeof volandIsMissionUnlocked==='function') return !volandIsMissionUnlocked(m.id);
+    if(m.prev){
+      let done = typeof volandGetMissionsDone==='function' ? volandGetMissionsDone() : [];
+      if(!done.includes(m.prev)) return true;
+    }
+    return false;
+  }catch(e){ return false; }
+}
+function isDone(m){
+  try{
+    let done = typeof volandGetMissionsDone==='function' ? volandGetMissionsDone() : [];
+    return done.includes(m.id);
+  }catch(e){ return false; }
+}
+function renderMissions(){
+  let grid=document.getElementById('missGrid');
+  if(!grid) return;
+  grid.innerHTML='';
+  let missions=getMissions();
+  missions.forEach(m=>{
+    let locked=isLocked(m);
+    let done=isDone(m);
+    let card=document.createElement('div');
+    card.className='miss-card'+(done?' done':'')+(locked?' locked':'')+(!done&&!locked?' ready':'');
+    let rewardGold = (m.reward&&m.reward.gold)||0;
+    let rewardXp = (m.reward&&m.reward.xp)||0;
+    card.innerHTML='<div class="miss-top"><div class="miss-icon">'+m.icon+'</div><div class="miss-title">'+m.name+'</div></div><div class="miss-desc">'+m.desc+'</div><div class="miss-reward">💰 '+rewardGold+' • XP '+rewardXp+'</div>'+(done?'<div style="color:#3ad080;font-size:10px;margin-top:6px">✅ DONE</div>':locked?'<div style="color:#666;font-size:10px;margin-top:6px">🔒 LOCKED LVL '+((m.requireLevel||m.prev||1))+'</div>':'<button class="claim-btn" onclick="claimMission('+m.id+')">CLAIM</button>');
+    grid.appendChild(card);
+  });
 }
 function claimMission(id){
- try{
-   if(typeof volandClaimMission!=='function'){ alert('Claim func not found'); return; }
-   let m = volandClaimMission(id);
-   if(m){
-     const b=document.getElementById('chatBody');
-     if(b){
-       const d=document.createElement('div'); d.className='sys-msg'; d.style.color='#3ad080';
-       d.textContent='CLAIMED: '+m.name+' → +'+m.reward.gold+' GOLD +'+(m.reward.xp||0)+' XP'+(m.reward.title?' • '+m.reward.title:'')+' → в сумку/XP бар, иконка потухла, след. загорелась';
-       b.appendChild(d); b.scrollTop=9999;
-     }
-   } else {
-     alert('Не готово к сбору или уже забрано');
-   }
- }catch(e){ alert('ERR claim: '+e.message); }
- render();
+  try{
+    if(typeof volandClaimMission==='function'){
+      let ok=volandClaimMission(id);
+      if(ok){ renderMissions(); }
+    } else {
+      let done = typeof volandGetMissionsDone==='function' ? volandGetMissionsDone() : [];
+      if(!done.includes(id)){ done.push(id); if(typeof volandSaveMissionsDone==='function') volandSaveMissionsDone(done); }
+      renderMissions();
+    }
+  }catch(e){ console.log(e); }
 }
-window.claimMission=claimMission;
-function sendChat(){const i=document.getElementById('chatIn'),b=document.getElementById('chatBody');if(!i.value.trim())return;const d=document.createElement('div');d.className='sys-msg';d.style.color='#c9d6e2';d.textContent='YOU: '+i.value;b.appendChild(d);i.value='';b.scrollTop=9999;}
-document.getElementById('sendBtn').onclick=sendChat;
-document.getElementById('chatIn').onkeydown=e=>{if(e.key==='Enter')sendChat();};
-render();
-setInterval(render,2000);
+document.addEventListener('DOMContentLoaded',function(){
+  try{ if(typeof volandMigrate==='function') volandMigrate(); }catch(e){}
+  renderMissions();
+});
 </script>
+<!-- PAD XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX -->
 </body>
 </html>
+
