@@ -1,48 +1,39 @@
-// VOLAND DROP SYSTEM v3 - resources + gear from VOLAND_ENEMIES
+// VOLAND DROP SYSTEM v3
 function volandRollDrops(enemyData){
-  let results = {resources:[], gear:null, gold:0, xp:0};
   try{
-    if(!enemyData) return results;
-    results.gold = parseInt(enemyData.gold)||0;
-    results.xp = parseInt(enemyData.xp)||0;
-    // resources
-    if(Array.isArray(enemyData.drops)){
+    let res=[];
+    let equips=[];
+    if(enemyData && Array.isArray(enemyData.drops)){
       enemyData.drops.forEach(d=>{
-        let chance = parseFloat(d.chance)||0;
-        if(Math.random() < chance){
-          results.resources.push({id:d.id, amount:1});
+        if(Math.random() < (d.chance||0)){
+          res.push({id:d.id, count:1});
         }
       });
     }
-    // gear chance
-    let equipChance = parseFloat(enemyData.equipChance)||0;
-    if(equipChance>0 && Math.random() < equipChance){
-      if(typeof VOLAND_ITEMS !== 'undefined' && VOLAND_ITEMS.length>0){
-        // pick random item weighted by rarity
-        let pool = VOLAND_ITEMS.filter(it=> it.slot);
+    if(enemyData && enemyData.equipChance && Math.random() < enemyData.equipChance){
+      if(typeof VOLAND_ITEMS!=='undefined'){
+        let pool = VOLAND_ITEMS.filter(it=>it.slot);
         if(pool.length>0){
           let pick = pool[Math.floor(Math.random()*pool.length)];
-          results.gear = pick;
+          equips.push(pick.id);
         }
       }
     }
-  }catch(e){ console.log('drop error', e); }
-  return results;
+    return {resources:res, equips:equips};
+  }catch(e){ return {resources:[], equips:[]}; }
 }
-
-function volandApplyDrops(dropResult){
+function volandApplyDrops(drop){
   try{
-    if(!dropResult) return;
-    if(dropResult.gold>0 && typeof volandAddGold==='function') volandAddGold(dropResult.gold);
-    if(dropResult.xp>0 && typeof volandAddXp==='function') volandAddXp(dropResult.xp);
-    if(Array.isArray(dropResult.resources)){
-      dropResult.resources.forEach(r=>{
-        if(typeof volandAddResource==='function') volandAddResource(r.id, r.amount);
+    if(!drop) return;
+    if(drop.resources){
+      drop.resources.forEach(r=>{
+        if(typeof volandAddResource==='function') volandAddResource(r.id, r.count||1);
       });
     }
-    if(dropResult.gear && typeof volandAddToInventory==='function'){
-      volandAddToInventory(dropResult.gear.id);
+    if(drop.equips){
+      drop.equips.forEach(eid=>{
+        if(typeof volandAddToInventory==='function') volandAddToInventory(eid);
+      });
     }
-    return dropResult;
-  }catch(e){ console.log('apply drop error', e); }
+  }catch(e){}
 }
