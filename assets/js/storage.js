@@ -281,3 +281,214 @@ function volandCheckMissions(){
 // init login tracking
 try{ volandUpdateMissionStat('login'); }catch(e){}
 
+
+
+
+// ===== VOLAND STORAGE v3 - GOLD / XP / RESOURCES / INVENTORY / LEVEL =====
+function volandGetGold(){
+  try{
+    let saves=volandGetSaves();
+    let idx=volandGetActiveIndex();
+    if(saves.length>0 && saves[idx] && typeof saves[idx].gold!=='undefined') return parseInt(saves[idx].gold)||0;
+    let g = localStorage.getItem('voland_v1_gold');
+    return parseInt(g||'0')||0;
+  }catch(e){ return 0; }
+}
+function volandSetGold(amount){
+  try{
+    amount = Math.max(0, parseInt(amount)||0);
+    let saves=volandGetSaves();
+    let idx=volandGetActiveIndex();
+    if(saves.length>0){
+      saves[idx].gold = amount;
+      volandSaveSaves(saves);
+    }
+    localStorage.setItem('voland_v1_gold', String(amount));
+    return amount;
+  }catch(e){ return 0; }
+}
+function volandAddGold(add){
+  try{
+    let cur=volandGetGold();
+    let next=cur + (parseInt(add)||0);
+    return volandSetGold(next);
+  }catch(e){ return 0; }
+}
+
+function volandGetXp(){
+  try{
+    let saves=volandGetSaves();
+    let idx=volandGetActiveIndex();
+    if(saves.length>0 && saves[idx] && typeof saves[idx].xp!=='undefined') return parseInt(saves[idx].xp)||0;
+    let x = localStorage.getItem('voland_v1_xp');
+    return parseInt(x||'0')||0;
+  }catch(e){ return 0; }
+}
+function volandSetXp(amount){
+  try{
+    amount = Math.max(0, parseInt(amount)||0);
+    let saves=volandGetSaves();
+    let idx=volandGetActiveIndex();
+    if(saves.length>0){
+      saves[idx].xp = amount;
+      volandSaveSaves(saves);
+    }
+    localStorage.setItem('voland_v1_xp', String(amount));
+    return amount;
+  }catch(e){ return 0; }
+}
+function volandAddXp(add){
+  try{
+    let cur=volandGetXp();
+    let next=cur + (parseInt(add)||0);
+    return volandSetXp(next);
+  }catch(e){ return 0; }
+}
+
+function volandGetLevelInfo(totalXp){
+  try{
+    let xp = parseInt(totalXp)||0;
+    if(xp<0) xp=0;
+    let lvl = 1;
+    let accumulated = 0;
+    let need = 1000;
+    while(true){
+      need = (2*lvl - 1)*1000;
+      if(xp < accumulated + need){
+        break;
+      }
+      accumulated += need;
+      lvl++;
+      if(lvl>100) break;
+    }
+    let cur = xp - accumulated;
+    if(cur<0) cur=0;
+    let pct = need>0 ? Math.floor(cur/need*100) : 0;
+    if(pct>100) pct=100;
+    return {lvl:lvl, cur:cur, need:need, pct:pct, total:xp, nextNeed:need-cur, accumulated:accumulated};
+  }catch(e){ return {lvl:1, cur:0, need:1000, pct:0, total:0, nextNeed:1000, accumulated:0}; }
+}
+function volandGetCurrentLevelInfo(){
+  return volandGetLevelInfo(volandGetXp());
+}
+function volandGetLevel(){
+  try{ return volandGetCurrentLevelInfo().lvl; }catch(e){ return 1; }
+}
+function volandCheckLevelUp(oldXp, newXp){
+  try{
+    let oldInfo = volandGetLevelInfo(oldXp);
+    let newInfo = volandGetLevelInfo(newXp);
+    if(newInfo.lvl > oldInfo.lvl){
+      let diff = newInfo.lvl - oldInfo.lvl;
+      let curPoints = 0;
+      let saves = volandGetSaves();
+      let idx = volandGetActiveIndex();
+      if(saves[idx] && typeof saves[idx].stat_points!=='undefined'){
+        curPoints = parseInt(saves[idx].stat_points)||0;
+      } else {
+        curPoints = parseInt(localStorage.getItem('voland_v1_stat_points')||'0')||0;
+      }
+      curPoints += diff;
+      localStorage.setItem('voland_v1_stat_points', String(curPoints));
+      if(saves[idx]){
+        saves[idx].stat_points = curPoints;
+        volandSaveSaves(saves);
+      }
+      return {leveled:true, oldLvl:oldInfo.lvl, newLvl:newInfo.lvl, points:diff, totalPoints:curPoints};
+    }
+    return {leveled:false};
+  }catch(e){ return {leveled:false}; }
+}
+// обертка для volandAddXp чтобы чекать lvl up
+(function(){
+  try{
+    let orig = volandAddXp;
+    window.volandAddXp = function(amount){
+      try{
+        let oldXp = volandGetXp();
+        let newXp = orig(amount);
+        let lvlUp = volandCheckLevelUp(oldXp, newXp);
+        if(lvlUp.leveled){
+          console.log('LEVEL UP! '+lvlUp.oldLvl+' -> '+lvlUp.newLvl);
+        }
+        return newXp;
+      }catch(e){ return orig(amount); }
+    };
+  }catch(e){}
+})();
+
+function volandGetResources(){
+  try{
+    let saves=volandGetSaves();
+    let idx=volandGetActiveIndex();
+    if(saves.length>0 && saves[idx] && saves[idx].resources) return saves[idx].resources;
+    let raw = localStorage.getItem('voland_v1_resources');
+    if(raw) return JSON.parse(raw);
+    return {};
+  }catch(e){ return {}; }
+}
+function volandSetResources(res){
+  try{
+    let cleaned={};
+    for(let k in res){ cleaned[k]=Math.max(0, Math.min(99999, parseInt(res[k])||0)); }
+    let saves=volandGetSaves();
+    let idx=volandGetActiveIndex();
+    if(saves.length>0){
+      saves[idx].resources = cleaned;
+      volandSaveSaves(saves);
+    }
+    localStorage.setItem('voland_v1_resources', JSON.stringify(cleaned));
+    return cleaned;
+  }catch(e){ return {}; }
+}
+function volandAddResource(id, add){
+  try{
+    let res=volandGetResources();
+    let cur=parseInt(res[id]||0);
+    res[id] = Math.min(99999, cur + (parseInt(add)||0));
+    return volandSetResources(res)[id];
+  }catch(e){ return 0; }
+}
+
+function volandGetInventory(){
+  try{
+    let saves=volandGetSaves();
+    let idx=volandGetActiveIndex();
+    if(saves.length>0 && saves[idx] && saves[idx].inventory) return saves[idx].inventory;
+    let raw = localStorage.getItem('voland_v1_inventory');
+    if(raw) return JSON.parse(raw);
+    return [];
+  }catch(e){ return []; }
+}
+function volandSaveInventory(inv){
+  try{
+    if(!Array.isArray(inv)) inv=[];
+    let saves=volandGetSaves();
+    let idx=volandGetActiveIndex();
+    if(saves.length>0){
+      saves[idx].inventory = inv;
+      volandSaveSaves(saves);
+    }
+    localStorage.setItem('voland_v1_inventory', JSON.stringify(inv));
+    return inv;
+  }catch(e){ return []; }
+}
+function volandAddToInventory(itemId){
+  try{
+    let inv=volandGetInventory();
+    inv.push({id:itemId, time:Date.now()});
+    return volandSaveInventory(inv);
+  }catch(e){ return []; }
+}
+function volandRemoveFromInventory(itemId){
+  try{
+    let inv=volandGetInventory();
+    let idx=inv.findIndex(x=>x.id===itemId);
+    if(idx>=0){ inv.splice(idx,1); }
+    return volandSaveInventory(inv);
+  }catch(e){ return []; }
+}
+
+// совместимость для page4
+function getGold(){ return volandGetGold(); }
+function getResources(){ return volandGetResources(); }
