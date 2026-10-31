@@ -2,69 +2,324 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>VOLAND - BAG</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-body{margin:0;background:#111;color:#fff;font-family:Arial,sans-serif;}
-.header{padding:10px;background:#222;display:flex;justify-content:space-between;align-items:center;}
-.hero-name{font-weight:bold;}
-.xp-wrap{width:200px;background:#333;height:14px;position:relative;border-radius:7px;overflow:hidden;}
-.xp-fill{height:100%;background:linear-gradient(90deg,#ffd700,#ffaa00);transition:width .3s;}
-.xp-text{position:absolute;top:0;left:0;width:100%;text-align:center;font-size:11px;line-height:14px;}
-.nav{display:flex;gap:10px;padding:10px;background:#1a1a1a;justify-content:center;}
-.nav a{color:#fff;text-decoration:none;padding:8px 12px;background:#333;border-radius:6px;}
-.nav a.active{background:#555;}
-.bag{display:grid;grid-template-columns:repeat(10,1fr);gap:6px;padding:12px;max-width:800px;margin:0 auto;}
-.cell{border:1px solid #444;background:#1e1e1e;aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:8px;}
-.cell.empty{opacity:.3;}
-.cell .emoji{font-size:28px;}
-.cell .count{font-size:13px;margin-top:4px;text-align:center;width:100%;color:#ffd700;font-weight:bold;}
-.cell.gold-cell{border-color:#ffd700;background:#2a2410;}
-.cell.gold-cell .count{color:#fff;text-align:center;}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") center/cover no-repeat fixed #0a0e14;color:#d8d2b8;font-family:Inter,Arial,sans-serif;overflow:hidden}
+.bg{position:fixed;inset:0;z-index:0}.bg img{width:100%;height:100%;object-fit:cover}
+.wrap{position:fixed;inset:0;display:flex;z-index:2}
+.left-nav{width:68px;min-width:68px;background:rgba(18,24,30,.35);border-right:1px solid rgba(30,42,50,.5);display:flex;flex-direction:column;align-items:center;padding:12px 6px;gap:18px;backdrop-filter: blur(2px)}
+.nav-item{width:48px;height:48px;background:#1a252f;border:1px solid #2a3a4a;border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0.6;transition:.2s;font-size:20px}
+.nav-item.active{background:#1e2f3e;border-color:#e6d5a0;opacity:1;box-shadow:0 0 12px rgba(230,213,160,.2)}
+.nav-label{font-size:7px;letter-spacing:.15em;color:#6a7a8a;margin-top:4px;text-align:center;font-family:'JetBrains Mono',monospace}
+.center-col{flex:1;display:flex;flex-direction:column;background:rgba(16,22,30,.25);overflow:hidden;backdrop-filter: blur(2px)}
+.top-row{flex:0 0 480px;display:flex;gap:16px;background:rgba(19,26,34,.35);border-bottom:1px solid rgba(30,42,50,.5);overflow:hidden;align-items:stretch}
+.stats-panel{width:250px;min-width:250px;max-width:250px;background:rgba(20,28,36,.45);border-right:1px solid rgba(30,42,50,.5);padding:12px 16px 16px 16px;display:flex;flex-direction:column;justify-content:flex-start;gap:0;height:100%}
+.bars-panel{width:250px;min-width:250px;max-width:250px;background:rgba(20,28,36,.45);border-left:1px solid rgba(30,42,50,.5);padding:24px 16px;display:flex;flex-direction:column;justify-content:center;gap:8px}
+.panel-title{font-size:7px;letter-spacing:.2em;color:#6a7a8a;font-family:'JetBrains Mono',monospace;text-align:center;margin-bottom:8px}
+.stats-grid-inner{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,1fr);gap:10px;flex:1;margin-top:8px;height:100%}
+.stat-card{background:#1a242f;border:1px solid #2a3a4a;border-radius:10px;padding:8px 6px;text-align:center;min-height:0;display:flex;flex-direction:column;justify-content:center;align-items:center;height:100%}
+.stat-card.boosted{border-color:#3ad080;box-shadow:0 0 12px rgba(58,208,128,.3)}
+.stat-label{font-size:8px;letter-spacing:.15em;color:#6a7a8a;font-family:'JetBrains Mono',monospace}
+.stat-value{margin-top:4px;font-size:18px;font-weight:800;color:#e6d5a0;font-family:'JetBrains Mono',monospace}
+.stat-bonus{font-size:18px;color:#3ad080;font-family:'JetBrains Mono',monospace;margin-top:6px;min-height:20px;font-weight:800;line-height:1.1}
+.equip-zone{flex:1;padding:12px 16px 16px 16px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;background:rgba(16,22,30,.15)}
+.equip-grid{width:100%;max-width:680px;display:flex;gap:14px;align-items:stretch;justify-content:center;margin-top:6px}
+.equip-col{display:flex;flex-direction:column;gap:10px}
+.equip-col.left-col,.equip-col.right-col{width:120px;flex:0 0 120px}
+.equip-col.center-col-grid{flex:1;max-width:260px}
+.equip-col.center-col-grid .equip-slot{height:78px}
+.equip-col.left-col .equip-slot,.equip-col.right-col .equip-slot{height:136px}
+.equip-slot{background:#1a242f;border:1px dashed #2a3a4a;border-radius:12px;display:grid;grid-template-columns:44px 1fr;grid-template-rows:auto auto;column-gap:10px;row-gap:2px;align-items:center;cursor:pointer;width:100%;padding:8px 10px;justify-items:start}
+.equip-slot.filled{border-style:solid;border-color:#e6d5a0;background:#1e2f3e;box-shadow:0 0 14px rgba(230,213,160,.28)}
+.equip-slot .slot-icon{grid-column:1;grid-row:1 / span 2;font-size:28px;justify-self:center;align-self:center}
+.equip-slot .slot-name{grid-column:2;grid-row:1;font-size:11px;letter-spacing:.06em;color:#8a9a8a;font-family:'JetBrains Mono',monospace;text-align:left;text-transform:uppercase;font-weight:800;line-height:1.1;margin-top:0}
+.equip-slot.filled .slot-name{color:#e6d5a0}
+.equip-slot .slot-empty{grid-column:2;grid-row:2;font-size:14px;color:#3ad080;font-family:'JetBrains Mono',monospace;text-align:left;line-height:1.15;margin-top:0;font-weight:800}
+.equip-slot.head{width:100%;height:62px}
+.equip-slot.amulet{width:100%;height:62px}
+.equip-slot.ear-l{width:100%;height:110px}
+.equip-slot.ear-r{width:100%;height:110px}
+.equip-slot.weapon{width:100%;height:110px}
+.equip-slot.armor{width:100%;height:62px;background:#1e2a32}
+.equip-slot.shield{width:100%;height:110px}
+.equip-slot.ring1{width:100%;height:110px}
+.equip-slot.gloves{width:100%;height:62px}
+.equip-slot.ring2{width:100%;height:110px}
+.equip-slot.boots{width:100%;height:62px}
+.bar-row{display:flex;flex-direction:column;gap:5px}
+.bar-label{font-size:7px;letter-spacing:.15em;color:#6a7a8a;font-family:'JetBrains Mono',monospace;display:flex;justify-content:space-between}
+.bar-track{height:24px;background:#0a0e14;border-radius:5px;overflow:hidden;border:1px solid #1e2a32}
+.bar-fill{height:100%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;font-family:'JetBrains Mono',monospace}
+.bar-fill.hp{background:linear-gradient(90deg,#b33030,#e05050);color:#fff}
+.bar-fill.mana{background:linear-gradient(90deg,#1a4a9a,#2a6ad0);color:#fff}
+.bar-fill.stamina{background:linear-gradient(90deg,#1a7a4a,#3ad080);color:#fff}
+.bar-fill.xp{background:linear-gradient(90deg,#8a6a1a,#d0b040);color:#fff}
+.bars-inner{display:flex;flex-direction:column;gap:10px}
+.inventory-zone{flex:1;background:rgba(17,24,33,.25);padding:12px 14px;display:flex;flex-direction:column;overflow:auto;margin-top:4px}
+.inv-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;margin-top:6px}
+.inv-cell{aspect-ratio:1;background:#1a242f;border:1px solid #2a3a4a;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;min-height:38px}
+.inv-cell.has-item{background:#1e2a32;border-color:#3a4a5a}
+.inv-cell.has-item:hover{border-color:#e6d5a0}
+.inv-cell .item-icon{font-size:15px}
+.inv-cell .item-name{font-size:5px;color:#6a7a8a;margin-top:2px;font-family:'JetBrains Mono',monospace;text-align:center}
+.inv-cell .item-bonus{font-size:13px;color:#3ad080;margin-top:2px;font-family:'JetBrains Mono',monospace;font-weight:800;line-height:1.1}
+.inv-cell.empty{opacity:.4}
+.right{width:200px;min-width:200px;background:rgba(14,20,26,1);border-left:1px solid rgba(30,42,50,.5);display:flex;flex-direction:column}
+.chat-header{padding:12px;border-bottom:1px solid #1e2a32;display:flex;align-items:center;gap:8px;background:#141c24}
+.dot{width:8px;height:8px;border-radius:50%;background:#3ad080;box-shadow:0 0 6px #3ad080}
+.chat-title{font-size:9px;letter-spacing:.2em;color:#6a7a8a;font-family:'JetBrains Mono',monospace}
+.chat-body{flex:1;padding:10px;overflow:auto;display:flex;flex-direction:column;gap:8px}
+.sys-msg{background:#1a242f;border-left:2px solid #d0b040;padding:8px;font-size:9px;color:#9a9a7a;line-height:1.3;border-radius:0 6px 6px 0}
+.chat-input{padding:8px;border-top:1px solid #1e2a32;display:flex;gap:6px;background:#12181e}
+.chat-input input{flex:1;background:#0a0e14;border:1px solid #1e2a32;border-radius:6px;padding:8px;font-size:11px;color:#d8d2b8}
+.chat-input button{width:32px;background:#e6d5a0;border:none;border-radius:6px;cursor:pointer;font-weight:800}
 </style>
 </head>
 <body>
-<div class="header">
-<div class="hero-name" id="heroName">Hero LVL 1</div>
-<div class="xp-wrap"><div class="xp-fill" id="xpFill" style="width:0%"></div><div class="xp-text" id="xpText">0/1000</div></div>
+<div class="bg"><img src="./assets/heroes/bg-battlefield.webp"></div>
+<div class="wrap">
+  <div class="left-nav">
+    <div onclick="location.href='./page3.html'"><div class="nav-item">👤</div><div class="nav-label">HERO</div></div>
+    <div><div class="nav-item active">🎒</div><div class="nav-label">BAG</div></div>
+    <div onclick="location.href='./page5.html'"><div class="nav-item">📜</div><div class="nav-label">SKILLS</div></div>
+    <div onclick="location.href='./page6.html'"><div class="nav-item">⚔️</div><div class="nav-label">BATTLE</div></div>
+    <div onclick="location.href='./page9.html'"><div class="nav-item">🎯</div><div class="nav-label">MISSIONS</div></div>
+    <div onclick="location.href='./index.html'"><div class="nav-item">🗺️</div><div class="nav-label">MAP</div></div>
+  </div>
+  <div class="center-col">
+    <div class="top-row">
+      <div class="stats-panel" id="statsPanel"><div class="panel-title">СТАТЫ ГЕРОЯ — 6 (A+B)</div></div>
+      <div class="equip-zone">
+        <div class="panel-title">ЭКИПИРОВКА — 11 • КЛИК СНЯТЬ</div>
+        <div class="equip-grid" id="equipGrid">
+          <div class="equip-col left-col">
+            <div class="equip-slot ear-l" data-slot="ear1"><div class="slot-icon">👂</div><div class="slot-name">Серьга 1</div><div class="slot-empty">пусто</div></div>
+            <div class="equip-slot weapon" data-slot="weapon"><div class="slot-icon">⚔️</div><div class="slot-name">Оружие</div><div class="slot-empty">пусто</div></div>
+            <div class="equip-slot ring1" data-slot="ring1"><div class="slot-icon">💍</div><div class="slot-name">Кольцо 1</div><div class="slot-empty">пусто</div></div>
+          </div>
+          <div class="equip-col center-col-grid">
+            <div class="equip-slot head" data-slot="head"><div class="slot-icon">🪖</div><div class="slot-name">Шлем</div><div class="slot-empty">пусто</div></div>
+            <div class="equip-slot amulet" data-slot="amulet"><div class="slot-icon">📿</div><div class="slot-name">Амулет</div><div class="slot-empty">пусто</div></div>
+            <div class="equip-slot armor" data-slot="armor"><div class="slot-icon">🦺</div><div class="slot-name">Броня</div><div class="slot-empty">пусто</div></div>
+            <div class="equip-slot gloves" data-slot="gloves"><div class="slot-icon">🧤</div><div class="slot-name">Перчатки</div><div class="slot-empty">пусто</div></div>
+            <div class="equip-slot boots" data-slot="boots"><div class="slot-icon">👢</div><div class="slot-name">Ботинки</div><div class="slot-empty">пусто</div></div>
+          </div>
+          <div class="equip-col right-col">
+            <div class="equip-slot ear-r" data-slot="ear2"><div class="slot-icon">👂</div><div class="slot-name">Серьга 2</div><div class="slot-empty">пусто</div></div>
+            <div class="equip-slot shield" data-slot="shield"><div class="slot-icon">🛡️</div><div class="slot-name">Щит</div><div class="slot-empty">пусто</div></div>
+            <div class="equip-slot ring2" data-slot="ring2"><div class="slot-icon">💍</div><div class="slot-name">Кольцо 2</div><div class="slot-empty">пусто</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="bars-panel" id="barsPanel"><div class="panel-title">БАРЫ ГЕРОЯ — 4 (C=D)</div></div>
+    </div>
+    <div class="inventory-zone">
+      <div class="panel-title" style="display:flex;justify-content:space-between"><span>ИНВЕНТАРЬ — 50 • <span id="goldDisplay">0 GOLD</span> • <span id="resDisplay">0 RES</span> • КЛИК НАДЕТЬ</span><span id="equipCount">0/11</span></div>
+      <div class="inv-grid" id="invGrid"></div>
+    </div>
+  </div>
+  <div class="right">
+    <div class="chat-header"><div class="dot"></div><div class="chat-title">CHAT + ЛОГИ v1</div></div>
+    <div class="chat-body" id="chatBody"><div class="sys-msg">Система: Шмот сохраняется между страницами (v1) — стабильно</div></div>
+    <div class="chat-input"><input id="chatIn" placeholder="..."><button id="chatBtn">▶</button></div>
+  </div>
 </div>
-<div class="nav">
-<a href="page3.html">HERO</a>
-<a href="page4.html" class="active">BAG</a>
-<a href="page5.html">SKILLS</a>
-<a href="page6.html">BATTLE</a>
-<a href="page9.html">MISSIONS</a>
-</div>
-<div class="bag" id="bag"></div>
-<script src="assets/js/db.js"></script>
-<script src="assets/js/storage.js"></script>
+<script src="./assets/js/db.js"></script>
+<script src="./assets/js/storage.js"></script>
 <script>
-function getItemEmoji(id){
-  try{if(typeof volandDB!=='undefined'&&volandDB.items){let it=volandDB.items.find(x=>x.id===id);if(it&&it.emoji)return it.emoji;}}catch{}
-  return {gold:'💰',wood:'🪵',stone:'🪨',iron:'⚙️',herb:'🌿',meat:'🍖',skin:'🦊'}[id]||'📦';
+if (!volandHasSave()){ location.href='./page2.html'; }
+let equipped = volandGetEquippedItems();
+let inv = [];
+function rebuildInv(){
+  const ids = new Set(Object.values(equipped).map(i=>i.id));
+  inv = [];
+  // золото - одна ячейка бесконечно
+  try{
+    let gold = getGold();
+    if(gold>0){
+      inv.push({id:'gold', icon:'🪙', name:'Золото', desc:gold+' GOLD', isGold:true, count:gold, type:'gold', rarity:'gold'});
+    }
+  }catch(e){}
+  // ресурсы - делим по 99
+  try{
+    if(typeof volandGetResources==='function'){
+      let res = volandGetResources();
+      const RES_ORDER_LOCAL = (typeof RES_ORDER !== 'undefined') ? RES_ORDER : ['quartz','wood','diamond','fang','essence'];
+      RES_ORDER_LOCAL.forEach(rid=>{
+        let cnt = res[rid]||0;
+        if(cnt>0){
+          let rdef = null;
+          try{
+            if(window.VOLAND_RESOURCES){
+              if(Array.isArray(VOLAND_RESOURCES)) rdef = VOLAND_RESOURCES.find(r=>r.id===rid);
+              else if(VOLAND_RESOURCES[rid]) rdef = VOLAND_RESOURCES[rid];
+            }
+          }catch(e){}
+          let icon = (rdef && rdef.icon) ? rdef.icon : ((typeof RES_ICONS_FALLBACK !== 'undefined' && RES_ICONS_FALLBACK[rid]) ? RES_ICONS_FALLBACK[rid] : '📦');
+          let name = (rdef && rdef.name) ? rdef.name : ((typeof RES_NAMES_FALLBACK !== 'undefined' && RES_NAMES_FALLBACK[rid]) ? RES_NAMES_FALLBACK[rid] : rid);
+          let remaining = cnt;
+          let chunkIdx = 0;
+          while(remaining>0 && inv.length<50){
+            let chunk = Math.min(99, remaining);
+            inv.push({id:rid+'_'+chunkIdx, icon:icon, name:name, desc:name, isResource:true, count:chunk, type:'resource', resId:rid});
+            remaining -= chunk;
+            chunkIdx++;
+          }
+        }
+      });
+    }
+  }catch(e){ console.log('rebuild res err', e); }
+  // дропнутый шмот
+  try{
+    if(typeof volandGetInventory==='function'){
+      let dropped = volandGetInventory();
+      for(let d of dropped){
+        if(inv.length>=50) break;
+        let item = null;
+        try{ item = VOLAND_ITEMS.find(i=>i.id===d.id); }catch(e){}
+        if(item && !ids.has(item.id) && !inv.find(x=>x && x.id===item.id)){
+          inv.push({...item, isDropped:true, dropTime:d.time, isEquip:true});
+        }
+      }
+    }
+  }catch(e){}
+  // весь остальной шмот
+  try{
+    VOLAND_ITEMS.forEach(it=>{
+      if(inv.length>=50) return;
+      if(!ids.has(it.id)){
+        if(!inv.find(x=>x && x.id===it.id)){
+          inv.push({...it, isEquip:true});
+        }
+      }
+    });
+  }catch(e){}
+  while(inv.length<50) inv.push(null);
+  inv = inv.slice(0,50);
 }
-function renderHero(){
-  let el=document.getElementById('heroName');
-  if(typeof volandGetHeroName==='function') el.textContent=volandGetHeroName();
-  let info=typeof volandGetLevelInfo==='function'?volandGetLevelInfo():{xp:0,need:1000,percent:0,level:1};
-  document.getElementById('xpFill').style.width=info.percent+'%';
-  document.getElementById('xpText').textContent=info.xp+'/'+info.need+' LVL '+info.level;
-}
-function renderBag(){
-  let bagEl=document.getElementById('bag'); bagEl.innerHTML='';
-  let gold=0; try{gold=volandGetGold();}catch{}
-  let goldCell=document.createElement('div'); goldCell.className='cell gold-cell';
-  goldCell.innerHTML='<div class="emoji">💰</div><div class="count">'+gold+'</div>';
-  bagEl.appendChild(goldCell);
-  let res={}; try{res=volandGetResources();}catch{}
-  Object.keys(res).forEach(id=>{
-    let total=parseInt(res[id],10)||0, rem=total;
-    while(rem>0){let c=Math.min(99,rem);let cell=document.createElement('div');cell.className='cell';
-      cell.innerHTML='<div class="emoji">'+getItemEmoji(id)+'</div><div class="count">'+c+'</div>';bagEl.appendChild(cell);rem-=c;}
+rebuildInv();
+const invGrid=document.getElementById('invGrid');
+const statsPanel=document.getElementById('statsPanel');
+const barsPanel=document.getElementById('barsPanel');
+const equipCount=document.getElementById('equipCount');
+const chatBody=document.getElementById('chatBody');
+function renderStats(){
+  const {cur, bonus} = volandCalcStats();
+  const order=[{key:'HP',label:'HP'},{key:'MANA',label:'MANA'},{key:'DEF',label:'DEF'},{key:'CRIT',label:'CRIT',suffix:'%'},{key:'DMG',label:'DAMAGE'},{key:'DODGE',label:'DODGE',suffix:'%'}];
+  const title=statsPanel.querySelector('.panel-title');
+  statsPanel.innerHTML=''; statsPanel.appendChild(title);
+  const grid=document.createElement('div'); grid.className='stats-grid-inner';
+  order.forEach(o=>{
+    const total=cur[o.key]||0; const add=bonus[o.key]||0;
+    const div=document.createElement('div'); div.className='stat-card'+(add>0?' boosted':'');
+    const suf=o.suffix||'';
+    div.innerHTML=`<div class="stat-label">${o.label}</div><div class="stat-value">${total}${suf}</div><div class="stat-bonus">${add>0?`+${add}${suf} от шмота`:''}</div>`;
+    grid.appendChild(div);
   });
-  while(bagEl.children.length<50){let e=document.createElement('div');e.className='cell empty';e.innerHTML='<div class="emoji"></div><div class="count"></div>';bagEl.appendChild(e);}
+  statsPanel.appendChild(grid);
 }
-document.addEventListener('DOMContentLoaded',()=>{try{volandInit();}catch{} renderHero(); renderBag();});
+function renderBars(){
+  const {cur} = volandCalcStats();
+  const title=barsPanel.querySelector('.panel-title');
+  barsPanel.innerHTML=''; barsPanel.appendChild(title);
+  const inner=document.createElement('div'); inner.className='bars-inner';
+  [{label:'HP',cls:'hp',cur:cur.HP,max:cur.HP},{label:'MANA',cls:'mana',cur:cur.MANA,max:cur.MANA},{label:'STAMINA',cls:'stamina',cur:100,max:100,txt:'100 / 100'},{label:'XP',cls:'xp',cur:100,max:100,txt:'LVL 7 • BAG'}].forEach(b=>{
+    const row=document.createElement('div'); row.className='bar-row';
+    const txt=b.txt||`${b.cur} / ${b.max}`;
+    row.innerHTML=`<div class="bar-label"><span>${b.label}</span><span>${b.max}</span></div><div class="bar-track"><div class="bar-fill ${b.cls}" style="width:100%">${txt}</div></div>`;
+    inner.appendChild(row);
+  });
+  barsPanel.appendChild(inner);
+}
+function log(m){const d=document.createElement('div'); d.className='sys-msg'; d.textContent=m; chatBody.appendChild(d); chatBody.scrollTop=9999;}
+function updateGoldRes(){
+  try{
+    let gold = typeof volandGetGold==='function'?volandGetGold():0;
+    let res = typeof volandGetResources==='function'?volandGetResources():{};
+    let resCount = Object.values(res).reduce((a,b)=>a+b,0);
+    let goldEl=document.getElementById('goldDisplay');
+    let resEl=document.getElementById('resDisplay');
+    if(goldEl) goldEl.textContent=gold+' GOLD';
+    if(resEl) resEl.textContent=resCount+' RES';
+  }catch(e){}
+}
+function renderInv(){
+  try{updateGoldRes();}catch(e){}
+  invGrid.innerHTML='';
+  for(let i=0;i<50;i++){
+    const cell=document.createElement('div'); cell.className='inv-cell';
+    const it=inv[i];
+    if(it){
+      cell.classList.add('has-item');
+      if(it.isGold){
+        cell.classList.add('gold');
+        cell.innerHTML=`<div class="item-icon">${it.icon}</div><div class="item-bonus" style="font-size:10px;font-weight:800;color:#d0b040;margin-top:2px">${it.count}</div>`;
+        cell.onclick=()=>{ log('Золото: '+it.count+' — в одной ячейке бесконечно'); };
+        cell.title = it.name+' '+it.count;
+      } else if(it.isResource){
+        cell.classList.add('resource');
+        cell.innerHTML=`<div class="item-icon">${it.icon}</div><div class="item-bonus" style="font-size:10px;font-weight:800;color:#3ad080;margin-top:2px">${it.count}</div>`;
+        cell.onclick=()=>{ log(it.name+': '+it.count+' — стак 99, при 99+ новая ячейка'); };
+        cell.title = it.name+' '+it.count;
+      } else {
+        cell.classList.add('equip');
+        if(it.rarity==='green') cell.classList.add('rarity-green');
+        if(it.rarity==='blue') cell.classList.add('rarity-blue');
+        if(it.rarity==='legend' || it.rarity==='legendary') cell.classList.add('rarity-legend');
+        cell.innerHTML=`<div class="item-icon">${it.icon}</div><div class="item-name">${it.name}</div><div class="item-bonus">${it.desc||''}</div>`;
+        cell.onclick=()=>equipItem(it,i);
+        cell.title = it.name+' '+(it.desc||'');
+      }
+    } else {
+      cell.classList.add('empty');
+    }
+    invGrid.appendChild(cell);
+  }
+}
+function renderEquip(){
+  document.querySelectorAll('.equip-slot').forEach(el=>{
+    const slot=el.dataset.slot; const it=equipped[slot];
+    const nameEl=el.querySelector('.slot-name'); const iconEl=el.querySelector('.slot-icon'); const emptyEl=el.querySelector('.slot-empty');
+    if(it){ el.classList.add('filled'); iconEl.textContent=it.icon; nameEl.textContent=it.name; emptyEl.textContent=it.desc; emptyEl.style.color='#3ad080'; }
+    else{
+      el.classList.remove('filled');
+      const defs={head:{icon:'🪖',name:'Шлем'},ear1:{icon:'👂',name:'Серьга 1'},ear2:{icon:'👂',name:'Серьга 2'},amulet:{icon:'📿',name:'Амулет'},armor:{icon:'🦺',name:'Броня'},weapon:{icon:'⚔️',name:'Оружие'},shield:{icon:'🛡️',name:'Щит'},ring1:{icon:'💍',name:'Кольцо 1'},ring2:{icon:'💍',name:'Кольцо 2'},gloves:{icon:'🧤',name:'Перчатки'},boots:{icon:'👢',name:'Ботинки'}};
+      const def=defs[slot]; if(def){ iconEl.textContent=def.icon; nameEl.textContent=def.name; }
+      emptyEl.textContent='пусто'; emptyEl.style.color='';
+    }
+  });
+  equipCount.textContent=Object.keys(equipped).length+'/11';
+}
+function equipItem(item, idx){
+  const slot=item.slot;
+  if(equipped[slot]){
+    const old=equipped[slot];
+    const j=inv.findIndex(v=>v==null);
+    inv[j=== -1 ? inv.length : j]=old;
+    log(`Снято: ${old.name}`);
+  }
+  equipped[slot]=item;
+  inv[idx]=null;
+  rebuildInv(); volandSaveEquip(equipped);
+  renderInv(); renderEquip(); renderStats(); renderBars();
+  log(`Экипировано: ${item.name} ${item.desc} — сохранено на всех страницах`);
+}
+function unequipSlot(el){
+  const slot=el.dataset.slot; const it=equipped[slot]; if(!it) return;
+  delete equipped[slot];
+  rebuildInv(); volandSaveEquip(equipped);
+  renderInv(); renderEquip(); renderStats(); renderBars();
+  log(`Снято: ${it.name}`);
+}
+document.querySelectorAll('.equip-slot').forEach(el=>{ el.onclick=()=>unequipSlot(el); });
+renderInv(); renderEquip(); renderStats(); renderBars();
+const chatIn=document.getElementById('chatIn'); const chatBtn=document.getElementById('chatBtn');
+chatBtn.onclick=()=>{ const v=chatIn.value.trim(); if(!v) return; log('Ты: '+v); chatIn.value=''; };
+chatIn.addEventListener('keydown',e=>{ if(e.key==='Enter') chatBtn.click(); });
 </script>
 </body>
 </html>
