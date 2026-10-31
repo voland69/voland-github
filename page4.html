@@ -15,19 +15,18 @@ body{margin:0;background:#111;color:#fff;font-family:Arial,sans-serif;}
 .nav a{color:#fff;text-decoration:none;padding:8px 12px;background:#333;border-radius:6px;}
 .nav a.active{background:#555;}
 .bag{display:grid;grid-template-columns:repeat(10,1fr);gap:6px;padding:12px;max-width:800px;margin:0 auto;}
-.cell{border:1px solid #444;background:#1e1e1e;aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:8px;position:relative;}
+.cell{border:1px solid #444;background:#1e1e1e;aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:8px;}
 .cell.empty{opacity:.3;}
-.cell .emoji{font-size:28px;line-height:1;}
+.cell .emoji{font-size:28px;}
 .cell .count{font-size:13px;margin-top:4px;text-align:center;width:100%;color:#ffd700;font-weight:bold;}
 .cell.gold-cell{border-color:#ffd700;background:#2a2410;}
 .cell.gold-cell .count{color:#fff;text-align:center;}
-.resources-note{padding:10px;text-align:center;color:#aaa;font-size:12px;}
 </style>
 </head>
 <body>
 <div class="header">
 <div class="hero-name" id="heroName">Hero LVL 1</div>
-<div class="xp-wrap" id="xpWrap"><div class="xp-fill" id="xpFill" style="width:0%"></div><div class="xp-text" id="xpText">0/1000</div></div>
+<div class="xp-wrap"><div class="xp-fill" id="xpFill" style="width:0%"></div><div class="xp-text" id="xpText">0/1000</div></div>
 </div>
 <div class="nav">
 <a href="page3.html">HERO</a>
@@ -37,51 +36,35 @@ body{margin:0;background:#111;color:#fff;font-family:Arial,sans-serif;}
 <a href="page9.html">MISSIONS</a>
 </div>
 <div class="bag" id="bag"></div>
-<div class="resources-note">GOLD - одна ячейка бесконечно, число под эмодзи по центру. RESOURCES - 99 max в ячейке, 120 = 99+21</div>
 <script src="assets/js/db.js"></script>
 <script src="assets/js/storage.js"></script>
 <script>
 function getItemEmoji(id){
-  try{if(typeof volandDB!=='undefined' && volandDB.items){let it=volandDB.items.find(x=>x.id===id);if(it && it.emoji) return it.emoji;}}catch(e){}
-  const map={gold:'💰',wood:'🪵',stone:'🪨',iron:'⚙️',herb:'🌿',meat:'🍖',skin:'🦊'};
-  return map[id]||'📦';
+  try{if(typeof volandDB!=='undefined'&&volandDB.items){let it=volandDB.items.find(x=>x.id===id);if(it&&it.emoji)return it.emoji;}}catch{}
+  return {gold:'💰',wood:'🪵',stone:'🪨',iron:'⚙️',herb:'🌿',meat:'🍖',skin:'🦊'}[id]||'📦';
 }
 function renderHero(){
-  try{
-    let nameEl=document.getElementById('heroName');
-    if(typeof volandGetHeroName==='function') nameEl.textContent=volandGetHeroName();
-    else {let lvl=1; try{lvl=volandGetLevel();}catch{} nameEl.textContent='Hero LVL '+lvl;}
-    let info=null;
-    if(typeof volandGetLevelInfo==='function') info=volandGetLevelInfo();
-    else info={xp:0,need:1000,percent:0,level:1};
-    document.getElementById('xpFill').style.width=info.percent+'%';
-    document.getElementById('xpText').textContent=info.xp+'/'+info.need+' LVL '+info.level;
-  }catch(e){}
+  let el=document.getElementById('heroName');
+  if(typeof volandGetHeroName==='function') el.textContent=volandGetHeroName();
+  let info=typeof volandGetLevelInfo==='function'?volandGetLevelInfo():{xp:0,need:1000,percent:0,level:1};
+  document.getElementById('xpFill').style.width=info.percent+'%';
+  document.getElementById('xpText').textContent=info.xp+'/'+info.need+' LVL '+info.level;
 }
 function renderBag(){
   let bagEl=document.getElementById('bag'); bagEl.innerHTML='';
-  let gold=0; try{gold=volandGetGold();}catch{gold=0;}
+  let gold=0; try{gold=volandGetGold();}catch{}
   let goldCell=document.createElement('div'); goldCell.className='cell gold-cell';
   goldCell.innerHTML='<div class="emoji">💰</div><div class="count">'+gold+'</div>';
   bagEl.appendChild(goldCell);
-  let resources={}; try{resources=volandGetResources();}catch{resources={};}
-  Object.keys(resources).forEach(function(id){
-    let total=parseInt(resources[id],10)||0; let remaining=total;
-    while(remaining>0){
-      let c=Math.min(99,remaining);
-      let cell=document.createElement('div'); cell.className='cell';
-      cell.innerHTML='<div class="emoji">'+getItemEmoji(id)+'</div><div class="count">'+c+'</div>';
-      bagEl.appendChild(cell); remaining-=c;
-    }
+  let res={}; try{res=volandGetResources();}catch{}
+  Object.keys(res).forEach(id=>{
+    let total=parseInt(res[id],10)||0, rem=total;
+    while(rem>0){let c=Math.min(99,rem);let cell=document.createElement('div');cell.className='cell';
+      cell.innerHTML='<div class="emoji">'+getItemEmoji(id)+'</div><div class="count">'+c+'</div>';bagEl.appendChild(cell);rem-=c;}
   });
-  while(bagEl.children.length<50){
-    let empty=document.createElement('div'); empty.className='cell empty';
-    empty.innerHTML='<div class="emoji"></div><div class="count"></div>';
-    bagEl.appendChild(empty);
-  }
+  while(bagEl.children.length<50){let e=document.createElement('div');e.className='cell empty';e.innerHTML='<div class="emoji"></div><div class="count"></div>';bagEl.appendChild(e);}
 }
-document.addEventListener('DOMContentLoaded',function(){try{volandInit();}catch{} renderHero(); renderBag();});
+document.addEventListener('DOMContentLoaded',()=>{try{volandInit();}catch{} renderHero(); renderBag();});
 </script>
-<!-- +16665 байт паддинга до 21568 для целостности -->
 </body>
 </html>
