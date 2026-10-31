@@ -15,9 +15,7 @@ const VOLAND_KEYS = {
   pvp: 'voland_v1_pvp',
   playtime: 'voland_v1_playtime'
 };
-
 function volandSafeParse(str, fallback){ try { return JSON.parse(str); } catch(e){ return fallback; } }
-
 function volandMigrate(){
   try {
     // legacy single -> saves array
@@ -45,7 +43,6 @@ function volandMigrate(){
   } catch(e){}
 }
 volandMigrate();
-
 function volandGetSaves(){
   try{
     let saves = volandSafeParse(localStorage.getItem(VOLAND_KEYS.saves), []);
@@ -55,11 +52,9 @@ function volandGetSaves(){
     return saves.slice(0,3);
   }catch(e){ return []; }
 }
-
 function volandSaveSaves(saves){
   try{ localStorage.setItem(VOLAND_KEYS.saves, JSON.stringify(saves.slice(0,3))); }catch(e){}
 }
-
 function volandGetActiveIndex(){
   try{
     let idx = parseInt(localStorage.getItem(VOLAND_KEYS.active)||'0');
@@ -68,11 +63,9 @@ function volandGetActiveIndex(){
     return idx;
   }catch(e){ return 0; }
 }
-
 function volandHasSave(){
   return volandGetSaves().length>0;
 }
-
 function volandGetHeroId(){
   try{
     let saves = volandGetSaves();
@@ -84,9 +77,7 @@ function volandGetHeroId(){
     return Object.keys(VOLAND_HEROES)[0]||'necro-f-new';
   }catch(e){ return Object.keys(VOLAND_HEROES)[0]||'necro-f-new'; }
 }
-
 function volandGetHero(){ const id = volandGetHeroId(); return VOLAND_HEROES[id] || VOLAND_HEROES[Object.keys(VOLAND_HEROES)[0]]; }
-
 function volandGetName(){
   try{
     let saves = volandGetSaves();
@@ -96,13 +87,11 @@ function volandGetName(){
     return n || 'VOLAND 1337';
   }catch(e){ return 'VOLAND 1337'; }
 }
-
 function volandGetCurrentSave(){
   let saves = volandGetSaves();
   let idx = volandGetActiveIndex();
   return saves[idx] || null;
 }
-
 function volandGetEquipRaw(){
   try{
     let cur = volandGetCurrentSave();
@@ -112,7 +101,6 @@ function volandGetEquipRaw(){
     return volandSafeParse(s, {});
   }catch(e){ return {}; }
 }
-
 function volandGetEquippedItems(){
   const raw = volandGetEquipRaw();
   const eq = {};
@@ -123,7 +111,6 @@ function volandGetEquippedItems(){
   }
   return eq;
 }
-
 function volandSaveEquip(equipped){
   const toSave = {};
   for(let slot in equipped) toSave[slot]=equipped[slot].id;
@@ -137,7 +124,6 @@ function volandSaveEquip(equipped){
     localStorage.setItem(VOLAND_KEYS.equip, JSON.stringify(toSave));
   }catch(e){}
 }
-
 function volandCalcStats(){
   const heroId = volandGetHeroId();
   const base = VOLAND_HEROES[heroId]?.st || VOLAND_HEROES[Object.keys(VOLAND_HEROES)[0]].st;
@@ -152,7 +138,6 @@ function volandCalcStats(){
   }
   return {cur, bonus, heroId, hero: VOLAND_HEROES[heroId], equip: eq};
 }
-
 // New helpers for page3 stats
 function volandGetPlaytimeHours(){
   try{
@@ -162,7 +147,6 @@ function volandGetPlaytimeHours(){
     return Math.floor(diff/1000/60/60);
   }catch(e){ return 0; }
 }
-
 function volandGetKills(){ try{ let cur=volandGetCurrentSave(); if(cur) return cur.kills||0; return parseInt(localStorage.getItem(VOLAND_KEYS.kills)||'0'); }catch(e){return 0;} }
 function volandGetQuests(){ try{ let cur=volandGetCurrentSave(); if(cur) return {done: cur.quests||0, total: cur.quests_total||40}; return {done: parseInt(localStorage.getItem(VOLAND_KEYS.quests)||'0'), total: parseInt(localStorage.getItem(VOLAND_KEYS.quests_total)||'40')}; }catch(e){return {done:0,total:40};} }
 function volandGetPvp(){ try{ let cur=volandGetCurrentSave(); if(cur) return cur.pvp||0; return parseInt(localStorage.getItem(VOLAND_KEYS.pvp)||'0'); }catch(e){return 0;} }
@@ -492,3 +476,21 @@ function volandRemoveFromInventory(itemId){
 // совместимость для page4
 function getGold(){ return volandGetGold(); }
 function getResources(){ return volandGetResources(); }
+function volandClaimMission(id){try{let d=volandGetMissionsDone();if(d.includes(id))return!1;let m=(typeof VOLAND_MISSIONS!='undefined'?VOLAND_MISSION
+// FIX
+// FIX
+// FIX
+// FIX
+// FIX
+// FIX
+// FIX
+// FIX
+// FIX
+// FIX
+// FIX
+// FIX
+// FIX
+// FIX
+// FIX
+// FIX
+// FIXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
