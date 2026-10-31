@@ -15,7 +15,6 @@ function extra(){
   if(calderaTurns>0) s.push('🌋КАЛЬДЕРА '+calderaTurns);
   if(meteorWaveTimer>0) s.push('☄️ВОЛНА '+meteorWaveTimer);
   if(judgmentTurns>0) s.push('🌋СУД '+judgmentTurns+'/'+(judgmentTick+1));
-  s.push('ЗАКЛ:'+spellCounter);
   return s.join(' ');
 }
 setTimeout(()=>{ if(window.VB) window.VB.extraStat=extra; },100);
