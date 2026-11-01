@@ -187,8 +187,7 @@ window.VOLAND_HERO_ON_ROUND_END = function(){
    passiveShieldTurns = 4;
    passiveUsed = true;
    window.VB.addLog('🦁 Непоколебимая Стена! Щит '+passiveShield+' 15% HP на 4р (1 раз за бой) DEF+'+getDefBonus()+'%','skill');
- }
- if(passiveShieldTurns>0){
+ } else if(passiveShieldTurns>0){
    passiveShieldTurns--;
    if(passiveShieldTurns==0){
      if(passiveShield>0 && window.VB) window.VB.addLog('🛡️ Щит пассива истек '+passiveShield,'hit');
