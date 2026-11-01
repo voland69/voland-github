@@ -325,15 +325,15 @@ function rebuildInv(){
       RES_ORDER_LOCAL.forEach(rid=>{
         let cnt = res[rid]||0;
         if(cnt>0){
-          let rdef = null;
+          // FIX: direct path to loot webp - no fallback to emoji
+          let icon = './assets/ui/loot/' + rid + '.webp';
+          let name = rid;
           try{
-            if(window.VOLAND_RESOURCES){
-              if(Array.isArray(VOLAND_RESOURCES)) rdef = VOLAND_RESOURCES.find(r=>r.id===rid);
-              else if(VOLAND_RESOURCES[rid]) rdef = VOLAND_RESOURCES[rid];
+            if(window.VOLAND_RESOURCES && Array.isArray(VOLAND_RESOURCES)){
+              let rdef = VOLAND_RESOURCES.find(r=>r.id===rid);
+              if(rdef && rdef.name) name = rdef.name;
             }
           }catch(e){}
-          let icon = (rdef && rdef.icon) ? rdef.icon : ((typeof RES_ICONS_FALLBACK !== 'undefined' && RES_ICONS_FALLBACK[rid]) ? RES_ICONS_FALLBACK[rid] : '📦');
-          let name = (rdef && rdef.name) ? rdef.name : ((typeof RES_NAMES_FALLBACK !== 'undefined' && RES_NAMES_FALLBACK[rid]) ? RES_NAMES_FALLBACK[rid] : rid);
           let remaining = cnt;
           let chunkIdx = 0;
           while(remaining>0 && inv.length<50){
