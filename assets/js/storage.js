@@ -206,8 +206,18 @@ function volandSaveMissionsDone(done){
 }
 
 function volandIsMissionUnlocked(mission, doneList){
- if(!mission.prev) return true;
- return doneList.includes(mission.prev);
+ try{
+   let m = mission;
+   // If mission is id, find object
+   if(typeof mission==='number'){
+     let all = (typeof VOLAND_MISSIONS!=='undefined'&&VOLAND_MISSIONS.length>0)?VOLAND_MISSIONS:(typeof FALLBACK_MISSIONS!=='undefined'?FALLBACK_MISSIONS:[]);
+     m = all.find(x=>x.id===mission) || {id:mission, prev:null};
+   }
+   if(!m) return true;
+   if(!m.prev) return true;
+   let done = doneList || (typeof volandGetMissionsDone==='function'?volandGetMissionsDone():[]);
+   return done.includes(m.prev);
+ }catch(e){ return true; }
 }
 
 function volandGetMissionProgress(mission){
@@ -492,43 +502,3 @@ function volandRemoveFromInventory(itemId){
 // совместимость для page4
 function getGold(){ return volandGetGold(); }
 function getResources(){ return volandGetResources(); }
-
-// --- MISSIONS FIX FOR PAGE9 - CLEAN VERSION, NO SIZE LIMIT ---
-function volandClaimMission(id){
-  try{
-    let done = volandGetMissionsDone();
-    if(done.includes(id)) return false;
-    let all = (typeof VOLAND_MISSIONS!=='undefined' && VOLAND_MISSIONS.length>0) ? VOLAND_MISSIONS : (typeof FALLBACK_MISSIONS!=='undefined' ? FALLBACK_MISSIONS : []);
-    let mission = all.find(m=>m.id==id);
-    if(!mission) return false;
-    if(typeof volandIsMissionUnlocked==='function' && !volandIsMissionUnlocked(id)) return false;
-    done.push(id);
-    volandSaveMissionsDone(done);
-    if(mission.reward){
-      if(typeof volandAddGold==='function') volandAddGold(mission.reward.gold||0);
-      if(typeof volandAddXp==='function') volandAddXp(mission.reward.xp||0);
-    }
-    return true;
-  }catch(e){ console.log('claim error', e); return false; }
-}
-
-function volandCompleteMission(id){
-  try{
-    let done = volandGetMissionsDone();
-    if(!done.includes(id)){ done.push(id); volandSaveMissionsDone(done); }
-    return true;
-  }catch(e){ return false; }
-}
-
-function volandIsMissionLockedObj(m){
-  try{
-    if(!m) return true;
-    if(typeof volandIsMissionUnlocked==='function') return !volandIsMissionUnlocked(m.id);
-    if(m.prev){
-      let done = volandGetMissionsDone();
-      if(!done.includes(m.prev)) return true;
-    }
-    return false;
-  }catch(e){ return true; }
-}
-
