@@ -64,7 +64,8 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
 .inv-cell{aspect-ratio:1;background:#1a242f;border:1px solid #2a3a4a;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;min-height:38px}
 .inv-cell.has-item{background:#1e2a32;border-color:#3a4a5a}
 .inv-cell.has-item:hover{border-color:#e6d5a0}
-.inv-cell .item-icon{font-size:15px}
+.inv-cell .item-icon{font-size:15px;display:flex;align-items:center;justify-content:center}
+.inv-cell .item-icon img{width:24px;height:24px;object-fit:contain;display:block}
 .inv-cell .item-name{font-size:5px;color:#6a7a8a;margin-top:2px;font-family:'JetBrains Mono',monospace;text-align:center}
 .inv-cell .item-bonus{font-size:13px;color:#3ad080;margin-top:2px;font-family:'JetBrains Mono',monospace;font-weight:800;line-height:1.1}
 .inv-cell.empty{opacity:.4}
@@ -270,7 +271,7 @@ function rebuildInv(){
   try{
     let gold = getGold();
     if(gold>0){
-      inv.push({id:'gold', icon:'🪙', name:'Золото', desc:gold+' GOLD', isGold:true, count:gold, type:'gold', rarity:'gold'});
+      inv.push({id:'gold', icon:'./assets/ui/loot/gold.webp', name:'Золото', desc:gold+' GOLD', isGold:true, count:gold, type:'gold', rarity:'gold'});
     }
   }catch(e){}
   // ресурсы - делим по 99
@@ -391,12 +392,14 @@ function renderInv(){
       cell.classList.add('has-item');
       if(it.isGold){
         cell.classList.add('gold');
-        cell.innerHTML=`<div class="item-icon">${it.icon}</div><div class="item-bonus" style="font-size:10px;font-weight:800;color:#d0b040;margin-top:2px">${it.count}</div>`;
+        let iconHtmlGold = (it.icon && (it.icon.includes('.webp') || it.icon.includes('/'))) ? `<img src="${it.icon}" style="width:24px;height:24px;object-fit:contain;display:block">` : it.icon;
+        cell.innerHTML=`<div class="item-icon">${iconHtmlGold}</div><div class="item-bonus" style="font-size:10px;font-weight:800;color:#d0b040;margin-top:2px">${it.count}</div>`;
         cell.onclick=()=>{ log('Золото: '+it.count+' — в одной ячейке бесконечно'); };
         cell.title = it.name+' '+it.count;
       } else if(it.isResource){
         cell.classList.add('resource');
-        cell.innerHTML=`<div class="item-icon">${it.icon}</div><div class="item-bonus" style="font-size:10px;font-weight:800;color:#3ad080;margin-top:2px">${it.count}</div>`;
+        let iconHtmlRes = (it.icon && (it.icon.includes('.webp') || it.icon.includes('/'))) ? `<img src="${it.icon}" style="width:24px;height:24px;object-fit:contain;display:block">` : it.icon;
+        cell.innerHTML=`<div class="item-icon">${iconHtmlRes}</div><div class="item-bonus" style="font-size:10px;font-weight:800;color:#3ad080;margin-top:2px">${it.count}</div>`;
         cell.onclick=()=>{ log(it.name+': '+it.count+' — стак 99, при 99+ новая ячейка'); };
         cell.title = it.name+' '+it.count;
       } else {
