@@ -75,7 +75,27 @@ const FALLBACK_MISSIONS=[
 {id:22,name:'НЕУЯЗВИМЫЙ',icon:'🛡️',prev:21,reward:{gold:1200,xp:3000},desc:'10 побед подряд'}
 ];
 function getMissions(){try{if(typeof VOLAND_MISSIONS!=='undefined'&&VOLAND_MISSIONS.length>0)return VOLAND_MISSIONS;}catch(e){}return FALLBACK_MISSIONS;}
-function isLocked(m){try{if(typeof volandIsMissionUnlocked==='function')return!volandIsMissionUnlocked(m.id);if(m.prev){let d=volandGetMissionsDone();return !d.includes(m.prev);}return false;}catch(e){return false;}}
+function isLocked(m){
+  try{
+    let done=[];
+    try{done=typeof volandGetMissionsDone==='function'?volandGetMissionsDone():[];}catch(e){}
+    // storage has volandIsMissionUnlocked(mission, doneList) signature
+    if(typeof volandIsMissionUnlocked==='function'){
+      try{
+        let res=volandIsMissionUnlocked(m, done);
+        if(typeof res==='boolean') return !res;
+      }catch(e){}
+      try{
+        let res2=volandIsMissionUnlocked(m.id, done);
+        if(typeof res2==='boolean') return !res2;
+      }catch(e){}
+    }
+    if(m.prev){
+      return !done.includes(m.prev);
+    }
+    return false;
+  }catch(e){return false;}
+}
 function isDone(m){try{return volandGetMissionsDone().includes(m.id);}catch(e){return false;}}
 function render(){let g=document.getElementById('missGrid');g.innerHTML='';getMissions().forEach(m=>{let locked=isLocked(m);let done=isDone(m);let c=document.createElement('div');c.className='miss-card'+(done?' done':'')+(locked?' locked':'')+(!done&&!locked?' ready':'');c.innerHTML=`<div class="miss-top"><div class="miss-icon">${m.icon}</div><div class="miss-title">${m.name}</div></div><div class="miss-desc">${m.desc}</div><div class="miss-reward">💰 ${m.reward.gold} • XP ${m.reward.xp}</div>${done?'<div style="color:#3ad080;font-size:10px;margin-top:6px">✅ DONE</div>':locked?'<div style="color:#666;font-size:10px;margin-top:6px">🔒 LOCKED</div>':`<button class="claim-btn" onclick="claim(${m.id})">CLAIM</button>`}`;g.appendChild(c);});}
 function claim(id){try{if(typeof volandClaimMission==='function'){if(volandClaimMission(id))render();}else{let d=volandGetMissionsDone();if(!d.includes(id)){d.push(id);volandSaveMissionsDone(d);}render();}}catch(e){console.log(e);}}
