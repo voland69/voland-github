@@ -5,6 +5,7 @@ let avatarTurns=0;
 let avatarDmgTurns=0;
 let avatarHPBonus=0;
 let passiveShield=0;
+let passiveUsed=false;
 let passiveShieldTurns=0;
 let lastCur=null;
 
@@ -181,10 +182,11 @@ window.VOLAND_HERO_ON_ROUND_END = function(){
      }
    }
  }
- if(window.VB && window.VB.hHp/window.VB.hMax < 0.3 && passiveShield==0 && passiveShieldTurns==0){
+ if(window.VB && window.VB.hHp/window.VB.hMax < 0.3 && passiveShield==0 && passiveShieldTurns==0 && !passiveUsed){
    passiveShield = Math.floor(window.VB.hMax*0.15);
    passiveShieldTurns = 4;
-   window.VB.addLog('🦁 Непоколебимая Стена! Щит '+passiveShield+' 15% HP на 4р DEF+'+getDefBonus()+'%','skill');
+   passiveUsed = true;
+   window.VB.addLog('🦁 Непоколебимая Стена! Щит '+passiveShield+' 15% HP на 4р (1 раз за бой) DEF+'+getDefBonus()+'%','skill');
  }
  if(passiveShieldTurns>0){
    passiveShieldTurns--;
