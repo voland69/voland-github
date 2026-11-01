@@ -56,6 +56,7 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 .reward{background:#0f1620;border:1px solid #1e2a32;border-radius:10px;padding:14px 8px;display:flex;flex-direction:column;align-items:center;gap:6px}
 .reward-val{font:900 14px 'JetBrains Mono',monospace;color:#e6d5a0}
 .reward-val.gold{color:#d0b040}.reward-val.xp{color:#6ab0ff}
+.reward img{width:28px;height:28px;object-fit:contain;display:block}
 .reward-lbl{font:400 7px 'JetBrains Mono',monospace;color:#5a6a7a}
 .modal-btns{display:flex;gap:10px;margin-top:16px}
 .btn{flex:1;height:40px;border-radius:10px;border:1px solid #2a3a4a;background:#1a242f;color:#8a9a8a;font:400 10px 'JetBrains Mono',monospace;cursor:pointer}
@@ -209,7 +210,7 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 <div class="skill-bar" id="skillBar"></div>
 </div>
 </div>
-<div class="modal-overlay" id="victoryModal"><div class="modal"><div id="modalIcon" style="font-size:36px">🏆</div><div class="modal-title" id="modalTitle">ПОБЕДА!</div><div class="modal-sub" id="modalSub">Ты победил</div><div class="rewards"><div class="reward"><div>🪙</div><div class="reward-val gold" id="rewGold">+190</div><div class="reward-lbl">GOLD</div></div><div class="reward"><div>⭐</div><div class="reward-val xp" id="rewXp">+4200</div><div class="reward-lbl">XP</div></div><div class="reward"><div>📦</div><div class="reward-val" id="rewLoot">1</div><div class="reward-lbl">LOOT</div></div></div><div class="modal-btns"><button class="btn" onclick="location.reload()">✕ БИТЬ СНОВА</button><button class="btn gold" onclick="let _loc=(typeof loc!=='undefined'?loc:(window.VB&&VB.loc)||localStorage.getItem('voland_location')||'1'); location.href='./page7.html?loc='+_loc">✓ К МОБАМ</button></div></div></div>
+<div class="modal-overlay" id="victoryModal"><div class="modal"><div id="modalIcon" style="font-size:36px">🏆</div><div class="modal-title" id="modalTitle">ПОБЕДА!</div><div class="modal-sub" id="modalSub">Ты победил</div><div class="rewards"><div class="reward"><div><img src="./assets/ui/loot/gold.webp" style="width:28px;height:28px;object-fit:contain;display:block"></div><div class="reward-val gold" id="rewGold">+190</div><div class="reward-lbl">GOLD</div></div><div class="reward"><div>⭐</div><div class="reward-val xp" id="rewXp">+4200</div><div class="reward-lbl">XP</div></div><div class="reward"><div><img src="./assets/ui/loot/essence.webp" style="width:28px;height:28px;object-fit:contain;display:block"></div><div class="reward-val" id="rewLoot">1</div><div class="reward-lbl">LOOT</div></div></div><div class="modal-btns"><button class="btn" onclick="location.reload()">✕ БИТЬ СНОВА</button><button class="btn gold" onclick="let _loc=(typeof loc!=='undefined'?loc:(window.VB&&VB.loc)||localStorage.getItem('voland_location')||'1'); location.href='./page7.html?loc='+_loc">✓ К МОБАМ</button></div></div></div>
 <script src="./assets/js/db.js"></script>
 <script src="./assets/js/storage.js"></script>
 <script src="./assets/js/config.js"></script>
