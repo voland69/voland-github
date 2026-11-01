@@ -59,16 +59,40 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
 .bar-fill.stamina{background:linear-gradient(90deg,#1a7a4a,#3ad080);color:#fff}
 .bar-fill.xp{background:linear-gradient(90deg,#8a6a1a,#d0b040);color:#fff}
 .bars-inner{display:flex;flex-direction:column;gap:10px}
-.inventory-zone{flex:1;background:rgba(17,24,33,.25);padding:12px 14px;display:flex;flex-direction:column;overflow:auto;margin-top:4px}
-.inv-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;margin-top:6px}
-.inv-cell{aspect-ratio:1;background:#1a242f;border:1px solid #2a3a4a;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;min-height:38px}
-.inv-cell.has-item{background:#1e2a32;border-color:#3a4a5a}
-.inv-cell.has-item:hover{border-color:#e6d5a0}
-.inv-cell .item-icon{font-size:15px;display:flex;align-items:center;justify-content:center}
-.inv-cell .item-icon img{width:24px;height:24px;object-fit:contain;display:block}
-.inv-cell .item-name{font-size:5px;color:#6a7a8a;margin-top:2px;font-family:'JetBrains Mono',monospace;text-align:center}
-.inv-cell .item-bonus{font-size:13px;color:#3ad080;margin-top:2px;font-family:'JetBrains Mono',monospace;font-weight:800;line-height:1.1}
-.inv-cell.empty{opacity:.4}
+.inventory-zone{flex:1;background:rgba(17,24,33,.25);padding:10px 12px;display:flex;flex-direction:column;overflow:auto;margin-top:4px}
+.inv-grid{display:grid;grid-template-columns:repeat(15,1fr);gap:4px;margin-top:6px}
+.inv-cell{aspect-ratio:1;background:#1a242f;border:1px solid #2a3a4a;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;min-height:32px;position:relative;overflow:hidden}
+.inv-cell.has-item{background:#121a26;border-color:#2a3a4a}
+.inv-cell.has-item:hover{border-color:#e6d5a0;box-shadow:0 0 8px rgba(230,213,160,.15)}
+.inv-cell .item-icon{width:100%;height:100%;display:flex;align-items:center;justify-content:center;position:absolute;inset:0}
+.inv-cell .item-icon img{width:100%;height:100%;object-fit:cover;display:block;border-radius:6px}
+.inv-cell .item-icon .emoji-fallback{font-size:18px}
+.inv-cell .badge{position:absolute;right:2px;bottom:2px;min-width:18px;height:18px;padding:0 4px;border-radius:9px;background:rgba(0,0,0,.85);color:#fff;font:800 9px 'JetBrains Mono',monospace;display:flex;align-items:center;justify-content:center;z-index:2;border:1px solid rgba(255,255,255,.12);box-shadow:0 2px 6px rgba(0,0,0,.5)}
+.inv-cell.empty{opacity:.25}
+
+/* modal for gear */
+.gear-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:100;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.gear-modal-overlay.show{display:flex}
+.gear-modal{width:360px;background:linear-gradient(180deg,#1e2a3a,#121a26);border:1px solid rgba(230,213,160,.25);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:12px;box-shadow:0 12px 32px rgba(0,0,0,.6)}
+.gear-modal-top{display:flex;gap:14px;align-items:flex-start}
+.gear-modal-icon{width:72px;height:72px;min-width:72px;border-radius:10px;background:#0a0e14;border:1px solid #2a3a4a;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.gear-modal-icon img{width:100%;height:100%;object-fit:cover;display:block}
+.gear-modal-info{flex:1;display:flex;flex-direction:column;gap:6px}
+.gear-modal-name{font:800 13px Inter,sans-serif;color:#e6d5a0;letter-spacing:.04em;text-transform:uppercase}
+.gear-modal-rarity{font:700 7px 'JetBrains Mono',monospace;letter-spacing:.15em;padding:3px 6px;border-radius:4px;width:fit-content}
+.gear-modal-rarity.green{background:rgba(58,208,128,.15);border:1px solid #3ad080;color:#3ad080}
+.gear-modal-rarity.blue{background:rgba(106,176,255,.15);border:1px solid #6ab0ff;color:#6ab0ff}
+.gear-modal-rarity.legend{background:rgba(208,176,64,.15);border:1px solid #d0b040;color:#d0b040}
+.gear-modal-rarity.common{background:rgba(122,144,168,.12);border:1px solid #2a3a4a;color:#7a90a8}
+.gear-modal-slot{font:400 8px 'JetBrains Mono',monospace;color:#6a7a8a;letter-spacing:.12em}
+.gear-modal-bonuses{display:flex;flex-direction:column;gap:4px;background:rgba(0,0,0,.25);border:1px solid rgba(42,58,74,.5);border-radius:8px;padding:10px}
+.gear-modal-bonus{font:700 11px 'JetBrains Mono',monospace;color:#3ad080}
+.gear-modal-btns{display:flex;gap:8px;margin-top:4px}
+.gear-modal-btn{flex:1;height:38px;border-radius:8px;border:1px solid #2a3a4a;background:#1a242f;color:#8a9a8a;font:700 9px 'JetBrains Mono',monospace;cursor:pointer;letter-spacing:.12em;transition:.15s}
+.gear-modal-btn:hover{border-color:#e6d5a0;color:#e6d5a0}
+.gear-modal-btn.equip{background:linear-gradient(180deg,#e6d5a0,#c0a860);color:#0a0e14;border-color:#e6d5a0;font-weight:800}
+.gear-modal-btn.equip:hover{filter:brightness(1.1)}
+
 .right{width:200px;min-width:200px;background:rgba(14,20,26,1);border-left:1px solid rgba(30,42,50,.5);display:flex;flex-direction:column}
 .chat-header{padding:12px;border-bottom:1px solid #1e2a32;display:flex;align-items:center;gap:8px;background:#141c24}
 .dot{width:8px;height:8px;border-radius:50%;background:#3ad080;box-shadow:0 0 6px #3ad080}
@@ -258,6 +282,25 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
     <div class="chat-input"><input id="chatIn" placeholder="..."><button id="chatBtn">▶</button></div>
   </div>
 </div>
+
+<div class="gear-modal-overlay" id="gearModal" onclick="if(event.target===this) closeGearModal()">
+  <div class="gear-modal">
+    <div class="gear-modal-top">
+      <div class="gear-modal-icon" id="gearModalIcon"></div>
+      <div class="gear-modal-info">
+        <div class="gear-modal-name" id="gearModalName">Предмет</div>
+        <div class="gear-modal-rarity common" id="gearModalRarity">COMMON</div>
+        <div class="gear-modal-slot" id="gearModalSlot">SLOT</div>
+      </div>
+    </div>
+    <div class="gear-modal-bonuses" id="gearModalBonuses"></div>
+    <div class="gear-modal-btns">
+      <button class="gear-modal-btn" onclick="closeGearModal()">ЗАКРЫТЬ</button>
+      <button class="gear-modal-btn equip" onclick="confirmEquipGear()">НАДЕТЬ</button>
+    </div>
+  </div>
+</div>
+
 <script src="./assets/js/db.js"></script>
 <script src="./assets/js/storage.js"></script>
 <script>
@@ -392,14 +435,14 @@ function renderInv(){
       cell.classList.add('has-item');
       if(it.isGold){
         cell.classList.add('gold');
-        let iconHtmlGold = (it.icon && (it.icon.includes('.webp') || it.icon.includes('/'))) ? `<img src="${it.icon}" style="width:24px;height:24px;object-fit:contain;display:block">` : it.icon;
-        cell.innerHTML=`<div class="item-icon">${iconHtmlGold}</div><div class="item-bonus" style="font-size:10px;font-weight:800;color:#d0b040;margin-top:2px">${it.count}</div>`;
+        let iconHtml = (it.icon && (it.icon.includes('.webp') || it.icon.includes('/'))) ? `<img src="${it.icon}">` : `<span class="emoji-fallback">${it.icon}</span>`;
+        cell.innerHTML=`<div class="item-icon">${iconHtml}</div><div class="badge">${it.count}</div>`;
         cell.onclick=()=>{ log('Золото: '+it.count+' — в одной ячейке бесконечно'); };
         cell.title = it.name+' '+it.count;
       } else if(it.isResource){
         cell.classList.add('resource');
-        let iconHtmlRes = (it.icon && (it.icon.includes('.webp') || it.icon.includes('/'))) ? `<img src="${it.icon}" style="width:24px;height:24px;object-fit:contain;display:block">` : it.icon;
-        cell.innerHTML=`<div class="item-icon">${iconHtmlRes}</div><div class="item-bonus" style="font-size:10px;font-weight:800;color:#3ad080;margin-top:2px">${it.count}</div>`;
+        let iconHtml = (it.icon && (it.icon.includes('.webp') || it.icon.includes('/'))) ? `<img src="${it.icon}">` : `<span class="emoji-fallback">${it.icon}</span>`;
+        cell.innerHTML=`<div class="item-icon">${iconHtml}</div><div class="badge">${it.count}</div>`;
         cell.onclick=()=>{ log(it.name+': '+it.count+' — стак 99, при 99+ новая ячейка'); };
         cell.title = it.name+' '+it.count;
       } else {
@@ -407,8 +450,10 @@ function renderInv(){
         if(it.rarity==='green') cell.classList.add('rarity-green');
         if(it.rarity==='blue') cell.classList.add('rarity-blue');
         if(it.rarity==='legend' || it.rarity==='legendary') cell.classList.add('rarity-legend');
-        cell.innerHTML=`<div class="item-icon">${it.icon}</div><div class="item-name">${it.name}</div><div class="item-bonus">${it.desc||''}</div>`;
-        cell.onclick=()=>equipItem(it,i);
+        let iconHtml = (it.icon && (it.icon.includes('.webp') || it.icon.includes('/') || it.icon.includes('.jpg') || it.icon.includes('.png'))) ? `<img src="${it.icon}">` : `<span class="emoji-fallback">${it.icon}</span>`;
+        // badge empty for gear as requested
+        cell.innerHTML=`<div class="item-icon">${iconHtml}</div>`;
+        cell.onclick=()=>openGearModal(it,i);
         cell.title = it.name+' '+(it.desc||'');
       }
     } else {
@@ -417,6 +462,50 @@ function renderInv(){
     invGrid.appendChild(cell);
   }
 }
+
+// Gear modal logic
+let pendingGear = null;
+let pendingGearIdx = -1;
+function openGearModal(item, idx){
+  pendingGear = item;
+  pendingGearIdx = idx;
+  const overlay = document.getElementById('gearModal');
+  const iconEl = document.getElementById('gearModalIcon');
+  const nameEl = document.getElementById('gearModalName');
+  const rarityEl = document.getElementById('gearModalRarity');
+  const slotEl = document.getElementById('gearModalSlot');
+  const bonusesEl = document.getElementById('gearModalBonuses');
+  let iconHtml = (item.icon && (item.icon.includes('.webp') || item.icon.includes('/') || item.icon.includes('.jpg'))) ? `<img src="${item.icon}">` : item.icon;
+  iconEl.innerHTML = iconHtml;
+  nameEl.textContent = item.name || 'Предмет';
+  let rar = (item.rarity||'common').toLowerCase();
+  if(rar==='legendary') rar='legend';
+  rarityEl.className = 'gear-modal-rarity '+rar;
+  rarityEl.textContent = rar.toUpperCase();
+  slotEl.textContent = (item.slot||'').toUpperCase() + ' • ' + (item.id||'');
+  // bonuses - item.bonus or item.desc
+  let bonuses = [];
+  if(item.bonus){
+    for(let k in item.bonus){ bonuses.push(k+' +'+item.bonus[k]); }
+  }
+  if(bonuses.length===0 && item.desc){
+    bonuses.push(item.desc);
+  }
+  if(bonuses.length===0) bonuses.push('Без бонусов');
+  bonusesEl.innerHTML = bonuses.map(b=>`<div class="gear-modal-bonus">${b}</div>`).join('');
+  overlay.classList.add('show');
+}
+function closeGearModal(){
+  document.getElementById('gearModal').classList.remove('show');
+  pendingGear=null; pendingGearIdx=-1;
+}
+function confirmEquipGear(){
+  if(pendingGear && pendingGearIdx>=0){
+    equipItem(pendingGear, pendingGearIdx);
+  }
+  closeGearModal();
+}
+
 function renderEquip(){
   document.querySelectorAll('.equip-slot').forEach(el=>{
     const slot=el.dataset.slot; const it=equipped[slot];
