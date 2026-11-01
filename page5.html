@@ -47,18 +47,28 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
 .chat-input{padding:8px;border-top:1px solid #1e2a32;display:flex;gap:6px;background:#12181e}
 .chat-input input{flex:1;background:#0a0e14;border:1px solid #1e2a32;border-radius:6px;padding:8px;font-size:11px;color:#d8d2b8;outline:none}
 .chat-input button{width:32px;background:#e6d5a0;border:none;border-radius:6px;cursor:pointer;font-weight:800;color:#12181e}
+
+.left-nav{display:flex;flex-direction:column;justify-content:space-between;height:100%;}
+.nav-top{display:flex;flex-direction:column;gap:16px;align-items:center;}
+.nav-bottom{margin-top:auto;padding-top:16px;border-top:1px solid rgba(255,255,255,0.08);display:flex;flex-direction:column;align-items:center;}
+
 </style>
 </head>
 <body>
 <div class="bg"><img src="./assets/heroes/bg-battlefield.webp" onerror="this.style.display='none'"></div>
 <div class="wrap">
   <div class="left-nav">
-    <div onclick="location.href='./page3.html'"><div class="nav-item">👤</div><div class="nav-label">HERO</div></div>
-    <div onclick="location.href='./page4.html'"><div class="nav-item">🎒</div><div class="nav-label">BAG</div></div>
-    <div onclick="location.href='./page5.html'"><div class="nav-item active">📜</div><div class="nav-label">SKILLS</div></div>
-    <div onclick="location.href='./page6.html'"><div class="nav-item">⚔️</div><div class="nav-label">BATTLE</div></div>
-    <div onclick="location.href='./index.html'"><div class="nav-item">🗺️</div><div class="nav-label">MAP</div></div>
+  <div class="nav-top">
+    <div class="nav-group" onclick="location.href='./page3.html'"><div class="nav-item" data-page="page3">🦁</div><div class="nav-label">HERO</div></div>
+    <div class="nav-group" onclick="location.href='./page4.html'"><div class="nav-item" data-page="page4">🎒</div><div class="nav-label">BAG</div></div>
+    <div class="nav-group" onclick="location.href='./page5.html'"><div class="nav-item" data-page="page5">✨</div><div class="nav-label">SKILLS</div></div>
+    <div class="nav-group" onclick="location.href='./page6.html'"><div class="nav-item" data-page="page6">⚔️</div><div class="nav-label">BATTLE</div></div>
+    <div class="nav-group" onclick="location.href='./page9.html'"><div class="nav-item" data-page="page9">📜</div><div class="nav-label">MISSIONS</div></div>
   </div>
+  <div class="nav-bottom">
+    <div class="nav-group" onclick="location.href='./index.html'"><div class="nav-item" data-page="index">🏠</div><div class="nav-label">START</div></div>
+  </div>
+</div>
   <div class="main">
     <div class="sk-header">
       <div><div class="sk-title">SKILLS • 5 + SOON</div><div class="sk-sub">СТРАНИЦА 5 — СКИЛЫ ГЕРОЯ ИЗ DB.JS — 6 БОЛЬШИХ ОКОН</div></div>
@@ -132,5 +142,19 @@ const chatIn=document.getElementById('chatIn'); const chatBtn=document.getElemen
 chatBtn.onclick=()=>{ const v=chatIn.value.trim(); if(!v) return; log('Ты: '+v); chatIn.value=''; };
 chatIn.addEventListener('keydown',e=>{ if(e.key==='Enter') chatBtn.click(); });
 </script>
+
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+  let path=location.pathname.toLowerCase();
+  document.querySelectorAll('.nav-item').forEach(el=>{
+    let pg=el.dataset.page;
+    if(pg && path.includes(pg)){
+      el.classList.add('active');
+      el.closest('.nav-group')?.classList.add('active');
+    }
+  });
+});
+</script>
+
 </body>
 </html>
