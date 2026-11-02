@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head><meta charset="UTF-8"><title>VOLAND CHEAT</title></head>
+<body style="background:#0a0e14;color:#d8d2b8;font-family:monospace;padding:40px">
+<h1>VOLAND TEST CHEAT</h1>
+<p>Нажми кнопку чтобы дать 99999 ресурсов для теста. Потом удалим эту страницу.</p>
+<button id="btn" style="padding:16px 24px;font-size:16px;background:#e6d5a0;color:#000;border:none;border-radius:8px;cursor:pointer">ДАТЬ РЕСУРСЫ 99999</button>
+<p id="log" style="margin-top:20px;color:#3ad080"></p>
+<script src="./assets/js/db.js"></script>
+<script src="./assets/js/storage.js"></script>
+<script>
+document.getElementById('btn').onclick = ()=>{
+  try{
+    volandSetGold(999999);
+    volandSetResources({
+      quartz:99999,
+      wood:99999,
+      diamond:99999,
+      stone:99999,
+      fang:99999,
+      essence:99999,
+      bone:99999,
+      leather:99999,
+      iron:99999
+    });
+    // also add all starter gear to inventory for testing
+    if(typeof VOLAND_STARTER_GEAR_IDS!=='undefined'){
+      VOLAND_STARTER_GEAR_IDS.forEach(id=>{
+        volandAddToInventory(id);
+      });
+    }
+    document.getElementById('log').textContent = 'ГОТОВО! Gold 999999, ресы 99999, стартовый шмот в инвентаре. Иди в WORKSHOP.';
+    setTimeout(()=>{ location.href='./page12.html'; }, 1000);
+  }catch(e){
+    document.getElementById('log').textContent = 'Ошибка: '+e;
+  }
+};
+</script>
+</body>
+</html>
