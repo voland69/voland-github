@@ -6,398 +6,78 @@
 <title>VOLAND - WORKSHOP</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,sans-serif;overflow:hidden}
-.bg{position:fixed;inset:0;z-index:0}.bg img{width:100%;height:100%;object-fit:cover}
+.bg{position:fixed;inset:0;z-index:0;background:url("./assets/heroes/bg-battlefield.webp") center/cover no-repeat fixed}
 .bg:after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.6)}
 .wrap{position:fixed;inset:0;display:flex;z-index:2}
+.left-nav{width:68px;min-width:68px;background:rgba(18,24,30,.9);border-right:1px solid #2a3a4a;display:flex;flex-direction:column;justify-content:space-between;height:100%;padding:12px 6px;backdrop-filter:blur(4px)}
+.nav-top{display:flex;flex-direction:column;gap:14px;align-items:center;overflow:auto}
+.nav-bottom{margin-top:auto;padding-top:14px;border-top:1px solid rgba(255,255,255,.08);display:flex;flex-direction:column;align-items:center}
+.nav-group{cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;transition:.2s}
+.nav-item{width:48px;height:48px;background:#1a252f;border:1px solid #2a3a4a;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;opacity:.6;transition:.2s}
+.nav-item.active{border-color:#e6d5a0;opacity:1;background:#1e2f3e;box-shadow:0 0 12px rgba(230,213,160,.3)}
+.nav-item:hover{opacity:1;border-color:#e6d5a0}
+.nav-label{font-size:7px;color:#6a7a8a;font-family:'JetBrains Mono',monospace;letter-spacing:.1em;text-align:center}
+.nav-group.active .nav-label{color:#e6d5a0}
+.center{flex:1;padding:24px;overflow:auto;display:flex;flex-direction:column;align-items:center;background:rgba(16,22,30,.18)}
+.page-title{font:900 32px 'Cinzel Decorative',serif;color:#e6d5a0;letter-spacing:.15em;text-align:center}
+.page-sub{margin-top:8px;font:400 9px 'JetBrains Mono',monospace;letter-spacing:.35em;color:#7a90a8;text-transform:uppercase;text-align:center}
+.placeholder-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;width:100%;max-width:1100px;margin-top:28px}
+.ph-card{background:rgba(20,26,34,.88);border:1px solid rgba(122,144,168,.22);border-radius:12px;padding:22px;text-align:center;backdrop-filter:blur(8px);transition:.2s}
+.ph-card:hover{border-color:#e6d5a0;transform:translateY(-2px)}
+.ph-icon{font-size:36px;margin-bottom:12px}
+.ph-name{font:700 13px Inter,sans-serif;letter-spacing:.08em;color:#e6d5a0;text-transform:uppercase}
+.ph-desc{margin-top:8px;font:400 10px 'JetBrains Mono',monospace;color:#8a9aaa;line-height:1.5}
+.ph-badge{margin-top:14px;display:inline-block;font:900 10px 'JetBrains Mono',monospace;letter-spacing:.25em;color:#5a6e80;border:1px solid #3a4a5a;border-radius:6px;padding:5px 10px;background:rgba(0,0,0,.2)}
 
-/* NAV FIX 60px / 52x52 / no scroll */
-.left-nav{
-  width:60px !important;
-  min-width:60px !important;
-  max-width:60px !important;
-  flex:0 0 60px !important;
-  background:rgba(18,24,30,.94) !important;
-  border-right:1px solid #2a3a4a !important;
-  display:flex !important;
-  flex-direction:column !important;
-  justify-content:space-between !important;
-  align-items:center !important;
-  height:100vh !important;
-  overflow:hidden !important;
-  overflow-y:hidden !important;
-  overflow-x:hidden !important;
-  scrollbar-width:none !important;
-  -ms-overflow-style:none !important;
-  padding:10px 4px 8px 4px !important;
-  gap:0 !important;
-}
-.left-nav::-webkit-scrollbar{display:none !important;width:0 !important;height:0 !important;}
-.nav-top{
-  display:flex !important;
-  flex-direction:column !important;
-  gap:4px !important;
-  align-items:center !important;
-  width:100% !important;
-  overflow:hidden !important;
-}
-.nav-bottom{
-  display:flex !important;
-  flex-direction:column !important;
-  align-items:center !important;
-  width:100% !important;
-  padding-top:8px !important;
-  border-top:1px solid rgba(255,255,255,.08) !important;
-  margin-top:8px !important;
-}
-.nav-group{
-  cursor:pointer !important;
-  display:flex !important;
-  flex-direction:column !important;
-  align-items:center !important;
-  gap:0 !important;
-  width:100% !important;
-  position:relative !important;
-}
-.nav-item{
-  width:52px !important;
-  height:52px !important;
-  min-width:52px !important;
-  min-height:52px !important;
-  background:#1a252f !important;
-  border:1px solid #2a3a4a !important;
-  border-radius:9px !important;
-  display:flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-  opacity:.75 !important;
-  transition:.2s !important;
-  flex-shrink:0 !important;
-  padding:0 !important;
-  overflow:hidden !important;
-}
-.nav-item.active{
-  border-color:#e6d5a0 !important;
-  opacity:1 !important;
-  background:#1e2f3e !important;
-  box-shadow:0 0 10px rgba(230,213,160,.3) !important;
-}
-.nav-item:hover{opacity:1 !important;border-color:#e6d5a0 !important;}
-.nav-item img{width:100% !important;height:100% !important;object-fit:cover !important;display:block !important;border-radius:8px !important;}
-.nav-label{
-  position:absolute !important;
-  left:64px !important;
-  top:50% !important;
-  transform:translateY(-50%) translateX(-6px) !important;
-  background:rgba(20,26,34,.96) !important;
-  border:1px solid #e6d5a0 !important;
-  color:#e6d5a0 !important;
-  padding:5px 9px !important;
-  border-radius:6px !important;
-  font:700 8px 'JetBrains Mono',monospace !important;
-  letter-spacing:.15em !important;
-  white-space:nowrap !important;
-  opacity:0 !important;
-  pointer-events:none !important;
-  transition:.18s !important;
-  z-index:30 !important;
-  box-shadow:0 4px 16px rgba(0,0,0,.5) !important;
-}
-.nav-group:hover .nav-label{opacity:1 !important;transform:translateY(-50%) translateX(0) !important;}
-.wrap{display:flex !important;position:fixed !important;inset:0 !important;}
-
-.center{flex:1;display:flex;flex-direction:column;overflow:hidden;background:rgba(16,22,30,.22)}
-.top-bar{height:48px;background:rgba(18,24,33,.85);border-bottom:1px solid rgba(30,42,50,.5);display:flex;align-items:center;justify-content:space-between;padding:0 16px}
-.top-title{font:900 16px 'Cinzel Decorative',serif;letter-spacing:.2em;color:#e6d5a0}
-.top-res{display:flex;gap:12px;font:700 10px 'JetBrains Mono',monospace;color:#8a9aaa}
-.top-res span{color:#d0b040}
-.main-area{flex:1;display:flex;overflow:hidden}
-.left-list{width:320px;min-width:320px;background:rgba(18,24,33,.55);border-right:1px solid rgba(30,42,50,.5);display:flex;flex-direction:column;overflow:hidden}
-.list-header{padding:12px 14px;border-bottom:1px solid rgba(30,42,50,.3);font:700 9px 'JetBrains Mono',monospace;letter-spacing:.15em;color:#6a7a8a;display:flex;justify-content:space-between}
-.item-list{flex:1;overflow:auto;padding:8px;display:flex;flex-direction:column;gap:6px}
-.gear-row{display:flex;gap:10px;align-items:center;padding:8px 10px;background:#1a242f;border:1px solid #2a3a4a;border-radius:8px;cursor:pointer;transition:.15s}
-.gear-row:hover{border-color:#e6d5a0;transform:translateY(-1px)}
-.gear-row.selected{border-color:#e6d5a0;background:#1e2f3e;box-shadow:0 0 10px rgba(230,213,160,.15)}
-.gear-row.max{opacity:.5;cursor:not-allowed}
-.gear-icon{width:42px;height:42px;min-width:42px;border-radius:6px;background:#0a0e14;border:1px solid #2a3a4a;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:20px}
-.gear-icon img{width:100%;height:100%;object-fit:cover;display:block}
-.gear-info{flex:1;display:flex;flex-direction:column;gap:2px;overflow:hidden}
-.gear-name{font:700 10px Inter,sans-serif;color:#e6d5a0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-transform:uppercase}
-.gear-tier{font:700 7px 'JetBrains Mono',monospace;letter-spacing:.1em}
-.gear-tier.bw{color:#8a8a8a}.gear-tier.green{color:#3ad080}.gear-tier.blue{color:#6ab0ff}.gear-tier.red{color:#e05050}.gear-tier.gold{color:#d0b040}
-.gear-lvl{font:400 8px 'JetBrains Mono',monospace;color:#6a7a8a}
-.right-preview{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;overflow:auto;background:radial-gradient(ellipse at center, rgba(230,213,160,.05), transparent 70%)}
-.preview-empty{font:400 11px 'JetBrains Mono',monospace;color:#5a6a7a;text-align:center}
-.upgrade-card{width:100%;max-width:520px;background:linear-gradient(180deg,#1e2a3a,#121a26);border:1px solid rgba(230,213,160,.2);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:14px;box-shadow:0 12px 32px rgba(0,0,0,.5)}
-.upgrade-top{display:flex;gap:16px;align-items:flex-start}
-.upgrade-icons{display:flex;gap:12px;align-items:center}
-.up-icon{width:64px;height:64px;border-radius:10px;background:#0a0e14;border:1px solid #2a3a4a;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:28px;position:relative}
-.up-icon img{width:100%;height:100%;object-fit:cover;display:block}
-.up-arrow{font:900 18px 'Cinzel Decorative',serif;color:#e6d5a0}
-.up-info{flex:1;display:flex;flex-direction:column;gap:6px}
-.up-name{font:800 13px Inter,sans-serif;color:#e6d5a0;text-transform:uppercase}
-.up-stats{display:flex;flex-direction:column;gap:3px;margin-top:4px}
-.up-stat{font:600 10px 'JetBrains Mono',monospace;color:#8a9aaa}
-.up-stat b{color:#3ad080}
-.up-stat.next b{color:#6ab0ff}
-.cost-box{background:rgba(0,0,0,.3);border:1px solid rgba(42,58,74,.5);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px}
-.cost-title{font:700 8px 'JetBrains Mono',monospace;letter-spacing:.15em;color:#6a7a8a}
-.cost-row{display:flex;gap:8px;flex-wrap:wrap}
-.cost-item{display:flex;align-items:center;gap:4px;background:#1a242f;border:1px solid #2a3a4a;border-radius:6px;padding:4px 8px;font:700 10px 'JetBrains Mono',monospace;color:#d8d2b8}
-.cost-item.need{border-color:#e05050;color:#ff8a8a}
-.cost-item.have{border-color:#3ad080;color:#3ad080}
-.cost-item.gold{color:#d0b040}
-.up-btn{height:42px;border-radius:10px;border:1px solid #e6d5a0;background:linear-gradient(180deg,#e6d5a0,#c0a860);color:#0a0e14;font:800 10px 'JetBrains Mono',monospace;letter-spacing:.15em;cursor:pointer;transition:.15s}
-.up-btn:hover{filter:brightness(1.1);transform:translateY(-1px)}
-.up-btn:disabled{opacity:.4;cursor:not-allowed;filter:grayscale(.5);transform:none}
-.up-log{margin-top:10px;font:400 9px 'JetBrains Mono',monospace;color:#6a7a8a;text-align:center;min-height:14px}
 </style>
 </head>
 <body>
-<div class="bg"><img src="./assets/heroes/bg-battlefield.webp" onerror="this.style.display='none'"></div>
+<div class="bg"></div>
 <div class="wrap">
 <div class="left-nav">
   <div class="nav-top">
-    <div class="nav-group " onclick="location.href='./page3.html'"><div class="nav-item " data-page="page3"><img src="./assets/ui/nav/hero.webp" alt="HERO"></div><div class="nav-label">HERO</div></div>
-    <div class="nav-group " onclick="location.href='./page4.html'"><div class="nav-item " data-page="page4"><img src="./assets/ui/nav/bag.webp" alt="BAG"></div><div class="nav-label">BAG</div></div>
-    <div class="nav-group " onclick="location.href='./page5.html'"><div class="nav-item " data-page="page5"><img src="./assets/ui/nav/skills.webp" alt="SKILLS"></div><div class="nav-label">SKILLS</div></div>
-    <div class="nav-group " onclick="location.href='./page6.html'"><div class="nav-item " data-page="page6"><img src="./assets/ui/nav/battle.webp" alt="BATTLE"></div><div class="nav-label">BATTLE</div></div>
-    <div class="nav-group " onclick="location.href='./page9.html'"><div class="nav-item " data-page="page9"><img src="./assets/ui/nav/missions.webp" alt="MISSIONS"></div><div class="nav-label">MISSIONS</div></div>
-    <div class="nav-group " onclick="location.href='./page10.html'"><div class="nav-item " data-page="page10"><img src="./assets/ui/nav/market.webp" alt="MARKET"></div><div class="nav-label">MARKET</div></div>
-    <div class="nav-group " onclick="location.href='./page11.html'"><div class="nav-item " data-page="page11"><img src="./assets/ui/nav/pvp.webp" alt="PVP"></div><div class="nav-label">PVP</div></div>
-    <div class="nav-group active" onclick="location.href='./page12.html'"><div class="nav-item active" data-page="page12"><img src="./assets/ui/nav/workshop.webp" alt="WORKSHOP"></div><div class="nav-label">WORKSHOP</div></div>
-    <div class="nav-group " onclick="location.href='./page13.html'"><div class="nav-item " data-page="page13"><img src="./assets/ui/nav/pass.webp" alt="PASS"></div><div class="nav-label">PASS</div></div>
+    <div class="nav-group " onclick="location.href='./page3.html'"><div class="nav-item " data-page="page3">🦁</div><div class="nav-label">HERO</div></div>
+    <div class="nav-group " onclick="location.href='./page4.html'"><div class="nav-item " data-page="page4">🎒</div><div class="nav-label">BAG</div></div>
+    <div class="nav-group " onclick="location.href='./page5.html'"><div class="nav-item " data-page="page5">✨</div><div class="nav-label">SKILLS</div></div>
+    <div class="nav-group " onclick="location.href='./page6.html'"><div class="nav-item " data-page="page6">⚔️</div><div class="nav-label">BATTLE</div></div>
+    <div class="nav-group " onclick="location.href='./page9.html'"><div class="nav-item " data-page="page9">📜</div><div class="nav-label">MISSIONS</div></div>
+    <div class="nav-group " onclick="location.href='./page10.html'"><div class="nav-item " data-page="page10">🛒</div><div class="nav-label">MARKET</div></div>
+    <div class="nav-group " onclick="location.href='./page11.html'"><div class="nav-item " data-page="page11">🏆</div><div class="nav-label">PVP</div></div>
+    <div class="nav-group active" onclick="location.href='./page12.html'"><div class="nav-item active" data-page="page12">🔨</div><div class="nav-label">WORKSHOP</div></div>
+    <div class="nav-group " onclick="location.href='./page13.html'"><div class="nav-item " data-page="page13">🎫</div><div class="nav-label">PASS</div></div>
   </div>
   <div class="nav-bottom">
-    <div class="nav-group" onclick="location.href='./index.html'"><div class="nav-item" data-page="index"><img src="./assets/ui/nav/start.webp" alt="START"></div><div class="nav-label">START</div></div>
+    <div class="nav-group" onclick="location.href='./index.html'"><div class="nav-item" data-page="index">🏠</div><div class="nav-label">START</div></div>
   </div>
 </div>
 <div class="center">
-  <div class="top-bar">
-    <div class="top-title">WORKSHOP • UPGRADE</div>
-    <div class="top-res">
-      <div>GOLD: <span id="goldDisplay">0</span></div>
-      <div>RES: <span id="resDisplay">0</span></div>
-    </div>
-  </div>
-  <div class="main-area">
-    <div class="left-list">
-      <div class="list-header"><span>ТВОЙ ШМОТ</span><span id="countDisplay">0</span></div>
-      <div class="item-list" id="itemList"></div>
-    </div>
-    <div class="right-preview" id="previewArea">
-      <div class="preview-empty">Выбери предмет слева для апгрейда<br><br>Система: 5 мастей (bw → green → blue → red → gold) × 10 уровней<br>Золото: 50×lvl, Ресурсы: quartz/wood/diamond + fang/essence</div>
-    </div>
-  </div>
+<div class="page-title">WORKSHOP</div>
+<div class="page-sub">VOLAND • CRAFT & UPGRADE • COMING SOON</div>
+
+<div class="placeholder-grid">
+  <div class="ph-card"><div class="ph-icon">🔨</div><div class="ph-name">CRAFT</div><div class="ph-desc">Создание предметов • Рецепты<br>Жду твоих рецептов</div><div class="ph-badge">SOON</div></div>
+  <div class="ph-card"><div class="ph-icon">⚒️</div><div class="ph-name">UPGRADE</div><div class="ph-desc">Улучшение гира • Уровни<br>Без выдуманных статов</div><div class="ph-badge">SOON</div></div>
+  <div class="ph-card"><div class="ph-icon">🧪</div><div class="ph-name">ENCHANT</div><div class="ph-desc">Зачарование • Руны<br>Данные — позже</div><div class="ph-badge">SOON</div></div>
+</div>
+
 </div>
 </div>
 <script src="./assets/js/db.js"></script>
 <script src="./assets/js/storage.js"></script>
 <script>
-if (!volandHasSave()){ location.href='./page2.html'; }
-
-function getAllUpgradeable(){
-  let equippedRaw = {};
-  let inv = [];
-  try{ equippedRaw = volandGetEquipRaw(); }catch(e){ console.log('equipRaw err', e); }
-  try{ inv = volandGetInventory(); }catch(e){ console.log('inv err', e); }
-  let equippedIds = new Set(Object.values(equippedRaw).map(id=>volandResolveItemId(id)));
-  console.log('DEBUG equippedIds', equippedIds, 'inv', inv);
-  let all = [];
-  // ONLY inventory - NOT equipped (надетое апать нельзя)
-  inv.forEach(entry=>{
-    let it = null;
-    try{ it = volandGetItemById(entry.id); }catch(e){}
-    if(!it){
-      try{
-        let rid = volandResolveItemId(entry.id);
-        it = volandGetItemById(rid);
-      }catch(e){}
-    }
-    if(it){
-      if(!it.tier) it.tier='bw';
-      if(!it.level) it.level=1;
-      // skip if this item is equipped
-      let resolvedId = volandResolveItemId(it.id);
-      if(equippedIds.has(it.id) || equippedIds.has(resolvedId)){
-        console.log('skip equipped', it.id);
-        return;
-      }
-      let cost = null;
-      try{ cost = volandGetUpgradeCost(it.id); }catch(e){}
-      if(!all.find(x=>x.item.id===it.id)){
-        all.push({item:it, slot:it.slot, equipped:false, cost:cost, isMax:!cost, invEntry:entry});
-      }
-    }
-  });
-  // FALLBACK: if inventory empty (nothing to upgrade), show starter gear that is NOT equipped
-  if(all.length===0){
-    console.log('FALLBACK to starter gear (non-equipped)');
-    try{
-      let starterIds = (typeof VOLAND_STARTER_GEAR_IDS!=='undefined') ? VOLAND_STARTER_GEAR_IDS : [];
-      starterIds.forEach(sid=>{
-        if(equippedIds.has(sid)) return; // skip equipped
-        let it = volandGetItemById(sid);
-        if(it){
-          let cost = volandGetUpgradeCost(it.id);
-          all.push({item:it, slot:it.slot, equipped:false, cost:cost, isMax:!cost, isFallback:true});
-        }
-      });
-    }catch(e){ console.log('fallback err', e); }
+// active nav highlight fallback
+let path=location.pathname.toLowerCase();
+document.querySelectorAll('.nav-item').forEach(el=>{
+  let pg=el.dataset.page;
+  if(pg && path.includes(pg)){
+    el.classList.add('active');
+    el.closest('.nav-group')?.classList.add('active');
   }
-  // sort
-  all.sort((a,b)=>{
-    let tierOrder = {bw:0,green:1,blue:2,red:3,gold:4};
-    if((tierOrder[a.item.tier]||0)!==(tierOrder[b.item.tier]||0)) return (tierOrder[a.item.tier]||0)-(tierOrder[b.item.tier]||0);
-    return (a.item.level||1)-(b.item.level||1);
-  });
-  return all;
-}
-
-function renderList(){
-  let list = getAllUpgradeable();
-  let container = document.getElementById('itemList');
-  let countEl = document.getElementById('countDisplay');
-  countEl.textContent = list.length;
-  container.innerHTML='';
-  list.forEach((entry,idx)=>{
-    let div = document.createElement('div');
-    div.className = 'gear-row' + (entry.isMax?' max':'');
-    let iconHtml = '';
-    if(entry.item.icon && entry.item.icon.includes('.webp')){
-      iconHtml = `<img src="${entry.item.icon}" onerror="this.style.display='none'; this.parentElement.textContent='${entry.item.emoji||'⚔️'}'">`;
-    } else {
-      iconHtml = entry.item.emoji||'⚔️';
-    }
-    div.innerHTML = `
-      <div class="gear-icon">${iconHtml}</div>
-      <div class="gear-info">
-        <div class="gear-name">${entry.item.name}</div>
-        <div class="gear-tier ${entry.item.tier}">${entry.item.tier.toUpperCase()} LVL${entry.item.level} • ${entry.item.slot.toUpperCase()} ${entry.equipped?'[EQUIPPED]':''}</div>
-        <div class="gear-lvl">${entry.item.desc}</div>
-      </div>
-    `;
-    if(!entry.isMax){
-      div.onclick = ()=> selectItem(entry, div);
-    }
-    container.appendChild(div);
-  });
-  // gold/res display
-  try{
-    document.getElementById('goldDisplay').textContent = volandGetGold();
-    let res = volandGetResources();
-    let total = Object.values(res).reduce((a,b)=>a+b,0);
-    document.getElementById('resDisplay').textContent = total;
-  }catch(e){}
-}
-
-let selectedEntry = null;
-let selectedDiv = null;
-
-function selectItem(entry, divEl){
-  selectedEntry = entry;
-  if(selectedDiv) selectedDiv.classList.remove('selected');
-  selectedDiv = divEl;
-  if(divEl) divEl.classList.add('selected');
-  
-  let preview = document.getElementById('previewArea');
-  let cur = entry.item;
-  let cost = entry.cost;
-  if(!cost){
-    preview.innerHTML = `<div class="preview-empty">MAX LEVEL<br>${cur.name} уже GOLD LVL10</div>`;
-    return;
-  }
-  let next = volandGetItemById(cost.nextId);
-  if(!next){
-    preview.innerHTML = `<div class="preview-empty">Следующий предмет не найден: ${cost.nextId}</div>`;
-    return;
-  }
-  // check can upgrade
-  let can = volandCanUpgrade(cur.id);
-  
-  let curIcon = cur.icon && cur.icon.includes('.webp') ? `<img src="${cur.icon}" onerror="this.style.display='none'; this.parentElement.textContent='${cur.emoji||'⚔️'}'">` : (cur.emoji||'⚔️');
-  let nextIcon = next.icon && next.icon.includes('.webp') ? `<img src="${next.icon}" onerror="this.style.display='none'; this.parentElement.textContent='${next.emoji||'⚔️'}'">` : (next.emoji||'⚔️');
-  
-  let curStats = Object.entries(cur.bonus).map(([k,v])=>`<div class="up-stat">${k}: <b>${v}</b></div>`).join('');
-  let nextStats = Object.entries(next.bonus).map(([k,v])=>{
-    let curV = cur.bonus[k]||0;
-    let diff = v-curV;
-    return `<div class="up-stat next">${k}: <b>${v} (+${diff})</b></div>`;
-  }).join('');
-  
-  // cost display
-  let gold = volandGetGold();
-  let res = volandGetResources();
-  let goldNeed = cost.gold;
-  let goldClass = gold>=goldNeed ? 'have' : 'need';
-  
-  let resHtml = '';
-  for(let rid in cost.resources){
-    let need = cost.resources[rid];
-    let have = res[rid]||0;
-    let cls = have>=need ? 'have' : 'need';
-    let iconRes = `./assets/ui/loot/${rid}.webp`;
-    resHtml += `<div class="cost-item ${cls}"><img src="${iconRes}" style="width:16px;height:16px;object-fit:contain" onerror="this.style.display='none'"> ${rid.toUpperCase()}: ${have}/${need}</div>`;
-  }
-  
-  preview.innerHTML = `
-    <div class="upgrade-card">
-      <div class="upgrade-top">
-        <div class="upgrade-icons">
-          <div class="up-icon">${curIcon}</div>
-          <div class="up-arrow">→</div>
-          <div class="up-icon">${nextIcon}</div>
-        </div>
-        <div class="up-info">
-          <div class="up-name">${cur.name} → ${next.name}</div>
-          <div class="up-stats">${curStats}</div>
-          <div class="up-stats" style="margin-top:8px; border-top:1px solid rgba(42,58,74,.5); padding-top:6px">${nextStats}</div>
-        </div>
-      </div>
-      <div class="cost-box">
-        <div class="cost-title">СТОИМОСТЬ АПГРЕЙДА</div>
-        <div class="cost-row">
-          <div class="cost-item gold ${goldClass}">🪙 GOLD: ${gold}/${goldNeed}</div>
-          ${resHtml}
-        </div>
-      </div>
-      <button class="up-btn" id="upBtn" ${!can.can?'disabled':''}>${can.can ? 'АПГРЕЙД ЗА '+goldNeed+' GOLD' : can.reason}</button>
-      <div class="up-log" id="upLog"></div>
-    </div>
-  `;
-  
-  let btn = document.getElementById('upBtn');
-  if(btn){
-    btn.onclick = ()=>{
-      let result = volandUpgradeItem(cur.id);
-      let logEl = document.getElementById('upLog');
-      if(result.success){
-        logEl.textContent = 'УСПЕХ! → ' + result.nextId;
-        logEl.style.color = '#3ad080';
-        setTimeout(()=>{
-          renderList();
-          // auto select next
-          let newList = getAllUpgradeable();
-          let newEntry = newList.find(x=>x.item.id===result.nextId);
-          if(newEntry){
-            // find div
-            let divs = document.querySelectorAll('.gear-row');
-            let idx = newList.indexOf(newEntry);
-            if(divs[idx]) selectItem(newEntry, divs[idx]);
-          } else {
-            document.getElementById('previewArea').innerHTML = '<div class="preview-empty">Апгрейд завершен! Выбери следующий предмет</div>';
-          }
-        }, 600);
-      } else {
-        logEl.textContent = 'ОШИБКА: ' + result.reason;
-        logEl.style.color = '#e05050';
-      }
-    };
-  }
-}
-
-renderList();
+});
 </script>
 </body>
 </html>
