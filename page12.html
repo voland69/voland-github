@@ -198,41 +198,18 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 if (!volandHasSave()){ location.href='./page2.html'; }
 
 function getAllUpgradeable(){
-  let equipped = {};
+  let equippedRaw = {};
   let inv = [];
-  try{ equipped = volandGetEquippedItems(); }catch(e){ console.log('equip err', e); }
+  try{ equippedRaw = volandGetEquipRaw(); }catch(e){ console.log('equipRaw err', e); }
   try{ inv = volandGetInventory(); }catch(e){ console.log('inv err', e); }
-  console.log('DEBUG equipped', equipped, 'inv', inv);
+  let equippedIds = new Set(Object.values(equippedRaw).map(id=>volandResolveItemId(id)));
+  console.log('DEBUG equippedIds', equippedIds, 'inv', inv);
   let all = [];
-  // equipped - try both new and old
-  for(let slot in equipped){
-    let it = equipped[slot];
-    if(it){
-      // ensure tier/level exists, if old compat add
-      if(!it.tier) it.tier='bw';
-      if(!it.level) it.level=1;
-      let cost = null;
-      try{ cost = volandGetUpgradeCost(it.id); }catch(e){}
-      // if no cost but tier bw, try resolve
-      if(!cost){
-        let resolved = volandResolveItemId(it.id);
-        if(resolved!==it.id){
-          let resolvedItem = volandGetItemById(resolved);
-          if(resolvedItem){
-            it = resolvedItem;
-            cost = volandGetUpgradeCost(resolved);
-          }
-        }
-      }
-      all.push({item:it, slot:slot, equipped:true, cost:cost, isMax:!cost});
-    }
-  }
-  // inventory
+  // ONLY inventory - NOT equipped (надетое апать нельзя)
   inv.forEach(entry=>{
     let it = null;
     try{ it = volandGetItemById(entry.id); }catch(e){}
     if(!it){
-      // try resolve old id
       try{
         let rid = volandResolveItemId(entry.id);
         it = volandGetItemById(rid);
@@ -241,6 +218,12 @@ function getAllUpgradeable(){
     if(it){
       if(!it.tier) it.tier='bw';
       if(!it.level) it.level=1;
+      // skip if this item is equipped
+      let resolvedId = volandResolveItemId(it.id);
+      if(equippedIds.has(it.id) || equippedIds.has(resolvedId)){
+        console.log('skip equipped', it.id);
+        return;
+      }
       let cost = null;
       try{ cost = volandGetUpgradeCost(it.id); }catch(e){}
       if(!all.find(x=>x.item.id===it.id)){
@@ -248,12 +231,13 @@ function getAllUpgradeable(){
       }
     }
   });
-  // FALLBACK: if still empty, show starter gear for testing
+  // FALLBACK: if inventory empty (nothing to upgrade), show starter gear that is NOT equipped
   if(all.length===0){
-    console.log('FALLBACK to starter gear');
+    console.log('FALLBACK to starter gear (non-equipped)');
     try{
       let starterIds = (typeof VOLAND_STARTER_GEAR_IDS!=='undefined') ? VOLAND_STARTER_GEAR_IDS : [];
       starterIds.forEach(sid=>{
+        if(equippedIds.has(sid)) return; // skip equipped
         let it = volandGetItemById(sid);
         if(it){
           let cost = volandGetUpgradeCost(it.id);
@@ -262,7 +246,7 @@ function getAllUpgradeable(){
       });
     }catch(e){ console.log('fallback err', e); }
   }
-  // sort by tier and level
+  // sort
   all.sort((a,b)=>{
     let tierOrder = {bw:0,green:1,blue:2,red:3,gold:4};
     if((tierOrder[a.item.tier]||0)!==(tierOrder[b.item.tier]||0)) return (tierOrder[a.item.tier]||0)-(tierOrder[b.item.tier]||0);
