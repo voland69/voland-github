@@ -502,3 +502,138 @@ function volandRemoveFromInventory(itemId){
 // совместимость для page4
 function getGold(){ return volandGetGold(); }
 function getResources(){ return volandGetResources(); }
+
+
+// VOLAND UPGRADE SYSTEM v1
+function volandGetUpgradeCost(itemId){
+  try{
+    if(typeof VOLAND_UPGRADE_COSTS!=='undefined' && VOLAND_UPGRADE_COSTS[itemId]){
+      return VOLAND_UPGRADE_COSTS[itemId];
+    }
+    return null;
+  }catch(e){ return null; }
+}
+
+function volandCanUpgrade(itemId){
+  try{
+    let cost = volandGetUpgradeCost(itemId);
+    if(!cost) return {can:false, reason:'MAX LEVEL'};
+    let gold = volandGetGold();
+    if(gold < cost.gold) return {can:false, reason:'NEED GOLD '+cost.gold, needGold:cost.gold-cost.gold, gold:cost.gold};
+    let res = volandGetResources();
+    for(let rid in cost.resources){
+      let need = cost.resources[rid];
+      let have = res[rid]||0;
+      if(have < need) return {can:false, reason:'NEED '+rid.toUpperCase()+' '+need, needRes:rid, needAmount:need-have};
+    }
+    return {can:true, cost:cost};
+  }catch(e){ return {can:false, reason:'ERROR'}; }
+}
+
+function volandUpgradeItem(itemId){
+  try{
+    let check = volandCanUpgrade(itemId);
+    if(!check.can) return {success:false, reason:check.reason};
+    let cost = check.cost;
+    // deduct gold
+    volandSetGold(volandGetGold() - cost.gold);
+    // deduct resources
+    let res = volandGetResources();
+    for(let rid in cost.resources){
+      res[rid] = Math.max(0, (res[rid]||0) - cost.resources[rid]);
+    }
+    volandSetResources(res);
+    // replace item in inventory/equip
+    let nextId = cost.nextId;
+    // if item is equipped, replace equipped
+    let equipped = volandGetEquipRaw();
+    let foundEquipped = false;
+    for(let slot in equipped){
+      if(equipped[slot]===itemId){
+        equipped[slot]=nextId;
+        foundEquipped=true;
+      }
+    }
+    if(foundEquipped){
+      // save equipped
+      try{
+        let saves=volandGetSaves();
+        let idx=volandGetActiveIndex();
+        if(saves.length>0){
+          saves[idx].equip = equipped;
+          volandSaveSaves(saves);
+        }
+        localStorage.setItem('voland_v1_equip', JSON.stringify(equipped));
+      }catch(e){}
+    } else {
+      // if in inventory, replace
+      let inv = volandGetInventory();
+      let idx = inv.findIndex(x=>x.id===itemId);
+      if(idx>=0){
+        inv[idx].id = nextId;
+        volandSaveInventory(inv);
+      } else {
+        // if not found, add next and remove old if exists
+        volandAddToInventory(nextId);
+      }
+    }
+    return {success:true, nextId:nextId, cost:cost};
+  }catch(e){ return {success:false, reason:'EXCEPTION '+e}; }
+}
+
+function volandGetItemById(itemId){
+  try{
+    if(typeof VOLAND_ITEMS!=='undefined'){
+      return VOLAND_ITEMS.find(x=>x.id===itemId)||null;
+    }
+    return null;
+  }catch(e){ return null; }
+}
+
+// Backward compat mapping old ids to new bw lvl1
+const VOLAND_OLD_TO_NEW = {
+  'head':'helmet-bw-lvl1',
+  'armor':'armor-bw-lvl1',
+  'amulet':'amulet-bw-lvl1',
+  'gloves':'gloves-bw-lvl1',
+  'boots':'boots-bw-lvl1',
+  'ring1':'ring1-bw-lvl1',
+  'ring2':'ring2-bw-lvl1',
+  'ear1':'earring1-bw-lvl1',
+  'ear2':'earring2-bw-lvl1',
+  'weapon':'sword-bw-lvl1',
+  'shield':'shield-bw-lvl1'
+};
+
+function volandResolveItemId(itemId){
+  try{
+    if(VOLAND_OLD_TO_NEW[itemId]) return VOLAND_OLD_TO_NEW[itemId];
+    return itemId;
+  }catch(e){ return itemId; }
+}
+
+// Override volandGetEquippedItems to resolve old ids
+(function(){
+  try{
+    let orig = volandGetEquippedItems;
+    window.volandGetEquippedItems = function(){
+      try{
+        let raw = volandGetEquipRaw();
+        let eq = {};
+        for(let slot in raw){
+          let id = volandResolveItemId(raw[slot]);
+          let item = null;
+          if(typeof VOLAND_ITEMS!=='undefined'){
+            item = VOLAND_ITEMS.find(x=>x.id===id);
+            if(!item){
+              // try find by base id?
+              item = VOLAND_ITEMS.find(x=>x.id===raw[slot]);
+            }
+          }
+          if(item) eq[slot]=item;
+        }
+        return eq;
+      }catch(e){ return orig(); }
+    };
+  }catch(e){}
+})();
