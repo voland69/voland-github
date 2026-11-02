@@ -443,13 +443,13 @@ function renderInv(){
       cell.classList.add('has-item');
       if(it.isGold){
         cell.classList.add('gold');
-        let iconHtml = (it.icon && (it.icon.includes('.webp') || it.icon.includes('/'))) ? `<img src="${it.icon}">` : `<span class="emoji-fallback">${it.icon}</span>`;
+        let iconHtml = `<img src="${it.icon}" style="width:100%;height:100%;object-fit:contain" onerror="this.style.display='none'">`;
         cell.innerHTML=`<div class="item-icon">${iconHtml}</div><div class="badge">${it.count}</div>`;
         cell.onclick=()=>{ log('Золото: '+it.count+' — в одной ячейке бесконечно'); };
         cell.title = it.name+' '+it.count;
       } else if(it.isResource){
         cell.classList.add('resource');
-        let iconHtml = (it.icon && (it.icon.includes('.webp') || it.icon.includes('/'))) ? `<img src="${it.icon}">` : `<span class="emoji-fallback">${it.icon}</span>`;
+        let iconHtml = `<img src="${it.icon}" style="width:100%;height:100%;object-fit:contain" onerror="this.style.display='none'">`;
         cell.innerHTML=`<div class="item-icon">${iconHtml}</div><div class="badge">${it.count}</div>`;
         cell.onclick=()=>{ log(it.name+': '+it.count+' — стак 99, при 99+ новая ячейка'); };
         cell.title = it.name+' '+it.count;
@@ -458,7 +458,7 @@ function renderInv(){
         if(it.rarity==='green') cell.classList.add('rarity-green');
         if(it.rarity==='blue') cell.classList.add('rarity-blue');
         if(it.rarity==='legend' || it.rarity==='legendary') cell.classList.add('rarity-legend');
-        let iconHtml = (it.icon && (it.icon.includes('.webp') || it.icon.includes('/') || it.icon.includes('.jpg') || it.icon.includes('.png'))) ? `<img src="${it.icon}">` : `<span class="emoji-fallback">${it.icon}</span>`;
+        let emoji = it.emoji || it.icon || '⚔️'; let iconHtml = (it.icon && it.icon.includes('/loot/')) ? `<img src="${it.icon}" onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\'emoji-fallback\'>'+'${it.emoji || '⚔️'}'+'</span>'">` : `<span class="emoji-fallback">${emoji}</span>`;
         // badge empty for gear as requested
         cell.innerHTML=`<div class="item-icon">${iconHtml}</div>`;
         cell.onclick=()=>openGearModal(it,i);
@@ -518,8 +518,18 @@ function renderEquip(){
   document.querySelectorAll('.equip-slot').forEach(el=>{
     const slot=el.dataset.slot; const it=equipped[slot];
     const nameEl=el.querySelector('.slot-name'); const iconEl=el.querySelector('.slot-icon'); const emptyEl=el.querySelector('.slot-empty');
-    if(it){ el.classList.add('filled'); iconEl.textContent=it.icon; nameEl.textContent=it.name; emptyEl.textContent=it.desc; emptyEl.style.color='#3ad080'; }
-    else{
+    if(it){
+      el.classList.add('filled');
+      // FIX: use emoji, not path text - equipment webp files don't exist yet
+      let displayIcon = it.emoji || '⚔️';
+      // if icon is webp that actually exists in loot, try img with fallback
+      if(it.icon && it.icon.includes('/loot/')){
+        iconEl.innerHTML = `<img src="${it.icon}" style="width:100%;height:100%;object-fit:cover;border-radius:6px" onerror="this.style.display='none'; this.parentElement.textContent='${displayIcon}'">`;
+      } else {
+        iconEl.textContent = displayIcon;
+      }
+      nameEl.textContent=it.name; emptyEl.textContent=it.desc; emptyEl.style.color='#3ad080';
+    } else {
       el.classList.remove('filled');
       const defs={head:{icon:'🪖',name:'Шлем'},ear1:{icon:'👂',name:'Серьга 1'},ear2:{icon:'👂',name:'Серьга 2'},amulet:{icon:'📿',name:'Амулет'},armor:{icon:'🦺',name:'Броня'},weapon:{icon:'⚔️',name:'Оружие'},shield:{icon:'🛡️',name:'Щит'},ring1:{icon:'💍',name:'Кольцо 1'},ring2:{icon:'💍',name:'Кольцо 2'},gloves:{icon:'🧤',name:'Перчатки'},boots:{icon:'👢',name:'Ботинки'}};
       const def=defs[slot]; if(def){ iconEl.textContent=def.icon; nameEl.textContent=def.name; }
