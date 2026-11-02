@@ -125,11 +125,12 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
   height:100dvh !important;
   padding:6px 4px !important;
   gap:0 !important;
-  overflow:visible !important;
+  overflow:hidden !important; overflow-y:hidden !important; overflow-x:hidden !important; scrollbar-width:none !important; -ms-overflow-style:none !important;
   position:relative !important;
   z-index:20 !important;
   backdrop-filter:blur(6px) !important;
 }
+.left-nav::-webkit-scrollbar{display:none !important; width:0 !important; height:0 !important;}
 .nav-top{
   display:flex !important;
   flex-direction:column !important;
@@ -360,15 +361,22 @@ function rebuildInv(){
       }
     }
   }catch(e){}
-  // весь остальной шмот
+  // стартовый шмот (только bw lvl1) - не все 650
   try{
-    VOLAND_ITEMS.forEach(it=>{
+    let starterIds = [];
+    if(typeof VOLAND_STARTER_GEAR_IDS !== 'undefined') starterIds = VOLAND_STARTER_GEAR_IDS;
+    else if(typeof VOLAND_ITEMS !== 'undefined'){
+      starterIds = VOLAND_ITEMS.filter(it=>it.tier==='bw' && it.level===1).map(it=>it.id).slice(0,13);
+    }
+    starterIds.forEach(sid=>{
       if(inv.length>=50) return;
-      if(!ids.has(it.id)){
-        if(!inv.find(x=>x && x.id===it.id)){
+      try{
+        let it = VOLAND_ITEMS.find(x=>x.id===sid);
+        if(it && !ids.has(it.id) && !inv.find(x=>x && x.id===it.id)){
+          // check if already in dropped
           inv.push({...it, isEquip:true});
         }
-      }
+      }catch(e){}
     });
   }catch(e){}
   while(inv.length<50) inv.push(null);
