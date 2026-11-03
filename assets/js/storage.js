@@ -50,8 +50,8 @@ function volandGetSaves(){
   try{
     let saves = volandSafeParse(localStorage.getItem(VOLAND_KEYS.saves), []);
     if(!Array.isArray(saves)) saves=[];
-    // filter invalid
-    saves = saves.filter(s=> s && s.hero && s.name && VOLAND_HEROES[s.hero]);
+    // filter invalid - but don't require hero in VOLAND_HEROES to avoid redirect loop when db fails
+    saves = saves.filter(s=> s && s.hero && s.name);
     return saves.slice(0,3);
   }catch(e){ return []; }
 }
