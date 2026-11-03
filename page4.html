@@ -6,16 +6,12 @@
 <title>VOLAND - BAG</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
-*{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") center/cover no-repeat fixed #0a0e14;color:#d8d2b8;font-family:Inter,Arial,sans-serif;overflow:hidden}
-.bg{position:fixed;inset:0;z-index:0}.bg img{width:100%;height:100%;object-fit:cover}
-.wrap{position:fixed;inset:0;display:flex;z-index:2}
+/* === TOOLTIP ONLY - page4 BAG - keep 68px but add fixed tooltip === */
 .left-nav{
-  width:60px !important;
-  min-width:60px !important;
-  max-width:60px !important;
-  flex:0 0 60px !important;
+  width:68px !important;
+  min-width:68px !important;
+  max-width:68px !important;
+  flex:0 0 68px !important;
   background:rgba(18,24,30,.94) !important;
   border-right:1px solid #2a3a4a !important;
   display:flex !important;
@@ -23,21 +19,84 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
   justify-content:space-between !important;
   align-items:center !important;
   height:100vh !important;
+  height:100dvh !important;
   overflow:visible !important;
   overflow-y:visible !important;
   overflow-x:visible !important;
   scrollbar-width:none !important;
   -ms-overflow-style:none !important;
-  padding:10px 4px 8px 4px !important;
+  padding:6px 4px !important;
   gap:0 !important;
+  position:relative !important;
+  z-index:20 !important;
 }
-.nav-item{width:48px;height:48px;background:#1a252f;border:1px solid #2a3a4a;border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0.6;transition:.2s;font-size:20px}
-.nav-item.active{background:#1e2f3e;border-color:#e6d5a0;opacity:1;box-shadow:0 0 12px rgba(230,213,160,.2)}
+.left-nav::-webkit-scrollbar{display:none !important;width:0 !important;height:0 !important;}
+.nav-top{
+  display:flex !important;
+  flex-direction:column !important;
+  gap:4px !important;
+  align-items:center !important;
+  width:100% !important;
+  overflow:visible !important;
+}
+.nav-bottom{
+  margin-top:auto !important;
+  padding-top:8px !important;
+  border-top:1px solid rgba(255,255,255,.08) !important;
+  width:100% !important;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  gap:4px !important;
+  overflow:visible !important;
+}
+.nav-group{
+  cursor:pointer !important;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  gap:0 !important;
+  width:100% !important;
+  position:relative !important;
+  overflow:visible !important;
+}
+.nav-item{
+  width:52px !important;
+  height:52px !important;
+  min-width:52px !important;
+  min-height:52px !important;
+  background:#1a252f !important;
+  border:1px solid #2a3a4a !important;
+  border-radius:9px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  opacity:.75 !important;
+  transition:.2s !important;
+  flex-shrink:0 !important;
+  padding:0 !important;
+  overflow:hidden !important;
+}
+.nav-item.active{
+  border-color:#e6d5a0 !important;
+  opacity:1 !important;
+  background:#1e2f3e !important;
+  box-shadow:0 0 10px rgba(230,213,160,.3) !important;
+}
+.nav-item:hover{
+  opacity:1 !important;
+  border-color:#e6d5a0 !important;
+}
+.nav-item img{
+  width:100% !important;
+  height:100% !important;
+  object-fit:cover !important;
+  display:block !important;
+  border-radius:8px !important;
+}
 .nav-label{
-  position:absolute !important;
-  left:64px !important;
-  top:50% !important;
-  transform:translateY(-50%) translateX(-6px) !important;
+  position:fixed !important;
+  left:72px !important;
   background:rgba(20,26,34,.96) !important;
   border:1px solid #e6d5a0 !important;
   color:#e6d5a0 !important;
@@ -49,9 +108,28 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
   opacity:0 !important;
   pointer-events:none !important;
   transition:.18s !important;
-  z-index:9999 !important;
+  z-index:99999 !important;
   box-shadow:0 4px 16px rgba(0,0,0,.5) !important;
 }
+.nav-group:hover .nav-label{
+  opacity:1 !important;
+}
+.wrap{
+  display:flex !important;
+  position:fixed !important;
+  inset:0 !important;
+}
+
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") center/cover no-repeat fixed #0a0e14;color:#d8d2b8;font-family:Inter,Arial,sans-serif;overflow:hidden}
+.bg{position:fixed;inset:0;z-index:0}.bg img{width:100%;height:100%;object-fit:cover}
+.wrap{position:fixed;inset:0;display:flex;z-index:2}
+
+
+
+
 .center-col{flex:1;display:flex;flex-direction:column;background:rgba(16,22,30,.25);overflow:hidden;backdrop-filter: blur(2px)}
 .top-row{flex:0 0 480px;display:flex;gap:16px;background:rgba(19,26,34,.35);border-bottom:1px solid rgba(30,42,50,.5);overflow:hidden;align-items:stretch}
 .stats-panel{width:250px;min-width:250px;max-width:250px;background:rgba(20,28,36,.45);border-right:1px solid rgba(30,42,50,.5);padding:12px 16px 16px 16px;display:flex;flex-direction:column;justify-content:flex-start;gap:0;height:100%}
@@ -147,27 +225,8 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
 
 
 /* VOLAND NAV FIX - 60px / 52x52 / gap 4 / no scroll / hover label */
-.left-nav{
-  width:60px !important;
-  min-width:60px !important;
-  max-width:60px !important;
-  flex:0 0 60px !important;
-  background:rgba(18,24,30,.94) !important;
-  border-right:1px solid #2a3a4a !important;
-  display:flex !important;
-  flex-direction:column !important;
-  justify-content:flex-start !important;
-  align-items:center !important;
-  height:100vh !important;
-  height:100dvh !important;
-  padding:6px 4px !important;
-  gap:0 !important;
-  overflow:hidden !important; overflow-y:hidden !important; overflow-x:hidden !important; scrollbar-width:none !important; -ms-overflow-style:none !important;
-  position:relative !important;
-  z-index:20 !important;
-  backdrop-filter:blur(6px) !important;
-}
-.left-nav::-webkit-scrollbar{display:none !important;width:0 !important;height:0 !important;}
+
+.left-nav::-webkit-scrollbar{display:none !important; width:0 !important; height:0 !important;}
 .nav-top{
   display:flex !important;
   flex-direction:column !important;
@@ -193,31 +252,9 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
   gap:0 !important;
   width:100% !important;
   position:relative !important;
-  overflow:visible !important;
 }
-.nav-item{
-  width:52px !important;
-  height:52px !important;
-  min-width:52px !important;
-  min-height:52px !important;
-  background:#1a252f !important;
-  border:1px solid #2a3a4a !important;
-  border-radius:9px !important;
-  display:flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-  opacity:.75 !important;
-  transition:.2s !important;
-  flex-shrink:0 !important;
-  padding:0 !important;
-  overflow:hidden !important;
-}
-.nav-item.active{
-  border-color:#e6d5a0 !important;
-  opacity:1 !important;
-  background:#1e2f3e !important;
-  box-shadow:0 0 10px rgba(230,213,160,.3) !important;
-}
+
+
 .nav-item:hover{
   opacity:1 !important;
   border-color:#e6d5a0 !important;
@@ -229,29 +266,8 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
   display:block !important;
   border-radius:8px !important;
 }
-.nav-label{
-  position:absolute !important;
-  left:64px !important;
-  top:50% !important;
-  transform:translateY(-50%) translateX(-6px) !important;
-  background:rgba(20,26,34,.96) !important;
-  border:1px solid #e6d5a0 !important;
-  color:#e6d5a0 !important;
-  padding:5px 9px !important;
-  border-radius:6px !important;
-  font:700 8px 'JetBrains Mono',monospace !important;
-  letter-spacing:.15em !important;
-  white-space:nowrap !important;
-  opacity:0 !important;
-  pointer-events:none !important;
-  transition:.18s !important;
-  z-index:30 !important;
-  box-shadow:0 4px 16px rgba(0,0,0,.5) !important;
-}
-.nav-group:hover .nav-label{
-  opacity:1 !important;
-  transform:translateY(-50%) translateX(0) !important;
-}
+
+.nav-group:hover 
 .wrap{
   display:flex !important;
   position:fixed !important;
@@ -266,17 +282,18 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
   <div class="left-nav">
   <div class="nav-top">
     <div class="nav-group " onclick="location.href='./page3.html'"><div class="nav-item " data-page="page3"><img src="./assets/ui/nav/hero.webp" alt="HERO"></div><div class="nav-label">HERO</div></div>
-    <div class="nav-group active" onclick="location.href='./page4.html'"><div class="nav-item active" data-page="page4"><img src="./assets/ui/nav/bag.webp" alt="BAG"></div><div class="nav-label">BAG</div></div>
+    <div class="nav-group " onclick="location.href='./page4.html'"><div class="nav-item " data-page="page4"><img src="./assets/ui/nav/bag.webp" alt="BAG"></div><div class="nav-label">BAG</div></div>
     <div class="nav-group " onclick="location.href='./page5.html'"><div class="nav-item " data-page="page5"><img src="./assets/ui/nav/skills.webp" alt="SKILLS"></div><div class="nav-label">SKILLS</div></div>
     <div class="nav-group " onclick="location.href='./page6.html'"><div class="nav-item " data-page="page6"><img src="./assets/ui/nav/battle.webp" alt="BATTLE"></div><div class="nav-label">BATTLE</div></div>
     <div class="nav-group " onclick="location.href='./page9.html'"><div class="nav-item " data-page="page9"><img src="./assets/ui/nav/missions.webp" alt="MISSIONS"></div><div class="nav-label">MISSIONS</div></div>
     <div class="nav-group " onclick="location.href='./page10.html'"><div class="nav-item " data-page="page10"><img src="./assets/ui/nav/market.webp" alt="MARKET"></div><div class="nav-label">MARKET</div></div>
     <div class="nav-group " onclick="location.href='./page11.html'"><div class="nav-item " data-page="page11"><img src="./assets/ui/nav/pvp.webp" alt="PVP"></div><div class="nav-label">PVP</div></div>
     <div class="nav-group " onclick="location.href='./page12.html'"><div class="nav-item " data-page="page12"><img src="./assets/ui/nav/workshop.webp" alt="WORKSHOP"></div><div class="nav-label">WORKSHOP</div></div>
-    <div class="nav-group " onclick="location.href='./page13.html'"><div class="nav-item " data-page="page13"><img src="./assets/ui/nav/pass.webp" alt="PASS"></div><div class="nav-label">PASS</div></div>
+    <div class="nav-group active" onclick="location.href='./page13.html'"><div class="nav-item active" data-page="page13"><img src="./assets/ui/nav/pass.webp" alt="PASS"></div><div class="nav-label">PASS</div></div>
   </div>
   <div class="nav-bottom">
     <div class="nav-group" onclick="location.href='./index.html'"><div class="nav-item" data-page="index"><img src="./assets/ui/nav/start.webp" alt="START"></div><div class="nav-label">START</div></div>
+
   </div>
 </div>
 
@@ -725,5 +742,22 @@ const chatIn=document.getElementById('chatIn'); const chatBtn=document.getElemen
 chatBtn.onclick=()=>{ const v=chatIn.value.trim(); if(!v) return; log('Ты: '+v); chatIn.value=''; };
 chatIn.addEventListener('keydown',e=>{ if(e.key==='Enter') chatBtn.click(); });
 </script>
+
+<script>
+// Tooltip positioning for page4 BAG
+document.querySelectorAll('.nav-group').forEach(g=>{
+  let label = g.querySelector('.nav-label');
+  if(!label) return;
+  g.addEventListener('mouseenter', ()=>{
+    let rect = g.getBoundingClientRect();
+    label.style.top = (rect.top + rect.height/2) + 'px';
+    label.style.transform = 'translateY(-50%) translateX(0)';
+  });
+  g.addEventListener('mouseleave', ()=>{
+    label.style.transform = 'translateY(-50%) translateX(-6px)';
+  });
+});
+</script>
 </body>
+
 </html>
