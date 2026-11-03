@@ -347,6 +347,8 @@ function rebuildInv(){
         if(!item) continue;
         if(ids.has(item.id)) continue;
         let base = item.baseId || item.id.split('-')[0];
+        if(equippedBaseIds.has(base)) continue; // FIX: skip if base already equipped (e.g. red helmet when gold helmet equipped)
+        
         if(allowedWeaponBases && ['bow','staff','sword','shield'].includes(base) && !allowedWeaponBases.has(base)){
           continue;
         }
