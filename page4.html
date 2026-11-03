@@ -228,13 +228,13 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
   <div class="left-nav">
   <div class="nav-top">
     <div class="nav-group " onclick="location.href='./page3.html'"><div class="nav-item " data-page="page3"><img src="./assets/ui/nav/hero.webp" alt="HERO"></div><div class="nav-label">HERO</div></div>
-    <div class="nav-group active" onclick="location.href='./page2.html'"><div class="nav-item active" data-page="page4"><img src="./assets/ui/nav/bag.webp" alt="BAG"></div><div class="nav-label">BAG</div></div>
+    <div class="nav-group active" onclick="location.href='./page4.html'"><div class="nav-item active" data-page="page4"><img src="./assets/ui/nav/bag.webp" alt="BAG"></div><div class="nav-label">BAG</div></div>
     <div class="nav-group " onclick="location.href='./page5.html'"><div class="nav-item " data-page="page5"><img src="./assets/ui/nav/skills.webp" alt="SKILLS"></div><div class="nav-label">SKILLS</div></div>
     <div class="nav-group " onclick="location.href='./page6.html'"><div class="nav-item " data-page="page6"><img src="./assets/ui/nav/battle.webp" alt="BATTLE"></div><div class="nav-label">BATTLE</div></div>
     <div class="nav-group " onclick="location.href='./page9.html'"><div class="nav-item " data-page="page9"><img src="./assets/ui/nav/missions.webp" alt="MISSIONS"></div><div class="nav-label">MISSIONS</div></div>
     <div class="nav-group " onclick="location.href='./page10.html'"><div class="nav-item " data-page="page10"><img src="./assets/ui/nav/market.webp" alt="MARKET"></div><div class="nav-label">MARKET</div></div>
     <div class="nav-group " onclick="location.href='./page11.html'"><div class="nav-item " data-page="page11"><img src="./assets/ui/nav/pvp.webp" alt="PVP"></div><div class="nav-label">PVP</div></div>
-    <div class="nav-group " onclick="location.href='./page2.html'"><div class="nav-item " data-page="page12"><img src="./assets/ui/nav/workshop.webp" alt="WORKSHOP"></div><div class="nav-label">WORKSHOP</div></div>
+    <div class="nav-group " onclick="location.href='./page12.html'"><div class="nav-item " data-page="page12"><img src="./assets/ui/nav/workshop.webp" alt="WORKSHOP"></div><div class="nav-label">WORKSHOP</div></div>
     <div class="nav-group " onclick="location.href='./page13.html'"><div class="nav-item " data-page="page13"><img src="./assets/ui/nav/pass.webp" alt="PASS"></div><div class="nav-label">PASS</div></div>
   </div>
   <div class="nav-bottom">
@@ -372,28 +372,6 @@ function rebuildInv(){
   Object.values(droppedGearMap).forEach(it=>{
     if(inv.length<50) inv.push(it);
   });
-  // FIX 2 cleanup: remove inappropriate weapons from storage
-  try{
-    if(allowedWeaponBases && typeof volandGetInventory==='function' && typeof volandSaveInventory==='function'){
-      let rawInv = volandGetInventory();
-      let cleaned = rawInv.filter(entry=>{
-        if(!entry || !entry.id) return false;
-        try{
-          let it = VOLAND_ITEMS.find(x=>x.id===entry.id);
-          if(!it) return true;
-          let base = it.baseId || it.id.split('-')[0];
-          if(['bow','staff','sword','shield'].includes(base) && !allowedWeaponBases.has(base)){
-            return false;
-          }
-          return true;
-        }catch(e){ return true; }
-      });
-      if(cleaned.length!==rawInv.length){
-        volandSaveInventory(cleaned);
-        console.log('Cleaned inappropriate weapons from inventory', rawInv.length, '->', cleaned.length);
-      }
-    }
-  }catch(e){ console.log('cleanup err', e); }
   try{
     let starterIds = [];
     if(heroId && typeof VOLAND_GET_STARTER_GEAR_FOR_HERO==='function'){
@@ -482,7 +460,12 @@ function renderStats(){
   });
   statsPanel.appendChild(grid);
 }
-let totalXp=0, lvlInfo={cur:0,need:1000,pct:0,lvl:1};
+function renderBars(){
+  const {cur} = volandCalcStats();
+  const title=barsPanel.querySelector('.panel-title');
+  barsPanel.innerHTML=''; barsPanel.appendChild(title);
+  const inner=document.createElement('div'); inner.className='bars-inner';
+  let totalXp=0, lvlInfo={cur:0,need:1000,pct:0,lvl:1};
   try{
     totalXp = typeof volandGetXp==='function' ? volandGetXp() : 0;
     lvlInfo = typeof volandGetLevelInfo==='function' ? volandGetLevelInfo(totalXp) : (typeof volandGetCurrentLevelInfo==='function' ? volandGetCurrentLevelInfo() : lvlInfo);
@@ -539,7 +522,6 @@ function renderInv(){
         if(it.rarity==='green') cell.classList.add('rarity-green');
         if(it.rarity==='blue') cell.classList.add('rarity-blue');
         if(it.rarity==='legend' || it.rarity==='legendary') cell.classList.add('rarity-legend');
-        // FIX 1: show image from /equipment/ or /weapons/ , not emoji
         let iconHtml='';
         if(it.icon && (it.icon.includes('.webp') || it.icon.includes('/equipment/') || it.icon.includes('/weapons/') || it.icon.includes('/loot/'))){
           iconHtml = `<img src="${it.icon}" style="width:100%;height:100%;object-fit:contain" onerror="this.style.display='none'">`;
@@ -603,7 +585,6 @@ function confirmEquipGear(){
 }
 
 function renderEquip(){
-  // FIX 2: clean inappropriate weapons for class before render
   try{
     let heroId = (typeof volandGetHeroId==='function') ? volandGetHeroId() : null;
     if(heroId && typeof VOLAND_HERO_WEAPON_TYPE!=='undefined' && typeof VOLAND_WEAPON_SETS!=='undefined'){
@@ -617,7 +598,6 @@ function renderEquip(){
             else allowed.add(wid.split('-')[0]);
           }catch(e){}
         });
-        // for warriors, allow sword+shield, for others only their weapon
         let toRemove=[];
         for(let slot in equipped){
           let it = equipped[slot];
@@ -650,7 +630,7 @@ function renderEquip(){
       el.classList.remove('filled');
       const defs={head:{name:'Шлем'},ear1:{name:'Серьга 1'},ear2:{name:'Серьга 2'},amulet:{name:'Амулет'},armor:{name:'Броня'},weapon:{name:'Оружие'},shield:{name:'Щит'},ring1:{name:'Кольцо 1'},ring2:{name:'Кольцо 2'},gloves:{name:'Перчатки'},boots:{name:'Ботинки'}};
       const def=defs[slot];
-      iconEl.textContent=''; // FIX 4: no emoji when empty
+      iconEl.textContent='';
       if(def){ nameEl.textContent=def.name; }
       emptyEl.textContent='пусто'; emptyEl.style.color='';
     }
