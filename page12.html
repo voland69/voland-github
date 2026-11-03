@@ -160,13 +160,13 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 <div class="left-nav">
   <div class="nav-top">
     <div class="nav-group " onclick="location.href='./page3.html'"><div class="nav-item " data-page="page3"><img src="./assets/ui/nav/hero.webp" alt="HERO"></div><div class="nav-label">HERO</div></div>
-    <div class="nav-group " onclick="location.href='./page4.html'"><div class="nav-item " data-page="page4"><img src="./assets/ui/nav/bag.webp" alt="BAG"></div><div class="nav-label">BAG</div></div>
+    <div class="nav-group " onclick="location.href='./page2.html'"><div class="nav-item " data-page="page4"><img src="./assets/ui/nav/bag.webp" alt="BAG"></div><div class="nav-label">BAG</div></div>
     <div class="nav-group " onclick="location.href='./page5.html'"><div class="nav-item " data-page="page5"><img src="./assets/ui/nav/skills.webp" alt="SKILLS"></div><div class="nav-label">SKILLS</div></div>
     <div class="nav-group " onclick="location.href='./page6.html'"><div class="nav-item " data-page="page6"><img src="./assets/ui/nav/battle.webp" alt="BATTLE"></div><div class="nav-label">BATTLE</div></div>
     <div class="nav-group " onclick="location.href='./page9.html'"><div class="nav-item " data-page="page9"><img src="./assets/ui/nav/missions.webp" alt="MISSIONS"></div><div class="nav-label">MISSIONS</div></div>
     <div class="nav-group " onclick="location.href='./page10.html'"><div class="nav-item " data-page="page10"><img src="./assets/ui/nav/market.webp" alt="MARKET"></div><div class="nav-label">MARKET</div></div>
     <div class="nav-group " onclick="location.href='./page11.html'"><div class="nav-item " data-page="page11"><img src="./assets/ui/nav/pvp.webp" alt="PVP"></div><div class="nav-label">PVP</div></div>
-    <div class="nav-group active" onclick="location.href='./page12.html'"><div class="nav-item active" data-page="page12"><img src="./assets/ui/nav/workshop.webp" alt="WORKSHOP"></div><div class="nav-label">WORKSHOP</div></div>
+    <div class="nav-group active" onclick="location.href='./page2.html'"><div class="nav-item active" data-page="page12"><img src="./assets/ui/nav/workshop.webp" alt="WORKSHOP"></div><div class="nav-label">WORKSHOP</div></div>
     <div class="nav-group " onclick="location.href='./page13.html'"><div class="nav-item " data-page="page13"><img src="./assets/ui/nav/pass.webp" alt="PASS"></div><div class="nav-label">PASS</div></div>
   </div>
   <div class="nav-bottom">
@@ -192,6 +192,8 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
   </div>
 </div>
 </div>
+
+
 <script src="./assets/js/db.js"></script>
 <script src="./assets/js/storage.js"></script>
 <script>
@@ -203,9 +205,35 @@ function getAllUpgradeable(){
   try{ equippedRaw = volandGetEquipRaw(); }catch(e){ console.log('equipRaw err', e); }
   try{ inv = volandGetInventory(); }catch(e){ console.log('inv err', e); }
   let equippedIds = new Set(Object.values(equippedRaw).map(id=>volandResolveItemId(id)));
-  console.log('DEBUG equippedIds', equippedIds, 'inv', inv);
+  let heroId = null;
+  let allowedWeaponBases = null;
+  try{
+    heroId = (typeof volandGetHeroId==='function') ? volandGetHeroId() : null;
+    if(heroId && typeof VOLAND_HERO_WEAPON_TYPE!=='undefined' && typeof VOLAND_WEAPON_SETS!=='undefined'){
+      let wType = VOLAND_HERO_WEAPON_TYPE[heroId] || 'sword';
+      let weaponIds = VOLAND_WEAPON_SETS[wType] || [];
+      allowedWeaponBases = new Set();
+      weaponIds.forEach(wid=>{
+        try{
+          let it = VOLAND_ITEMS.find(x=>x.id===wid);
+          if(it) allowedWeaponBases.add(it.baseId || wid.split('-')[0]);
+          else allowedWeaponBases.add(wid.split('-')[0]);
+        }catch(e){}
+      });
+      if(typeof VOLAND_BASE_CLOTHING_IDS!=='undefined'){
+        VOLAND_BASE_CLOTHING_IDS.forEach(cid=>{
+          try{
+            let it = VOLAND_ITEMS.find(x=>x.id===cid);
+            if(it) allowedWeaponBases.add(it.baseId);
+          }catch(e){}
+        });
+      }
+    }
+  }catch(e){}
+  console.log('DEBUG equippedIds', equippedIds, 'inv', inv, 'hero', heroId, 'allowed', allowedWeaponBases);
   let all = [];
-  // ONLY inventory - NOT equipped (надетое апать нельзя)
+  let baseMap = {};
+  const tierOrder = {bw:0,green:1,blue:2,red:3,gold:4};
   inv.forEach(entry=>{
     let it = null;
     try{ it = volandGetItemById(entry.id); }catch(e){}
@@ -218,37 +246,72 @@ function getAllUpgradeable(){
     if(it){
       if(!it.tier) it.tier='bw';
       if(!it.level) it.level=1;
-      // skip if this item is equipped
       let resolvedId = volandResolveItemId(it.id);
       if(equippedIds.has(it.id) || equippedIds.has(resolvedId)){
         console.log('skip equipped', it.id);
         return;
       }
+      let base = it.baseId || it.id.split('-')[0];
+      if(allowedWeaponBases && ['bow','staff','sword','shield'].includes(base) && !allowedWeaponBases.has(base)){
+        console.log('skip weapon not allowed for class', base, 'hero', heroId);
+        return;
+      }
       let cost = null;
       try{ cost = volandGetUpgradeCost(it.id); }catch(e){}
-      if(!all.find(x=>x.item.id===it.id)){
-        all.push({item:it, slot:it.slot, equipped:false, cost:cost, isMax:!cost, invEntry:entry});
+      let existing = baseMap[base];
+      if(!existing){
+        baseMap[base] = {item:it, slot:it.slot, equipped:false, cost:cost, isMax:!cost, invEntry:entry};
+      } else {
+        let ea = existing.item, eb = it;
+        let ta = tierOrder[ea.tier]||0, tb = tierOrder[eb.tier]||0;
+        if(tb>ta || (tb===ta && (eb.level||0)>(ea.level||0))){
+          baseMap[base] = {item:it, slot:it.slot, equipped:false, cost:cost, isMax:!cost, invEntry:entry};
+        }
       }
     }
   });
-  // FALLBACK: if inventory empty (nothing to upgrade), show starter gear that is NOT equipped
+  all = Object.values(baseMap);
   if(all.length===0){
-    console.log('FALLBACK to starter gear (non-equipped)');
+    console.log('FALLBACK to starter gear by class');
     try{
-      let starterIds = (typeof VOLAND_STARTER_GEAR_IDS!=='undefined') ? VOLAND_STARTER_GEAR_IDS : [];
+      let starterIds = [];
+      if(heroId && typeof VOLAND_GET_STARTER_GEAR_FOR_HERO==='function'){
+        starterIds = VOLAND_GET_STARTER_GEAR_FOR_HERO(heroId);
+      } else if(typeof VOLAND_BASE_CLOTHING_IDS!=='undefined'){
+        starterIds = [...VOLAND_BASE_CLOTHING_IDS];
+      } else if(typeof VOLAND_STARTER_GEAR_IDS!=='undefined'){
+        starterIds = VOLAND_STARTER_GEAR_IDS;
+      }
+      // FIX: filter fallback by class and by base already equipped
+      let equippedBases = new Set();
+      try{
+        Object.values(equippedRaw).forEach(eid=>{
+          try{
+            let eItem = volandGetItemById(eid) || volandGetItemById(volandResolveItemId(eid));
+            if(eItem){
+              let eb = eItem.baseId || eItem.id.split('-')[0];
+              equippedBases.add(eb);
+            }
+          }catch(e){}
+        });
+      }catch(e){}
       starterIds.forEach(sid=>{
-        if(equippedIds.has(sid)) return; // skip equipped
+        if(equippedIds.has(sid)) return;
         let it = volandGetItemById(sid);
-        if(it){
-          let cost = volandGetUpgradeCost(it.id);
-          all.push({item:it, slot:it.slot, equipped:false, cost:cost, isMax:!cost, isFallback:true});
+        if(!it) return;
+        let base = it.baseId || it.id.split('-')[0];
+        if(equippedBases.has(base)) return; // FIX: skip if base already equipped (e.g. bow lvl10 equipped, don't show bow lvl1)
+        if(baseMap[base]) return;
+        if(allowedWeaponBases && ['bow','staff','sword','shield'].includes(base) && !allowedWeaponBases.has(base)){
+          return; // FIX: skip weapon not allowed for class
         }
+        let cost = volandGetUpgradeCost(it.id);
+        baseMap[base] = {item:it, slot:it.slot, equipped:false, cost:cost, isMax:!cost, isFallback:true};
       });
+      all = Object.values(baseMap);
     }catch(e){ console.log('fallback err', e); }
   }
-  // sort
   all.sort((a,b)=>{
-    let tierOrder = {bw:0,green:1,blue:2,red:3,gold:4};
     if((tierOrder[a.item.tier]||0)!==(tierOrder[b.item.tier]||0)) return (tierOrder[a.item.tier]||0)-(tierOrder[b.item.tier]||0);
     return (a.item.level||1)-(b.item.level||1);
   });
