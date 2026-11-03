@@ -322,23 +322,30 @@ function renderMarket(){
   let res = {};
   try{ res = volandGetResources(); }catch(e){}
   let gold = 0; try{ gold = volandGetGold(); }catch(e){}
-  let html = `<div class="market-card"><div class="card-title">MARKET • BUY / SELL FOR GOLD</div><div class="market-grid">`;
+  let html = `<div class="market-card"><div class="card-title">MARKET • BUY / SELL FOR GOLD</div>
+  <div style="display:flex;gap:8px;align-items:center;justify-content:center;margin-bottom:8px">
+    <span style="font:700 8px 'JetBrains Mono',monospace;color:#8a9aaa">КОЛ-ВО ДЛЯ ВСЕХ:</span>
+    <input class="input" id="marketGlobalQty" type="number" min="1" max="999" value="1" style="width:70px" oninput="updateMarketQty()">
+    <button class="btn" onclick="document.getElementById('marketGlobalQty').value=1;updateMarketQty()">x1</button>
+    <button class="btn" onclick="document.getElementById('marketGlobalQty').value=10;updateMarketQty()">x10</button>
+    <button class="btn" onclick="document.getElementById('marketGlobalQty').value=100;updateMarketQty()">x100</button>
+  </div>
+  <div class="market-grid">`;
   Object.keys(RES_NAMES).forEach(id=>{
     let price = MARKET_PRICES[id];
     if(!price) return;
     let have = res[id]||0;
-    let canBuy = gold >= price.buy;
-    let canSell = have > 0;
     let icon = RES_ICONS[id];
     html += `
-      <div class="market-item">
+      <div class="market-item" data-res="${id}">
         <div class="market-item-icon"><img src="${icon}" onerror="this.parentElement.textContent='💎'"></div>
         <div class="market-item-info">
           <div class="market-item-name">${RES_NAMES[id]} x${have}</div>
-          <div class="market-item-price">BUY ${price.buy}g • SELL ${price.sell}g</div>
-          <div class="market-actions">
-            <button class="btn buy" ${!canBuy?'disabled':''} onclick="buyRes('${id}',1)">BUY +1</button>
-            <button class="btn sell" ${!canSell?'disabled':''} onclick="sellRes('${id}',1)">SELL -1</button>
+          <div class="market-item-price" id="price-${id}">BUY ${price.buy}g • SELL ${price.sell}g</div>
+          <div class="market-actions" style="align-items:center">
+            <input class="input" id="qty-${id}" type="number" min="1" max="9999" value="1" style="width:56px" oninput="updateItemPrice('${id}')">
+            <button class="btn buy" id="buy-${id}" onclick="buyRes('${id}', getQty('${id}'))">BUY</button>
+            <button class="btn sell" id="sell-${id}" onclick="sellRes('${id}', getQty('${id}'))">SELL</button>
           </div>
         </div>
       </div>
@@ -346,7 +353,41 @@ function renderMarket(){
   });
   html += `</div><div class="log" id="marketLog"></div></div>`;
   el.innerHTML = html;
+  // sync global qty to items
+  setTimeout(()=>{ updateMarketQty(); }, 10);
 }
+
+function getQty(id){
+  let el = document.getElementById('qty-'+id);
+  let v = parseInt(el ? el.value : 1) || 1;
+  return Math.max(1, Math.min(9999, v));
+}
+function updateItemPrice(id){
+  let qty = getQty(id);
+  let price = MARKET_PRICES[id];
+  if(!price) return;
+  let priceEl = document.getElementById('price-'+id);
+  if(priceEl){
+    priceEl.textContent = `BUY ${price.buy*qty}g (${price.buy}g x${qty}) • SELL ${price.sell*qty}g`;
+  }
+  let gold = 0; try{ gold = volandGetGold(); }catch(e){}
+  let res = {}; try{ res = volandGetResources(); }catch(e){}
+  let buyBtn = document.getElementById('buy-'+id);
+  let sellBtn = document.getElementById('sell-'+id);
+  if(buyBtn) buyBtn.disabled = gold < price.buy*qty;
+  if(sellBtn) sellBtn.disabled = (res[id]||0) < qty;
+}
+function updateMarketQty(){
+  let globalEl = document.getElementById('marketGlobalQty');
+  let globalQty = parseInt(globalEl ? globalEl.value : 1) || 1;
+  globalQty = Math.max(1, Math.min(999, globalQty));
+  if(globalEl) globalEl.value = globalQty;
+  Object.keys(RES_NAMES).forEach(id=>{
+    let el = document.getElementById('qty-'+id);
+    if(el){ el.value = globalQty; updateItemPrice(id); }
+  });
+}
+
 
 function buyRes(id, qty){
   try{
