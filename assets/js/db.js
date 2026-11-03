@@ -128,17 +128,6 @@ const VOLAND_RESOURCES = [
 ];
 
 const VOLAND_ITEMS = [
- {id:'head',name:'Шлем Ярости',icon:'🪖',slot:'head',bonus:{"DMG": 20, "DEF": 10},
- {id:'ear1',name:'Серьга Крита',icon:'🔹',slot:'ear1',bonus:{"CRIT": 1, "DMG": 5},
- {id:'ear2',name:'Серьга Тени',icon:'🔸',slot:'ear2',bonus:{"CRIT": 1, "DODGE": 2},
- {id:'amulet',name:'Амулет Душ',icon:'📿',slot:'amulet',bonus:{"MANA": 50, "CRIT": 2},
- {id:'armor',name:'Кольчуга Титана',icon:'🦺',slot:'armor',bonus:{"HP": 100, "DEF": 30},
- {id:'weapon',name:'Меч Бури',icon:'⚔️',slot:'weapon',bonus:{"DMG": 40},
- {id:'shield',name:'Щит Бастион',icon:'🛡️',slot:'shield',bonus:{"DEF": 60, "HP": 50, "PARRY": 5},
- {id:'ring1',name:'Кольцо Крови',icon:'💍',slot:'ring1',bonus:{"DMG": 15, "CRIT": 1},
- {id:'ring2',name:'Кольцо Маны',icon:'💍',slot:'ring2',bonus:{"MANA": 30, "DODGE": 1},
- {id:'gloves',name:'Перчатки Силы',icon:'🧤',slot:'gloves',bonus:{"DEF": 15, "DMG": 10},
- {id:'boots',name:'Ботинки Ветра',icon:'👢',slot:'boots',bonus:{"DEF": 20, "DODGE": 2, "HP": 20},
  {id:'amulet-bw-lvl1',name:'Амулет Серый Lvl1',baseId:'amulet',tier:'bw',level:1,slot:'amulet',icon:'./assets/ui/equipment/amulet-bw.webp',emoji:'📿',bonus:{"MANA": 50, "CRIT": 1},desc:'+50 MANA +1 CRIT',rarity:'common',type:'equipment' },
  {id:'amulet-bw-lvl2',name:'Амулет Серый Lvl2',baseId:'amulet',tier:'bw',level:2,slot:'amulet',icon:'./assets/ui/equipment/amulet-bw.webp',emoji:'📿',bonus:{"MANA": 52, "CRIT": 1},desc:'+52 MANA +1 CRIT',rarity:'common',type:'equipment' },
  {id:'amulet-bw-lvl3',name:'Амулет Серый Lvl3',baseId:'amulet',tier:'bw',level:3,slot:'amulet',icon:'./assets/ui/equipment/amulet-bw.webp',emoji:'📿',bonus:{"MANA": 55, "CRIT": 1},desc:'+55 MANA +1 CRIT',rarity:'common',type:'equipment' },
@@ -1490,5 +1479,29 @@ const VOLAND_MISSIONS = [
  {id:22, name:'НЕУЯЗВИМЫЙ', eng:'Untouchable', icon:'🛡️', chain:'streak', prev:21, type:'win_streak', target:10, reward:{gold:1200,xp:3000,title:'Неуязвимый'}, desc:'Выиграй 10 боев подряд без смертей'},
 ];
 
-const VOLAND_STARTER_ITEMS = VOLAND_ITEMS.filter(it=>it.tier==='bw' && it.level===1 && !['head','ear1','ear2','amulet','armor','weapon','shield','ring1','ring2','gloves','boots'].includes(it.id)).map(it=>it.id);
-const VOLAND_STARTER_GEAR_IDS = ['helmet-bw-lvl1','amulet-bw-lvl1','armor-bw-lvl1','gloves-bw-lvl1','boots-bw-lvl1','ring1-bw-lvl1','ring2-bw-lvl1','earring1-bw-lvl1','earring2-bw-lvl1','bow-bw-lvl1','staff-bw-lvl1','sword-bw-lvl1','shield-bw-lvl1'];
+const VOLAND_BASE_CLOTHING_IDS = ['helmet-bw-lvl1','amulet-bw-lvl1','armor-bw-lvl1','gloves-bw-lvl1','boots-bw-lvl1','ring1-bw-lvl1','ring2-bw-lvl1','earring1-bw-lvl1','earring2-bw-lvl1'];
+const VOLAND_WEAPON_SETS = {
+  bow: ['bow-bw-lvl1'],
+  staff: ['staff-bw-lvl1'],
+  sword: ['sword-bw-lvl1','shield-bw-lvl1']
+};
+const VOLAND_HERO_WEAPON_TYPE = {
+  'archer-f': 'bow',
+  'archer-m': 'bow',
+  'archmage-m': 'staff',
+  'mage-f-new': 'staff',
+  'necro-f-new': 'staff',
+  'necro-m': 'staff',
+  'warrior-f': 'sword',
+  'warrior-m': 'sword'
+};
+function VOLAND_GET_STARTER_GEAR_FOR_HERO(heroId){
+  try{
+    let base = [...VOLAND_BASE_CLOTHING_IDS];
+    let wType = VOLAND_HERO_WEAPON_TYPE[heroId] || 'sword';
+    let weapons = VOLAND_WEAPON_SETS[wType] || VOLAND_WEAPON_SETS['sword'];
+    return [...base, ...weapons];
+  }catch(e){ return [...VOLAND_BASE_CLOTHING_IDS, 'sword-bw-lvl1','shield-bw-lvl1']; }
+}
+const VOLAND_STARTER_ITEMS = VOLAND_ITEMS.filter(it=>it.tier==='bw' && it.level===1).map(it=>it.id);
+const VOLAND_STARTER_GEAR_IDS = [...VOLAND_BASE_CLOTHING_IDS, 'bow-bw-lvl1','staff-bw-lvl1','sword-bw-lvl1','shield-bw-lvl1'];
