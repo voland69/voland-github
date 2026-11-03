@@ -11,10 +11,47 @@
 html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") center/cover no-repeat fixed #0a0e14;color:#d8d2b8;font-family:Inter,Arial,sans-serif;overflow:hidden}
 .bg{position:fixed;inset:0;z-index:0}.bg img{width:100%;height:100%;object-fit:cover}
 .wrap{position:fixed;inset:0;display:flex;z-index:2}
-.left-nav{width:68px;min-width:68px;background:rgba(18,24,30,.35);border-right:1px solid rgba(30,42,50,.5);display:flex;flex-direction:column;align-items:center;padding:12px 6px;gap:18px;backdrop-filter: blur(2px)}
+.left-nav{
+  width:60px !important;
+  min-width:60px !important;
+  max-width:60px !important;
+  flex:0 0 60px !important;
+  background:rgba(18,24,30,.94) !important;
+  border-right:1px solid #2a3a4a !important;
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:space-between !important;
+  align-items:center !important;
+  height:100vh !important;
+  overflow:visible !important;
+  overflow-y:visible !important;
+  overflow-x:visible !important;
+  scrollbar-width:none !important;
+  -ms-overflow-style:none !important;
+  padding:10px 4px 8px 4px !important;
+  gap:0 !important;
+}
 .nav-item{width:48px;height:48px;background:#1a252f;border:1px solid #2a3a4a;border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0.6;transition:.2s;font-size:20px}
 .nav-item.active{background:#1e2f3e;border-color:#e6d5a0;opacity:1;box-shadow:0 0 12px rgba(230,213,160,.2)}
-.nav-label{font-size:7px;letter-spacing:.15em;color:#6a7a8a;margin-top:4px;text-align:center;font-family:'JetBrains Mono',monospace}
+.nav-label{
+  position:absolute !important;
+  left:64px !important;
+  top:50% !important;
+  transform:translateY(-50%) translateX(-6px) !important;
+  background:rgba(20,26,34,.96) !important;
+  border:1px solid #e6d5a0 !important;
+  color:#e6d5a0 !important;
+  padding:5px 9px !important;
+  border-radius:6px !important;
+  font:700 8px 'JetBrains Mono',monospace !important;
+  letter-spacing:.15em !important;
+  white-space:nowrap !important;
+  opacity:0 !important;
+  pointer-events:none !important;
+  transition:.18s !important;
+  z-index:9999 !important;
+  box-shadow:0 4px 16px rgba(0,0,0,.5) !important;
+}
 .center-col{flex:1;display:flex;flex-direction:column;background:rgba(16,22,30,.25);overflow:hidden;backdrop-filter: blur(2px)}
 .top-row{flex:0 0 480px;display:flex;gap:16px;background:rgba(19,26,34,.35);border-bottom:1px solid rgba(30,42,50,.5);overflow:hidden;align-items:stretch}
 .stats-panel{width:250px;min-width:250px;max-width:250px;background:rgba(20,28,36,.45);border-right:1px solid rgba(30,42,50,.5);padding:12px 16px 16px 16px;display:flex;flex-direction:column;justify-content:flex-start;gap:0;height:100%}
@@ -130,7 +167,7 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
   z-index:20 !important;
   backdrop-filter:blur(6px) !important;
 }
-.left-nav::-webkit-scrollbar{display:none !important; width:0 !important; height:0 !important;}
+.left-nav::-webkit-scrollbar{display:none !important;width:0 !important;height:0 !important;}
 .nav-top{
   display:flex !important;
   flex-direction:column !important;
@@ -156,6 +193,7 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
   gap:0 !important;
   width:100% !important;
   position:relative !important;
+  overflow:visible !important;
 }
 .nav-item{
   width:52px !important;
@@ -311,33 +349,9 @@ let inv = [];
 function rebuildInv(){
   const ids = new Set(Object.values(equipped).map(i=>i.id));
   const equippedBaseIds = new Set(Object.values(equipped).map(i=>i.baseId || (i.id||'').split('-')[0]));
-  let heroId = null;
-  let allowedWeaponBases = null;
-  try{
-    heroId = (typeof volandGetHeroId==='function') ? volandGetHeroId() : null;
-    if(heroId && typeof VOLAND_HERO_WEAPON_TYPE!=='undefined' && typeof VOLAND_WEAPON_SETS!=='undefined'){
-      let wType = VOLAND_HERO_WEAPON_TYPE[heroId] || 'sword';
-      let weaponIds = VOLAND_WEAPON_SETS[wType] || [];
-      allowedWeaponBases = new Set();
-      weaponIds.forEach(wid=>{
-        try{
-          let it = VOLAND_ITEMS.find(x=>x.id===wid);
-          if(it) allowedWeaponBases.add(it.baseId || wid.split('-')[0]);
-          else allowedWeaponBases.add(wid.split('-')[0]);
-        }catch(e){}
-      });
-      if(typeof VOLAND_BASE_CLOTHING_IDS!=='undefined'){
-        VOLAND_BASE_CLOTHING_IDS.forEach(cid=>{
-          try{
-            let it = VOLAND_ITEMS.find(x=>x.id===cid);
-            if(it) allowedWeaponBases.add(it.baseId);
-          }catch(e){}
-        });
-      }
-    }
-  }catch(e){}
   inv = [];
-  let droppedGearMap = {};
+  // FIX: first collect dropped gear, dedup by baseId keeping max level, so upgraded gear is visible
+  let droppedGearMap = {}; // baseId -> item
   try{
     if(typeof volandGetInventory==='function'){
       let dropped = volandGetInventory();
@@ -345,22 +359,21 @@ function rebuildInv(){
         let item = null;
         try{ item = VOLAND_ITEMS.find(i=>i.id===d.id); }catch(e){}
         if(!item) continue;
-        if(ids.has(item.id)) continue;
+        if(ids.has(item.id)) continue; // skip equipped exact id
         let base = item.baseId || item.id.split('-')[0];
-        if(equippedBaseIds.has(base)) continue; // FIX: skip if base already equipped (e.g. red helmet when gold helmet equipped)
-        
-        if(allowedWeaponBases && ['bow','staff','sword','shield'].includes(base) && !allowedWeaponBases.has(base)){
-          continue;
-        }
+        // skip if same baseId as equipped? No, show higher level even if baseId same? Keep it if higher level than equipped
+        // For BAG we show inventory items even if baseId same as equipped but higher lvl - useful to see upgrade
         let existing = droppedGearMap[base];
         if(!existing){
           droppedGearMap[base] = {...item, isDropped:true, dropTime:d.time, isEquip:true};
         } else {
+          // keep higher
           if(typeof volandCompareItemLevel==='function'){
             if(volandCompareItemLevel(item.id, existing.id)>0){
               droppedGearMap[base] = {...item, isDropped:true, dropTime:d.time, isEquip:true};
             }
           } else {
+            // fallback tier compare
             const order={bw:0,green:1,blue:2,red:3,gold:4};
             let ta=order[existing.tier]||0, tb=order[item.tier]||0;
             if(tb>ta || (tb===ta && (item.level||0)>(existing.level||0))){
@@ -371,18 +384,15 @@ function rebuildInv(){
       }
     }
   }catch(e){ console.log('rebuild dropped err', e); }
+  // push deduped dropped gear first (priority)
   Object.values(droppedGearMap).forEach(it=>{
     if(inv.length<50) inv.push(it);
   });
+  // стартовый шмот (только bw lvl1) - показываем только если нет такого baseId уже в инвентаре и не надет
   try{
     let starterIds = [];
-    if(heroId && typeof VOLAND_GET_STARTER_GEAR_FOR_HERO==='function'){
-      starterIds = VOLAND_GET_STARTER_GEAR_FOR_HERO(heroId);
-    } else if(typeof VOLAND_BASE_CLOTHING_IDS!=='undefined'){
-      starterIds = [...VOLAND_BASE_CLOTHING_IDS, 'sword-bw-lvl1','shield-bw-lvl1'];
-    } else if(typeof VOLAND_STARTER_GEAR_IDS !== 'undefined'){
-      starterIds = VOLAND_STARTER_GEAR_IDS;
-    } else if(typeof VOLAND_ITEMS !== 'undefined'){
+    if(typeof VOLAND_STARTER_GEAR_IDS !== 'undefined') starterIds = VOLAND_STARTER_GEAR_IDS;
+    else if(typeof VOLAND_ITEMS !== 'undefined'){
       starterIds = VOLAND_ITEMS.filter(it=>it.tier==='bw' && it.level===1).map(it=>it.id).slice(0,13);
     }
     starterIds.forEach(sid=>{
@@ -391,8 +401,8 @@ function rebuildInv(){
         let it = VOLAND_ITEMS.find(x=>x.id===sid);
         if(!it) return;
         let base = it.baseId || it.id.split('-')[0];
-        if(equippedBaseIds.has(base)) return;
-        if(droppedGearMap[base]) return;
+        if(equippedBaseIds.has(base)) return; // already have base equipped, skip starter of same base
+        if(droppedGearMap[base]) return; // already have dropped of same base (higher lvl)
         if(ids.has(it.id)) return;
         if(!inv.find(x=>x && (x.baseId===base || x.id===it.id))){
           inv.push({...it, isEquip:true});
@@ -400,12 +410,14 @@ function rebuildInv(){
       }catch(e){}
     });
   }catch(e){}
+  // золото - одна ячейка
   try{
     let gold = getGold();
     if(gold>0 && inv.length<50){
       inv.push({id:'gold', icon:'./assets/ui/loot/gold.webp', name:'Золото', desc:gold+' GOLD', isGold:true, count:gold, type:'gold', rarity:'gold'});
     }
   }catch(e){}
+  // ресурсы - делим по 99, но только если есть место (последний приоритет, чтобы не забивать шмот)
   try{
     if(typeof volandGetResources==='function'){
       let res = volandGetResources();
@@ -467,22 +479,10 @@ function renderBars(){
   const title=barsPanel.querySelector('.panel-title');
   barsPanel.innerHTML=''; barsPanel.appendChild(title);
   const inner=document.createElement('div'); inner.className='bars-inner';
-  let totalXp=0, lvlInfo={cur:0,need:1000,pct:0,lvl:1};
-  try{
-    totalXp = typeof volandGetXp==='function' ? volandGetXp() : 0;
-    lvlInfo = typeof volandGetLevelInfo==='function' ? volandGetLevelInfo(totalXp) : (typeof volandGetCurrentLevelInfo==='function' ? volandGetCurrentLevelInfo() : lvlInfo);
-  }catch(e){}
-  let bars=[
-    {label:'HP',cls:'hp',cur:cur.HP,max:cur.HP,txt:`${cur.HP} / ${cur.HP}`,pct:100},
-    {label:'MANA',cls:'mana',cur:cur.MANA,max:cur.MANA,txt:`${cur.MANA} / ${cur.MANA}`,pct:100},
-    {label:'STAMINA',cls:'stamina',cur:100,max:100,txt:'100 / 100',pct:100},
-    {label:'XP',cls:'xp',cur:lvlInfo.cur,max:lvlInfo.need,txt:`${lvlInfo.cur} / ${lvlInfo.need}`,pct:lvlInfo.pct}
-  ];
-  bars.forEach(b=>{
+  [{label:'HP',cls:'hp',cur:cur.HP,max:cur.HP},{label:'MANA',cls:'mana',cur:cur.MANA,max:cur.MANA},{label:'STAMINA',cls:'stamina',cur:100,max:100,txt:'100 / 100'},{label:'XP',cls:'xp',cur:100,max:100,txt:'LVL 7 • BAG'}].forEach(b=>{
     const row=document.createElement('div'); row.className='bar-row';
     const txt=b.txt||`${b.cur} / ${b.max}`;
-    const pct = (typeof b.pct==='number') ? b.pct : 100;
-    row.innerHTML=`<div class="bar-label"><span>${b.label}</span><span>${b.max}</span></div><div class="bar-track"><div class="bar-fill ${b.cls}" style="width:${pct}%">${txt}</div></div>`;
+    row.innerHTML=`<div class="bar-label"><span>${b.label}</span><span>${b.max}</span></div><div class="bar-track"><div class="bar-fill ${b.cls}" style="width:100%">${txt}</div></div>`;
     inner.appendChild(row);
   });
   barsPanel.appendChild(inner);
@@ -524,13 +524,7 @@ function renderInv(){
         if(it.rarity==='green') cell.classList.add('rarity-green');
         if(it.rarity==='blue') cell.classList.add('rarity-blue');
         if(it.rarity==='legend' || it.rarity==='legendary') cell.classList.add('rarity-legend');
-        let iconHtml='';
-        if(it.icon && (it.icon.includes('.webp') || it.icon.includes('/equipment/') || it.icon.includes('/weapons/') || it.icon.includes('/loot/'))){
-          iconHtml = `<img src="${it.icon}" style="width:100%;height:100%;object-fit:contain" onerror="this.style.display='none'">`;
-        } else {
-          let emoji = it.emoji || '⚔️';
-          iconHtml = `<span class="emoji-fallback">${emoji}</span>`;
-        }
+        let emoji = it.emoji || it.icon || '⚔️'; let iconHtml = (it.icon && it.icon.includes('/loot/')) ? `<img src="${it.icon}" onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\'emoji-fallback\'>'+'${it.emoji || '⚔️'}'+'</span>'">` : `<span class="emoji-fallback">${emoji}</span>`;
         // badge empty for gear as requested
         cell.innerHTML=`<div class="item-icon">${iconHtml}</div>`;
         cell.onclick=()=>openGearModal(it,i);
@@ -587,53 +581,24 @@ function confirmEquipGear(){
 }
 
 function renderEquip(){
-  try{
-    let heroId = (typeof volandGetHeroId==='function') ? volandGetHeroId() : null;
-    if(heroId && typeof VOLAND_HERO_WEAPON_TYPE!=='undefined' && typeof VOLAND_WEAPON_SETS!=='undefined'){
-      let wType = VOLAND_HERO_WEAPON_TYPE[heroId] || null;
-      if(wType){
-        let allowed = new Set();
-        (VOLAND_WEAPON_SETS[wType]||[]).forEach(wid=>{
-          try{
-            let it = VOLAND_ITEMS.find(x=>x.id===wid);
-            if(it) allowed.add(it.baseId || wid.split('-')[0]);
-            else allowed.add(wid.split('-')[0]);
-          }catch(e){}
-        });
-        let toRemove=[];
-        for(let slot in equipped){
-          let it = equipped[slot];
-          if(!it) continue;
-          let base = it.baseId || (it.id||'').split('-')[0];
-          if(['bow','staff','sword','shield'].includes(base) && !allowed.has(base)){
-            toRemove.push(slot);
-          }
-        }
-        if(toRemove.length>0){
-          toRemove.forEach(s=>{ delete equipped[s]; });
-          try{ volandSaveEquip(equipped); }catch(e){}
-        }
-      }
-    }
-  }catch(e){}
   document.querySelectorAll('.equip-slot').forEach(el=>{
     const slot=el.dataset.slot; const it=equipped[slot];
     const nameEl=el.querySelector('.slot-name'); const iconEl=el.querySelector('.slot-icon'); const emptyEl=el.querySelector('.slot-empty');
     if(it){
       el.classList.add('filled');
-      if(it.icon && (it.icon.includes('.webp') || it.icon.includes('/equipment/') || it.icon.includes('/weapons/') || it.icon.includes('/loot/'))){
-        iconEl.innerHTML = `<img src="${it.icon}" style="width:100%;height:100%;object-fit:cover;border-radius:6px" onerror="this.style.display='none'">`;
+      // FIX: use emoji, not path text - equipment webp files don't exist yet
+      let displayIcon = it.emoji || '⚔️';
+      // if icon is webp that actually exists in loot, try img with fallback
+      if(it.icon && it.icon.includes('/loot/')){
+        iconEl.innerHTML = `<img src="${it.icon}" style="width:100%;height:100%;object-fit:cover;border-radius:6px" onerror="this.style.display='none'; this.parentElement.textContent='${displayIcon}'">`;
       } else {
-        let displayIcon = it.emoji || '⚔️';
         iconEl.textContent = displayIcon;
       }
       nameEl.textContent=it.name; emptyEl.textContent=it.desc; emptyEl.style.color='#3ad080';
     } else {
       el.classList.remove('filled');
-      const defs={head:{name:'Шлем'},ear1:{name:'Серьга 1'},ear2:{name:'Серьга 2'},amulet:{name:'Амулет'},armor:{name:'Броня'},weapon:{name:'Оружие'},shield:{name:'Щит'},ring1:{name:'Кольцо 1'},ring2:{name:'Кольцо 2'},gloves:{name:'Перчатки'},boots:{name:'Ботинки'}};
-      const def=defs[slot];
-      iconEl.textContent='';
-      if(def){ nameEl.textContent=def.name; }
+      const defs={head:{icon:'🪖',name:'Шлем'},ear1:{icon:'👂',name:'Серьга 1'},ear2:{icon:'👂',name:'Серьга 2'},amulet:{icon:'📿',name:'Амулет'},armor:{icon:'🦺',name:'Броня'},weapon:{icon:'⚔️',name:'Оружие'},shield:{icon:'🛡️',name:'Щит'},ring1:{icon:'💍',name:'Кольцо 1'},ring2:{icon:'💍',name:'Кольцо 2'},gloves:{icon:'🧤',name:'Перчатки'},boots:{icon:'👢',name:'Ботинки'}};
+      const def=defs[slot]; if(def){ iconEl.textContent=def.icon; nameEl.textContent=def.name; }
       emptyEl.textContent='пусто'; emptyEl.style.color='';
     }
   });
@@ -641,43 +606,22 @@ function renderEquip(){
 }
 function equipItem(item, idx){
   const slot=item.slot;
-  try{
-    // FIX: properly handle inventory storage - remove new item from storage, add old to storage
-    if(typeof volandRemoveFromInventory==='function'){
-      volandRemoveFromInventory(item.id);
-    }
-    if(equipped[slot]){
-      const old=equipped[slot];
-      if(typeof volandAddToInventory==='function'){
-        volandAddToInventory(old.id);
-      }
-      log(`Снято: ${old.name}`);
-    }
-  }catch(e){ console.log('equip inv err', e); }
+  if(equipped[slot]){
+    const old=equipped[slot];
+    const j=inv.findIndex(v=>v==null);
+    inv[j=== -1 ? inv.length : j]=old;
+    log(`Снято: ${old.name}`);
+  }
   equipped[slot]=item;
-  try{
-    volandSaveEquip(equipped);
-  }catch(e){}
-  try{
-    rebuildInv();
-  }catch(e){}
+  inv[idx]=null;
+  rebuildInv(); volandSaveEquip(equipped);
   renderInv(); renderEquip(); renderStats(); renderBars();
   log(`Экипировано: ${item.name} ${item.desc} — сохранено на всех страницах`);
 }
 function unequipSlot(el){
   const slot=el.dataset.slot; const it=equipped[slot]; if(!it) return;
-  try{
-    if(typeof volandAddToInventory==='function'){
-      volandAddToInventory(it.id);
-    }
-  }catch(e){ console.log('unequip inv err', e); }
   delete equipped[slot];
-  try{
-    volandSaveEquip(equipped);
-  }catch(e){}
-  try{
-    rebuildInv();
-  }catch(e){}
+  rebuildInv(); volandSaveEquip(equipped);
   renderInv(); renderEquip(); renderStats(); renderBars();
   log(`Снято: ${it.name}`);
 }
