@@ -6,7 +6,14 @@
 <title>VOLAND - MARKET</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-/* === VOLAND NAV - SYMMETRIC 60px / 52x52 / gap 4 / no scroll / fixed tooltip === */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,sans-serif;overflow:hidden}
+.bg{position:fixed;inset:0;z-index:0;background:url("./assets/heroes/bg-battlefield.webp") center/cover no-repeat fixed}
+.bg:after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.6)}
+.wrap{position:fixed;inset:0;display:flex;z-index:2}
+
+/* NAV - tooltip only fixed */
 .left-nav{
   width:60px !important;
   min-width:60px !important;
@@ -20,8 +27,8 @@
   align-items:center !important;
   height:100vh !important;
   height:100dvh !important;
-  overflow:hidden !important;
-  overflow-y:hidden !important;
+  overflow:visible !important;
+  overflow-y:visible !important;
   overflow-x:visible !important;
   scrollbar-width:none !important;
   -ms-overflow-style:none !important;
@@ -37,7 +44,7 @@
   gap:4px !important;
   align-items:center !important;
   width:100% !important;
-  overflow:hidden !important;
+  overflow:visible !important;
 }
 .nav-bottom{
   margin-top:auto !important;
@@ -48,7 +55,7 @@
   flex-direction:column !important;
   align-items:center !important;
   gap:4px !important;
-  overflow:hidden !important;
+  overflow:visible !important;
 }
 .nav-group{
   cursor:pointer !important;
@@ -119,108 +126,60 @@
   position:fixed !important;
   inset:0 !important;
 }
-.center{
-  flex:1 !important;
-  padding:24px !important;
-  overflow:auto !important;
-  display:flex !important;
-  flex-direction:column !important;
-  align-items:center !important;
-  justify-content:flex-start !important;
-  background:rgba(16,22,30,.18) !important;
-  width:100% !important;
-}
-.page-title{
-  font:900 32px 'Cinzel Decorative',serif !important;
-  color:#e6d5a0 !important;
-  letter-spacing:.15em !important;
-  text-align:center !important;
-}
-.page-sub{
-  margin-top:8px !important;
-  font:400 9px 'JetBrains Mono',monospace !important;
-  letter-spacing:.35em !important;
-  color:#7a90a8 !important;
-  text-transform:uppercase !important;
-  text-align:center !important;
-}
-.placeholder-grid{
-  display:grid !important;
-  grid-template-columns:repeat(3,1fr) !important;
-  gap:18px !important;
-  width:100% !important;
-  max-width:1100px !important;
-  margin:28px auto 0 auto !important;
-  justify-content:center !important;
-  place-items:stretch !important;
-  justify-items:center !important;
-}
-.ph-card{
-  background:rgba(20,26,34,.88) !important;
-  border:1px solid rgba(122,144,168,.22) !important;
-  border-radius:12px !important;
-  padding:22px !important;
-  text-align:center !important;
-  backdrop-filter:blur(8px) !important;
-  transition:.2s !important;
-  width:100% !important;
-  max-width:340px !important;
-  margin:0 auto !important;
-}
-.ph-card:hover{
-  border-color:#e6d5a0 !important;
-  transform:translateY(-2px) !important;
-}
-.ph-icon{font-size:36px !important;margin-bottom:12px !important;}
-.ph-name{font:700 13px Inter,sans-serif !important;letter-spacing:.08em !important;color:#e6d5a0 !important;text-transform:uppercase !important;}
-.ph-desc{margin-top:8px !important;font:400 10px 'JetBrains Mono',monospace !important;color:#8a9aaa !important;line-height:1.5 !important;}
-.ph-badge{margin-top:14px !important;display:inline-block !important;font:900 10px 'JetBrains Mono',monospace !important;letter-spacing:.25em !important;color:#5a6e80 !important;border:1px solid #3a4a5a !important;border-radius:6px !important;padding:5px 10px !important;background:rgba(0,0,0,.2) !important;}
 
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
-
-*{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,sans-serif;overflow:hidden}
-.bg{position:fixed;inset:0;z-index:0;background:url("./assets/heroes/bg-battlefield.webp") center/cover no-repeat fixed}
-.bg:after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.6)}
-
-
-
-
-
-
-
-
-
-.nav-group.active 
-.center{flex:1;padding:24px;overflow:auto;display:flex;flex-direction:column;align-items:center;background:rgba(16,22,30,.18)}
-.page-title{font:900 32px 'Cinzel Decorative',serif;color:#e6d5a0;letter-spacing:.15em;text-align:center}
-.page-sub{margin-top:8px;font:400 9px 'JetBrains Mono',monospace;letter-spacing:.35em;color:#7a90a8;text-transform:uppercase;text-align:center}
-.placeholder-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;width:100%;max-width:1100px;margin-top:28px}
-.ph-card{background:rgba(20,26,34,.88);border:1px solid rgba(122,144,168,.22);border-radius:12px;padding:22px;text-align:center;backdrop-filter:blur(8px);transition:.2s}
-.ph-card:hover{border-color:#e6d5a0;transform:translateY(-2px)}
-.ph-icon{font-size:36px;margin-bottom:12px}
-.ph-name{font:700 13px Inter,sans-serif;letter-spacing:.08em;color:#e6d5a0;text-transform:uppercase}
-.ph-desc{margin-top:8px;font:400 10px 'JetBrains Mono',monospace;color:#8a9aaa;line-height:1.5}
-.ph-badge{margin-top:14px;display:inline-block;font:900 10px 'JetBrains Mono',monospace;letter-spacing:.25em;color:#5a6e80;border:1px solid #3a4a5a;border-radius:6px;padding:5px 10px;background:rgba(0,0,0,.2)}
-
-
-
-
-
-/* VOLAND NAV FIX - 60px / 52x52 / gap 4 / no scroll / hover label */
-
-
-
-
-
-
-
-
-
-.nav-group:hover 
-
-
+/* MARKET LAYOUT like WORKSHOP */
+.center{flex:1;display:flex;flex-direction:column;overflow:hidden;background:rgba(16,22,30,.22)}
+.top-bar{height:48px;background:rgba(18,24,33,.85);border-bottom:1px solid rgba(30,42,50,.5);display:flex;align-items:center;justify-content:space-between;padding:0 16px}
+.top-title{font:900 16px 'Cinzel Decorative',serif;letter-spacing:.2em;color:#e6d5a0}
+.top-res{display:flex;gap:12px;font:700 10px 'JetBrains Mono',monospace;color:#8a9aaa}
+.top-res span{color:#d0b040}
+.main-area{flex:1;display:flex;overflow:hidden}
+.left-list{width:320px;min-width:320px;background:rgba(18,24,33,.55);border-right:1px solid rgba(30,42,50,.5);display:flex;flex-direction:column;overflow:hidden}
+.list-header{padding:12px 14px;border-bottom:1px solid rgba(30,42,50,.3);font:700 9px 'JetBrains Mono',monospace;letter-spacing:.15em;color:#6a7a8a;display:flex;justify-content:space-between}
+.res-list{flex:1;overflow:auto;padding:8px;display:flex;flex-direction:column;gap:6px}
+.res-row{display:flex;gap:10px;align-items:center;padding:8px 10px;background:#1a242f;border:1px solid #2a3a4a;border-radius:8px;cursor:pointer;transition:.15s}
+.res-row:hover{border-color:#e6d5a0;transform:translateY(-1px)}
+.res-row.selected{border-color:#e6d5a0;background:#1e2f3e;box-shadow:0 0 10px rgba(230,213,160,.15)}
+.res-icon{width:42px;height:42px;min-width:42px;border-radius:6px;background:#0a0e14;border:1px solid #2a3a4a;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:20px}
+.res-icon img{width:100%;height:100%;object-fit:cover;display:block}
+.res-info{flex:1;display:flex;flex-direction:column;gap:2px;overflow:hidden}
+.res-name{font:700 10px Inter,sans-serif;color:#e6d5a0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-transform:uppercase}
+.res-tier{font:700 7px 'JetBrains Mono',monospace;letter-spacing:.1em;color:#8a9aaa}
+.res-amount{font:700 9px 'JetBrains Mono',monospace;color:#6a7a8a}
+.right-preview{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:12px 16px;overflow:auto;background:radial-gradient(ellipse at center, rgba(230,213,160,.05), transparent 70%)}
+.tabs{display:flex;gap:6px;margin-bottom:12px;width:100%;max-width:620px}
+.tab{flex:1;padding:8px 10px;background:#1a242f;border:1px solid #2a3a4a;border-radius:8px;font:700 8px 'JetBrains Mono',monospace;letter-spacing:.15em;color:#8a9aaa;text-align:center;cursor:pointer;transition:.15s}
+.tab.active{background:#1e2f3e;border-color:#e6d5a0;color:#e6d5a0;box-shadow:0 0 10px rgba(230,213,160,.15)}
+.tab:hover{border-color:#e6d5a0;color:#e6d5a0}
+.market-card{width:100%;max-width:620px;background:linear-gradient(180deg,#1e2a3a,#121a26);border:1px solid rgba(230,213,160,.2);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px;box-shadow:0 12px 32px rgba(0,0,0,.5)}
+.card-title{font:900 12px 'Cinzel Decorative',serif;color:#e6d5a0;letter-spacing:.15em;text-align:center}
+.market-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.market-item{display:flex;gap:10px;align-items:center;padding:8px 10px;background:#1a242f;border:1px solid #2a3a4a;border-radius:8px}
+.market-item-icon{width:36px;height:36px;min-width:36px;border-radius:6px;background:#0a0e14;border:1px solid #2a3a4a;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.market-item-icon img{width:100%;height:100%;object-fit:cover}
+.market-item-info{flex:1;display:flex;flex-direction:column;gap:2px}
+.market-item-name{font:700 9px Inter,sans-serif;color:#e6d5a0;text-transform:uppercase}
+.market-item-price{font:700 8px 'JetBrains Mono',monospace;color:#d0b040}
+.market-actions{display:flex;gap:6px;margin-top:4px}
+.btn{padding:6px 10px;border-radius:6px;border:1px solid #2a3a4a;background:#1a242f;color:#d8d2b8;font:700 8px 'JetBrains Mono',monospace;letter-spacing:.1em;cursor:pointer;transition:.15s}
+.btn:hover{border-color:#e6d5a0;color:#e6d5a0}
+.btn.buy{background:#1a2f1e;border-color:#2a5a3a;color:#3ad080}
+.btn.buy:hover{background:#1e3f2a;border-color:#3ad080}
+.btn.sell{background:#2f1a1a;border-color:#5a2a2a;color:#e08080}
+.btn.sell:hover{background:#3f1e1e;border-color:#e05050}
+.btn.primary{background:#1e2f3e;border-color:#e6d5a0;color:#e6d5a0}
+.btn.primary:hover{background:#2a3f4e;box-shadow:0 0 10px rgba(230,213,160,.2)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.select-row{display:flex;gap:8px;align-items:center}
+.select{flex:1;padding:8px;background:#0a0e14;border:1px solid #2a3a4a;border-radius:6px;color:#d8d2b8;font:700 9px 'JetBrains Mono',monospace}
+.input{width:80px;padding:8px;background:#0a0e14;border:1px solid #2a3a4a;border-radius:6px;color:#e6d5a0;font:700 10px 'JetBrains Mono',monospace;text-align:center}
+.preview-empty{font:400 11px 'JetBrains Mono',monospace;color:#5a6a7a;text-align:center;padding:20px}
+.log{margin-top:8px;font:700 9px 'JetBrains Mono',monospace;min-height:16px;text-align:center}
+.log.ok{color:#3ad080}
+.log.err{color:#e05050}
+.p2p-list{width:100%;max-width:620px;margin-top:12px;display:flex;flex-direction:column;gap:6px}
+.p2p-item{display:flex;gap:10px;align-items:center;padding:8px 10px;background:#1a242f;border:1px solid #2a3a4a;border-radius:8px}
+.p2p-item-info{flex:1;font:700 8px 'JetBrains Mono',monospace;color:#8a9aaa}
 </style>
 </head>
 <body>
@@ -243,33 +202,356 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
   </div>
 </div>
 <div class="center">
-<div class="page-title">MARKET</div>
-<div class="page-sub">VOLAND • TRADE • COMING SOON</div>
-
-<div class="placeholder-grid">
-  <div class="ph-card"><div class="ph-icon">🛒</div><div class="ph-name">MARKET STALL</div><div class="ph-desc">Торговля предметами • Покупка / Продажа<br>Данные товаров — позже</div><div class="ph-badge">SOON</div></div>
-  <div class="ph-card"><div class="ph-icon">💰</div><div class="ph-name">GOLD EXCHANGE</div><div class="ph-desc">Обмен золота • Курс<br>Без баланса пока</div><div class="ph-badge">SOON</div></div>
-  <div class="ph-card"><div class="ph-icon">📦</div><div class="ph-name">BLACK MARKET</div><div class="ph-desc">Редкие предметы • Ротация<br>Жду данных от тебя</div><div class="ph-badge">SOON</div></div>
-</div>
-
+  <div class="top-bar">
+    <div class="top-title">MARKET • 3 TABS</div>
+    <div class="top-res">
+      <div>GOLD: <span id="goldDisplay">0</span></div>
+      <div>RES: <span id="resDisplay">0</span></div>
+    </div>
+  </div>
+  <div class="main-area">
+    <div class="left-list">
+      <div class="list-header"><span>RESOURCES IN BAG</span><span id="countDisplay">0</span></div>
+      <div class="res-list" id="resList"></div>
+    </div>
+    <div class="right-preview" id="previewArea">
+      <div class="tabs">
+        <div class="tab active" data-tab="market" onclick="switchTab('market')">1 • MARKET</div>
+        <div class="tab" data-tab="exchange" onclick="switchTab('exchange')">2 • EXCHANGE</div>
+        <div class="tab" data-tab="p2p" onclick="switchTab('p2p')">3 • P2P</div>
+      </div>
+      <div id="tabMarket"></div>
+      <div id="tabExchange" style="display:none"></div>
+      <div id="tabP2P" style="display:none"></div>
+    </div>
+  </div>
 </div>
 </div>
 <script src="./assets/js/db.js"></script>
 <script src="./assets/js/storage.js"></script>
 <script>
-// active nav highlight fallback
-let path=location.pathname.toLowerCase();
-document.querySelectorAll('.nav-item').forEach(el=>{
-  let pg=el.dataset.page;
-  if(pg && path.includes(pg)){
-    el.classList.add('active');
-    el.closest('.nav-group')?.classList.add('active');
-  }
-});
-</script>
+// === CONFIG ===
+const MARKET_PRICES = {
+  quartz: {buy:50, sell:25},
+  wood: {buy:50, sell:25},
+  diamond: {buy:50, sell:25},
+  fang: {buy:100, sell:50},
+  essence: {buy:100, sell:50}
+};
+const RES_ICONS = {
+  quartz:'./assets/ui/loot/quartz.webp',
+  wood:'./assets/ui/loot/wood.webp',
+  diamond:'./assets/ui/loot/diamond.webp',
+  fang:'./assets/ui/loot/fang.webp',
+  essence:'./assets/ui/loot/essence.webp'
+};
+const RES_NAMES = {
+  quartz:'QUARTZ', wood:'WOOD', diamond:'DIAMOND', fang:'FANG', essence:'ESSENCE'
+};
+// Exchange rates: base group = quartz, wood, diamond 1k2 between themselves, 1k4 with fang/essence
+function getExchangeRate(fromId, toId){
+  if(fromId===toId) return 1;
+  const base = ['quartz','wood','diamond'];
+  const rare = ['fang','essence'];
+  const isBaseFrom = base.includes(fromId);
+  const isBaseTo = base.includes(toId);
+  const isRareFrom = rare.includes(fromId);
+  const isRareTo = rare.includes(toId);
+  if(isBaseFrom && isBaseTo) return 2; // need 2 from to get 1 to (1k2)
+  if(isRareFrom && isRareTo) return 1; // 1k1 rare<->rare
+  if(isBaseFrom && isRareTo) return 4; // 4 base -> 1 rare (1k4)
+  if(isRareFrom && isBaseTo) return 0.25; // 1 rare -> 4 base (reverse 1k4)
+  return 2;
+}
 
+let selectedResId = null;
+
+function refreshTop(){
+  try{
+    document.getElementById('goldDisplay').textContent = volandGetGold();
+    let res = volandGetResources();
+    let total = Object.values(res).reduce((a,b)=>a+b,0);
+    document.getElementById('resDisplay').textContent = total;
+  }catch(e){}
+}
+
+function renderResList(){
+  let listEl = document.getElementById('resList');
+  let countEl = document.getElementById('countDisplay');
+  let res = {};
+  try{ res = volandGetResources(); }catch(e){}
+  let entries = Object.keys(RES_NAMES).map(id=>({id, amount: res[id]||0}));
+  // also include 0 amount to show all
+  entries.sort((a,b)=> b.amount - a.amount);
+  countEl.textContent = entries.length;
+  listEl.innerHTML='';
+  entries.forEach(entry=>{
+    let div = document.createElement('div');
+    div.className = 'res-row' + (selectedResId===entry.id ? ' selected':'');
+    let icon = RES_ICONS[entry.id] || '';
+    let iconHtml = icon ? `<img src="${icon}" onerror="this.style.display='none'">` : '💎';
+    div.innerHTML = `
+      <div class="res-icon">${iconHtml}</div>
+      <div class="res-info">
+        <div class="res-name">${RES_NAMES[entry.id]}</div>
+        <div class="res-tier">${entry.id.toUpperCase()} • ${MARKET_PRICES[entry.id] ? MARKET_PRICES[entry.id].buy+'g BUY / '+MARKET_PRICES[entry.id].sell+'g SELL' : ''}</div>
+        <div class="res-amount">x${entry.amount}</div>
+      </div>
+    `;
+    div.onclick = ()=>{ selectedResId = entry.id; renderResList(); if(currentTab==='market') renderMarket(); };
+    listEl.appendChild(div);
+  });
+  refreshTop();
+}
+
+let currentTab = 'market';
+function switchTab(tab){
+  currentTab = tab;
+  document.querySelectorAll('.tab').forEach(t=> t.classList.toggle('active', t.dataset.tab===tab));
+  document.getElementById('tabMarket').style.display = tab==='market' ? 'block':'none';
+  document.getElementById('tabExchange').style.display = tab==='exchange' ? 'block':'none';
+  document.getElementById('tabP2P').style.display = tab==='p2p' ? 'block':'none';
+  if(tab==='market') renderMarket();
+  if(tab==='exchange') renderExchange();
+  if(tab==='p2p') renderP2P();
+}
+
+// === TAB 1 MARKET ===
+function renderMarket(){
+  let el = document.getElementById('tabMarket');
+  let res = {};
+  try{ res = volandGetResources(); }catch(e){}
+  let gold = 0; try{ gold = volandGetGold(); }catch(e){}
+  let html = `<div class="market-card"><div class="card-title">MARKET • BUY / SELL FOR GOLD</div><div class="market-grid">`;
+  Object.keys(RES_NAMES).forEach(id=>{
+    let price = MARKET_PRICES[id];
+    if(!price) return;
+    let have = res[id]||0;
+    let canBuy = gold >= price.buy;
+    let canSell = have > 0;
+    let icon = RES_ICONS[id];
+    html += `
+      <div class="market-item">
+        <div class="market-item-icon"><img src="${icon}" onerror="this.parentElement.textContent='💎'"></div>
+        <div class="market-item-info">
+          <div class="market-item-name">${RES_NAMES[id]} x${have}</div>
+          <div class="market-item-price">BUY ${price.buy}g • SELL ${price.sell}g</div>
+          <div class="market-actions">
+            <button class="btn buy" ${!canBuy?'disabled':''} onclick="buyRes('${id}',1)">BUY +1</button>
+            <button class="btn sell" ${!canSell?'disabled':''} onclick="sellRes('${id}',1)">SELL -1</button>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+  html += `</div><div class="log" id="marketLog"></div></div>`;
+  el.innerHTML = html;
+}
+
+function buyRes(id, qty){
+  try{
+    let price = MARKET_PRICES[id].buy * qty;
+    let gold = volandGetGold();
+    if(gold < price){ showLog('marketLog','Недостаточно GOLD: '+gold+'/'+price,'err'); return; }
+    volandSetGold(gold - price);
+    volandAddResource(id, qty);
+    showLog('marketLog','Куплено '+RES_NAMES[id]+' x'+qty+' за '+price+'g','ok');
+    renderResList(); renderMarket(); refreshTop();
+  }catch(e){ showLog('marketLog','Ошибка: '+e.message,'err'); }
+}
+function sellRes(id, qty){
+  try{
+    let res = volandGetResources();
+    let have = res[id]||0;
+    if(have < qty){ showLog('marketLog','Недостаточно '+RES_NAMES[id],'err'); return; }
+    let price = MARKET_PRICES[id].sell * qty;
+    volandAddResource(id, -qty);
+    let gold = volandGetGold();
+    volandSetGold(gold + price);
+    showLog('marketLog','Продано '+RES_NAMES[id]+' x'+qty+' за '+price+'g','ok');
+    renderResList(); renderMarket(); refreshTop();
+  }catch(e){ showLog('marketLog','Ошибка: '+e.message,'err'); }
+}
+
+// === TAB 2 EXCHANGE ===
+function renderExchange(){
+  let el = document.getElementById('tabExchange');
+  let res = {}; try{ res = volandGetResources(); }catch(e){}
+  let options = Object.keys(RES_NAMES).map(id=>`<option value="${id}">${RES_NAMES[id]} (x${res[id]||0})</option>`).join('');
+  let fromId = selectedResId || 'quartz';
+  let toId = 'wood';
+  if(fromId===toId) toId = 'diamond';
+  let rate = getExchangeRate(fromId, toId);
+  let needDesc = rate >=1 ? `${rate} ${RES_NAMES[fromId]} → 1 ${RES_NAMES[toId]}` : `1 ${RES_NAMES[fromId]} → ${Math.round(1/rate)} ${RES_NAMES[toId]}`;
+  el.innerHTML = `
+    <div class="market-card">
+      <div class="card-title">EXCHANGE • БЕЗ ЗОЛОТА</div>
+      <div style="font:400 8px 'JetBrains Mono',monospace;color:#6a7a8a;text-align:center">Курс: база quartz/wood/diamond между собой 1к2, с fang/essence 1к4</div>
+      <div class="select-row">
+        <select class="select" id="exFrom" onchange="updateExchangePreview()">${options}</select>
+        <span style="color:#e6d5a0">→</span>
+        <select class="select" id="exTo" onchange="updateExchangePreview()">${options}</select>
+      </div>
+      <div class="select-row" style="margin-top:8px">
+        <input class="input" id="exAmount" type="number" min="1" value="2" oninput="updateExchangePreview()">
+        <button class="btn primary" style="flex:1" onclick="doExchange()">ОБМЕНЯТЬ</button>
+      </div>
+      <div class="preview-empty" id="exPreview">${needDesc}</div>
+      <div class="log" id="exLog"></div>
+    </div>
+  `;
+  document.getElementById('exFrom').value = fromId;
+  document.getElementById('exTo').value = toId;
+  updateExchangePreview();
+}
+
+function updateExchangePreview(){
+  try{
+    let fromEl = document.getElementById('exFrom');
+    let toEl = document.getElementById('exTo');
+    let amtEl = document.getElementById('exAmount');
+    if(!fromEl||!toEl||!amtEl) return;
+    let fromId = fromEl.value;
+    let toId = toEl.value;
+    let amount = parseInt(amtEl.value)||1;
+    if(fromId===toId){ document.getElementById('exPreview').textContent = 'Выбери разные ресурсы'; return; }
+    let rate = getExchangeRate(fromId, toId);
+    let res = volandGetResources();
+    let have = res[fromId]||0;
+    let receive = rate >=1 ? Math.floor(amount / rate) : Math.floor(amount * (1/rate));
+    if(rate >=1){
+      document.getElementById('exPreview').innerHTML = `Отдаешь <b style="color:#e6d5a0">${amount} ${RES_NAMES[fromId]}</b> (есть x${have}) → Получишь <b style="color:#3ad080">${receive} ${RES_NAMES[toId]}</b><br><span style="font-size:8px;color:#6a7a8a">Курс: ${rate}:1 • ${rate} ${RES_NAMES[fromId]} = 1 ${RES_NAMES[toId]}</span>`;
+    } else {
+      document.getElementById('exPreview').innerHTML = `Отдаешь <b style="color:#e6d5a0">${amount} ${RES_NAMES[fromId]}</b> (есть x${have}) → Получишь <b style="color:#3ad080">${receive} ${RES_NAMES[toId]}</b><br><span style="font-size:8px;color:#6a7a8a">Курс: 1:${Math.round(1/rate)} • 1 ${RES_NAMES[fromId]} = ${Math.round(1/rate)} ${RES_NAMES[toId]}</span>`;
+    }
+  }catch(e){}
+}
+
+function doExchange(){
+  try{
+    let fromId = document.getElementById('exFrom').value;
+    let toId = document.getElementById('exTo').value;
+    let amount = parseInt(document.getElementById('exAmount').value)||1;
+    if(fromId===toId){ showLog('exLog','Выбери разные ресурсы','err'); return; }
+    let res = volandGetResources();
+    let have = res[fromId]||0;
+    if(have < amount){ showLog('exLog','Недостаточно '+RES_NAMES[fromId]+': '+have+'/'+amount,'err'); return; }
+    let rate = getExchangeRate(fromId, toId);
+    let receive = rate >=1 ? Math.floor(amount / rate) : Math.floor(amount * (1/rate));
+    if(receive < 1){ showLog('exLog','Слишком мало для обмена, увеличь количество','err'); return; }
+    volandAddResource(fromId, -amount);
+    volandAddResource(toId, receive);
+    showLog('exLog','Обмен: -'+amount+' '+RES_NAMES[fromId]+' +'+receive+' '+RES_NAMES[toId],'ok');
+    renderResList(); renderExchange(); refreshTop();
+  }catch(e){ showLog('exLog','Ошибка: '+e.message,'err'); }
+}
+
+// === TAB 3 P2P ===
+function getP2PList(){
+  try{
+    let raw = localStorage.getItem('voland_p2p_listings');
+    if(raw) return JSON.parse(raw);
+    return [];
+  }catch(e){ return []; }
+}
+function setP2PList(list){
+  try{ localStorage.setItem('voland_p2p_listings', JSON.stringify(list)); }catch(e){}
+}
+
+function renderP2P(){
+  let el = document.getElementById('tabP2P');
+  let res = {}; try{ res = volandGetResources(); }catch(e){}
+  let options = Object.keys(RES_NAMES).map(id=>`<option value="${id}">${RES_NAMES[id]} (x${res[id]||0})</option>`).join('');
+  let listings = getP2PList();
+  let html = `
+    <div class="market-card">
+      <div class="card-title">P2P • ВЫСТАВИТЬ СВОЙ РЕСУРС ЗА СВОЮ ЦЕНУ</div>
+      <div style="font:400 8px 'JetBrains Mono',monospace;color:#6a7a8a;text-align:center">Сейчас локальный мок (видишь только свои лоты). Потом подключим сервер без переделки UI.</div>
+      <div class="select-row">
+        <select class="select" id="p2pRes">${options}</select>
+        <input class="input" id="p2pAmt" type="number" min="1" value="1" placeholder="кол-во">
+        <input class="input" id="p2pPrice" type="number" min="1" value="50" placeholder="цена за 1">
+      </div>
+      <button class="btn primary" style="width:100%;margin-top:8px" onclick="createP2P()">ВЫСТАВИТЬ ЛОТ</button>
+      <div class="log" id="p2pLog"></div>
+    </div>
+    <div class="market-card" style="margin-top:12px">
+      <div class="card-title">МОИ ЛОТЫ (${listings.length})</div>
+      <div class="p2p-list" id="p2pMyList">
+  `;
+  if(listings.length===0){
+    html += `<div class="preview-empty">Нет лотов. Выстави свой ресурс выше.</div>`;
+  } else {
+    listings.forEach((lot,idx)=>{
+      let icon = RES_ICONS[lot.resId] || '';
+      html += `
+        <div class="p2p-item">
+          <div class="market-item-icon"><img src="${icon}" onerror="this.parentElement.textContent='💎'"></div>
+          <div class="p2p-item-info">
+            <div style="color:#e6d5a0">${RES_NAMES[lot.resId]} x${lot.amount} за ${lot.pricePer}g/шт (всего ${lot.amount*lot.pricePer}g)</div>
+            <div>Выставлен: ${new Date(lot.ts).toLocaleTimeString()}</div>
+          </div>
+          <button class="btn sell" onclick="removeP2P(${idx})">СНЯТЬ</button>
+        </div>
+      `;
+    });
+  }
+  html += `</div></div>
+    <div class="market-card" style="margin-top:12px;opacity:.6">
+      <div class="card-title">ЧУЖИЕ ЛОТЫ • SOON</div>
+      <div class="preview-empty">С бэком здесь будут лоты других игроков. Сейчас заглушка — место зарезервировано.</div>
+    </div>
+  `;
+  el.innerHTML = html;
+}
+
+function createP2P(){
+  try{
+    let resId = document.getElementById('p2pRes').value;
+    let amount = parseInt(document.getElementById('p2pAmt').value)||1;
+    let pricePer = parseInt(document.getElementById('p2pPrice').value)||1;
+    let res = volandGetResources();
+    let have = res[resId]||0;
+    if(have < amount){ showLog('p2pLog','Недостаточно '+RES_NAMES[resId]+': '+have+'/'+amount,'err'); return; }
+    // remove from inventory
+    volandAddResource(resId, -amount);
+    let listings = getP2PList();
+    listings.push({resId, amount, pricePer, ts:Date.now()});
+    setP2PList(listings);
+    showLog('p2pLog','Лот выставлен: '+RES_NAMES[resId]+' x'+amount+' за '+pricePer+'g/шт','ok');
+    renderResList(); renderP2P(); refreshTop();
+  }catch(e){ showLog('p2pLog','Ошибка: '+e.message,'err'); }
+}
+
+function removeP2P(idx){
+  try{
+    let listings = getP2PList();
+    let lot = listings[idx];
+    if(!lot) return;
+    // return resources
+    volandAddResource(lot.resId, lot.amount);
+    listings.splice(idx,1);
+    setP2PList(listings);
+    showLog('p2pLog','Лот снят, ресурсы возвращены','ok');
+    renderResList(); renderP2P(); refreshTop();
+  }catch(e){}
+}
+
+function showLog(id, msg, type){
+  let el = document.getElementById(id);
+  if(!el) return;
+  el.textContent = msg;
+  el.className = 'log ' + (type||'');
+  setTimeout(()=>{ if(el) el.textContent=''; }, 3000);
+}
+
+// INIT
+renderResList();
+switchTab('market');
+renderMarket();
+</script>
 <script>
-// Symmetric tooltip positioning
+// Tooltip positioning
 document.querySelectorAll('.nav-group').forEach(g=>{
   let label = g.querySelector('.nav-label');
   if(!label) return;
@@ -282,6 +564,7 @@ document.querySelectorAll('.nav-group').forEach(g=>{
     label.style.transform = 'translateY(-50%) translateX(-6px)';
   });
 });
+// active nav highlight fallback
 let path=location.pathname.toLowerCase();
 document.querySelectorAll('.nav-item').forEach(el=>{
   let pg=el.dataset.page;
@@ -292,5 +575,4 @@ document.querySelectorAll('.nav-item').forEach(el=>{
 });
 </script>
 </body>
-
 </html>
