@@ -639,22 +639,43 @@ function renderEquip(){
 }
 function equipItem(item, idx){
   const slot=item.slot;
-  if(equipped[slot]){
-    const old=equipped[slot];
-    const j=inv.findIndex(v=>v==null);
-    inv[j=== -1 ? inv.length : j]=old;
-    log(`Снято: ${old.name}`);
-  }
+  try{
+    // FIX: properly handle inventory storage - remove new item from storage, add old to storage
+    if(typeof volandRemoveFromInventory==='function'){
+      volandRemoveFromInventory(item.id);
+    }
+    if(equipped[slot]){
+      const old=equipped[slot];
+      if(typeof volandAddToInventory==='function'){
+        volandAddToInventory(old.id);
+      }
+      log(`Снято: ${old.name}`);
+    }
+  }catch(e){ console.log('equip inv err', e); }
   equipped[slot]=item;
-  inv[idx]=null;
-  rebuildInv(); volandSaveEquip(equipped);
+  try{
+    volandSaveEquip(equipped);
+  }catch(e){}
+  try{
+    rebuildInv();
+  }catch(e){}
   renderInv(); renderEquip(); renderStats(); renderBars();
   log(`Экипировано: ${item.name} ${item.desc} — сохранено на всех страницах`);
 }
 function unequipSlot(el){
   const slot=el.dataset.slot; const it=equipped[slot]; if(!it) return;
+  try{
+    if(typeof volandAddToInventory==='function'){
+      volandAddToInventory(it.id);
+    }
+  }catch(e){ console.log('unequip inv err', e); }
   delete equipped[slot];
-  rebuildInv(); volandSaveEquip(equipped);
+  try{
+    volandSaveEquip(equipped);
+  }catch(e){}
+  try{
+    rebuildInv();
+  }catch(e){}
   renderInv(); renderEquip(); renderStats(); renderBars();
   log(`Снято: ${it.name}`);
 }
