@@ -23,6 +23,8 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 .card{position:relative;background:rgba(20,26,34,.88);border:1px solid rgba(122,144,168,.22);border-radius:12px;padding:0;text-align:center;cursor:pointer;transition:.25s;overflow:hidden;min-height:260px;height:300px;display:flex;flex-direction:column}
 .card:hover{transform:translateY(-4px);border-color:#e6d5a0;box-shadow:0 12px 28px rgba(0,0,0,.5),0 0 16px rgba(230,213,160,.18)}
 .card.boss{border-color:rgba(224,80,80,.45)}
+.card.boss-limit{opacity:0.55;filter:grayscale(0.5)}
+
 .boss-badge{position:absolute;top:8px;right:8px;background:rgba(180,30,30,.9);color:#fff;font:900 9px 'JetBrains Mono',monospace;letter-spacing:.15em;padding:4px 7px;border-radius:4px;z-index:3;box-shadow:0 2px 8px rgba(0,0,0,.5);border:1px solid rgba(255,100,100,.5)}
 .card .icon{flex:1;width:100%;height:100%;margin:0;display:flex;align-items:center;justify-content:center;position:relative;padding:0;overflow:hidden}
 .card .icon img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block}
@@ -174,7 +176,7 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
   </div>
 </div>
 <div class="center">
-<div class="title" id="locTitle" style="position:relative">ПУСТЫНЯ<span id="locSub">DESERT • 4 STAGES</span></div>
+<div class="title" id="locTitle">ПУСТЫНЯ<span id="locSub">DESERT • 4 STAGES</span></div>
 <div id="staminaDisplay" style="margin-top:12px;font:700 10px JetBrains Mono,monospace;color:#3ad080;text-align:center"></div><div class="stages" id="stagesGrid"></div>
 </div>
 <div class="right">
@@ -234,7 +236,22 @@ try{
 }catch(e){}
 function startBattle(stage){
  try{
-  // STAMINA CHECK
+  // BOSS DAILY LIMIT 10 per boss per day
+  let isBossStage = (parseInt(stage)===4);
+  if(isBossStage){
+    try{
+      if(typeof volandCanFightBoss==='function' && !volandCanFightBoss(locId)){
+        let info = typeof volandGetBossLimitInfo==='function' ? volandGetBossLimitInfo(locId) : {kills:10, limit:10};
+        let tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate()+1); tomorrow.setHours(0,0,0,0);
+        let now = new Date(); let diff = tomorrow - now;
+        let hours = Math.floor(diff/1000/60/60); let mins = Math.floor((diff/1000/60)%60);
+        alert(`Лимит боссов на сегодня! Ты уже убил ${info.kills}/${info.limit} боссов этой локи.\nПриходи завтра через ${hours}ч ${mins}м.\nСброс в полночь.`);
+        try{ updateStaminaDisplay(); }catch(e){}
+        return;
+      }
+    }catch(e){}
+  }
+  // STAMINA CHECK 1,2,3,5 / 3,4,5,10 / 5,6,7,15
   let cost = 1;
   try{
     if(typeof volandGetStaminaCost==='function'){
@@ -248,7 +265,6 @@ function startBattle(stage){
     if(typeof volandGetStamina==='function') curStam = volandGetStamina();
   }catch(e){}
   if(curStam < cost){
-    let need = cost - curStam;
     let info = '';
     try{
       let sinfo = volandGetStaminaInfo();
@@ -259,7 +275,6 @@ function startBattle(stage){
     try{ updateStaminaDisplay(); }catch(e){}
     return;
   }
-  // Spend stamina
   try{
     if(typeof volandSpendStamina==='function'){
       if(!volandSpendStamina(cost)){
@@ -285,44 +300,34 @@ document.getElementById('stagesGrid').innerHTML=enemies.map(e=>{
    if(typeof volandGetStaminaCost==='function') staminaCost = volandGetStaminaCost(locId, e.stage);
    else if(window.VOLAND_STAMINA_COSTS && VOLAND_STAMINA_COSTS[locId]) staminaCost = VOLAND_STAMINA_COSTS[locId][e.stage]||1;
  }catch(e){}
+ let isBoss = !!e.boss;
+ let bossInfo = {kills:0, limit:10, left:10, canFight:true};
+ try{
+   if(isBoss && typeof volandGetBossLimitInfo==='function'){
+     bossInfo = volandGetBossLimitInfo(locId);
+   }
+ }catch(err){}
  let rs = (REAL_STATS[locId] && REAL_STATS[locId][e.stage]) || (REAL_STATS[1] && REAL_STATS[1][e.stage]) || {hp:2000,def:100,dmg:150};
  let iconHtml = e.img ? `<img src="${e.img}" alt="${e.name}" onerror="this.parentNode.innerHTML='${e.icon}'">` : `<div style="font-size:48px">${e.icon}</div>`;
+ let staminaBadge = `<div class="boss-badge" style="background:rgba(30,60,30,.92);border:1px solid #3ad080;color:#3ad080;box-shadow:0 2px 8px rgba(0,0,0,.5)">${staminaCost} STAM</div>`;
+ let bossCounterBadge = '';
+ if(isBoss){
+   let kills = bossInfo.kills;
+   let limit = bossInfo.limit;
+   let color = kills>=limit ? '#e05050' : kills>=7 ? '#d0b040' : '#3ad080';
+   let bg = kills>=limit ? 'rgba(180,30,30,.92)' : 'rgba(20,26,34,.88)';
+   let border = kills>=limit ? 'rgba(224,80,80,.8)' : color;
+   bossCounterBadge = `<div class="boss-badge" style="top:8px;right:8px;background:${bg};border-color:${border};color:${kills>=limit?'#fff':color}">${kills}/${limit} BOSS</div>`;
+ }
  return `
- <div class="card ${e.boss?'boss':''}" onclick="startBattle(${e.stage})">
-  ${e.boss ? '<div class="boss-badge">BOSS</div>' : ''}
+ <div class="card ${e.boss?'boss':''} ${isBoss && !bossInfo.canFight ? 'boss-limit' : ''}" onclick="startBattle(${e.stage})" style="${isBoss && !bossInfo.canFight ? 'opacity:0.55;filter:grayscale(0.5)' : ''}">
+  ${isBoss ? bossCounterBadge : staminaBadge}
+  ${isBoss ? `<div class="boss-badge" style="top:36px;right:8px;background:rgba(30,60,30,.92);border:1px solid #3ad080;color:#3ad080">${staminaCost} STAM</div>` : ''}
   <div class="icon">${iconHtml}</div>
   <div class="name">${e.name}<span style="display:block;margin-top:4px;font:400 8px 'JetBrains Mono',monospace;color:#8ab0d0;letter-spacing:.1em">HP ${rs.hp} • DEF ${rs.def} • DMG ${rs.dmg}</span></div>
  </div>
 `;
 }).join('');
-</script>
-
-<script>
-// STAMINA DISPLAY
-function updateStaminaDisplay(){
-  try{
-    let cur = 100, max=100, toNext=0, pct=100;
-    if(typeof volandGetStaminaInfo==='function'){
-      let info = volandGetStaminaInfo();
-      cur = info.cur; max = info.max; toNext = info.toNext; pct = info.pct;
-    } else if(typeof volandGetStamina==='function'){
-      cur = volandGetStamina(); max = volandGetStaminaMax();
-    }
-    let el = document.getElementById('staminaDisplay');
-    if(!el) return;
-    if(cur >= max){
-      el.innerHTML = `STAMINA: ${cur}/${max} • FULL • 2 за 3 мин (40/час) • 2.5ч полная`;
-      el.style.color = '#3ad080';
-    } else {
-      let mins = Math.floor(toNext/1000/60);
-      let secs = Math.floor((toNext/1000)%60);
-      el.innerHTML = `STAMINA: ${cur}/${max} (${pct}%) • реген через ${mins}м ${secs}с • 2 за 3 мин (40/час)`;
-      el.style.color = cur<5 ? '#e05050' : '#d0b040';
-    }
-  }catch(e){}
-}
-setInterval(updateStaminaDisplay, 1000);
-setTimeout(updateStaminaDisplay, 100);
 </script>
 </body>
 </html>
