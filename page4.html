@@ -6,12 +6,11 @@
 <title>VOLAND - BAG</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-/* === TOOLTIP ONLY - page4 BAG - keep 68px but add fixed tooltip === */
 .left-nav{
-  width:68px !important;
-  min-width:68px !important;
-  max-width:68px !important;
-  flex:0 0 68px !important;
+  width:60px !important;
+  min-width:60px !important;
+  max-width:60px !important;
+  flex:0 0 60px !important;
   background:rgba(18,24,30,.94) !important;
   border-right:1px solid #2a3a4a !important;
   display:flex !important;
@@ -96,7 +95,7 @@
 }
 .nav-label{
   position:fixed !important;
-  left:72px !important;
+  left:64px !important;
   background:rgba(20,26,34,.96) !important;
   border:1px solid #e6d5a0 !important;
   color:#e6d5a0 !important;
@@ -169,11 +168,11 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
 .bar-label{font-size:7px;letter-spacing:.15em;color:#6a7a8a;font-family:'JetBrains Mono',monospace;display:flex;justify-content:space-between}
 .bar-track{height:24px;background:#0a0e14;border-radius:5px;overflow:hidden;border:1px solid #1e2a32;position:relative;display:flex;align-items:center;justify-content:center}
 .bar-fill{position:absolute;left:0;top:0;bottom:0;display:flex;align-items:center;justify-content:flex-start;font-size:9px;font-weight:700;font-family:'JetBrains Mono',monospace;transition:width .3s ease}
-.bar-fill.hp{background:linear-gradient(90deg,#b33030,#e05050)}
-.bar-fill.mana{background:linear-gradient(90deg,#1a4a9a,#2a6ad0)}
-.bar-fill.stamina{background:linear-gradient(90deg,#1a7a4a,#3ad080)}
-.bar-fill.xp{background:linear-gradient(90deg,#8a6a1a,#d0b040)}
 .bar-text{position:relative;z-index:2;font-size:9px;font-weight:700;font-family:'JetBrains Mono',monospace;color:#fff;text-align:center;pointer-events:none;width:100%;text-shadow:0 1px 2px rgba(0,0,0,.8)}
+.bar-fill.hp{background:linear-gradient(90deg,#b33030,#e05050);color:#fff}
+.bar-fill.mana{background:linear-gradient(90deg,#1a4a9a,#2a6ad0);color:#fff}
+.bar-fill.stamina{background:linear-gradient(90deg,#1a7a4a,#3ad080);color:#fff}
+.bar-fill.xp{background:linear-gradient(90deg,#8a6a1a,#d0b040);color:#fff}
 .bars-inner{display:flex;flex-direction:column;gap:10px}
 .inventory-zone{flex:1;background:rgba(17,24,33,.25);padding:10px 12px;display:flex;flex-direction:column;overflow:auto;margin-top:4px}
 .inv-grid{display:grid;grid-template-columns:repeat(15,1fr);gap:4px;margin-top:6px}
@@ -282,19 +281,18 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
 <div class="wrap">
   <div class="left-nav">
   <div class="nav-top">
-    <div class="nav-group " onclick="location.href='./page3.html'"><div class="nav-item " data-page="page3"><img src="./assets/ui/nav/hero.webp" alt="HERO"></div><div class="nav-label">HERO</div></div>
-    <div class="nav-group " onclick="location.href='./page4.html'"><div class="nav-item " data-page="page4"><img src="./assets/ui/nav/bag.webp" alt="BAG"></div><div class="nav-label">BAG</div></div>
+    <div class="nav-group active" onclick="location.href='./page3.html'"><div class="nav-item active" data-page="page3"><img src="./assets/ui/nav/hero.webp" alt="HERO"></div><div class="nav-label">HERO</div></div>
+    <div class="nav-group active" onclick="location.href=\'./page4.html\'"><div class="nav-item " data-page="page4"><img src="./assets/ui/nav/bag.webp" alt="BAG"></div><div class="nav-label">BAG</div></div>
     <div class="nav-group " onclick="location.href='./page5.html'"><div class="nav-item " data-page="page5"><img src="./assets/ui/nav/skills.webp" alt="SKILLS"></div><div class="nav-label">SKILLS</div></div>
     <div class="nav-group " onclick="location.href='./page6.html'"><div class="nav-item " data-page="page6"><img src="./assets/ui/nav/battle.webp" alt="BATTLE"></div><div class="nav-label">BATTLE</div></div>
     <div class="nav-group " onclick="location.href='./page9.html'"><div class="nav-item " data-page="page9"><img src="./assets/ui/nav/missions.webp" alt="MISSIONS"></div><div class="nav-label">MISSIONS</div></div>
     <div class="nav-group " onclick="location.href='./page10.html'"><div class="nav-item " data-page="page10"><img src="./assets/ui/nav/market.webp" alt="MARKET"></div><div class="nav-label">MARKET</div></div>
     <div class="nav-group " onclick="location.href='./page11.html'"><div class="nav-item " data-page="page11"><img src="./assets/ui/nav/pvp.webp" alt="PVP"></div><div class="nav-label">PVP</div></div>
     <div class="nav-group " onclick="location.href='./page12.html'"><div class="nav-item " data-page="page12"><img src="./assets/ui/nav/workshop.webp" alt="WORKSHOP"></div><div class="nav-label">WORKSHOP</div></div>
-    <div class="nav-group active" onclick="location.href='./page13.html'"><div class="nav-item active" data-page="page13"><img src="./assets/ui/nav/pass.webp" alt="PASS"></div><div class="nav-label">PASS</div></div>
+    <div class="nav-group " onclick="location.href='./page13.html'"><div class="nav-item " data-page="page13"><img src="./assets/ui/nav/pass.webp" alt="PASS"></div><div class="nav-label">PASS</div></div>
   </div>
   <div class="nav-bottom">
     <div class="nav-group" onclick="location.href='./index.html'"><div class="nav-item" data-page="index"><img src="./assets/ui/nav/start.webp" alt="START"></div><div class="nav-label">START</div></div>
-
   </div>
 </div>
 
@@ -518,23 +516,6 @@ function renderStats(){
   });
   statsPanel.appendChild(grid);
 }
-function getCurrentStatsForBarsP4(){
-  let cur = {HP:1000, MANA:200};
-  try{ cur = volandCalcStats().cur; }catch(e){}
-  let curHP = cur.HP, curMANA = cur.MANA, curSTAM = 100, maxSTAM = 100, stamPct = 100;
-  try{
-    if(typeof volandGetCurrentHP==='function') curHP = volandGetCurrentHP();
-    if(typeof volandGetCurrentMANA==='function') curMANA = volandGetCurrentMANA();
-    if(typeof volandGetStaminaInfo==='function'){
-      let sinfo = volandGetStaminaInfo();
-      curSTAM = sinfo.cur; maxSTAM = sinfo.max; stamPct = sinfo.pct;
-    } else if(typeof volandGetStamina==='function'){
-      curSTAM = volandGetStamina(); maxSTAM = volandGetStaminaMax();
-      stamPct = Math.round(curSTAM/maxSTAM*100);
-    }
-  }catch(e){}
-  return {cur, curHP, curMANA, curSTAM, maxSTAM, stamPct};
-}
 function renderBars(){
   const {cur} = volandCalcStats();
   const title=barsPanel.querySelector('.panel-title');
@@ -545,13 +526,10 @@ function renderBars(){
     totalXp = typeof volandGetXp==='function' ? volandGetXp() : 0;
     lvlInfo = typeof volandGetLevelInfo==='function' ? volandGetLevelInfo(totalXp) : (typeof volandGetCurrentLevelInfo==='function' ? volandGetCurrentLevelInfo() : lvlInfo);
   }catch(e){}
-  let {curHP, curMANA, curSTAM, maxSTAM, stamPct} = getCurrentStatsForBarsP4();
-  let hpPct = Math.max(0, Math.min(100, Math.round(curHP/cur.HP*100)));
-  let manaPct = Math.max(0, Math.min(100, Math.round(curMANA/cur.MANA*100)));
   let bars=[
-    {label:'HP',cls:'hp',cur:curHP,max:cur.HP,txt:`${curHP} / ${cur.HP}`,pct:hpPct},
-    {label:'MANA',cls:'mana',cur:curMANA,max:cur.MANA,txt:`${curMANA} / ${cur.MANA}`,pct:manaPct},
-    {label:'STAMINA',cls:'stamina',cur:curSTAM,max:maxSTAM,txt:`${curSTAM} / ${maxSTAM}`,pct:stamPct},
+    {label:'HP',cls:'hp',cur:cur.HP,max:cur.HP,txt:`${cur.HP} / ${cur.HP}`,pct:100},
+    {label:'MANA',cls:'mana',cur:cur.MANA,max:cur.MANA,txt:`${cur.MANA} / ${cur.MANA}`,pct:100},
+    {label:'STAMINA',cls:'stamina',cur:100,max:100,txt:'100 / 100',pct:100},
     {label:'XP',cls:'xp',cur:lvlInfo.cur,max:lvlInfo.need,txt:`${lvlInfo.cur} / ${lvlInfo.need}`,pct:lvlInfo.pct}
   ];
   bars.forEach(b=>{
@@ -561,8 +539,6 @@ function renderBars(){
   });
   barsPanel.appendChild(inner);
 }
-setInterval(()=>{ try{ renderBars(); }catch(e){} }, 1000);
-
 function log(m){const d=document.createElement('div'); d.className='sys-msg'; d.textContent=m; chatBody.appendChild(d); chatBody.scrollTop=9999;}
 function updateGoldRes(){
   try{
