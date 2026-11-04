@@ -900,6 +900,78 @@ function volandSetCurrentMANA(val){
   return volandSetMANAData(val, Date.now());
 }
 
+
+// === BOSS DAILY LIMIT 10 PER BOSS (per loc) ===
+const VOLAND_BOSS_DAILY_LIMIT = 10;
+
+function volandGetBossKillDateStr(){
+  let d = new Date();
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+
+function volandGetBossKillsData(){
+  try{
+    let raw = localStorage.getItem('voland_v1_boss_kills');
+    if(!raw) return {date: volandGetBossKillDateStr(), kills:{}};
+    let data = JSON.parse(raw);
+    let today = volandGetBossKillDateStr();
+    if(data.date !== today){
+      // new day - reset
+      return {date: today, kills:{}};
+    }
+    return data;
+  }catch(e){ return {date: volandGetBossKillDateStr(), kills:{}}; }
+}
+
+function volandSaveBossKillsData(data){
+  try{
+    localStorage.setItem('voland_v1_boss_kills', JSON.stringify(data));
+    // also save in saves for backup
+    let saves = volandGetSaves();
+    let idx = volandGetActiveIndex();
+    if(saves.length>0){
+      saves[idx].boss_kills_data = data;
+      volandSaveSaves(saves);
+    }
+  }catch(e){}
+}
+
+function volandGetBossKills(loc){
+  try{
+    let data = volandGetBossKillsData();
+    loc = String(parseInt(loc)||1);
+    return parseInt(data.kills[loc]||0);
+  }catch(e){ return 0; }
+}
+
+function volandAddBossKill(loc){
+  try{
+    let data = volandGetBossKillsData();
+    loc = String(parseInt(loc)||1);
+    data.kills[loc] = (parseInt(data.kills[loc]||0)+1);
+    // cap at limit? keep counting but we check limit before battle
+    volandSaveBossKillsData(data);
+    return data.kills[loc];
+  }catch(e){ return 0; }
+}
+
+function volandCanFightBoss(loc){
+  let kills = volandGetBossKills(loc);
+  return kills < VOLAND_BOSS_DAILY_LIMIT;
+}
+
+function volandGetBossKillsLeft(loc){
+  let kills = volandGetBossKills(loc);
+  return Math.max(0, VOLAND_BOSS_DAILY_LIMIT - kills);
+}
+
+function volandGetBossLimitInfo(loc){
+  let kills = volandGetBossKills(loc);
+  let left = VOLAND_BOSS_DAILY_LIMIT - kills;
+  return {kills, limit: VOLAND_BOSS_DAILY_LIMIT, left: Math.max(0,left), canFight: kills < VOLAND_BOSS_DAILY_LIMIT};
+}
+
+
 function volandGetStaminaInfo(){
   let cur = volandGetStamina();
   let max = volandGetStaminaMax();
