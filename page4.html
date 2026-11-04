@@ -283,14 +283,14 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
   <div class="left-nav">
   <div class="nav-top">
     <div class="nav-group " onclick="location.href='./page3.html'"><div class="nav-item " data-page="page3"><img src="./assets/ui/nav/hero.webp" alt="HERO"></div><div class="nav-label">HERO</div></div>
-    <div class="nav-group " onclick="location.href='./page4.html'"><div class="nav-item " data-page="page4"><img src="./assets/ui/nav/bag.webp" alt="BAG"></div><div class="nav-label">BAG</div></div>
+    <div class="nav-group active" onclick="location.href='./page4.html'"><div class="nav-item active" data-page="page4"><img src="./assets/ui/nav/bag.webp" alt="BAG"></div><div class="nav-label">BAG</div></div>
     <div class="nav-group " onclick="location.href='./page5.html'"><div class="nav-item " data-page="page5"><img src="./assets/ui/nav/skills.webp" alt="SKILLS"></div><div class="nav-label">SKILLS</div></div>
     <div class="nav-group " onclick="location.href='./page6.html'"><div class="nav-item " data-page="page6"><img src="./assets/ui/nav/battle.webp" alt="BATTLE"></div><div class="nav-label">BATTLE</div></div>
     <div class="nav-group " onclick="location.href='./page9.html'"><div class="nav-item " data-page="page9"><img src="./assets/ui/nav/missions.webp" alt="MISSIONS"></div><div class="nav-label">MISSIONS</div></div>
     <div class="nav-group " onclick="location.href='./page10.html'"><div class="nav-item " data-page="page10"><img src="./assets/ui/nav/market.webp" alt="MARKET"></div><div class="nav-label">MARKET</div></div>
     <div class="nav-group " onclick="location.href='./page11.html'"><div class="nav-item " data-page="page11"><img src="./assets/ui/nav/pvp.webp" alt="PVP"></div><div class="nav-label">PVP</div></div>
     <div class="nav-group " onclick="location.href='./page12.html'"><div class="nav-item " data-page="page12"><img src="./assets/ui/nav/workshop.webp" alt="WORKSHOP"></div><div class="nav-label">WORKSHOP</div></div>
-    <div class="nav-group active" onclick="location.href='./page13.html'"><div class="nav-item active" data-page="page13"><img src="./assets/ui/nav/pass.webp" alt="PASS"></div><div class="nav-label">PASS</div></div>
+    <div class="nav-group " onclick="location.href='./page13.html'"><div class="nav-item " data-page="page13"><img src="./assets/ui/nav/pass.webp" alt="PASS"></div><div class="nav-label">PASS</div></div>
   </div>
   <div class="nav-bottom">
     <div class="nav-group" onclick="location.href='./index.html'"><div class="nav-item" data-page="index"><img src="./assets/ui/nav/start.webp" alt="START"></div><div class="nav-label">START</div></div>
@@ -368,9 +368,9 @@ function rebuildInv(){
   const ids = new Set(Object.values(equipped).map(i=>i.id));
   const equippedBaseIds = new Set(Object.values(equipped).map(i=>i.baseId || (i.id||'').split('-')[0]));
   let heroId = null;
-  let allowedWeaponBases = null;
+  let allowedWeaponBases = new Set(['staff']); // default mage
   try{
-    heroId = (typeof volandGetHeroId==='function') ? volandGetHeroId() : null;
+    heroId = (typeof volandGetHeroId==='function') ? volandGetHeroId() : 'necro-f-new';
     const classMap = {'necro-f-new':'mage','necro-m':'tank','archer-f':'archer','archer-m':'archer','archmage-m':'mage','warrior-f':'warrior','warrior-m':'warrior','mage-f-new':'mage'};
     const heroClass = classMap[heroId] || 'mage';
     const mapBases = {'mage':['staff'],'archer':['bow'],'warrior':['sword'],'tank':['shield','sword']};
@@ -380,7 +380,9 @@ function rebuildInv(){
         try{ let it = VOLAND_ITEMS.find(x=>x.id===cid); if(it) allowedWeaponBases.add(it.baseId); }catch(e){}
       });
     }
-  }catch(e){}
+  }catch(e){
+    allowedWeaponBases = new Set(['staff']);
+  }
   inv = [];
   let droppedGearMap = {};
   try{
