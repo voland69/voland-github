@@ -215,7 +215,55 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
   </div>
 </div>
 
-<script src="./assets/js/db.js"></script>
+<script src="./assets/js/db.js">
+// STAMINA/HP/MANA with regen - same as storage v20
+function getCurrentStatsForBars(){
+  let cur = {HP:1000, MANA:200};
+  try{ cur = volandCalcStats().cur; }catch(e){}
+  let curHP = cur.HP, curMANA = cur.MANA, curSTAM = 100, maxSTAM = 100, stamPct = 100;
+  try{
+    if(typeof volandGetCurrentHP==='function') curHP = volandGetCurrentHP();
+    if(typeof volandGetCurrentMANA==='function') curMANA = volandGetCurrentMANA();
+    if(typeof volandGetStaminaInfo==='function'){
+      let sinfo = volandGetStaminaInfo();
+      curSTAM = sinfo.cur; maxSTAM = sinfo.max; stamPct = sinfo.pct;
+    } else if(typeof volandGetStamina==='function'){
+      curSTAM = volandGetStamina(); maxSTAM = volandGetStaminaMax();
+      stamPct = Math.round(curSTAM/maxSTAM*100);
+    }
+  }catch(e){}
+  return {cur, curHP, curMANA, curSTAM, maxSTAM, stamPct};
+}
+
+function renderBarsWithRegen(){
+  try{
+    let {cur, curHP, curMANA, curSTAM, maxSTAM, stamPct} = getCurrentStatsForBars();
+    let totalXp=0, lvlInfo={cur:0,need:1000,pct:0,lvl:1};
+    try{
+      totalXp = typeof volandGetXp==='function' ? volandGetXp() : 0;
+      lvlInfo = typeof volandGetLevelInfo==='function' ? volandGetLevelInfo(totalXp) : lvlInfo;
+    }catch(e){}
+    let hpPct = Math.round(curHP/cur.HP*100);
+    let manaPct = Math.round(curMANA/cur.MANA*100);
+    document.getElementById('barsPanel').innerHTML = `
+      <div class="bar-row"><div class="bar-label">HP</div><div class="bar-track"><div class="bar-fill hp" style="width:${hpPct}%"></div><div class="bar-text">${curHP} / ${cur.HP}</div></div></div>
+      <div class="bar-row"><div class="bar-label">MANA</div><div class="bar-track"><div class="bar-fill mana" style="width:${manaPct}%"></div><div class="bar-text">${curMANA} / ${cur.MANA}</div></div></div>
+      <div class="bar-row"><div class="bar-label">STAMINA</div><div class="bar-track"><div class="bar-fill stamina" style="width:${stamPct}%"></div><div class="bar-text">${curSTAM} / ${maxSTAM}</div></div></div>
+      <div class="bar-row"><div class="bar-label">XP</div><div class="bar-track"><div class="bar-fill xp" style="width:${lvlInfo.pct}%"></div><div class="bar-text">${lvlInfo.cur} / ${lvlInfo.need}</div></div></div>
+    `;
+  }catch(e){ console.log('bars regen err', e); }
+}
+
+// Override original render and add interval
+let _origRenderBars = null;
+try{
+  if(typeof renderBars==='function') _origRenderBars = renderBars;
+}catch(e){}
+renderBars = renderBarsWithRegen;
+setInterval(renderBarsWithRegen, 1000);
+setTimeout(renderBarsWithRegen, 100);
+
+</script>
 <script src="./assets/js/storage.js"></script>
 <script src="./assets/js/config.js"></script>
 <script>
