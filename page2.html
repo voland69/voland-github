@@ -169,7 +169,7 @@ btn.onclick = ()=>{
     let saves = [];
     try{ saves = JSON.parse(localStorage.getItem('voland_v1_saves')||'[]'); }catch(e){ saves=[]; }
     if(!Array.isArray(saves)) saves=[];
-    // STARTER GEAR by class - 9 clothing + weapon by class
+    // STARTER GEAR by class
     let starterEquip = {};
     let starterInv = [];
     try{
@@ -182,13 +182,29 @@ btn.onclick = ()=>{
       });
       starterInv = gearIds.map(id=>({id:id, time:Date.now()}));
     }catch(e){ starterEquip={}; starterInv=[]; }
-    // if slot specified and empty, use it, otherwise append or replace oldest
+    // PER-HERO LVL1 ISOLATION - no leak
+    let baseHP = 1000, baseMANA = 200;
+    try{
+      let h = VOLAND_HEROES[selectedId];
+      if(h && h.st){ baseHP = h.st.HP||1000; baseMANA = h.st.MANA||200; }
+      for(let gid in starterEquip){
+        try{
+          let it = VOLAND_ITEMS.find(x=>x.id===starterEquip[gid]);
+          if(it && it.bonus){
+            if(it.bonus.HP) baseHP += it.bonus.HP;
+            if(it.bonus.MANA) baseMANA += it.bonus.MANA;
+          }
+        }catch(e){}
+      }
+    }catch(e){}
+    let now = Date.now();
+    let today = new Date().toISOString().slice(0,10);
     let newSave = {
       hero: selectedId,
       name: name,
       equip: starterEquip,
       inventory: starterInv,
-      created: Date.now(),
+      created: now,
       kills:0,
       quests:0,
       quests_total:40,
@@ -198,42 +214,28 @@ btn.onclick = ()=>{
       stat_points:0,
       resources:{},
       stamina:100,
-      lastStaminaUpdate:Date.now(),
-      hp_current:null,
-      lastHPUpdate:Date.now(),
-      mana_current:null,
-      lastMANAUpdate:Date.now(),
-      boss_kills_data:{date:(new Date().toISOString().slice(0,10)), kills:{}},
-      mission_stats:{kill_loc:{1:0,2:0,3:0}, kill_boss:0, kill_boss_diff:[], login_days:[(new Date().toISOString().slice(0,10))], ult_uses:0, win_streak:0, max_win_streak:0, collect_green:0, collect_blue:0, collect_legend:0, equip_dmg_max:0},
+      lastStaminaUpdate:now,
+      hp_current:baseHP,
+      lastHPUpdate:now,
+      mana_current:baseMANA,
+      lastMANAUpdate:now,
+      boss_kills_data:{date:today, kills:{}},
+      mission_stats:{kill_loc:{1:0,2:0,3:0}, kill_boss:0, kill_boss_diff:[], login_days:[today], ult_uses:0, win_streak:0, max_win_streak:0, collect_green:0, collect_blue:0, collect_legend:0, equip_dmg_max:0},
       missions_done:[]
     };
-    try{
-      let baseHP = 1000, baseMANA = 200;
-      try{ let h = VOLAND_HEROES[selectedId]; if(h && h.st){ baseHP = h.st.HP||1000; baseMANA = h.st.MANA||200; } }catch(e){}
-      try{ for(let gid in starterEquip){ let it = VOLAND_ITEMS.find(x=>x.id===starterEquip[gid]); if(it && it.bonus){ if(it.bonus.HP) baseHP += it.bonus.HP; if(it.bonus.MANA) baseMANA += it.bonus.MANA; } } }catch(e){}
-      newSave.hp_current = baseHP;
-      newSave.mana_current = baseMANA;
-    }catch(e){}
+    // slot handling - keep slot index
     if(slot!==null && !isNaN(slot) && slot>=0 && slot<3){
-      saves[slot]=newSave;
-      // fill gaps with null? compact to keep order but keep index
-      // ensure array length 3 max with empty slots preserved as null for UI
-      let compact=[];
-      for(let i=0;i<3;i++){ if(saves[i]) compact.push(saves[i]); }
-      // if slot was empty and we inserted at specific index, we need to place correctly
-      // simpler: rebuild array with slot placement
-      let tmp=[null,null,null];
-      try{ let existing=JSON.parse(localStorage.getItem('voland_v1_saves')||'[]'); if(Array.isArray(existing)){ for(let i=0;i<Math.min(existing.length,3);i++) if(existing[i]) tmp[i]=existing[i]; } }catch(e){}
-      tmp[slot]=newSave;
-      saves = tmp.filter(x=>x!==null);
-      // but to keep slot index, we store sparse? For simplicity store compact and set active to last added
-      // Actually store as array of up to 3 where index = slot if possible
       let finalSaves=[null,null,null];
-      // load again to place
-      try{ let raw=JSON.parse(localStorage.getItem('voland_v1_saves')||'[]'); if(Array.isArray(raw)){ for(let i=0;i<Math.min(raw.length,3);i++) finalSaves[i]=raw[i]; } }catch(e){}
+      try{
+        let existing = JSON.parse(localStorage.getItem('voland_v1_saves')||'[]');
+        if(Array.isArray(existing)){
+          for(let i=0;i<3;i++){
+            if(i!==slot && existing[i]) finalSaves[i]=existing[i];
+          }
+        }
+      }catch(e){}
       finalSaves[slot]=newSave;
       saves = finalSaves.filter(x=>x!==null);
-      // find active index of newSave
       let activeIdx = saves.findIndex(s=>s && s.name===name && s.hero===selectedId && s.created===newSave.created);
       if(activeIdx===-1) activeIdx = saves.length-1;
       localStorage.setItem('voland_v1_saves', JSON.stringify(saves));
@@ -244,13 +246,27 @@ btn.onclick = ()=>{
       localStorage.setItem('voland_v1_saves', JSON.stringify(saves));
       localStorage.setItem('voland_v1_active', (saves.length-1).toString());
     }
-    // legacy keys for compat
+    // clear global leaks for new hero - ensure no shared boss/missions
+    try{
+      localStorage.setItem('voland_v1_gold', '0');
+      localStorage.setItem('voland_v1_xp', '0');
+      localStorage.setItem('voland_v1_boss_kills', JSON.stringify({date:today, kills:{}}));
+      localStorage.setItem('voland_missions_stats', JSON.stringify(newSave.mission_stats));
+      localStorage.setItem('voland_missions_done', JSON.stringify([]));
+      localStorage.setItem('voland_v1_stamina', '100');
+      localStorage.setItem('voland_v1_stamina_last', String(now));
+      localStorage.setItem('voland_v1_hp_current', String(baseHP));
+      localStorage.setItem('voland_v1_hp_last', String(now));
+      localStorage.setItem('voland_v1_mana_current', String(baseMANA));
+      localStorage.setItem('voland_v1_mana_last', String(now));
+    }catch(e){}
     localStorage.setItem('voland_v1_hero', selectedId);
     localStorage.setItem('voland_v1_name', name);
     localStorage.setItem('voland_hero', selectedId);
     localStorage.setItem('voland_name', name);
-    localStorage.setItem('voland_v1_created', Date.now().toString());
+    localStorage.setItem('voland_v1_created', String(now));
   } catch(e){
+    console.error(e);
     localStorage.setItem('voland_hero', selectedId);
     localStorage.setItem('voland_name', name);
   }
