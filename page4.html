@@ -167,12 +167,13 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
 .equip-slot.boots{width:100%;height:62px}
 .bar-row{display:flex;flex-direction:column;gap:5px}
 .bar-label{font-size:7px;letter-spacing:.15em;color:#6a7a8a;font-family:'JetBrains Mono',monospace;display:flex;justify-content:space-between}
-.bar-track{height:24px;background:#0a0e14;border-radius:5px;overflow:hidden;border:1px solid #1e2a32}
-.bar-fill{height:100%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;font-family:'JetBrains Mono',monospace}
-.bar-fill.hp{background:linear-gradient(90deg,#b33030,#e05050);color:#fff}
-.bar-fill.mana{background:linear-gradient(90deg,#1a4a9a,#2a6ad0);color:#fff}
-.bar-fill.stamina{background:linear-gradient(90deg,#1a7a4a,#3ad080);color:#fff}
-.bar-fill.xp{background:linear-gradient(90deg,#8a6a1a,#d0b040);color:#fff}
+.bar-track{height:24px;background:#0a0e14;border-radius:5px;overflow:hidden;border:1px solid #1e2a32;position:relative;display:flex;align-items:center;justify-content:center}
+.bar-fill{position:absolute;left:0;top:0;bottom:0;display:flex;align-items:center;justify-content:flex-start;font-size:9px;font-weight:700;font-family:'JetBrains Mono',monospace;transition:width .3s ease}
+.bar-fill.hp{background:linear-gradient(90deg,#b33030,#e05050)}
+.bar-fill.mana{background:linear-gradient(90deg,#1a4a9a,#2a6ad0)}
+.bar-fill.stamina{background:linear-gradient(90deg,#1a7a4a,#3ad080)}
+.bar-fill.xp{background:linear-gradient(90deg,#8a6a1a,#d0b040)}
+.bar-text{position:relative;z-index:2;font-size:9px;font-weight:700;font-family:'JetBrains Mono',monospace;color:#fff;text-align:center;pointer-events:none;width:100%;text-shadow:0 1px 2px rgba(0,0,0,.8)}
 .bars-inner{display:flex;flex-direction:column;gap:10px}
 .inventory-zone{flex:1;background:rgba(17,24,33,.25);padding:10px 12px;display:flex;flex-direction:column;overflow:auto;margin-top:4px}
 .inv-grid{display:grid;grid-template-columns:repeat(15,1fr);gap:4px;margin-top:6px}
@@ -517,8 +518,6 @@ function renderStats(){
   });
   statsPanel.appendChild(grid);
 }
-
-// STAMINA REGEN - keep BAG fix
 function getCurrentStatsForBarsP4(){
   let cur = {HP:1000, MANA:200};
   try{ cur = volandCalcStats().cur; }catch(e){}
@@ -547,8 +546,8 @@ function renderBars(){
     lvlInfo = typeof volandGetLevelInfo==='function' ? volandGetLevelInfo(totalXp) : (typeof volandGetCurrentLevelInfo==='function' ? volandGetCurrentLevelInfo() : lvlInfo);
   }catch(e){}
   let {curHP, curMANA, curSTAM, maxSTAM, stamPct} = getCurrentStatsForBarsP4();
-  let hpPct = Math.round(curHP/cur.HP*100);
-  let manaPct = Math.round(curMANA/cur.MANA*100);
+  let hpPct = Math.max(0, Math.min(100, Math.round(curHP/cur.HP*100)));
+  let manaPct = Math.max(0, Math.min(100, Math.round(curMANA/cur.MANA*100)));
   let bars=[
     {label:'HP',cls:'hp',cur:curHP,max:cur.HP,txt:`${curHP} / ${cur.HP}`,pct:hpPct},
     {label:'MANA',cls:'mana',cur:curMANA,max:cur.MANA,txt:`${curMANA} / ${cur.MANA}`,pct:manaPct},
