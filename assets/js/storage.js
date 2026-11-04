@@ -1205,3 +1205,139 @@ function volandResolveItemId(itemId){
     };
   }catch(e){}
 })();
+
+
+function volandUsePotion(potionId){
+ try{
+  let item = (typeof VOLAND_ITEMS!=='undefined') ? VOLAND_ITEMS.find(x=>x.id===potionId) : null;
+  if(!item || item.type!=='potion' || !item.potion) return false;
+  let p = item.potion;
+  let saves = volandGetSaves();
+  let idx = volandGetActiveIndex();
+  if(saves.length===0) return false;
+  let save = saves[idx];
+  let inv = save.inventory || [];
+  let invIdx = inv.findIndex(x=> (x.id||x)===potionId);
+  if(invIdx===-1){
+    if(typeof volandGetInventory==='function'){
+      let globalInv = volandGetInventory();
+      let gIdx = globalInv.findIndex(x=> (x.id||x)===potionId);
+      if(gIdx===-1) return false;
+    } else {
+      return false;
+    }
+  }
+  // apply effect - FIXED LOGIC per user: XL 1 hour
+  if(p.stat==='HP'){
+    if(p.percent){
+      if(p.value===100){
+        let max = volandCalcStats().cur.HP;
+        volandSetCurrentHP(max);
+      } else if(p.value===200){
+        // HP XL: full +100% for 1h or until HP drops to normal
+        let max = volandCalcStats().cur.HP;
+        volandSetCurrentHP(max * 2);
+        save.buffs = save.buffs || {};
+        save.buffs.hpBonus = {value: max, until: Date.now() + 3600000, type:'double_until_normal'};
+      }
+    } else {
+      let cur = volandGetCurrentHP();
+      let max = volandCalcStats().cur.HP;
+      let extra = (save.buffs && save.buffs.hpBonus) ? save.buffs.hpBonus.value : 0;
+      let cap = max + extra;
+      if(p.value>=1000) cap = max*2;
+      volandSetCurrentHP(Math.min(cur + p.value, cap));
+    }
+  } else if(p.stat==='MANA'){
+    if(p.percent){
+      if(p.value===100){
+        if(!p.tempBonus){
+          let max = volandCalcStats().cur.MANA;
+          volandSetCurrentMANA(max);
+        } else {
+          // MANA XL: +100% HP to existing HP (not full heal) for 1h
+          let maxH = volandCalcStats().cur.HP;
+          let curH = volandGetCurrentHP();
+          // adds +100% max to existing HP, not heal to 100%
+          let newHP = curH + maxH;
+          volandSetCurrentHP(Math.min(newHP, maxH*2));
+          let maxM = volandCalcStats().cur.MANA;
+          volandSetCurrentMANA(maxM);
+          save.buffs = save.buffs || {};
+          save.buffs.hpBonus = {value: maxH, until: Date.now() + 3600000, type:'additive'};
+        }
+      }
+    } else {
+      let cur = volandGetCurrentMANA();
+      let max = volandCalcStats().cur.MANA;
+      volandSetCurrentMANA(Math.min(cur + p.value, max));
+    }
+  } else if(p.stat==='STAM'){
+    if(p.percent){
+      if(p.value===100){
+        if(!p.tempBonus){
+          volandSetStamina(100);
+        } else {
+          volandSetStamina(100);
+          save.buffs = save.buffs || {};
+          save.buffs.staminaRegen = {value:1000, until: Date.now() + 3600000};
+        }
+      }
+    } else {
+      let cur = volandGetStamina();
+      volandSetStamina(Math.min(100, cur + p.value));
+    }
+  }
+  if(invIdx!==-1){
+    inv.splice(invIdx,1);
+    save.inventory = inv;
+    volandSaveSaves(saves);
+  }
+  if(typeof volandRemoveFromInventory==='function'){
+    volandRemoveFromInventory(potionId);
+  }
+  volandSaveSaves(saves);
+  return true;
+ }catch(e){ console.error('potion use error', e); return false; }
+}
+
+// Check and clear expired buffs - call on load
+function volandCheckBuffs(){
+ try{
+  let saves = volandGetSaves();
+  let idx = volandGetActiveIndex();
+  if(!saves[idx] || !saves[idx].buffs) return;
+  let b = saves[idx].buffs;
+  let now = Date.now();
+  let curHP = volandGetCurrentHP();
+  let maxHP = volandCalcStats().cur.HP;
+  if(b.hpBonus && now >= b.until){
+    // 1 hour expired
+    if(curHP > maxHP) volandSetCurrentHP(maxHP);
+    delete b.hpBonus;
+  } else if(b.hpBonus && b.hpBonus.type==='double_until_normal' && curHP <= maxHP){
+    // HP dropped to normal - remove buff early
+    delete b.hpBonus;
+  }
+  if(b.staminaRegen && now >= b.until){
+    delete b.staminaRegen;
+  }
+  volandSaveSaves(saves);
+ }catch(e){}
+}
+
+
+// Stamina regen boost handling - modify volandGetStamina regen if buff active
+function volandGetStaminaRegenBoost(){
+ try{
+  let saves = volandGetSaves();
+  let idx = volandGetActiveIndex();
+  if(saves[idx] && saves[idx].buffs && saves[idx].buffs.staminaRegen){
+    let b = saves[idx].buffs.staminaRegen;
+    if(Date.now() < b.until) return b.value;
+    else { delete saves[idx].buffs.staminaRegen; volandSaveSaves(saves); }
+  }
+ }catch(e){}
+ return 0;
+}
+
