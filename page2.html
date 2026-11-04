@@ -169,7 +169,8 @@ btn.onclick = ()=>{
     let saves = [];
     try{ saves = JSON.parse(localStorage.getItem('voland_v1_saves')||'[]'); }catch(e){ saves=[]; }
     if(!Array.isArray(saves)) saves=[];
-    // STARTER GEAR by class
+    saves = saves.filter(s=>s && s.hero && s.name);
+    // STARTER GEAR
     let starterEquip = {};
     let starterInv = [];
     try{
@@ -182,7 +183,6 @@ btn.onclick = ()=>{
       });
       starterInv = gearIds.map(id=>({id:id, time:Date.now()}));
     }catch(e){ starterEquip={}; starterInv=[]; }
-    // PER-HERO LVL1 ISOLATION - no leak
     let baseHP = 1000, baseMANA = 200;
     try{
       let h = VOLAND_HEROES[selectedId];
@@ -223,43 +223,27 @@ btn.onclick = ()=>{
       mission_stats:{kill_loc:{1:0,2:0,3:0}, kill_boss:0, kill_boss_diff:[], login_days:[today], ult_uses:0, win_streak:0, max_win_streak:0, collect_green:0, collect_blue:0, collect_legend:0, equip_dmg_max:0},
       missions_done:[]
     };
-    // slot handling - keep slot index
+    // SLOT LOGIC - per-hero isolation, no global wipe
     if(slot!==null && !isNaN(slot) && slot>=0 && slot<3){
-      let finalSaves=[null,null,null];
-      try{
-        let existing = JSON.parse(localStorage.getItem('voland_v1_saves')||'[]');
-        if(Array.isArray(existing)){
-          for(let i=0;i<3;i++){
-            if(i!==slot && existing[i]) finalSaves[i]=existing[i];
-          }
-        }
-      }catch(e){}
-      finalSaves[slot]=newSave;
-      saves = finalSaves.filter(x=>x!==null);
-      let activeIdx = saves.findIndex(s=>s && s.name===name && s.hero===selectedId && s.created===newSave.created);
-      if(activeIdx===-1) activeIdx = saves.length-1;
+      if(slot < saves.length){
+        saves[slot] = newSave;
+      } else {
+        // fill gaps if needed then push
+        while(saves.length < slot){ saves.push(null); }
+        saves[slot] = newSave;
+        saves = saves.filter(s=>s);
+      }
+      if(saves.length>3) saves = saves.slice(0,3);
+      let activeIdx = saves.findIndex(s=>s && s.created===newSave.created);
+      if(activeIdx===-1) activeIdx = slot < saves.length ? slot : saves.length-1;
       localStorage.setItem('voland_v1_saves', JSON.stringify(saves));
-      localStorage.setItem('voland_v1_active', activeIdx.toString());
+      localStorage.setItem('voland_v1_active', String(activeIdx));
     } else {
       if(saves.length>=3){ saves.shift(); }
       saves.push(newSave);
       localStorage.setItem('voland_v1_saves', JSON.stringify(saves));
-      localStorage.setItem('voland_v1_active', (saves.length-1).toString());
+      localStorage.setItem('voland_v1_active', String(saves.length-1));
     }
-    // clear global leaks for new hero - ensure no shared boss/missions
-    try{
-      localStorage.setItem('voland_v1_gold', '0');
-      localStorage.setItem('voland_v1_xp', '0');
-      localStorage.setItem('voland_v1_boss_kills', JSON.stringify({date:today, kills:{}}));
-      localStorage.setItem('voland_missions_stats', JSON.stringify(newSave.mission_stats));
-      localStorage.setItem('voland_missions_done', JSON.stringify([]));
-      localStorage.setItem('voland_v1_stamina', '100');
-      localStorage.setItem('voland_v1_stamina_last', String(now));
-      localStorage.setItem('voland_v1_hp_current', String(baseHP));
-      localStorage.setItem('voland_v1_hp_last', String(now));
-      localStorage.setItem('voland_v1_mana_current', String(baseMANA));
-      localStorage.setItem('voland_v1_mana_last', String(now));
-    }catch(e){}
     localStorage.setItem('voland_v1_hero', selectedId);
     localStorage.setItem('voland_v1_name', name);
     localStorage.setItem('voland_hero', selectedId);
