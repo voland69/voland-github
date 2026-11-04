@@ -344,11 +344,97 @@ function renderMarket(){
       </div>
     `;
   });
+  html += `</div></div>`;
+
+  // POTIONS MARKET
+  const POTION_PRICES = {
+    'potion-hp-xs':{buy:50,sell:15,desc:'+250 HP'},
+    'potion-hp-s':{buy:150,sell:45,desc:'+500 HP'},
+    'potion-hp-m':{buy:400,sell:120,desc:'+1000 HP'},
+    'potion-hp-l':{buy:1000,sell:300,desc:'100% HP'},
+    'potion-hp-xl':{buy:2500,sell:750,desc:'200% HP 1ч'},
+    'potion-mana-xs':{buy:50,sell:15,desc:'+100 MANA'},
+    'potion-mana-s':{buy:150,sell:45,desc:'+200 MANA'},
+    'potion-mana-m':{buy:400,sell:120,desc:'+400 MANA'},
+    'potion-mana-l':{buy:1000,sell:300,desc:'100% MANA'},
+    'potion-mana-xl':{buy:2500,sell:750,desc:'MANA 100% +100% HP 1ч'},
+    'potion-stam-xs':{buy:50,sell:15,desc:'+10 STAM'},
+    'potion-stam-s':{buy:150,sell:45,desc:'+20 STAM'},
+    'potion-stam-m':{buy:400,sell:120,desc:'+30 STAM'},
+    'potion-stam-l':{buy:1000,sell:300,desc:'100% STAM'},
+    'potion-stam-xl':{buy:2500,sell:750,desc:'100% STAM +1000% реген 1ч'},
+  };
+  html += `<div class="market-card" style="margin-top:16px"><div class="card-title">POTIONS • BANKИ</div><div class="market-grid">`;
+  Object.keys(POTION_PRICES).forEach(id=>{
+    let pr = POTION_PRICES[id];
+    let item = (typeof VOLAND_ITEMS!=='undefined') ? VOLAND_ITEMS.find(x=>x.id===id) : null;
+    let icon = item ? item.icon : '';
+    let name = item ? item.name : id;
+    let have = 0;
+    try{
+      let inv = volandGetInventory ? volandGetInventory() : [];
+      have = inv.filter(x=> (x.id||x)===id).length;
+    }catch(e){}
+    html += `
+      <div class="market-item" data-res="${id}">
+        <div class="market-item-icon"><img src="${icon}" onerror="this.parentElement.textContent='🧪'"></div>
+        <div class="market-item-info">
+          <div class="market-item-name">${name} x${have} • ${pr.desc}</div>
+          <div class="market-item-price" id="price-${id}">BUY ${pr.buy}g • SELL ${pr.sell}g</div>
+          <div class="market-actions" style="align-items:center">
+            <input class="input" id="qty-${id}" type="number" min="1" max="99" value="1" style="width:56px" oninput="updatePotionPrice('${id}')">
+            <button class="btn buy" id="buy-${id}" onclick="buyPotion('${id}', getQty('${id}'))">BUY</button>
+            <button class="btn sell" id="sell-${id}" onclick="sellPotion('${id}', getQty('${id}'))">SELL</button>
+          </div>
+        </div>
+      </div>
+    `;
+  });
   html += `</div><div class="log" id="marketLog"></div></div>`;
   el.innerHTML = html;
-  // per-item qty only
-  setTimeout(()=>{ Object.keys(RES_NAMES).forEach(id=>updateItemPrice(id)); }, 10);
+  setTimeout(()=>{
+    Object.keys(RES_NAMES).forEach(id=>{ try{updateItemPrice(id);}catch(e){} });
+    Object.keys(POTION_PRICES).forEach(id=>{ try{updatePotionPrice(id);}catch(e){} });
+  }, 10);
 }
+
+function updatePotionPrice(id){
+  try{
+    let qty = getQty(id);
+    let prices = { 'potion-hp-xs':50,'potion-hp-s':150,'potion-hp-m':400,'potion-hp-l':1000,'potion-hp-xl':2500,'potion-mana-xs':50,'potion-mana-s':150,'potion-mana-m':400,'potion-mana-l':1000,'potion-mana-xl':2500,'potion-stam-xs':50,'potion-stam-s':150,'potion-stam-m':400,'potion-stam-l':1000,'potion-stam-xl':2500 };
+    let price = prices[id]||50;
+    let el = document.getElementById('price-'+id);
+    if(el) el.textContent = 'BUY '+(price*qty)+'g • SELL '+Math.floor(price*0.3*qty)+'g';
+  }catch(e){}
+}
+function buyPotion(id, qty){
+  try{
+    let prices = { 'potion-hp-xs':50,'potion-hp-s':150,'potion-hp-m':400,'potion-hp-l':1000,'potion-hp-xl':2500,'potion-mana-xs':50,'potion-mana-s':150,'potion-mana-m':400,'potion-mana-l':1000,'potion-mana-xl':2500,'potion-stam-xs':50,'potion-stam-s':150,'potion-stam-m':400,'potion-stam-l':1000,'potion-stam-xl':2500 };
+    let price = (prices[id]||50)*qty;
+    let gold = volandGetGold();
+    if(gold < price){ logMarket('Недостаточно золота'); return; }
+    volandAddGold(-price);
+    for(let i=0;i<qty;i++){ if(typeof volandAddToInventory==='function') volandAddToInventory(id); }
+    logMarket('Куплено '+id+' x'+qty);
+    renderMarket();
+    updateTop();
+  }catch(e){ console.log(e); }
+}
+function sellPotion(id, qty){
+  try{
+    let prices = { 'potion-hp-xs':50,'potion-hp-s':150,'potion-hp-m':400,'potion-hp-l':1000,'potion-hp-xl':2500,'potion-mana-xs':50,'potion-mana-s':150,'potion-mana-m':400,'potion-mana-l':1000,'potion-mana-xl':2500,'potion-stam-xs':50,'potion-stam-s':150,'potion-stam-m':400,'potion-stam-l':1000,'potion-stam-xl':2500 };
+    let price = Math.floor((prices[id]||50)*0.3*qty);
+    let inv = volandGetInventory ? volandGetInventory() : [];
+    let have = inv.filter(x=> (x.id||x)===id).length;
+    if(have < qty){ logMarket('Недостаточно банок'); return; }
+    for(let i=0;i<qty;i++){ if(typeof volandRemoveFromInventory==='function') volandRemoveFromInventory(id); }
+    volandAddGold(price);
+    logMarket('Продано '+id+' x'+qty+' за '+price+'g');
+    renderMarket();
+    updateTop();
+  }catch(e){ console.log(e); }
+}
+
 
 function getQty(id){
   let el = document.getElementById('qty-'+id);
