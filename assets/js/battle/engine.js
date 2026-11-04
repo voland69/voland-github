@@ -49,7 +49,16 @@ if(loc==3){
 }
 const baseEDmg = eDmg;
 
-let eHp=eMaxHp, hHp=cur.HP, hMax=cur.HP, hMana=cur.MANA, hMaxMana=cur.MANA;
+// HP/MANA from storage with regen - after battle stays low then regens
+let storedHP = cur.HP, storedMANA = cur.MANA;
+try{
+  if(typeof volandGetCurrentHP==='function') storedHP = volandGetCurrentHP();
+  if(typeof volandGetCurrentMANA==='function') storedMANA = volandGetCurrentMANA();
+}catch(e){}
+let eHp=eMaxHp, hHp=storedHP, hMax=cur.HP, hMana=storedMANA, hMaxMana=cur.MANA;
+if(hHp<=0) hHp = Math.min(100, hMax); // if dead before, give 100 HP to start
+if(hMana<0) hMana = 0;
+
 let turn=1, enemyStun=0, cooldowns=[0,0,0,0,0], isBattleOver=false;
 let spellCount=0;
 
@@ -243,6 +252,11 @@ function showVictory(){
         }
       }
     }
+    // SAVE HP/MANA after battle - stays 780/1712 etc then regens 10/min and 3/min
+    try{
+      if(typeof volandSetCurrentHP==='function') volandSetCurrentHP(hHp);
+      if(typeof volandSetCurrentMANA==='function') volandSetCurrentMANA(hMana);
+    }catch(e){ console.log('save hp/mana err', e); }
     if(typeof volandAddKill==='function') volandAddKill();
     else {
       let saves=JSON.parse(localStorage.getItem('voland_v1_saves')||'[]');
@@ -261,6 +275,11 @@ function showVictory(){
 
 function showDefeat(){
   isBattleOver=true;
+  // SAVE HP/MANA even on defeat - stays low then regens
+  try{
+    if(typeof volandSetCurrentHP==='function') volandSetCurrentHP(Math.max(0, hHp));
+    if(typeof volandSetCurrentMANA==='function') volandSetCurrentMANA(Math.max(0, hMana));
+  }catch(e){}
   document.getElementById('modalIcon').textContent='💀';
   document.getElementById('modalTitle').textContent='ПОРАЖЕНИЕ!';
   document.getElementById('modalSub').textContent='Тебя победил '+enemyData.name;
