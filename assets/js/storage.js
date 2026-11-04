@@ -172,6 +172,25 @@ function volandAddKill(){ try{ let saves=volandGetSaves(); let idx=volandGetActi
 
 function volandGetMissionStats(){
  try{
+  // PER-HERO: check save first
+  let saves = volandGetSaves();
+  let idx = volandGetActiveIndex();
+  if(saves.length>0 && saves[idx] && saves[idx].mission_stats){
+    let s = saves[idx].mission_stats;
+    return {
+     kill_loc: s.kill_loc || {1:0,2:0,3:0},
+     kill_boss: s.kill_boss || 0,
+     kill_boss_diff: s.kill_boss_diff || [],
+     login_days: s.login_days || [],
+     ult_uses: s.ult_uses || 0,
+     win_streak: s.win_streak || 0,
+     max_win_streak: s.max_win_streak || 0,
+     collect_green: s.collect_green || 0,
+     collect_blue: s.collect_blue || 0,
+     collect_legend: s.collect_legend || 0,
+     equip_dmg_max: s.equip_dmg_max || 0
+    };
+  }
   let raw = localStorage.getItem('voland_missions_stats');
   let s = raw ? JSON.parse(raw) : {};
   return {
@@ -191,18 +210,44 @@ function volandGetMissionStats(){
 }
 
 function volandSaveMissionStats(stats){
+ try{
+  // PER-HERO save
+  let saves = volandGetSaves();
+  let idx = volandGetActiveIndex();
+  if(saves.length>0){
+    saves[idx].mission_stats = stats;
+    volandSaveSaves(saves);
+  }
+  localStorage.setItem('voland_missions_stats', JSON.stringify(stats));
+ }catch(e){}
+}
+
+function volandSaveMissionStats(stats){
  try{ localStorage.setItem('voland_missions_stats', JSON.stringify(stats)); }catch(e){}
 }
 
 function volandGetMissionsDone(){
  try{
+  let saves = volandGetSaves();
+  let idx = volandGetActiveIndex();
+  if(saves.length>0 && saves[idx] && Array.isArray(saves[idx].missions_done)){
+    return saves[idx].missions_done;
+  }
   let raw = localStorage.getItem('voland_missions_done');
   return raw ? JSON.parse(raw) : [];
  }catch(e){ return []; }
 }
 
 function volandSaveMissionsDone(done){
- try{ localStorage.setItem('voland_missions_done', JSON.stringify(done)); }catch(e){}
+ try{
+  let saves = volandGetSaves();
+  let idx = volandGetActiveIndex();
+  if(saves.length>0){
+    saves[idx].missions_done = done;
+    volandSaveSaves(saves);
+  }
+  localStorage.setItem('voland_missions_done', JSON.stringify(done));
+ }catch(e){}
 }
 
 function volandIsMissionUnlocked(mission, doneList){
@@ -299,7 +344,11 @@ function volandGetGold(){
   try{
     let saves=volandGetSaves();
     let idx=volandGetActiveIndex();
-    if(saves.length>0 && saves[idx] && typeof saves[idx].gold!=='undefined') return parseInt(saves[idx].gold)||0;
+    if(saves.length>0 && saves[idx]){
+      if(typeof saves[idx].gold!=='undefined') return parseInt(saves[idx].gold)||0;
+      // NEW HERO isolation: if save exists but no gold, return 0 (lvl1), don't leak global
+      return 0;
+    }
     let g = localStorage.getItem('voland_v1_gold');
     return parseInt(g||'0')||0;
   }catch(e){ return 0; }
@@ -329,7 +378,11 @@ function volandGetXp(){
   try{
     let saves=volandGetSaves();
     let idx=volandGetActiveIndex();
-    if(saves.length>0 && saves[idx] && typeof saves[idx].xp!=='undefined') return parseInt(saves[idx].xp)||0;
+    if(saves.length>0 && saves[idx]){
+      if(typeof saves[idx].xp!=='undefined') return parseInt(saves[idx].xp)||0;
+      // NEW HERO isolation: lvl1 if no xp
+      return 0;
+    }
     let x = localStorage.getItem('voland_v1_xp');
     return parseInt(x||'0')||0;
   }catch(e){ return 0; }
@@ -431,7 +484,11 @@ function volandGetResources(){
   try{
     let saves=volandGetSaves();
     let idx=volandGetActiveIndex();
-    if(saves.length>0 && saves[idx] && saves[idx].resources) return saves[idx].resources;
+    if(saves.length>0 && saves[idx]){
+      if(saves[idx].resources) return saves[idx].resources;
+      // NEW HERO isolation: empty resources for lvl1
+      return {};
+    }
     let raw = localStorage.getItem('voland_v1_resources');
     if(raw) return JSON.parse(raw);
     return {};
@@ -697,8 +754,10 @@ function volandGetStaminaData(){
       if(typeof s.stamina === 'number' && typeof s.lastStaminaUpdate === 'number'){
         return {current: s.stamina, last: s.lastStaminaUpdate};
       }
+      // NEW HERO isolation: full stamina for lvl1 hero, not global leak
+      return {current: VOLAND_STAMINA_MAX, last: Date.now()};
     }
-    // fallback localStorage
+    // fallback localStorage (no active save)
     let cur = localStorage.getItem('voland_v1_stamina');
     let last = localStorage.getItem('voland_v1_stamina_last');
     if(cur!==null && last!==null){
@@ -781,15 +840,20 @@ function volandGetHPData(){
   try{
     let saves = volandGetSaves();
     let idx = volandGetActiveIndex();
-    if(saves.length>0 && saves[idx] && typeof saves[idx].hp_current === 'number' && typeof saves[idx].lastHPUpdate === 'number'){
-      return {current: saves[idx].hp_current, last: saves[idx].lastHPUpdate};
+    if(saves.length>0 && saves[idx]){
+      if(typeof saves[idx].hp_current === 'number' && typeof saves[idx].lastHPUpdate === 'number'){
+        return {current: saves[idx].hp_current, last: saves[idx].lastHPUpdate};
+      }
+      // NEW HERO isolation: full HP for lvl1
+      let max = 1000;
+      try{ max = volandCalcStats().cur.HP || 1000; }catch(e){}
+      return {current: max, last: Date.now()};
     }
     let cur = localStorage.getItem('voland_v1_hp_current');
     let last = localStorage.getItem('voland_v1_hp_last');
     if(cur!==null && last!==null){
       return {current: parseInt(cur)||0, last: parseInt(last)||Date.now()};
     }
-    // first time: full HP
     let max = 1000;
     try{ max = volandCalcStats().cur.HP || 1000; }catch(e){}
     return {current: max, last: Date.now()};
@@ -843,8 +907,14 @@ function volandGetMANAData(){
   try{
     let saves = volandGetSaves();
     let idx = volandGetActiveIndex();
-    if(saves.length>0 && saves[idx] && typeof saves[idx].mana_current === 'number' && typeof saves[idx].lastMANAUpdate === 'number'){
-      return {current: saves[idx].mana_current, last: saves[idx].lastMANAUpdate};
+    if(saves.length>0 && saves[idx]){
+      if(typeof saves[idx].mana_current === 'number' && typeof saves[idx].lastMANAUpdate === 'number'){
+        return {current: saves[idx].mana_current, last: saves[idx].lastMANAUpdate};
+      }
+      // NEW HERO isolation: full MANA for lvl1
+      let max = 200;
+      try{ max = volandCalcStats().cur.MANA || 200; }catch(e){}
+      return {current: max, last: Date.now()};
     }
     let cur = localStorage.getItem('voland_v1_mana_current');
     let last = localStorage.getItem('voland_v1_mana_last');
@@ -911,12 +981,22 @@ function volandGetBossKillDateStr(){
 
 function volandGetBossKillsData(){
   try{
+    // PER-HERO: try save first
+    let saves = volandGetSaves();
+    let idx = volandGetActiveIndex();
+    if(saves.length>0 && saves[idx] && saves[idx].boss_kills_data){
+      let data = saves[idx].boss_kills_data;
+      let today = volandGetBossKillDateStr();
+      if(data.date !== today){
+        return {date: today, kills:{}};
+      }
+      return data;
+    }
     let raw = localStorage.getItem('voland_v1_boss_kills');
     if(!raw) return {date: volandGetBossKillDateStr(), kills:{}};
     let data = JSON.parse(raw);
     let today = volandGetBossKillDateStr();
     if(data.date !== today){
-      // new day - reset
       return {date: today, kills:{}};
     }
     return data;
