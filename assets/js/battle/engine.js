@@ -49,14 +49,14 @@ if(loc==3){
 }
 const baseEDmg = eDmg;
 
-// HP/MANA from storage with regen - after battle stays low then regens
+// HP/MANA from storage with regen - after battle stays low then regens 10/min 3/min
 let storedHP = cur.HP, storedMANA = cur.MANA;
 try{
   if(typeof volandGetCurrentHP==='function') storedHP = volandGetCurrentHP();
   if(typeof volandGetCurrentMANA==='function') storedMANA = volandGetCurrentMANA();
 }catch(e){}
 let eHp=eMaxHp, hHp=storedHP, hMax=cur.HP, hMana=storedMANA, hMaxMana=cur.MANA;
-if(hHp<=0) hHp = Math.min(100, hMax); // if dead before, give 100 HP to start
+if(hHp<=0) hHp = Math.min(100, hMax);
 if(hMana<0) hMana = 0;
 
 let turn=1, enemyStun=0, cooldowns=[0,0,0,0,0], isBattleOver=false;
@@ -252,11 +252,18 @@ function showVictory(){
         }
       }
     }
-    // SAVE HP/MANA after battle - stays 780/1712 etc then regens 10/min and 3/min
+    // SAVE HP/MANA after battle
     try{
       if(typeof volandSetCurrentHP==='function') volandSetCurrentHP(hHp);
       if(typeof volandSetCurrentMANA==='function') volandSetCurrentMANA(hMana);
-    }catch(e){ console.log('save hp/mana err', e); }
+    }catch(e){}
+    // BOSS DAILY LIMIT 10 per loc
+    try{
+      if(enemyData && enemyData.boss && typeof volandAddBossKill==='function'){
+        let newKills = volandAddBossKill(loc);
+        addLog(`🏆 Босс убит ${newKills}/10 за сегодня (лока ${loc})`, 'win');
+      }
+    }catch(e){}
     if(typeof volandAddKill==='function') volandAddKill();
     else {
       let saves=JSON.parse(localStorage.getItem('voland_v1_saves')||'[]');
@@ -270,19 +277,11 @@ function showVictory(){
         volandUpdateMissionStat('kill_boss_diff', null, loc+'-'+stage);
       }
     }
-    // BOSS DAILY LIMIT - increment 1/10 etc per loc
-    try{
-      if(enemyData && enemyData.boss && typeof volandAddBossKill==='function'){
-        let newKills = volandAddBossKill(loc);
-        addLog(`🏆 Босс убит ${newKills}/10 за сегодня (лока ${loc})`, 'win');
-      }
-    }catch(e){}
   }catch(e){ console.log('victory save error', e); }
 }
 
 function showDefeat(){
   isBattleOver=true;
-  // SAVE HP/MANA even on defeat - stays low then regens
   try{
     if(typeof volandSetCurrentHP==='function') volandSetCurrentHP(Math.max(0, hHp));
     if(typeof volandSetCurrentMANA==='function') volandSetCurrentMANA(Math.max(0, hMana));
