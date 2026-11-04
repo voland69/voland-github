@@ -260,14 +260,19 @@ function showVictory(){
       }
     }catch(e){}
     try{
+      console.log('[ENGINE] victory loc', loc, 'stage', stage, 'boss', enemyData && enemyData.boss);
       if(typeof volandUpdateMissionStat==='function'){
+        console.log('[ENGINE] calling kill_mob');
         volandUpdateMissionStat('kill_mob', loc, 1);
         if(enemyData && enemyData.boss){
+          console.log('[ENGINE] calling kill_boss');
           volandUpdateMissionStat('kill_boss', null, 1);
           volandUpdateMissionStat('kill_boss_diff', null, loc+'-'+stage);
         }
+      } else {
+        console.warn('[ENGINE] volandUpdateMissionStat not found');
       }
-    }catch(e){}
+    }catch(e){ console.error('[ENGINE] mission error', e); }
     if(typeof volandAddKill==='function') volandAddKill();
     else {
       let saves=JSON.parse(localStorage.getItem('voland_v1_saves')||'[]');
