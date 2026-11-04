@@ -387,6 +387,29 @@ function rebuildInv(){
   let droppedGearMap = {};
   try{
     if(typeof volandCleanupNonClassWeapons==='function'){ try{ volandCleanupNonClassWeapons(); }catch(e){} }
+
+    // FORCE REMOVE bow/sword/shield for mage from inventory immediately
+    try{
+      let saves = volandGetSaves();
+      let idx = volandGetActiveIndex();
+      if(saves[idx] && saves[idx].inventory){
+        let before = saves[idx].inventory.length;
+        saves[idx].inventory = saves[idx].inventory.filter(it=>{
+          let id = it.id || it;
+          if(typeof id!=='string') return true;
+          let b = id.split('-')[0];
+          // for mage, remove bow, sword, shield
+          if(['bow','sword','shield'].includes(b)) return false;
+          return true;
+        });
+        if(saves[idx].inventory.length !== before){
+          console.log('Force cleaned', before - saves[idx].inventory.length, 'weapons');
+          volandSaveSaves(saves);
+          localStorage.setItem('voland_v1_inventory', JSON.stringify(saves[idx].inventory));
+        }
+      }
+    }catch(e){ console.log('force cleanup error', e); }
+    
     if(typeof volandGetInventory==='function'){
       let dropped = volandGetInventory();
       for(let d of dropped){
@@ -397,6 +420,17 @@ function rebuildInv(){
         let base = item.baseId || item.id.split('-')[0];
         if(equippedBaseIds.has(base)) continue; // FIX: skip if base already equipped (e.g. red helmet when gold helmet equipped)
         
+        // HARD FILTER for mage - only staff
+        let heroClassForFilter = 'mage';
+        try{
+          let hid = (typeof volandGetHeroId==='function') ? volandGetHeroId() : 'necro-f-new';
+          const cmap = {'necro-f-new':'mage','necro-m':'tank','archer-f':'archer','archer-m':'archer','archmage-m':'mage','warrior-f':'warrior','warrior-m':'warrior','mage-f-new':'mage'};
+          heroClassForFilter = cmap[hid] || 'mage';
+        }catch(e){}
+        if(heroClassForFilter==='mage' && ['bow','sword','shield'].includes(base)){
+          console.log('Filtered non-mage weapon', base, item.id);
+          continue;
+        }
         if(allowedWeaponBases && ['bow','staff','sword','shield'].includes(base) && !allowedWeaponBases.has(base)){
           continue;
         }
