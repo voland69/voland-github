@@ -49,7 +49,6 @@ if(loc==3){
 }
 const baseEDmg = eDmg;
 
-// HP/MANA from storage with regen - after battle stays low then regens 10/min 3/min
 let storedHP = cur.HP, storedMANA = cur.MANA;
 try{
   if(typeof volandGetCurrentHP==='function') storedHP = volandGetCurrentHP();
@@ -58,7 +57,6 @@ try{
 let eHp=eMaxHp, hHp=storedHP, hMax=cur.HP, hMana=storedMANA, hMaxMana=cur.MANA;
 if(hHp<=0) hHp = Math.min(100, hMax);
 if(hMana<0) hMana = 0;
-
 let turn=1, enemyStun=0, cooldowns=[0,0,0,0,0], isBattleOver=false;
 let spellCount=0;
 
@@ -252,16 +250,22 @@ function showVictory(){
         }
       }
     }
-    // SAVE HP/MANA after battle
     try{
       if(typeof volandSetCurrentHP==='function') volandSetCurrentHP(hHp);
       if(typeof volandSetCurrentMANA==='function') volandSetCurrentMANA(hMana);
     }catch(e){}
-    // BOSS DAILY LIMIT 10 per loc
     try{
       if(enemyData && enemyData.boss && typeof volandAddBossKill==='function'){
         let newKills = volandAddBossKill(loc);
-        addLog(`🏆 Босс убит ${newKills}/10 за сегодня (лока ${loc})`, 'win');
+      }
+    }catch(e){}
+    try{
+      if(typeof volandUpdateMissionStat==='function'){
+        volandUpdateMissionStat('kill_mob', loc, 1);
+        if(enemyData && enemyData.boss){
+          volandUpdateMissionStat('kill_boss', null, 1);
+          volandUpdateMissionStat('kill_boss_diff', null, loc+'-'+stage);
+        }
       }
     }catch(e){}
     if(typeof volandAddKill==='function') volandAddKill();
@@ -285,6 +289,11 @@ function showDefeat(){
   try{
     if(typeof volandSetCurrentHP==='function') volandSetCurrentHP(Math.max(0, hHp));
     if(typeof volandSetCurrentMANA==='function') volandSetCurrentMANA(Math.max(0, hMana));
+  }catch(e){}
+  try{
+    if(typeof volandUpdateMissionStat==='function'){
+      volandUpdateMissionStat('win_streak', null, 0);
+    }
   }catch(e){}
   document.getElementById('modalIcon').textContent='💀';
   document.getElementById('modalTitle').textContent='ПОРАЖЕНИЕ!';
