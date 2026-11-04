@@ -50,8 +50,8 @@ function volandGetSaves(){
   try{
     let saves = volandSafeParse(localStorage.getItem(VOLAND_KEYS.saves), []);
     if(!Array.isArray(saves)) saves=[];
-    // filter invalid - but don't require hero in VOLAND_HEROES to avoid redirect loop when db fails
-    saves = saves.filter(s=> s && s.hero && s.name);
+    // filter invalid
+    saves = saves.filter(s=> s && s.hero && s.name && VOLAND_HEROES[s.hero]);
     return saves.slice(0,3);
   }catch(e){ return []; }
 }
@@ -460,19 +460,93 @@ function volandAddResource(id, add){
   }catch(e){ return 0; }
 }
 
+// FIX: dedup helpers - baseId + tier comparison (handles old ids via OLD_TO_NEW)
+function volandGetItemBaseId(itemId){
+  try{
+    let resolved = itemId;
+    if(typeof volandResolveItemId==='function'){
+      try{ resolved = volandResolveItemId(itemId); }catch(e){}
+    } else if(typeof VOLAND_OLD_TO_NEW!=='undefined' && VOLAND_OLD_TO_NEW[itemId]){
+      resolved = VOLAND_OLD_TO_NEW[itemId];
+    }
+    if(typeof VOLAND_ITEMS!=='undefined'){
+      let it = VOLAND_ITEMS.find(x=>x.id===resolved);
+      if(it && it.baseId) return it.baseId;
+      // try original id if resolved not found
+      let it2 = VOLAND_ITEMS.find(x=>x.id===itemId);
+      if(it2 && it2.baseId) return it2.baseId;
+    }
+    // fallback: first part before -
+    return (resolved||itemId).split('-')[0];
+  }catch(e){ return itemId.split('-')[0]; }
+}
+function volandCompareItemLevel(idA, idB){
+  try{
+    let ra=idA, rb=idB;
+    if(typeof volandResolveItemId==='function'){
+      try{ ra=volandResolveItemId(idA); rb=volandResolveItemId(idB); }catch(e){}
+    }
+    if(typeof VOLAND_ITEMS==='undefined') return 0;
+    let a = VOLAND_ITEMS.find(x=>x.id===ra) || VOLAND_ITEMS.find(x=>x.id===idA);
+    let b = VOLAND_ITEMS.find(x=>x.id===rb) || VOLAND_ITEMS.find(x=>x.id===idB);
+    if(!a || !b) return 0;
+    const tierOrder={bw:0,green:1,blue:2,red:3,gold:4};
+    let ta = tierOrder[a.tier]||0, tb = tierOrder[b.tier]||0;
+    if(ta!==tb) return ta-tb;
+    return (a.level||0)-(b.level||0);
+  }catch(e){ return 0; }
+}
+function volandDedupInventoryByBaseId(inv){
+  try{
+    if(!Array.isArray(inv)) return [];
+    let map={};
+    inv.forEach(entry=>{
+      if(!entry || !entry.id) return;
+      let base = volandGetItemBaseId(entry.id);
+      if(!map[base]){
+        map[base]=entry;
+      } else {
+        if(volandCompareItemLevel(entry.id, map[base].id)>0){
+          map[base]=entry;
+        }
+      }
+    });
+    let result = Object.values(map);
+    result.sort((a,b)=>(b.time||0)-(a.time||0));
+    return result;
+  }catch(e){ return inv; }
+}
+
 function volandGetInventory(){
   try{
     let saves=volandGetSaves();
     let idx=volandGetActiveIndex();
-    if(saves.length>0 && saves[idx] && saves[idx].inventory) return saves[idx].inventory;
-    let raw = localStorage.getItem('voland_v1_inventory');
-    if(raw) return JSON.parse(raw);
-    return [];
+    let rawInv=null;
+    if(saves.length>0 && saves[idx] && saves[idx].inventory) rawInv=saves[idx].inventory;
+    else {
+      let raw = localStorage.getItem('voland_v1_inventory');
+      if(raw) rawInv=JSON.parse(raw);
+    }
+    if(!rawInv) return [];
+    let cleaned = volandDedupInventoryByBaseId(rawInv);
+    if(cleaned.length!==rawInv.length){
+      try{
+        let saves2=volandGetSaves();
+        let idx2=volandGetActiveIndex();
+        if(saves2.length>0){
+          saves2[idx2].inventory=cleaned;
+          volandSaveSaves(saves2);
+        }
+        localStorage.setItem('voland_v1_inventory', JSON.stringify(cleaned));
+      }catch(e){}
+    }
+    return cleaned;
   }catch(e){ return []; }
 }
 function volandSaveInventory(inv){
   try{
     if(!Array.isArray(inv)) inv=[];
+    inv = volandDedupInventoryByBaseId(inv);
     let saves=volandGetSaves();
     let idx=volandGetActiveIndex();
     if(saves.length>0){
@@ -486,15 +560,28 @@ function volandSaveInventory(inv){
 function volandAddToInventory(itemId){
   try{
     let inv=volandGetInventory();
-    inv.push({id:itemId, time:Date.now()});
+    let base = volandGetItemBaseId(itemId);
+    let existingIdx = -1;
+    for(let i=0;i<inv.length;i++){
+      if(volandGetItemBaseId(inv[i].id)===base){
+        existingIdx=i;
+        break;
+      }
+    }
+    if(existingIdx>=0){
+      if(volandCompareItemLevel(itemId, inv[existingIdx].id)>0){
+        inv[existingIdx] = {id:itemId, time:Date.now()};
+      }
+    } else {
+      inv.push({id:itemId, time:Date.now()});
+    }
     return volandSaveInventory(inv);
   }catch(e){ return []; }
 }
 function volandRemoveFromInventory(itemId){
   try{
     let inv=volandGetInventory();
-    let idx=inv.findIndex(x=>x.id===itemId);
-    if(idx>=0){ inv.splice(idx,1); }
+    inv = inv.filter(x=>x.id!==itemId);
     return volandSaveInventory(inv);
   }catch(e){ return []; }
 }
@@ -535,17 +622,13 @@ function volandUpgradeItem(itemId){
     let check = volandCanUpgrade(itemId);
     if(!check.can) return {success:false, reason:check.reason};
     let cost = check.cost;
-    // deduct gold
     volandSetGold(volandGetGold() - cost.gold);
-    // deduct resources
     let res = volandGetResources();
     for(let rid in cost.resources){
       res[rid] = Math.max(0, (res[rid]||0) - cost.resources[rid]);
     }
     volandSetResources(res);
-    // replace item in inventory/equip
     let nextId = cost.nextId;
-    // if item is equipped, replace equipped
     let equipped = volandGetEquipRaw();
     let foundEquipped = false;
     for(let slot in equipped){
@@ -555,7 +638,6 @@ function volandUpgradeItem(itemId){
       }
     }
     if(foundEquipped){
-      // save equipped
       try{
         let saves=volandGetSaves();
         let idx=volandGetActiveIndex();
@@ -566,20 +648,269 @@ function volandUpgradeItem(itemId){
         localStorage.setItem('voland_v1_equip', JSON.stringify(equipped));
       }catch(e){}
     } else {
-      // if in inventory, replace
-      let inv = volandGetInventory();
-      let idx = inv.findIndex(x=>x.id===itemId);
-      if(idx>=0){
-        inv[idx].id = nextId;
+      try{
+        let inv = volandGetInventory();
+        let nextBase = volandGetItemBaseId(nextId);
+        let oldBase = volandGetItemBaseId(itemId);
+        let targetBase = nextBase || oldBase;
+        inv = inv.filter(x=> volandGetItemBaseId(x.id)!==targetBase && x.id!==itemId );
+        inv.push({id:nextId, time:Date.now()});
         volandSaveInventory(inv);
-      } else {
-        // if not found, add next and remove old if exists
-        volandAddToInventory(nextId);
+      }catch(e){
+        let inv = volandGetInventory();
+        let idx = inv.findIndex(x=>x.id===itemId);
+        if(idx>=0){
+          inv[idx].id = nextId;
+          volandSaveInventory(inv);
+        } else {
+          volandAddToInventory(nextId);
+        }
       }
     }
     return {success:true, nextId:nextId, cost:cost};
   }catch(e){ return {success:false, reason:'EXCEPTION '+e}; }
 }
+
+
+// === STAMINA / HP / MANA REGEN SYSTEM ===
+// Rates: STAMINA 2 per 3 min = 1 per 90 sec, HP 10 per min = 1 per 6 sec, MANA 3 per min = 1 per 20 sec
+const VOLAND_STAMINA_MAX = 100;
+const VOLAND_STAMINA_REGEN_MS = 90 * 1000; // 90 sec per 1 stamina
+const VOLAND_HP_REGEN_MS = 6 * 1000; // 6 sec per 1 HP (10 per min)
+const VOLAND_MANA_REGEN_MS = 20 * 1000; // 20 sec per 1 MANA (3 per min)
+
+const VOLAND_STAMINA_COSTS = {
+  // loc: { stage: cost }
+  1: {1:1, 2:2, 3:3, 4:5}, // desert 1,2,3 boss 5
+  2: {1:3, 2:4, 3:5, 4:10}, // forest 3,4,5 boss 10
+  3: {1:5, 2:6, 3:7, 4:15} // frost 5,6,7 boss 15
+};
+
+function volandGetStaminaMax(){ return VOLAND_STAMINA_MAX; }
+
+function volandGetStaminaData(){
+  try{
+    let saves = volandGetSaves();
+    let idx = volandGetActiveIndex();
+    if(saves.length>0 && saves[idx]){
+      let s = saves[idx];
+      if(typeof s.stamina === 'number' && typeof s.lastStaminaUpdate === 'number'){
+        return {current: s.stamina, last: s.lastStaminaUpdate};
+      }
+    }
+    // fallback localStorage
+    let cur = localStorage.getItem('voland_v1_stamina');
+    let last = localStorage.getItem('voland_v1_stamina_last');
+    if(cur!==null && last!==null){
+      return {current: parseInt(cur)||VOLAND_STAMINA_MAX, last: parseInt(last)||Date.now()};
+    }
+    return {current: VOLAND_STAMINA_MAX, last: Date.now()};
+  }catch(e){ return {current: VOLAND_STAMINA_MAX, last: Date.now()}; }
+}
+
+function volandSetStaminaData(current, last){
+  try{
+    current = Math.max(0, Math.min(VOLAND_STAMINA_MAX, parseInt(current)||0));
+    last = last || Date.now();
+    let saves = volandGetSaves();
+    let idx = volandGetActiveIndex();
+    if(saves.length>0){
+      saves[idx].stamina = current;
+      saves[idx].lastStaminaUpdate = last;
+      volandSaveSaves(saves);
+    }
+    localStorage.setItem('voland_v1_stamina', String(current));
+    localStorage.setItem('voland_v1_stamina_last', String(last));
+    return current;
+  }catch(e){ return current; }
+}
+
+function volandGetStamina(){
+  try{
+    let data = volandGetStaminaData();
+    let now = Date.now();
+    let elapsed = now - data.last;
+    if(elapsed < 0) elapsed = 0;
+    let regen = Math.floor(elapsed / VOLAND_STAMINA_REGEN_MS);
+    if(regen > 0){
+      let newCurrent = Math.min(VOLAND_STAMINA_MAX, data.current + regen);
+      let newLast = data.last + regen * VOLAND_STAMINA_REGEN_MS;
+      // if capped at max, reset last to now to avoid overflow
+      if(newCurrent >= VOLAND_STAMINA_MAX){
+        newCurrent = VOLAND_STAMINA_MAX;
+        newLast = now;
+      }
+      volandSetStaminaData(newCurrent, newLast);
+      return newCurrent;
+    }
+    return data.current;
+  }catch(e){ return VOLAND_STAMINA_MAX; }
+}
+
+function volandSetStamina(val){
+  return volandSetStaminaData(val, Date.now());
+}
+
+function volandAddStamina(delta){
+  let cur = volandGetStamina();
+  return volandSetStamina(cur + (parseInt(delta)||0));
+}
+
+function volandSpendStamina(cost){
+  let cur = volandGetStamina();
+  cost = parseInt(cost)||0;
+  if(cur < cost) return false;
+  volandSetStamina(cur - cost);
+  return true;
+}
+
+function volandGetStaminaCost(loc, stage){
+  try{
+    loc = parseInt(loc)||1;
+    stage = parseInt(stage)||1;
+    if(VOLAND_STAMINA_COSTS[loc] && VOLAND_STAMINA_COSTS[loc][stage]){
+      return VOLAND_STAMINA_COSTS[loc][stage];
+    }
+    // fallback: 1 + loc
+    return loc;
+  }catch(e){ return 1; }
+}
+
+// HP / MANA current with regen
+function volandGetHPData(){
+  try{
+    let saves = volandGetSaves();
+    let idx = volandGetActiveIndex();
+    if(saves.length>0 && saves[idx] && typeof saves[idx].hp_current === 'number' && typeof saves[idx].lastHPUpdate === 'number'){
+      return {current: saves[idx].hp_current, last: saves[idx].lastHPUpdate};
+    }
+    let cur = localStorage.getItem('voland_v1_hp_current');
+    let last = localStorage.getItem('voland_v1_hp_last');
+    if(cur!==null && last!==null){
+      return {current: parseInt(cur)||0, last: parseInt(last)||Date.now()};
+    }
+    // first time: full HP
+    let max = 1000;
+    try{ max = volandCalcStats().cur.HP || 1000; }catch(e){}
+    return {current: max, last: Date.now()};
+  }catch(e){ return {current: 1000, last: Date.now()}; }
+}
+
+function volandSetHPData(current, last){
+  try{
+    let max = 1000;
+    try{ max = volandCalcStats().cur.HP || 1000; }catch(e){}
+    current = Math.max(0, Math.min(max, parseInt(current)||0));
+    last = last || Date.now();
+    let saves = volandGetSaves();
+    let idx = volandGetActiveIndex();
+    if(saves.length>0){
+      saves[idx].hp_current = current;
+      saves[idx].lastHPUpdate = last;
+      volandSaveSaves(saves);
+    }
+    localStorage.setItem('voland_v1_hp_current', String(current));
+    localStorage.setItem('voland_v1_hp_last', String(last));
+    return current;
+  }catch(e){ return current; }
+}
+
+function volandGetCurrentHP(){
+  try{
+    let data = volandGetHPData();
+    let max = 1000;
+    try{ max = volandCalcStats().cur.HP || 1000; }catch(e){}
+    let now = Date.now();
+    let elapsed = now - data.last;
+    if(elapsed < 0) elapsed = 0;
+    let regen = Math.floor(elapsed / VOLAND_HP_REGEN_MS);
+    if(regen > 0 && data.current < max){
+      let newCurrent = Math.min(max, data.current + regen);
+      let newLast = data.last + regen * VOLAND_HP_REGEN_MS;
+      if(newCurrent >= max){ newLast = now; }
+      volandSetHPData(newCurrent, newLast);
+      return newCurrent;
+    }
+    return Math.min(max, data.current);
+  }catch(e){ try{ return volandCalcStats().cur.HP; }catch(_){ return 1000; } }
+}
+
+function volandSetCurrentHP(val){
+  return volandSetHPData(val, Date.now());
+}
+
+function volandGetMANAData(){
+  try{
+    let saves = volandGetSaves();
+    let idx = volandGetActiveIndex();
+    if(saves.length>0 && saves[idx] && typeof saves[idx].mana_current === 'number' && typeof saves[idx].lastMANAUpdate === 'number'){
+      return {current: saves[idx].mana_current, last: saves[idx].lastMANAUpdate};
+    }
+    let cur = localStorage.getItem('voland_v1_mana_current');
+    let last = localStorage.getItem('voland_v1_mana_last');
+    if(cur!==null && last!==null){
+      return {current: parseInt(cur)||0, last: parseInt(last)||Date.now()};
+    }
+    let max = 200;
+    try{ max = volandCalcStats().cur.MANA || 200; }catch(e){}
+    return {current: max, last: Date.now()};
+  }catch(e){ return {current: 200, last: Date.now()}; }
+}
+
+function volandSetMANAData(current, last){
+  try{
+    let max = 200;
+    try{ max = volandCalcStats().cur.MANA || 200; }catch(e){}
+    current = Math.max(0, Math.min(max, parseInt(current)||0));
+    last = last || Date.now();
+    let saves = volandGetSaves();
+    let idx = volandGetActiveIndex();
+    if(saves.length>0){
+      saves[idx].mana_current = current;
+      saves[idx].lastMANAUpdate = last;
+      volandSaveSaves(saves);
+    }
+    localStorage.setItem('voland_v1_mana_current', String(current));
+    localStorage.setItem('voland_v1_mana_last', String(last));
+    return current;
+  }catch(e){ return current; }
+}
+
+function volandGetCurrentMANA(){
+  try{
+    let data = volandGetMANAData();
+    let max = 200;
+    try{ max = volandCalcStats().cur.MANA || 200; }catch(e){}
+    let now = Date.now();
+    let elapsed = now - data.last;
+    if(elapsed < 0) elapsed = 0;
+    let regen = Math.floor(elapsed / VOLAND_MANA_REGEN_MS);
+    if(regen > 0 && data.current < max){
+      let newCurrent = Math.min(max, data.current + regen);
+      let newLast = data.last + regen * VOLAND_MANA_REGEN_MS;
+      if(newCurrent >= max){ newLast = now; }
+      volandSetMANAData(newCurrent, newLast);
+      return newCurrent;
+    }
+    return Math.min(max, data.current);
+  }catch(e){ try{ return volandCalcStats().cur.MANA; }catch(_){ return 200; } }
+}
+
+function volandSetCurrentMANA(val){
+  return volandSetMANAData(val, Date.now());
+}
+
+function volandGetStaminaInfo(){
+  let cur = volandGetStamina();
+  let max = volandGetStaminaMax();
+  let data = volandGetStaminaData();
+  let now = Date.now();
+  let elapsed = now - data.last;
+  let toNext = VOLAND_STAMINA_REGEN_MS - (elapsed % VOLAND_STAMINA_REGEN_MS);
+  if(cur >= max) toNext = 0;
+  return {cur, max, toNext, pct: Math.round(cur/max*100)};
+}
+
 
 function volandGetItemById(itemId){
   try{
