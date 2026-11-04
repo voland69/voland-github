@@ -169,8 +169,7 @@ btn.onclick = ()=>{
     let saves = [];
     try{ saves = JSON.parse(localStorage.getItem('voland_v1_saves')||'[]'); }catch(e){ saves=[]; }
     if(!Array.isArray(saves)) saves=[];
-    // if slot specified and empty, use it, otherwise append or replace oldest
-    // NEW: starter gear by class - 9 clothing same + weapon by class
+    // STARTER GEAR by class - 9 clothing + weapon by class
     let starterEquip = {};
     let starterInv = [];
     try{
@@ -178,14 +177,43 @@ btn.onclick = ()=>{
       gearIds.forEach(gid=>{
         try{
           let it = (typeof VOLAND_ITEMS!=='undefined') ? VOLAND_ITEMS.find(x=>x.id===gid) : null;
-          if(it && it.slot){
-            starterEquip[it.slot] = gid;
-          }
+          if(it && it.slot){ starterEquip[it.slot] = gid; }
         }catch(e){}
       });
       starterInv = gearIds.map(id=>({id:id, time:Date.now()}));
     }catch(e){ starterEquip={}; starterInv=[]; }
-    let newSave = {hero: selectedId, name: name, equip: starterEquip, inventory: starterInv, created: Date.now(), kills:0, quests:0, quests_total:40, pvp:0};
+    // if slot specified and empty, use it, otherwise append or replace oldest
+    let newSave = {
+      hero: selectedId,
+      name: name,
+      equip: starterEquip,
+      inventory: starterInv,
+      created: Date.now(),
+      kills:0,
+      quests:0,
+      quests_total:40,
+      pvp:0,
+      xp:0,
+      gold:0,
+      stat_points:0,
+      resources:{},
+      stamina:100,
+      lastStaminaUpdate:Date.now(),
+      hp_current:null,
+      lastHPUpdate:Date.now(),
+      mana_current:null,
+      lastMANAUpdate:Date.now(),
+      boss_kills_data:{date:(new Date().toISOString().slice(0,10)), kills:{}},
+      mission_stats:{kill_loc:{1:0,2:0,3:0}, kill_boss:0, kill_boss_diff:[], login_days:[(new Date().toISOString().slice(0,10))], ult_uses:0, win_streak:0, max_win_streak:0, collect_green:0, collect_blue:0, collect_legend:0, equip_dmg_max:0},
+      missions_done:[]
+    };
+    try{
+      let baseHP = 1000, baseMANA = 200;
+      try{ let h = VOLAND_HEROES[selectedId]; if(h && h.st){ baseHP = h.st.HP||1000; baseMANA = h.st.MANA||200; } }catch(e){}
+      try{ for(let gid in starterEquip){ let it = VOLAND_ITEMS.find(x=>x.id===starterEquip[gid]); if(it && it.bonus){ if(it.bonus.HP) baseHP += it.bonus.HP; if(it.bonus.MANA) baseMANA += it.bonus.MANA; } } }catch(e){}
+      newSave.hp_current = baseHP;
+      newSave.mana_current = baseMANA;
+    }catch(e){}
     if(slot!==null && !isNaN(slot) && slot>=0 && slot<3){
       saves[slot]=newSave;
       // fill gaps with null? compact to keep order but keep index
