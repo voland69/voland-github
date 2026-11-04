@@ -329,35 +329,23 @@ function volandGetMissionProgress(mission){
 }
 
 function volandUpdateMissionStat(type, loc, value){
- let stats = volandGetMissionStats();
- if(type==='kill_mob' && loc){
-  stats.kill_loc[loc] = (stats.kill_loc[loc]||0) + value;
- } else if(type==='kill_boss'){
-  stats.kill_boss = (stats.kill_boss||0) + value;
- } else if(type==='kill_boss_diff'){
-  if(!stats.kill_boss_diff.includes(value)) stats.kill_boss_diff.push(value);
- } else if(type==='login'){
-  let day = new Date().toISOString().slice(0,10);
-  if(!stats.login_days.includes(day)) stats.login_days.push(day);
- } else if(type==='ult'){
-  stats.ult_uses = (stats.ult_uses||0) + value;
- } else if(type==='win_streak'){
-  if(value>0){
-   stats.win_streak = (stats.win_streak||0) + 1;
-   stats.max_win_streak = Math.max(stats.max_win_streak||0, stats.win_streak);
-  } else {
-   stats.win_streak = 0;
+ try{
+  let stats = volandGetMissionStats();
+  if(type==='kill_mob' && loc){
+   let l = parseInt(loc)||1;
+   stats.kill_loc = stats.kill_loc || {1:0,2:0,3:0};
+   stats.kill_loc[l] = (stats.kill_loc[l]||0) + value;
+   stats.kill_loc[String(l)] = stats.kill_loc[l];
+   console.log('[MISSION] kill_mob loc', l, 'now', stats.kill_loc[l]);
+  } else if(type==='kill_boss'){
+   stats.kill_boss = (stats.kill_boss||0) + value;
+   console.log('[MISSION] kill_boss now', stats.kill_boss);
+  } else if(type==='kill_boss_diff'){
+   if(!stats.kill_boss_diff.includes(value)) stats.kill_boss_diff.push(value);
   }
- } else if(type==='collect_green'){
-  stats.collect_green = value;
- } else if(type==='collect_blue'){
-  stats.collect_blue = value;
- } else if(type==='collect_legend'){
-  stats.collect_legend = value;
- } else if(type==='equip_dmg'){
-  stats.equip_dmg_max = Math.max(stats.equip_dmg_max||0, value);
- }
- volandSaveMissionStats(stats);
+  volandSaveMissionStats(stats);
+  console.log('[MISSION] saved', JSON.stringify(stats).slice(0,400));
+ }catch(e){ console.error('[MISSION] update error', e); }
 }
 
 function volandCheckMissions(){
