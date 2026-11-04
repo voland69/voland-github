@@ -172,24 +172,34 @@ function volandAddKill(){ try{ let saves=volandGetSaves(); let idx=volandGetActi
 
 function volandGetMissionStats(){
  try{
-  // PER-HERO: check save first
   let saves = volandGetSaves();
   let idx = volandGetActiveIndex();
-  if(saves.length>0 && saves[idx] && saves[idx].mission_stats){
-    let s = saves[idx].mission_stats;
-    return {
-     kill_loc: s.kill_loc || {1:0,2:0,3:0},
-     kill_boss: s.kill_boss || 0,
-     kill_boss_diff: s.kill_boss_diff || [],
-     login_days: s.login_days || [],
-     ult_uses: s.ult_uses || 0,
-     win_streak: s.win_streak || 0,
-     max_win_streak: s.max_win_streak || 0,
-     collect_green: s.collect_green || 0,
-     collect_blue: s.collect_blue || 0,
-     collect_legend: s.collect_legend || 0,
-     equip_dmg_max: s.equip_dmg_max || 0
-    };
+  if(saves.length>0 && saves[idx]){
+    if(saves[idx].mission_stats){
+      let s = saves[idx].mission_stats;
+      return {
+       kill_loc: s.kill_loc || {1:0,2:0,3:0},
+       kill_boss: s.kill_boss || 0,
+       kill_boss_diff: s.kill_boss_diff || [],
+       login_days: s.login_days || [],
+       ult_uses: s.ult_uses || 0,
+       win_streak: s.win_streak || 0,
+       max_win_streak: s.max_win_streak || 0,
+       collect_green: s.collect_green || 0,
+       collect_blue: s.collect_blue || 0,
+       collect_legend: s.collect_legend || 0,
+       equip_dmg_max: s.equip_dmg_max || 0
+      };
+    } else {
+      let isNewHero = (parseInt(saves[idx].xp||0)===0);
+      if(isNewHero){
+        let today = new Date().toISOString().slice(0,10);
+        let empty = {kill_loc:{1:0,2:0,3:0}, kill_boss:0, kill_boss_diff:[], login_days:[today], ult_uses:0, win_streak:0, max_win_streak:0, collect_green:0, collect_blue:0, collect_legend:0, equip_dmg_max:0};
+        saves[idx].mission_stats = empty;
+        volandSaveSaves(saves);
+        return empty;
+      }
+    }
   }
   let raw = localStorage.getItem('voland_missions_stats');
   let s = raw ? JSON.parse(raw) : {};
@@ -230,8 +240,17 @@ function volandGetMissionsDone(){
  try{
   let saves = volandGetSaves();
   let idx = volandGetActiveIndex();
-  if(saves.length>0 && saves[idx] && Array.isArray(saves[idx].missions_done)){
-    return saves[idx].missions_done;
+  if(saves.length>0 && saves[idx]){
+    if(Array.isArray(saves[idx].missions_done)){
+      return saves[idx].missions_done;
+    } else {
+      let isNewHero = (parseInt(saves[idx].xp||0)===0);
+      if(isNewHero){
+        saves[idx].missions_done = [];
+        volandSaveSaves(saves);
+        return [];
+      }
+    }
   }
   let raw = localStorage.getItem('voland_missions_done');
   return raw ? JSON.parse(raw) : [];
@@ -981,21 +1000,33 @@ function volandGetBossKillDateStr(){
 
 function volandGetBossKillsData(){
   try{
-    // PER-HERO: try save first
     let saves = volandGetSaves();
     let idx = volandGetActiveIndex();
-    if(saves.length>0 && saves[idx] && saves[idx].boss_kills_data){
-      let data = saves[idx].boss_kills_data;
-      let today = volandGetBossKillDateStr();
-      if(data.date !== today){
-        return {date: today, kills:{}};
+    let today = volandGetBossKillDateStr();
+    if(saves.length>0 && saves[idx]){
+      if(saves[idx].boss_kills_data){
+        let data = saves[idx].boss_kills_data;
+        if(data.date !== today){
+          let empty = {date: today, kills:{}};
+          saves[idx].boss_kills_data = empty;
+          volandSaveSaves(saves);
+          localStorage.setItem('voland_v1_boss_kills', JSON.stringify(empty));
+          return empty;
+        }
+        return data;
+      } else {
+        let isNewHero = (parseInt(saves[idx].xp||0)===0);
+        if(isNewHero){
+          let empty = {date: today, kills:{}};
+          saves[idx].boss_kills_data = empty;
+          volandSaveSaves(saves);
+          return empty;
+        }
       }
-      return data;
     }
     let raw = localStorage.getItem('voland_v1_boss_kills');
     if(!raw) return {date: volandGetBossKillDateStr(), kills:{}};
     let data = JSON.parse(raw);
-    let today = volandGetBossKillDateStr();
     if(data.date !== today){
       return {date: today, kills:{}};
     }
