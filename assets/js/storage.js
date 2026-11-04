@@ -191,6 +191,14 @@ function volandGetMissionStats(){
        equip_dmg_max: s.equip_dmg_max || 0
       };
     } else {
+      let isNewHero = (parseInt(saves[idx].xp||0)===0 && (Date.now() - parseInt(saves[idx].created||0)) < 60000);
+      if(isNewHero){
+        let today = new Date().toISOString().slice(0,10);
+        let empty = {kill_loc:{1:0,2:0,3:0}, kill_boss:0, kill_boss_diff:[], login_days:[today], ult_uses:0, win_streak:0, max_win_streak:0, collect_green:0, collect_blue:0, collect_legend:0, equip_dmg_max:0};
+        saves[idx].mission_stats = empty;
+        volandSaveSaves(saves);
+        return empty;
+      }
       // OLD HERO - migrate from global to preserve lvl4
       let raw = localStorage.getItem('voland_missions_stats');
       let s = raw ? JSON.parse(raw) : null;
@@ -325,24 +333,35 @@ function volandGetMissionProgress(mission){
 }
 
 function volandUpdateMissionStat(type, loc, value){
- try{
-  console.log('[MISSION] update', type, loc, value, 'activeIdx', typeof volandGetActiveIndex==='function'?volandGetActiveIndex():'?');
-  let stats = volandGetMissionStats();
-  console.log('[MISSION] before', JSON.stringify(stats));
-  if(type==='kill_mob' && loc){
-   let key = String(loc);
-   stats.kill_loc[key] = (stats.kill_loc[key]||stats.kill_loc[parseInt(loc)]||0) + value;
-   // also ensure numeric key
-   stats.kill_loc[parseInt(loc)] = stats.kill_loc[key];
-  } else if(type==='kill_boss'){
-   stats.kill_boss = (stats.kill_boss||0) + value;
-  } else if(type==='kill_boss_diff'){
-   if(!stats.kill_boss_diff.includes(value)) stats.kill_boss_diff.push(value);
+ let stats = volandGetMissionStats();
+ if(type==='kill_mob' && loc){
+  stats.kill_loc[loc] = (stats.kill_loc[loc]||0) + value;
+ } else if(type==='kill_boss'){
+  stats.kill_boss = (stats.kill_boss||0) + value;
+ } else if(type==='kill_boss_diff'){
+  if(!stats.kill_boss_diff.includes(value)) stats.kill_boss_diff.push(value);
+ } else if(type==='login'){
+  let day = new Date().toISOString().slice(0,10);
+  if(!stats.login_days.includes(day)) stats.login_days.push(day);
+ } else if(type==='ult'){
+  stats.ult_uses = (stats.ult_uses||0) + value;
+ } else if(type==='win_streak'){
+  if(value>0){
+   stats.win_streak = (stats.win_streak||0) + 1;
+   stats.max_win_streak = Math.max(stats.max_win_streak||0, stats.win_streak);
+  } else {
+   stats.win_streak = 0;
   }
-  console.log('[MISSION] after', JSON.stringify(stats));
-  volandSaveMissionStats(stats);
-  console.log('[MISSION] saved, now', JSON.stringify(volandGetMissionStats()));
- }catch(e){ console.error('[MISSION] error', e); }
+ } else if(type==='collect_green'){
+  stats.collect_green = value;
+ } else if(type==='collect_blue'){
+  stats.collect_blue = value;
+ } else if(type==='collect_legend'){
+  stats.collect_legend = value;
+ } else if(type==='equip_dmg'){
+  stats.equip_dmg_max = Math.max(stats.equip_dmg_max||0, value);
+ }
+ volandSaveMissionStats(stats);
 }
 
 function volandCheckMissions(){
