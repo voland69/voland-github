@@ -534,9 +534,7 @@ function renderBars(){
   ];
   bars.forEach(b=>{
     const row=document.createElement('div'); row.className='bar-row';
-    const txt=b.txt||`${b.cur} / ${b.max}`;
-    const pct = (typeof b.pct==='number') ? b.pct : 100;
-    row.innerHTML=`<div class="bar-label"><span>${b.label}</span><span>${b.max}</span></div><div class="bar-track"><div class="bar-fill ${b.cls}" style="width:${pct}%">${txt}</div></div>`;
+    row.innerHTML=`<div class="bar-label"><span>${b.label}</span><span>${b.max}</span></div><div class="bar-track"><div class="bar-fill ${b.cls}" style="width:${b.pct}%"></div><div class="bar-text">${b.txt}</div></div>`;
     inner.appendChild(row);
   });
   barsPanel.appendChild(inner);
