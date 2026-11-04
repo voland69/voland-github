@@ -49,14 +49,16 @@ if(loc==3){
 }
 const baseEDmg = eDmg;
 
+// HP/MANA from storage with regen - after battle stays low then regens
 let storedHP = cur.HP, storedMANA = cur.MANA;
 try{
   if(typeof volandGetCurrentHP==='function') storedHP = volandGetCurrentHP();
   if(typeof volandGetCurrentMANA==='function') storedMANA = volandGetCurrentMANA();
 }catch(e){}
 let eHp=eMaxHp, hHp=storedHP, hMax=cur.HP, hMana=storedMANA, hMaxMana=cur.MANA;
-if(hHp<=0) hHp = Math.min(100, hMax);
+if(hHp<=0) hHp = Math.min(100, hMax); // if dead before, give 100 HP to start
 if(hMana<0) hMana = 0;
+
 let turn=1, enemyStun=0, cooldowns=[0,0,0,0,0], isBattleOver=false;
 let spellCount=0;
 
@@ -224,13 +226,15 @@ function showVictory(){
   document.getElementById('victoryModal').classList.add('show');
   renderSkillBar();
   // сохраняем награды - не конфликтуют с поражением
-    try{
+  try{
     if(typeof volandAddGold==='function') volandAddGold(goldReward);
     if(typeof volandAddXp==='function') volandAddXp(xpReward);
+    // ресурсы и шмот через drop систему если есть
     if(typeof volandRollDrops==='function' && typeof volandApplyDrops==='function'){
       let drop = volandRollDrops(enemyData);
       volandApplyDrops(drop);
     } else {
+      // fallback прямой ролл ресурсов
       if(enemyData && Array.isArray(enemyData.drops)){
         enemyData.drops.forEach(d=>{
           if(Math.random() < (d.chance||0)){
@@ -240,7 +244,27 @@ function showVictory(){
       }
       if(enemyData && enemyData.equipChance && Math.random() < enemyData.equipChance){
         if(typeof VOLAND_ITEMS!=='undefined' && typeof volandAddToInventory==='function'){
-          let pool = VOLAND_ITEMS.filter(it=>it.slot);
+          let heroId = (typeof volandGetHeroId==='function'?volandGetHeroId():'necro-f-new');
+          let classMap = {
+            'necro-f-new':'mage','necro-m':'tank','archer-f':'archer','archer-m':'archer',
+            'archmage-m':'mage','warrior-f':'warrior','warrior-m':'warrior','mage-f-new':'mage'
+          };
+          let heroClass = classMap[heroId] || 'mage';
+          let allowedWeaponBases = {
+            'mage':['staff'], 'archer':['bow'], 'warrior':['sword'], 'tank':['shield','sword']
+          };
+          let allowedBases = allowedWeaponBases[heroClass] || ['staff'];
+          let pool = VOLAND_ITEMS.filter(it=>{
+            if(!it.slot) return false;
+            if(it.type==='potion') return false;
+            if(it.slot==='weapon'){
+              let base = it.baseId || it.id.split('-')[0];
+              if(['sword','bow','staff','shield'].includes(base)){
+                return allowedBases.includes(base);
+              }
+            }
+            return true;
+          });
           if(pool.length>0){
             let pick = pool[Math.floor(Math.random()*pool.length)];
             volandAddToInventory(pick.id);
@@ -248,26 +272,47 @@ function showVictory(){
         }
       }
     }
+    // SAVE HP/MANA after battle - stays 780/1712 etc then regens 10/min and 3/min
     try{
       if(typeof volandSetCurrentHP==='function') volandSetCurrentHP(hHp);
       if(typeof volandSetCurrentMANA==='function') volandSetCurrentMANA(hMana);
-    }catch(e){}
-    try{
-      if(enemyData && enemyData.boss && typeof volandAddBossKill==='function'){
-        volandAddBossKill(loc);
-      }
-    }catch(e){}
-    try{
-      if(typeof volandUpdateMissionStat==='function'){
-        volandUpdateMissionStat('kill_mob', loc, 1);
-        if(enemyData && enemyData.boss){
-          volandUpdateMissionStat('kill_boss', null, 1);
-          volandUpdateMissionStat('kill_boss_diff', null, loc+'-'+stage);
-        }
-      }
-    }catch(e){}
+    }catch(e){ console.log('save hp/mana err', e); }
     if(typeof volandAddKill==='function') volandAddKill();
+    else {
+      let saves=JSON.parse(localStorage.getItem('voland_v1_saves')||'[]');
+      let idx=parseInt(localStorage.getItem('voland_v1_active')||'0');
+      if(saves[idx]){ saves[idx].kills=(saves[idx].kills||0)+1; localStorage.setItem('voland_v1_saves', JSON.stringify(saves)); }
+    }
+    if(typeof volandUpdateMissionStat==='function'){
+      volandUpdateMissionStat('kill_mob', loc, 1);
+      if(enemyData && enemyData.boss){
+        volandUpdateMissionStat('kill_boss', null, 1);
+        volandUpdateMissionStat('kill_boss_diff', null, loc+'-'+stage);
+      }
+    }
   }catch(e){ console.log('victory save error', e); }
+}
+
+function showDefeat(){
+  isBattleOver=true;
+  // SAVE HP/MANA even on defeat - stays low then regens
+  try{
+    if(typeof volandSetCurrentHP==='function') volandSetCurrentHP(Math.max(0, hHp));
+    if(typeof volandSetCurrentMANA==='function') volandSetCurrentMANA(Math.max(0, hMana));
+  }catch(e){}
+  document.getElementById('modalIcon').textContent='💀';
+  document.getElementById('modalTitle').textContent='ПОРАЖЕНИЕ!';
+  document.getElementById('modalSub').textContent='Тебя победил '+enemyData.name;
+  // при поражении - без золота и лута, только 50% XP
+  let xpReward = (enemyData && enemyData.xp) ? Math.floor(parseInt(enemyData.xp)*0.5) : 0;
+  try{
+    let goldEl=document.getElementById('rewGold');
+    let xpEl=document.getElementById('rewXp');
+    let lootEl=document.getElementById('rewLoot');
+    if(goldEl) goldEl.textContent='+0';
+    if(xpEl) xpEl.textContent='+'+xpReward;
+    if(lootEl) lootEl.textContent='0';
+  }catch(e){}
   try{
     if(typeof volandAddXp==='function' && xpReward>0) volandAddXp(xpReward);
     if(typeof volandUpdateMissionStat==='function'){
