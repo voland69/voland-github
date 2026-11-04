@@ -270,6 +270,13 @@ function showVictory(){
         volandUpdateMissionStat('kill_boss_diff', null, loc+'-'+stage);
       }
     }
+    // BOSS DAILY LIMIT - increment 1/10 etc per loc
+    try{
+      if(enemyData && enemyData.boss && typeof volandAddBossKill==='function'){
+        let newKills = volandAddBossKill(loc);
+        addLog(`🏆 Босс убит ${newKills}/10 за сегодня (лока ${loc})`, 'win');
+      }
+    }catch(e){}
   }catch(e){ console.log('victory save error', e); }
 }
 
