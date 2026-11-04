@@ -258,10 +258,6 @@ function volandSaveMissionStats(stats){
  }catch(e){}
 }
 
-function volandSaveMissionStats(stats){
- try{ localStorage.setItem('voland_missions_stats', JSON.stringify(stats)); }catch(e){}
-}
-
 function volandGetMissionsDone(){
  try{
   let saves = volandGetSaves();
