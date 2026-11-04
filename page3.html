@@ -215,9 +215,7 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
   </div>
 </div>
 
-<script src="./assets/js/db.js">
-// STAMINA/HP/MANA with regen - same as storage v20
-function getCurrentStatsForBars(){
+<script src="./assets/js/db.js">function getCurrentStatsForBars(){
   let cur = {HP:1000, MANA:200};
   try{ cur = volandCalcStats().cur; }catch(e){}
   let curHP = cur.HP, curMANA = cur.MANA, curSTAM = 100, maxSTAM = 100, stamPct = 100;
@@ -234,7 +232,6 @@ function getCurrentStatsForBars(){
   }catch(e){}
   return {cur, curHP, curMANA, curSTAM, maxSTAM, stamPct};
 }
-
 function renderBarsWithRegen(){
   try{
     let {cur, curHP, curMANA, curSTAM, maxSTAM, stamPct} = getCurrentStatsForBars();
@@ -243,8 +240,8 @@ function renderBarsWithRegen(){
       totalXp = typeof volandGetXp==='function' ? volandGetXp() : 0;
       lvlInfo = typeof volandGetLevelInfo==='function' ? volandGetLevelInfo(totalXp) : lvlInfo;
     }catch(e){}
-    let hpPct = Math.round(curHP/cur.HP*100);
-    let manaPct = Math.round(curMANA/cur.MANA*100);
+    let hpPct = Math.max(0, Math.min(100, Math.round(curHP/cur.HP*100)));
+    let manaPct = Math.max(0, Math.min(100, Math.round(curMANA/cur.MANA*100)));
     document.getElementById('barsPanel').innerHTML = `
       <div class="bar-row"><div class="bar-label">HP</div><div class="bar-track"><div class="bar-fill hp" style="width:${hpPct}%"></div><div class="bar-text">${curHP} / ${cur.HP}</div></div></div>
       <div class="bar-row"><div class="bar-label">MANA</div><div class="bar-track"><div class="bar-fill mana" style="width:${manaPct}%"></div><div class="bar-text">${curMANA} / ${cur.MANA}</div></div></div>
@@ -253,15 +250,9 @@ function renderBarsWithRegen(){
     `;
   }catch(e){ console.log('bars regen err', e); }
 }
-
-// Override original render and add interval
-let _origRenderBars = null;
-try{
-  if(typeof renderBars==='function') _origRenderBars = renderBars;
-}catch(e){}
-renderBars = renderBarsWithRegen;
 setInterval(renderBarsWithRegen, 1000);
 setTimeout(renderBarsWithRegen, 100);
+renderBarsWithRegen();
 
 </script>
 <script src="./assets/js/storage.js"></script>
@@ -293,12 +284,7 @@ let totalXp = 0;
 try{ totalXp = typeof volandGetXp==='function' ? volandGetXp() : 0; }catch(e){}
 let lvlInfo = typeof volandGetLevelInfo==='function' ? volandGetLevelInfo(totalXp) : {lvl:1,cur:0,need:1000,pct:0,total:totalXp};
 
-document.getElementById('barsPanel').innerHTML = `
-  <div class="bar-row"><div class="bar-label">HP</div><div class="bar-track"><div class="bar-fill hp" style="width:100%"></div><div class="bar-text">${cur.HP} / ${cur.HP}</div></div></div>
-  <div class="bar-row"><div class="bar-label">MANA</div><div class="bar-track"><div class="bar-fill mana" style="width:100%"></div><div class="bar-text">${cur.MANA} / ${cur.MANA}</div></div></div>
-  <div class="bar-row"><div class="bar-label">STAMINA</div><div class="bar-track"><div class="bar-fill stamina" style="width:100%"></div><div class="bar-text">100 / 100</div></div></div>
-  <div class="bar-row"><div class="bar-label">XP</div><div class="bar-track"><div class="bar-fill xp" style="width:${lvlInfo.pct}%"></div><div class="bar-text">${lvlInfo.cur} / ${lvlInfo.need}</div></div></div>
-`;
+// replaced by stamina regen
 
 // 4 new windows
 let playHours = volandGetPlaytimeHours();
