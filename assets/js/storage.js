@@ -325,35 +325,24 @@ function volandGetMissionProgress(mission){
 }
 
 function volandUpdateMissionStat(type, loc, value){
- let stats = volandGetMissionStats();
- if(type==='kill_mob' && loc){
-  stats.kill_loc[loc] = (stats.kill_loc[loc]||0) + value;
- } else if(type==='kill_boss'){
-  stats.kill_boss = (stats.kill_boss||0) + value;
- } else if(type==='kill_boss_diff'){
-  if(!stats.kill_boss_diff.includes(value)) stats.kill_boss_diff.push(value);
- } else if(type==='login'){
-  let day = new Date().toISOString().slice(0,10);
-  if(!stats.login_days.includes(day)) stats.login_days.push(day);
- } else if(type==='ult'){
-  stats.ult_uses = (stats.ult_uses||0) + value;
- } else if(type==='win_streak'){
-  if(value>0){
-   stats.win_streak = (stats.win_streak||0) + 1;
-   stats.max_win_streak = Math.max(stats.max_win_streak||0, stats.win_streak);
-  } else {
-   stats.win_streak = 0;
+ try{
+  console.log('[MISSION] update', type, loc, value, 'activeIdx', typeof volandGetActiveIndex==='function'?volandGetActiveIndex():'?');
+  let stats = volandGetMissionStats();
+  console.log('[MISSION] before', JSON.stringify(stats));
+  if(type==='kill_mob' && loc){
+   let key = String(loc);
+   stats.kill_loc[key] = (stats.kill_loc[key]||stats.kill_loc[parseInt(loc)]||0) + value;
+   // also ensure numeric key
+   stats.kill_loc[parseInt(loc)] = stats.kill_loc[key];
+  } else if(type==='kill_boss'){
+   stats.kill_boss = (stats.kill_boss||0) + value;
+  } else if(type==='kill_boss_diff'){
+   if(!stats.kill_boss_diff.includes(value)) stats.kill_boss_diff.push(value);
   }
- } else if(type==='collect_green'){
-  stats.collect_green = value;
- } else if(type==='collect_blue'){
-  stats.collect_blue = value;
- } else if(type==='collect_legend'){
-  stats.collect_legend = value;
- } else if(type==='equip_dmg'){
-  stats.equip_dmg_max = Math.max(stats.equip_dmg_max||0, value);
- }
- volandSaveMissionStats(stats);
+  console.log('[MISSION] after', JSON.stringify(stats));
+  volandSaveMissionStats(stats);
+  console.log('[MISSION] saved, now', JSON.stringify(volandGetMissionStats()));
+ }catch(e){ console.error('[MISSION] error', e); }
 }
 
 function volandCheckMissions(){
