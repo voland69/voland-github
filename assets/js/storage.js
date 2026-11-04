@@ -348,6 +348,37 @@ function volandUpdateMissionStat(type, loc, value){
  }catch(e){ console.error('[MISSION] update error', e); }
 }
 
+
+function volandClaimMission(id){
+ try{
+  let all = (typeof VOLAND_MISSIONS!=='undefined'&&VOLAND_MISSIONS.length>0)?VOLAND_MISSIONS:(typeof FALLBACK_MISSIONS!=='undefined'?FALLBACK_MISSIONS:[]);
+  let m = all.find(x=>x.id===id);
+  if(!m) return false;
+  let done = volandGetMissionsDone();
+  if(done.includes(id)) return false;
+  let prog = volandGetMissionProgress(m);
+  if(prog < m.target) return false;
+  // give rewards
+  if(m.reward){
+    if(m.reward.gold && typeof volandAddGold==='function') volandAddGold(m.reward.gold);
+    if(m.reward.xp && typeof volandAddXp==='function') volandAddXp(m.reward.xp);
+  }
+  done.push(id);
+  volandSaveMissionsDone(done);
+  // per-hero save
+  try{
+    let saves = volandGetSaves();
+    let idx = volandGetActiveIndex();
+    if(saves.length>0){
+      saves[idx].missions_done = done;
+      volandSaveSaves(saves);
+    }
+  }catch(e){}
+  return true;
+ }catch(e){ console.error('claim error', e); return false; }
+}
+
+
 function volandCheckMissions(){
  try{
   if(!window.VOLAND_MISSIONS) return [];
