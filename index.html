@@ -74,12 +74,17 @@ function render(){
           }
         }
         let active = (i===volandGetActiveIndex()) ? 'active' : '';
+        let lvlInfo = {lvl:1, cur:0, need:1000, pct:0};
+        try{
+          let xp = parseInt(s.xp||0);
+          if(typeof volandGetLevelInfo==='function') lvlInfo = volandGetLevelInfo(xp);
+        }catch(e){}
         html += `
           <div class="save-card ${active}">
             <img src="${hero.img}" onerror="this.src='./assets/heroes/warrior-f.webp'">
             <div class="hero-info">
-              <div class="hero-name">${(s.name||'').toUpperCase()}</div>
-              <div class="hero-stats">${hero.n} • ${hero.role}<br>HP ${cur.HP} • DMG ${cur.DMG} • DEF ${cur.DEF}<br>MANA ${cur.MANA} • CRIT ${cur.CRIT}% • SLOT ${i+1}</div>
+              <div class="hero-name">${(s.name||'').toUpperCase()} • LVL ${lvlInfo.lvl}</div>
+              <div class="hero-stats">${hero.n} • ${hero.role}<br>LVL ${lvlInfo.lvl} • XP ${lvlInfo.cur}/${lvlInfo.need} (${lvlInfo.pct}%)<br>HP ${cur.HP} • DMG ${cur.DMG} • DEF ${cur.DEF}<br>MANA ${cur.MANA} • CRIT ${cur.CRIT}% • SLOT ${i+1}</div>
             </div>
             <div class="btn primary" onclick="localStorage.setItem('voland_v1_active','${i}'); location.href='./page3.html'">CONTINUE → HERO ${i+1}</div>
             <div class="btn danger" onclick="if(confirm('Удалить героя ${s.name}?')){ let sv=volandGetSaves(); sv.splice(${i},1); localStorage.setItem('voland_v1_saves', JSON.stringify(sv)); if(parseInt(localStorage.getItem('voland_v1_active')||'0')>=sv.length) localStorage.setItem('voland_v1_active','0'); location.reload(); }">DELETE SLOT ${i+1}</div>
