@@ -1341,3 +1341,33 @@ function volandGetStaminaRegenBoost(){
  return 0;
 }
 
+
+
+function volandCleanupNonClassWeapons(){
+ try{
+  let heroId = volandGetHeroId();
+  let classMap = {'necro-f-new':'mage','necro-m':'tank','archer-f':'archer','archer-m':'archer','archmage-m':'mage','warrior-f':'warrior','warrior-m':'warrior','mage-f-new':'mage'};
+  let heroClass = classMap[heroId] || 'mage';
+  let allowed = {'mage':['staff'],'archer':['bow'],'warrior':['sword'],'tank':['shield','sword']}[heroClass] || ['staff'];
+  let saves = volandGetSaves();
+  let idx = volandGetActiveIndex();
+  if(!saves[idx]) return;
+  let inv = saves[idx].inventory || [];
+  let filtered = inv.filter(item=>{
+    let id = item.id || item;
+    if(typeof id!=='string') return true;
+    let base = id.split('-')[0];
+    if(['sword','bow','staff','shield'].includes(base)){
+      return allowed.includes(base);
+    }
+    return true;
+  });
+  if(filtered.length !== inv.length){
+    console.log('Cleaned non-class weapons', inv.length - filtered.length);
+    saves[idx].inventory = filtered;
+    volandSaveSaves(saves);
+  }
+ }catch(e){ console.log('cleanup error', e); }
+}
+try{ volandCleanupNonClassWeapons(); }catch(e){}
+
