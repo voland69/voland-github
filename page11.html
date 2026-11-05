@@ -208,4 +208,70 @@ function getAllHeroes(){
       let h = VH[id];
       list.push({id, n:h.n, role:h.role, img:h.img, st:h.st});
     });
-  }catch(e){ console.log('getAllHeroes error',
+  }catch(e){ console.log('getAllHeroes error', e); }
+  return list;
+}
+function renderHeroGrid(){
+  let grid = document.getElementById('heroGrid');
+  let heroes = getAllHeroes();
+  grid.innerHTML = '';
+  heroes.forEach(h=>{
+    let div = document.createElement('div');
+    div.className = 'hero-card' + (selectedHero===h.id ? ' selected':'');
+    div.innerHTML = `<img src="${h.img}" onerror="this.style.display='none'"><div class="hero-name">${h.n}</div><div class="hero-role">${h.role}</div><div class="hero-stats">HP ${h.st.HP} • DMG ${h.st.DMG}<br>DEF ${h.st.DEF} • MANA ${h.st.MANA}</div>`;
+    div.onclick = ()=> selectHero(h.id);
+    grid.appendChild(div);
+  });
+}
+function selectDiff(diff){
+  selectedDiff = diff; window.CURRENT_DIFF = diff;
+  document.querySelectorAll('.diff-btn').forEach(b=> b.classList.toggle('active', b.dataset.diff===diff));
+  updatePreview();
+}
+function selectHero(id){ selectedHero = id; renderHeroGrid(); updatePreview(); }
+function updatePreview(){
+  let section = document.getElementById('previewSection');
+  let area = document.getElementById('previewArea');
+  let btn = document.getElementById('fightBtn');
+  if(!selectedHero){ section.style.display='none'; return; }
+  section.style.display='block';
+  let heroes = getAllHeroes();
+  let botHero = heroes.find(x=>x.id===selectedHero);
+  let playerHeroId = 'necro-f-new';
+  try{ if(typeof volandGetHeroId==='function') playerHeroId = volandGetHeroId(); }catch(e){}
+  let playerHero = heroes.find(x=>x.id===playerHeroId) || heroes[0];
+  let mult = selectedDiff==='easy'?0.3 : selectedDiff==='hard'?1.3 : 1.0;
+  let botHp = Math.floor(botHero.st.HP * mult);
+  let botDmg = Math.floor(botHero.st.DMG * mult);
+  let botDef = Math.floor(botHero.st.DEF * mult);
+  area.innerHTML = `<div class="preview-card"><img src="${playerHero.img}"><div class="preview-info"><div class="preview-name">YOU • ${playerHero.n}</div><div class="preview-role">${playerHero.role}</div><div class="preview-stats">HP ${playerHero.st.HP} • DMG ${playerHero.st.DMG} • DEF ${playerHero.st.DEF}<br>100% • Твои статы из инвентаря</div></div></div><div style="font:900 20px Cinzel Decorative;color:#e6d5a0">VS</div><div class="preview-card" style="border-color:${mult<1?'#3ad080':mult>1?'#e05050':'#e6d5a0'}"><img src="${botHero.img}"><div class="preview-info"><div class="preview-name">BOT • ${botHero.n} • ${selectedDiff.toUpperCase()}</div><div class="preview-role">${botHero.role}</div><div class="preview-stats">HP ${botHp} • DMG ${botDmg} • DEF ${botDef}<br>${Math.round(mult*100)}% • ${selectedDiff==='easy'?'Слабый AI':selectedDiff==='hard'?'Умный AI +30%':'Умный AI'}</div></div></div>`;
+  btn.disabled = false; btn.textContent = `FIGHT vs ${botHero.n} [${selectedDiff.toUpperCase()} ${Math.round(mult*100)}%]`; btn.style.display='block';
+}
+function startFight(){
+  if(!selectedHero) return;
+  let playerHeroId = 'necro-f-new';
+  try{ if(typeof volandGetHeroId==='function') playerHeroId = volandGetHeroId(); }catch(e){}
+  document.getElementById('lobby').style.display='none';
+  document.getElementById('battleArea').classList.add('active');
+  document.getElementById('resultModal').classList.remove('show');
+  window.CURRENT_DIFF = selectedDiff;
+  if(window.pvpInit) window.pvpInit(playerHeroId, selectedHero, selectedDiff);
+}
+function backToLobby(){
+  document.getElementById('battleArea').classList.remove('active');
+  document.getElementById('lobby').style.display='flex';
+  document.getElementById('resultModal').classList.remove('show');
+  document.getElementById('battleLog').innerHTML='';
+}
+function rematch(){
+  document.getElementById('resultModal').classList.remove('show');
+  document.getElementById('battleLog').innerHTML='';
+  let playerHeroId = 'necro-f-new';
+  try{ if(typeof volandGetHeroId==='function') playerHeroId = volandGetHeroId(); }catch(e){}
+  if(window.pvpInit) window.pvpInit(playerHeroId, selectedHero, selectedDiff);
+}
+document.addEventListener('DOMContentLoaded', ()=>{ renderHeroGrid(); updatePreview(); });
+setTimeout(()=>{ renderHeroGrid(); }, 300);
+</script>
+</body>
+</html>
