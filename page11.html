@@ -202,7 +202,13 @@ let selectedDiff = 'medium';
 window.CURRENT_DIFF = 'medium';
 function getAllHeroes(){
   let list = [];
-  try{ if(window.VOLAND_HEROES){ Object.keys(VOLAND_HEROES).forEach(id=>{ let h = VOLAND_HEROES[id]; list.push({id, n:h.n, role:h.role, img:h.img, st:h.st}); }); } }catch(e){}
+  try{
+    let VH = (typeof VOLAND_HEROES!=='undefined' ? VOLAND_HEROES : (window.VOLAND_HEROES||{}));
+    Object.keys(VH).forEach(id=>{
+      let h = VH[id];
+      list.push({id, n:h.n, role:h.role, img:h.img, st:h.st});
+    });
+  }catch(e){ console.log('getAllHeroes error', e); }
   return list;
 }
 function renderHeroGrid(){
@@ -265,7 +271,7 @@ function rematch(){
   if(window.pvpInit) window.pvpInit(playerHeroId, selectedHero, selectedDiff);
 }
 document.addEventListener('DOMContentLoaded', ()=>{ renderHeroGrid(); updatePreview(); });
-setTimeout(()=>{ renderHeroGrid(); }, 200);
+setTimeout(()=>{ renderHeroGrid(); }, 300);
 </script>
 </body>
 </html>
