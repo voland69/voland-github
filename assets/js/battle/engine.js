@@ -301,6 +301,9 @@ function showVictory(){
       if(enemyData && enemyData.boss){
         volandUpdateMissionStat('kill_boss', null, 1);
         volandUpdateMissionStat('kill_boss_diff', null, loc+'-'+stage);
+        if(typeof volandAddBossKill==='function'){
+          try{ volandAddBossKill(loc); }catch(e){ console.log('boss kill save err', e); }
+        }
       }
     }
   }catch(e){ console.log('victory save error', e); }
