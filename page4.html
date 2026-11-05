@@ -358,7 +358,14 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
   </div>
 </div>
 
-<script src="./assets/js/db.js"></script>
+<script src="./assets/js/db/heroes.js"></script>
+<script src="./assets/js/db/tiers.js"></script>
+<script src="./assets/js/db/resources.js"></script>
+<script src="./assets/js/db/items.js"></script>
+<script src="./assets/js/db/starter.js"></script>
+<script src="./assets/js/db/locations.js"></script>
+<script src="./assets/js/db/enemies.js"></script>
+<script src="./assets/js/db/missions.js"></script>
 <script src="./assets/js/storage.js"></script>
 <script>
 if (!volandHasSave()){ location.href='./page2.html'; }
@@ -460,12 +467,12 @@ function rebuildInv(){
     let starterIds = [];
     if(heroId && typeof VOLAND_GET_STARTER_GEAR_FOR_HERO==='function'){
       starterIds = VOLAND_GET_STARTER_GEAR_FOR_HERO(heroId);
+    } else if(typeof VOLAND_BASE_CLOTHING_IDS!=='undefined' && typeof VOLAND_HERO_WEAPON_TYPE!=='undefined' && typeof VOLAND_WEAPON_SETS!=='undefined'){
+      let wType = VOLAND_HERO_WEAPON_TYPE[heroId] || 'sword';
+      let weapons = VOLAND_WEAPON_SETS[wType] || ['sword-bw-lvl1','shield-bw-lvl1'];
+      starterIds = [...VOLAND_BASE_CLOTHING_IDS, ...weapons];
     } else if(typeof VOLAND_BASE_CLOTHING_IDS!=='undefined'){
       starterIds = [...VOLAND_BASE_CLOTHING_IDS, 'sword-bw-lvl1','shield-bw-lvl1'];
-    } else if(typeof VOLAND_STARTER_GEAR_IDS !== 'undefined'){
-      starterIds = VOLAND_STARTER_GEAR_IDS;
-    } else if(typeof VOLAND_ITEMS !== 'undefined'){
-      starterIds = VOLAND_ITEMS.filter(it=>it.tier==='bw' && it.level===1).map(it=>it.id).slice(0,13);
     }
     starterIds.forEach(sid=>{
       if(inv.length>=50) return;
