@@ -1,4 +1,4 @@
-// VOLAND PVP ENGINE V1 - Bot with 3 difficulties, uses skills with ума
+// VOLAND PVP ENGINE V1 - Bot with 3 difficulties, uses skills with ума - FIXED
 (function(){
 const DIFF_MULT = { easy: 0.3, medium: 1.0, hard: 1.3 };
 let player = null;
@@ -13,10 +13,17 @@ let logEl, pHpBar, bHpBar, pManaBar, bManaBar, pHpText, bHpText, pManaText, bMan
 
 function rand(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
 
+function getVH(){ 
+  if(typeof VOLAND_HEROES !== 'undefined') return VOLAND_HEROES;
+  if(typeof window !== 'undefined' && window.VOLAND_HEROES) return window.VOLAND_HEROES;
+  return {};
+}
+
 function getHeroBase(heroId){
   try{
-    if(window.VOLAND_HEROES && VOLAND_HEROES[heroId]){
-      let h = VOLAND_HEROES[heroId];
+    let VH = getVH();
+    if(VH && VH[heroId]){
+      let h = VH[heroId];
       return { n: h.n, img: h.img, role: h.role, st: {...h.st}, sk: h.sk };
     }
   }catch(e){}
@@ -28,12 +35,24 @@ function calcStats(heroId, mult){
   let st = base.st;
   let cur = null;
   if(heroId === window.PLAYER_HERO_ID){
-    try{ if(typeof volandCalcStats==='function'){ let calc = volandCalcStats(); cur = {...calc}; } }catch(e){}
+    try{ 
+      if(typeof volandCalcStats==='function'){ 
+        let calc = volandCalcStats(); 
+        if(calc && calc.cur) cur = {...calc.cur};
+        else if(calc && calc.HP) cur = {...calc};
+      } 
+    }catch(e){ console.log('calc error', e); }
   }
   if(!cur){
     cur = { HP: Math.floor(st.HP * mult), DEF: Math.floor(st.DEF * mult), DMG: Math.floor(st.DMG * mult), MANA: Math.floor(st.MANA * mult), CRIT: st.CRIT || 15, DODGE: st.DODGE || 10, PARRY: st.PARRY || 0 };
   } else {
-    if(mult !== 1.0){ cur.HP = Math.floor(cur.HP * mult); cur.DMG = Math.floor(cur.DMG * mult); cur.DEF = Math.floor(cur.DEF * mult); cur.MANA = Math.floor(cur.MANA * mult); }
+    if(mult !== 1.0){ cur.HP = Math.floor((cur.HP||st.HP) * mult); cur.DMG = Math.floor((cur.DMG||st.DMG) * mult); cur.DEF = Math.floor((cur.DEF||st.DEF) * mult); cur.MANA = Math.floor((cur.MANA||st.MANA) * mult); }
+    cur.HP = cur.HP || st.HP;
+    cur.DMG = cur.DMG || st.DMG;
+    cur.DEF = cur.DEF || st.DEF;
+    cur.MANA = cur.MANA || st.MANA;
+    cur.CRIT = cur.CRIT || st.CRIT || 15;
+    cur.DODGE = cur.DODGE || st.DODGE || 10;
   }
   return { base, cur };
 }
@@ -88,13 +107,13 @@ function getSkillMeta(idx){
 
 function getPlayerSkillMeta(idx){
   if(idx===0) return {name:'ATK', mana:0, cd:1, mult:1.0};
-  try{ let hero = window.VOLAND_HEROES ? VOLAND_HEROES[player.id] : null; if(hero && hero.sk && hero.sk[idx]){ let meta = getSkillMeta(idx); meta.name = hero.sk[idx][0]; if(idx===4) meta.mult = 5.5; return meta; } }catch(e){}
+  try{ let VH = getVH(); let hero = VH ? VH[player.id] : null; if(hero && hero.sk && hero.sk[idx]){ let meta = getSkillMeta(idx); meta.name = hero.sk[idx][0]; if(idx===4) meta.mult = 5.5; return meta; } }catch(e){}
   return getSkillMeta(idx);
 }
 
 function getBotSkillMeta(idx, diff){
   let meta = getSkillMeta(idx);
-  try{ let hero = window.VOLAND_HEROES ? VOLAND_HEROES[bot.id] : null; if(hero && hero.sk && hero.sk[idx]){ meta.name = hero.sk[idx][0]; } }catch(e){}
+  try{ let VH = getVH(); let hero = VH ? VH[bot.id] : null; if(hero && hero.sk && hero.sk[idx]){ meta.name = hero.sk[idx][0]; } }catch(e){}
   if(diff==='easy') meta.mult *= 0.9; if(diff==='hard') meta.mult *= 1.2;
   if(idx===4){ if(diff==='easy') meta.mult = 4.0; if(diff==='medium') meta.mult = 5.5; if(diff==='hard') meta.mult = 7.0; }
   return meta;
