@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>VOLAND - MARKET</title>
+<title>VOLAND - MARKET V1</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
@@ -12,147 +12,103 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 .bg{position:fixed;inset:0;z-index:0;background:url("./assets/heroes/bg-battlefield.webp") center/cover no-repeat fixed}
 .bg:after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.6)}
 .wrap{position:fixed;inset:0;display:flex;z-index:2}
-
-/* NAV - tooltip only fixed */
 .left-nav{
-  width:60px !important;
-  min-width:60px !important;
-  max-width:60px !important;
-  flex:0 0 60px !important;
-  background:rgba(18,24,30,.94) !important;
-  border-right:1px solid #2a3a4a !important;
-  display:flex !important;
-  flex-direction:column !important;
-  justify-content:space-between !important;
-  align-items:center !important;
-  height:100vh !important;
-  height:100dvh !important;
-  overflow:visible !important;
-  overflow-y:visible !important;
-  overflow-x:visible !important;
-  scrollbar-width:none !important;
-  -ms-overflow-style:none !important;
-  padding:6px 4px !important;
-  gap:0 !important;
-  position:relative !important;
-  z-index:20 !important;
+  width:60px !important;min-width:60px !important;max-width:60px !important;flex:0 0 60px !important;
+  background:rgba(18,24,30,.94) !important;border-right:1px solid #2a3a4a !important;
+  display:flex !important;flex-direction:column !important;justify-content:space-between !important;align-items:center !important;
+  height:100vh !important;height:100dvh !important;overflow:visible !important;padding:6px 4px !important;gap:0 !important;position:relative !important;z-index:20 !important;
 }
-.left-nav::-webkit-scrollbar{display:none !important;width:0 !important;height:0 !important;}
-.nav-top{
-  display:flex !important;
-  flex-direction:column !important;
-  gap:4px !important;
-  align-items:center !important;
-  width:100% !important;
-  overflow:visible !important;
-}
-.nav-bottom{
-  margin-top:auto !important;
-  padding-top:8px !important;
-  border-top:1px solid rgba(255,255,255,.08) !important;
-  width:100% !important;
-  display:flex !important;
-  flex-direction:column !important;
-  align-items:center !important;
-  gap:4px !important;
-  overflow:visible !important;
-}
-.nav-group{
-  cursor:pointer !important;
-  display:flex !important;
-  flex-direction:column !important;
-  align-items:center !important;
-  gap:0 !important;
-  width:100% !important;
-  position:relative !important;
-  overflow:visible !important;
-}
-.nav-item{
-  width:52px !important;
-  height:52px !important;
-  min-width:52px !important;
-  min-height:52px !important;
-  background:#1a252f !important;
-  border:1px solid #2a3a4a !important;
-  border-radius:9px !important;
-  display:flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-  opacity:.75 !important;
-  transition:.2s !important;
-  flex-shrink:0 !important;
-  padding:0 !important;
-  overflow:hidden !important;
-}
-.nav-item.active{
-  border-color:#e6d5a0 !important;
-  opacity:1 !important;
-  background:#1e2f3e !important;
-  box-shadow:0 0 10px rgba(230,213,160,.3) !important;
-}
-.nav-item:hover{
-  opacity:1 !important;
-  border-color:#e6d5a0 !important;
-}
-.nav-item img{
-  width:100% !important;
-  height:100% !important;
-  object-fit:cover !important;
-  display:block !important;
-  border-radius:8px !important;
-}
-.nav-label{
-  position:fixed !important;
-  left:64px !important;
-  background:rgba(20,26,34,.96) !important;
-  border:1px solid #e6d5a0 !important;
-  color:#e6d5a0 !important;
-  padding:5px 9px !important;
-  border-radius:6px !important;
-  font:700 8px 'JetBrains Mono',monospace !important;
-  letter-spacing:.15em !important;
-  white-space:nowrap !important;
-  opacity:0 !important;
-  pointer-events:none !important;
-  transition:.18s !important;
-  z-index:99999 !important;
-  box-shadow:0 4px 16px rgba(0,0,0,.5) !important;
-}
-.nav-group:hover .nav-label{
-  opacity:1 !important;
-}
-.wrap{
-  display:flex !important;
-  position:fixed !important;
-  inset:0 !important;
-}
-
-/* MARKET LAYOUT like WORKSHOP */
+.left-nav::-webkit-scrollbar{display:none !important}
+.nav-top{display:flex !important;flex-direction:column !important;gap:4px !important;align-items:center !important;width:100% !important;overflow:visible !important}
+.nav-bottom{margin-top:auto !important;padding-top:8px !important;border-top:1px solid rgba(255,255,255,.08) !important;width:100% !important;display:flex !important;flex-direction:column !important;align-items:center !important;gap:4px !important;overflow:visible !important}
+.nav-group{cursor:pointer !important;display:flex !important;flex-direction:column !important;align-items:center !important;gap:0 !important;width:100% !important;position:relative !important;overflow:visible !important}
+.nav-item{width:52px !important;height:52px !important;min-width:52px !important;min-height:52px !important;background:#1a252f !important;border:1px solid #2a3a4a !important;border-radius:9px !important;display:flex !important;align-items:center !important;justify-content:center !important;opacity:.75 !important;transition:.2s !important;flex-shrink:0 !important;padding:0 !important;overflow:hidden !important}
+.nav-item.active{border-color:#e6d5a0 !important;opacity:1 !important;background:#1e2f3e !important;box-shadow:0 0 10px rgba(230,213,160,.3) !important}
+.nav-item:hover{opacity:1 !important;border-color:#e6d5a0 !important}
+.nav-item img{width:100% !important;height:100% !important;object-fit:cover !important;display:block !important;border-radius:8px !important}
+.nav-label{position:fixed !important;left:64px !important;background:rgba(20,26,34,.96) !important;border:1px solid #e6d5a0 !important;color:#e6d5a0 !important;padding:5px 9px !important;border-radius:6px !important;font:700 8px 'JetBrains Mono',monospace !important;letter-spacing:.15em !important;white-space:nowrap !important;opacity:0 !important;pointer-events:none !important;transition:.18s !important;z-index:99999 !important;box-shadow:0 4px 16px rgba(0,0,0,.5) !important}
+.nav-group:hover .nav-label{opacity:1 !important}
+.wrap{display:flex !important;position:fixed !important;inset:0 !important}
 .center{flex:1;display:flex;flex-direction:column;overflow:hidden;background:rgba(16,22,30,.22)}
 .top-bar{height:48px;background:rgba(18,24,33,.85);border-bottom:1px solid rgba(30,42,50,.5);display:flex;align-items:center;justify-content:space-between;padding:0 16px}
 .top-title{font:900 16px 'Cinzel Decorative',serif;letter-spacing:.2em;color:#e6d5a0}
 .top-res{display:flex;gap:12px;font:700 10px 'JetBrains Mono',monospace;color:#8a9aaa}
 .top-res span{color:#d0b040}
 .main-area{flex:1;display:flex;overflow:hidden}
-.left-list{width:320px;min-width:320px;background:rgba(18,24,33,.55);border-right:1px solid rgba(30,42,50,.5);display:flex;flex-direction:column;overflow:hidden}
+.left-list{width:280px;min-width:280px;background:rgba(18,24,33,.65);border-right:1px solid rgba(30,42,50,.5);display:flex;flex-direction:column;overflow:hidden}
 .list-header{padding:12px 14px;border-bottom:1px solid rgba(30,42,50,.3);font:700 9px 'JetBrains Mono',monospace;letter-spacing:.15em;color:#6a7a8a;display:flex;justify-content:space-between}
 .res-list{flex:1;overflow:auto;padding:8px;display:flex;flex-direction:column;gap:6px}
-.res-row{display:flex;gap:10px;align-items:center;padding:8px 10px;background:#1a242f;border:1px solid #2a3a4a;border-radius:8px;cursor:pointer;transition:.15s}
-.res-row:hover{border-color:#e6d5a0;transform:translateY(-1px)}
-.res-row.selected{border-color:#e6d5a0;background:#1e2f3e;box-shadow:0 0 10px rgba(230,213,160,.15)}
-.res-icon{width:42px;height:42px;min-width:42px;border-radius:6px;background:#0a0e14;border:1px solid #2a3a4a;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:20px}
-.res-icon img{width:100%;height:100%;object-fit:cover;display:block}
+.res-row{display:flex;gap:10px;align-items:center;padding:8px 10px;background:linear-gradient(180deg,#1e2a3a,#1a242f);border:1px solid #2a3a4a;border-radius:8px;cursor:default;transition:.15s}
+.res-row:hover{border-color:rgba(230,213,160,.4)}
+.res-icon{width:36px;height:36px;min-width:36px;border-radius:6px;background:#0a0e14;border:1px solid #2a3a4a;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.res-icon img{width:28px;height:28px;object-fit:contain;display:block}
 .res-info{flex:1;display:flex;flex-direction:column;gap:2px;overflow:hidden}
 .res-name{font:700 10px Inter,sans-serif;color:#e6d5a0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-transform:uppercase}
 .res-tier{font:700 7px 'JetBrains Mono',monospace;letter-spacing:.1em;color:#8a9aaa}
-.res-amount{font:700 9px 'JetBrains Mono',monospace;color:#6a7a8a}
+.res-amount{font:700 9px 'JetBrains Mono',monospace;color:#3ad080}
 .right-preview{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:12px 16px;overflow:auto;background:radial-gradient(ellipse at center, rgba(230,213,160,.05), transparent 70%)}
-.tabs{display:flex;gap:6px;margin-bottom:12px;width:100%;max-width:620px}
+.tabs{display:flex;gap:6px;margin-bottom:12px;width:100%;max-width:800px}
 .tab{flex:1;padding:8px 10px;background:#1a242f;border:1px solid #2a3a4a;border-radius:8px;font:700 8px 'JetBrains Mono',monospace;letter-spacing:.15em;color:#8a9aaa;text-align:center;cursor:pointer;transition:.15s}
 .tab.active{background:#1e2f3e;border-color:#e6d5a0;color:#e6d5a0;box-shadow:0 0 10px rgba(230,213,160,.15)}
 .tab:hover{border-color:#e6d5a0;color:#e6d5a0}
-.market-card{width:100%;max-width:620px;background:linear-gradient(180deg,#1e2a3a,#121a26);border:1px solid rgba(230,213,160,.2);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px;box-shadow:0 12px 32px rgba(0,0,0,.5)}
+.market-card{width:100%;max-width:800px;background:linear-gradient(180deg,#1e2a3a,#121a26);border:1px solid rgba(230,213,160,.2);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:12px;box-shadow:0 12px 32px rgba(0,0,0,.5)}
 .card-title{font:900 12px 'Cinzel Decorative',serif;color:#e6d5a0;letter-spacing:.15em;text-align:center}
+.filter-bar{display:flex;gap:6px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-bottom:4px}
+.filter-group{display:flex;gap:6px;flex-wrap:wrap}
+.filter-btn{padding:6px 12px;background:#1a242f;border:1px solid #2a3a4a;border-radius:20px;font:700 8px 'JetBrains Mono',monospace;letter-spacing:.1em;color:#8a9aaa;cursor:pointer;transition:.15s}
+.filter-btn.active{background:#1e2f3e;border-color:#e6d5a0;color:#e6d5a0;box-shadow:0 0 8px rgba(230,213,160,.2)}
+.filter-btn:hover{border-color:#e6d5a0;color:#e6d5a0}
+.sort-group{display:flex;gap:6px}
+.sort-btn{padding:6px 10px;background:rgba(10,14,20,.6);border:1px solid #2a3a4a;border-radius:6px;font:700 7px 'JetBrains Mono',monospace;color:#6a7a8a;cursor:pointer}
+.sort-btn.active{border-color:#e6d5a0;color:#e6d5a0}
+.backpack-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(72px, 72px));gap:8px;justify-content:start;width:100%}
+.bag-slot{width:72px;height:72px;background:linear-gradient(180deg,#1e2a3a,#151e2a);border:1px solid #2a3a4a;border-radius:10px;position:relative;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s;overflow:hidden}
+.bag-slot:hover{border-color:#e6d5a0;transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.4), 0 0 10px rgba(230,213,160,.15)}
+.bag-slot.res-type{border-color:rgba(80,180,255,.2)}
+.bag-slot.potion-type{border-color:rgba(80,255,150,.2)}
+.bag-slot.res-type:hover{border-color:#5abaff}
+.bag-slot.potion-type:hover{border-color:#3ad080}
+.bag-slot img{width:44px;height:44px;object-fit:contain;display:block;filter:drop-shadow(0 2px 4px rgba(0,0,0,.5))}
+.bag-slot .qty-badge{position:absolute;bottom:2px;right:3px;background:rgba(0,0,0,.75);color:#e6d5a0;border:1px solid rgba(230,213,160,.3);font:700 8px 'JetBrains Mono',monospace;padding:1px 4px;border-radius:4px;min-width:16px;text-align:center}
+.bag-slot .qty-badge.zero{color:#6a7a8a;border-color:rgba(100,100,100,.3)}
+.bag-slot .type-dot{position:absolute;top:4px;left:4px;width:6px;height:6px;border-radius:50%}
+.bag-slot.res-type .type-dot{background:#5abaff;box-shadow:0 0 6px #5abaff}
+.bag-slot.potion-type .type-dot{background:#3ad080;box-shadow:0 0 6px #3ad080}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);z-index:100;display:none;align-items:center;justify-content:center;padding:16px}
+.modal-overlay.open{display:flex}
+.modal-box{width:100%;max-width:380px;background:linear-gradient(180deg,#1e2a3a,#121a26);border:1px solid rgba(230,213,160,.3);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:12px;box-shadow:0 20px 60px rgba(0,0,0,.7);animation:pop .2s ease}
+@keyframes pop{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+.modal-header{display:flex;gap:12px;align-items:center}
+.modal-icon{width:64px;height:64px;min-width:64px;background:#0a0e14;border:1px solid #2a3a4a;border-radius:10px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.modal-icon img{width:48px;height:48px;object-fit:contain}
+.modal-info{flex:1}
+.modal-name{font:900 13px 'Cinzel Decorative',serif;color:#e6d5a0;letter-spacing:.1em}
+.modal-desc{font:700 8px 'JetBrains Mono',monospace;color:#8a9aaa;margin-top:2px}
+.modal-have{font:700 10px 'JetBrains Mono',monospace;color:#3ad080;margin-top:4px}
+.modal-prices{display:flex;gap:8px}
+.price-chip{flex:1;padding:8px;background:#0a0e14;border:1px solid #2a3a4a;border-radius:8px;text-align:center}
+.price-chip.buy{border-color:rgba(58,208,128,.3)}
+.price-chip.sell{border-color:rgba(224,80,80,.3)}
+.price-label{font:700 7px 'JetBrains Mono',monospace;color:#6a7a8a;letter-spacing:.1em}
+.price-val{font:700 12px 'JetBrains Mono',monospace;color:#e6d5a0;margin-top:2px}
+.price-val.buy{color:#3ad080}
+.price-val.sell{color:#e08080}
+.qty-row{display:flex;gap:8px;align-items:center}
+.qty-btn{width:36px;height:36px;background:#1a242f;border:1px solid #2a3a4a;border-radius:8px;color:#d8d2b8;font:700 14px 'JetBrains Mono';cursor:pointer;transition:.15s}
+.qty-btn:hover{border-color:#e6d5a0;color:#e6d5a0}
+.qty-input{flex:1;height:36px;background:#0a0e14;border:1px solid #2a3a4a;border-radius:8px;color:#e6d5a0;font:700 14px 'JetBrains Mono',monospace;text-align:center}
+.action-row{display:flex;gap:8px}
+.btn{padding:10px 14px;border-radius:8px;border:1px solid #2a3a4a;background:#1a242f;color:#d8d2b8;font:700 9px 'JetBrains Mono',monospace;letter-spacing:.12em;cursor:pointer;transition:.15s;flex:1;text-align:center}
+.btn:hover{border-color:#e6d5a0;color:#e6d5a0}
+.btn.buy{background:linear-gradient(180deg,#1a3a2a,#123a22);border-color:#2a6a4a;color:#3ad080}
+.btn.buy:hover{background:#1e4a32;border-color:#3ad080;box-shadow:0 0 12px rgba(58,208,128,.2)}
+.btn.sell{background:linear-gradient(180deg,#3a1a1a,#2a1212);border-color:#6a2a2a;color:#e08080}
+.btn.sell:hover{background:#4a1e1e;border-color:#e05050;box-shadow:0 0 12px rgba(224,80,80,.2)}
+.btn.close{background:rgba(10,14,20,.8)}
+.log{margin-top:4px;font:700 9px 'JetBrains Mono',monospace;min-height:16px;text-align:center}
+.log.ok{color:#3ad080}
+.log.err{color:#e05050}
+.preview-empty{font:400 11px 'JetBrains Mono',monospace;color:#5a6a7a;text-align:center;padding:20px}
 .market-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .market-item{display:flex;gap:10px;align-items:center;padding:8px 10px;background:#1a242f;border:1px solid #2a3a4a;border-radius:8px}
 .market-item-icon{width:36px;height:36px;min-width:36px;border-radius:6px;background:#0a0e14;border:1px solid #2a3a4a;overflow:hidden;display:flex;align-items:center;justify-content:center}
@@ -161,22 +117,9 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 .market-item-name{font:700 9px Inter,sans-serif;color:#e6d5a0;text-transform:uppercase}
 .market-item-price{font:700 8px 'JetBrains Mono',monospace;color:#d0b040}
 .market-actions{display:flex;gap:6px;margin-top:4px}
-.btn{padding:6px 10px;border-radius:6px;border:1px solid #2a3a4a;background:#1a242f;color:#d8d2b8;font:700 8px 'JetBrains Mono',monospace;letter-spacing:.1em;cursor:pointer;transition:.15s}
-.btn:hover{border-color:#e6d5a0;color:#e6d5a0}
-.btn.buy{background:#1a2f1e;border-color:#2a5a3a;color:#3ad080}
-.btn.buy:hover{background:#1e3f2a;border-color:#3ad080}
-.btn.sell{background:#2f1a1a;border-color:#5a2a2a;color:#e08080}
-.btn.sell:hover{background:#3f1e1e;border-color:#e05050}
-.btn.primary{background:#1e2f3e;border-color:#e6d5a0;color:#e6d5a0}
-.btn.primary:hover{background:#2a3f4e;box-shadow:0 0 10px rgba(230,213,160,.2)}
-.btn:disabled{opacity:.4;cursor:not-allowed}
 .select-row{display:flex;gap:8px;align-items:center}
 .select{flex:1;padding:8px;background:#0a0e14;border:1px solid #2a3a4a;border-radius:6px;color:#d8d2b8;font:700 9px 'JetBrains Mono',monospace}
 .input{width:80px;padding:8px;background:#0a0e14;border:1px solid #2a3a4a;border-radius:6px;color:#e6d5a0;font:700 10px 'JetBrains Mono',monospace;text-align:center}
-.preview-empty{font:400 11px 'JetBrains Mono',monospace;color:#5a6a7a;text-align:center;padding:20px}
-.log{margin-top:8px;font:700 9px 'JetBrains Mono',monospace;min-height:16px;text-align:center}
-.log.ok{color:#3ad080}
-.log.err{color:#e05050}
 .p2p-list{width:100%;max-width:620px;margin-top:12px;display:flex;flex-direction:column;gap:6px}
 .p2p-item{display:flex;gap:10px;align-items:center;padding:8px 10px;background:#1a242f;border:1px solid #2a3a4a;border-radius:8px}
 .p2p-item-info{flex:1;font:700 8px 'JetBrains Mono',monospace;color:#8a9aaa}
@@ -220,13 +163,50 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
         <div class="tab" data-tab="exchange" onclick="switchTab('exchange')">2 • EXCHANGE</div>
         <div class="tab" data-tab="p2p" onclick="switchTab('p2p')">3 • P2P</div>
       </div>
-      <div id="tabMarket"></div>
-      <div id="tabExchange" style="display:none"></div>
-      <div id="tabP2P" style="display:none"></div>
+      <div id="tabMarket" style="width:100%;max-width:800px"></div>
+      <div id="tabExchange" style="display:none;width:100%;max-width:800px"></div>
+      <div id="tabP2P" style="display:none;width:100%;max-width:800px"></div>
     </div>
   </div>
 </div>
 </div>
+
+<div class="modal-overlay" id="marketModal" onclick="if(event.target===this) closeModal()">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-icon" id="modalIcon"><img src="" alt=""></div>
+      <div class="modal-info">
+        <div class="modal-name" id="modalName">QUARTZ</div>
+        <div class="modal-desc" id="modalDesc">RESOURCE</div>
+        <div class="modal-have" id="modalHave">В рюкзаке: x0</div>
+      </div>
+    </div>
+    <div class="modal-prices">
+      <div class="price-chip buy">
+        <div class="price-label">BUY PRICE</div>
+        <div class="price-val buy" id="modalBuyPrice">50g</div>
+      </div>
+      <div class="price-chip sell">
+        <div class="price-label">SELL PRICE</div>
+        <div class="price-val sell" id="modalSellPrice">25g</div>
+      </div>
+    </div>
+    <div class="qty-row">
+      <button class="qty-btn" onclick="changeQty(-10)">-10</button>
+      <button class="qty-btn" onclick="changeQty(-1)">-</button>
+      <input class="qty-input" id="modalQty" type="number" min="1" max="999" value="1" oninput="updateModalPrices()">
+      <button class="qty-btn" onclick="changeQty(1)">+</button>
+      <button class="qty-btn" onclick="changeQty(10)">+10</button>
+    </div>
+    <div class="action-row">
+      <button class="btn buy" id="modalBuyBtn" onclick="confirmBuy()">BUY</button>
+      <button class="btn sell" id="modalSellBtn" onclick="confirmSell()">SELL</button>
+    </div>
+    <button class="btn close" onclick="closeModal()" style="width:100%">CLOSE</button>
+    <div class="log" id="modalLog"></div>
+  </div>
+</div>
+
 <script src="./assets/js/db/heroes.js"></script>
 <script src="./assets/js/db/tiers.js"></script>
 <script src="./assets/js/db/resources.js"></script>
@@ -237,13 +217,29 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 <script src="./assets/js/db/missions.js"></script>
 <script src="./assets/js/storage.js"></script>
 <script>
-// === CONFIG ===
 const MARKET_PRICES = {
   quartz: {buy:50, sell:25},
   wood: {buy:50, sell:25},
   diamond: {buy:50, sell:25},
   fang: {buy:100, sell:50},
   essence: {buy:100, sell:50}
+};
+const POTION_PRICES = {
+  'potion-hp-xs':{buy:50,sell:15,desc:'+250 HP'},
+  'potion-hp-s':{buy:150,sell:45,desc:'+500 HP'},
+  'potion-hp-m':{buy:400,sell:120,desc:'+1000 HP'},
+  'potion-hp-l':{buy:1000,sell:300,desc:'100% HP'},
+  'potion-hp-xl':{buy:2500,sell:750,desc:'200% HP 1ч'},
+  'potion-mana-xs':{buy:50,sell:15,desc:'+100 MANA'},
+  'potion-mana-s':{buy:150,sell:45,desc:'+200 MANA'},
+  'potion-mana-m':{buy:400,sell:120,desc:'+400 MANA'},
+  'potion-mana-l':{buy:1000,sell:300,desc:'100% MANA'},
+  'potion-mana-xl':{buy:2500,sell:750,desc:'100% MANA +100% HP 1ч'},
+  'potion-stam-xs':{buy:50,sell:15,desc:'+10 STAM'},
+  'potion-stam-s':{buy:150,sell:45,desc:'+20 STAM'},
+  'potion-stam-m':{buy:400,sell:120,desc:'+30 STAM'},
+  'potion-stam-l':{buy:1000,sell:300,desc:'100% STAM'},
+  'potion-stam-xl':{buy:2500,sell:750,desc:'100% STAM +1000% реген 1ч'},
 };
 const RES_ICONS = {
   quartz:'./assets/ui/loot/quartz.webp',
@@ -255,7 +251,11 @@ const RES_ICONS = {
 const RES_NAMES = {
   quartz:'QUARTZ', wood:'WOOD', diamond:'DIAMOND', fang:'FANG', essence:'ESSENCE'
 };
-// Exchange rates: base group = quartz, wood, diamond 1k2 between themselves, 1k4 with fang/essence
+
+let currentFilter = 'all';
+let currentSort = 'price-asc';
+let currentModalItem = null;
+
 function getExchangeRate(fromId, toId){
   if(fromId===toId) return 1;
   const base = ['quartz','wood','diamond'];
@@ -264,10 +264,10 @@ function getExchangeRate(fromId, toId){
   const isBaseTo = base.includes(toId);
   const isRareFrom = rare.includes(fromId);
   const isRareTo = rare.includes(toId);
-  if(isBaseFrom && isBaseTo) return 2; // need 2 from to get 1 to (1k2)
-  if(isRareFrom && isRareTo) return 1; // 1k1 rare<->rare
-  if(isBaseFrom && isRareTo) return 4; // 4 base -> 1 rare (1k4)
-  if(isRareFrom && isBaseTo) return 0.25; // 1 rare -> 4 base (reverse 1k4)
+  if(isBaseFrom && isBaseTo) return 2;
+  if(isRareFrom && isRareTo) return 1;
+  if(isBaseFrom && isRareTo) return 4;
+  if(isRareFrom && isBaseTo) return 0.25;
   return 2;
 }
 
@@ -288,24 +288,22 @@ function renderResList(){
   let res = {};
   try{ res = volandGetResources(); }catch(e){}
   let entries = Object.keys(RES_NAMES).map(id=>({id, amount: res[id]||0}));
-  // also include 0 amount to show all
   entries.sort((a,b)=> b.amount - a.amount);
   countEl.textContent = entries.length;
   listEl.innerHTML='';
   entries.forEach(entry=>{
     let div = document.createElement('div');
-    div.className = 'res-row' + (selectedResId===entry.id ? ' selected':'');
+    div.className = 'res-row';
     let icon = RES_ICONS[entry.id] || '';
     let iconHtml = icon ? `<img src="${icon}" onerror="this.style.display='none'">` : '💎';
+    let price = MARKET_PRICES[entry.id];
     div.innerHTML = `
       <div class="res-icon">${iconHtml}</div>
       <div class="res-info">
-        <div class="res-name">${RES_NAMES[entry.id]}</div>
-        <div class="res-tier">${entry.id.toUpperCase()} • ${MARKET_PRICES[entry.id] ? MARKET_PRICES[entry.id].buy+'g BUY / '+MARKET_PRICES[entry.id].sell+'g SELL' : ''}</div>
-        <div class="res-amount">x${entry.amount}</div>
+        <div class="res-name">${RES_NAMES[entry.id]} <span style="color:#3ad080">x${entry.amount}</span></div>
+        <div class="res-tier">${price ? price.buy+'g BUY / '+price.sell+'g SELL' : ''}</div>
       </div>
     `;
-    div.onclick = ()=>{ selectedResId = entry.id; renderResList(); if(currentTab==='market') renderMarket(); };
     listEl.appendChild(div);
   });
   refreshTop();
@@ -323,185 +321,226 @@ function switchTab(tab){
   if(tab==='p2p') renderP2P();
 }
 
-// === TAB 1 MARKET ===
-function renderMarket(){
-  let el = document.getElementById('tabMarket');
+function getMarketItems(){
   let res = {};
   try{ res = volandGetResources(); }catch(e){}
-  let gold = 0; try{ gold = volandGetGold(); }catch(e){}
-  let html = `<div class="market-card"><div class="card-title">MARKET • BUY / SELL FOR GOLD</div>
-<div class="market-grid">`;
+  let inv = [];
+  try{ inv = volandGetInventory ? volandGetInventory() : []; }catch(e){}
+  let items = [];
   Object.keys(RES_NAMES).forEach(id=>{
-    let price = MARKET_PRICES[id];
-    if(!price) return;
     let have = res[id]||0;
-    let icon = RES_ICONS[id];
-    html += `
-      <div class="market-item" data-res="${id}">
-        <div class="market-item-icon"><img src="${icon}" onerror="this.parentElement.textContent='💎'"></div>
-        <div class="market-item-info">
-          <div class="market-item-name">${RES_NAMES[id]} x${have}</div>
-          <div class="market-item-price" id="price-${id}">BUY ${price.buy}g • SELL ${price.sell}g</div>
-          <div class="market-actions" style="align-items:center">
-            <input class="input" id="qty-${id}" type="number" min="1" max="9999" value="1" style="width:56px" oninput="updateItemPrice('${id}')">
-            <button class="btn buy" id="buy-${id}" onclick="buyRes('${id}', getQty('${id}'))">BUY</button>
-            <button class="btn sell" id="sell-${id}" onclick="sellRes('${id}', getQty('${id}'))">SELL</button>
-          </div>
-        </div>
-      </div>
-    `;
+    items.push({
+      id, type:'res', name:RES_NAMES[id], icon:RES_ICONS[id],
+      buy:MARKET_PRICES[id].buy, sell:MARKET_PRICES[id].sell,
+      have, desc:'RESOURCE', price:MARKET_PRICES[id].buy
+    });
   });
-  html += `</div></div>`;
-
-  // POTIONS MARKET
-  const POTION_PRICES = {
-    'potion-hp-xs':{buy:50,sell:15,desc:'+250 HP'},
-    'potion-hp-s':{buy:150,sell:45,desc:'+500 HP'},
-    'potion-hp-m':{buy:400,sell:120,desc:'+1000 HP'},
-    'potion-hp-l':{buy:1000,sell:300,desc:'100% HP'},
-    'potion-hp-xl':{buy:2500,sell:750,desc:'200% HP 1ч'},
-    'potion-mana-xs':{buy:50,sell:15,desc:'+100 MANA'},
-    'potion-mana-s':{buy:150,sell:45,desc:'+200 MANA'},
-    'potion-mana-m':{buy:400,sell:120,desc:'+400 MANA'},
-    'potion-mana-l':{buy:1000,sell:300,desc:'100% MANA'},
-    'potion-mana-xl':{buy:2500,sell:750,desc:'MANA 100% +100% HP 1ч'},
-    'potion-stam-xs':{buy:50,sell:15,desc:'+10 STAM'},
-    'potion-stam-s':{buy:150,sell:45,desc:'+20 STAM'},
-    'potion-stam-m':{buy:400,sell:120,desc:'+30 STAM'},
-    'potion-stam-l':{buy:1000,sell:300,desc:'100% STAM'},
-    'potion-stam-xl':{buy:2500,sell:750,desc:'100% STAM +1000% реген 1ч'},
-  };
-  html += `<div class="market-card" style="margin-top:16px"><div class="card-title">POTIONS • BANKИ</div><div class="market-grid">`;
   Object.keys(POTION_PRICES).forEach(id=>{
-    let pr = POTION_PRICES[id];
-    let item = (typeof VOLAND_ITEMS!=='undefined') ? VOLAND_ITEMS.find(x=>x.id===id) : null;
-    let icon = item ? item.icon : '';
-    let name = item ? item.name : id;
-    let have = 0;
-    try{
-      let inv = volandGetInventory ? volandGetInventory() : [];
-      have = inv.filter(x=> (x.id||x)===id).length;
-    }catch(e){}
-    html += `
-      <div class="market-item" data-res="${id}">
-        <div class="market-item-icon"><img src="${icon}" onerror="this.parentElement.textContent='🧪'"></div>
-        <div class="market-item-info">
-          <div class="market-item-name">${name} x${have} • ${pr.desc}</div>
-          <div class="market-item-price" id="price-${id}">BUY ${pr.buy}g • SELL ${pr.sell}g</div>
-          <div class="market-actions" style="align-items:center">
-            <input class="input" id="qty-${id}" type="number" min="1" max="99" value="1" style="width:56px" oninput="updatePotionPrice('${id}')">
-            <button class="btn buy" id="buy-${id}" onclick="buyPotion('${id}', getQty('${id}'))">BUY</button>
-            <button class="btn sell" id="sell-${id}" onclick="sellPotion('${id}', getQty('${id}'))">SELL</button>
-          </div>
+    let have = inv.filter(x=> (x.id||x)===id).length;
+    let itemData = (typeof VOLAND_ITEMS!=='undefined') ? VOLAND_ITEMS.find(x=>x.id===id) : null;
+    let icon = itemData ? itemData.icon : `./assets/ui/potions/${id.replace('potion-','').replace('-','-')}.webp`;
+    let map = {
+      'potion-hp-xs':'./assets/ui/potions/hp-xs.webp','potion-hp-s':'./assets/ui/potions/hp-s.webp','potion-hp-m':'./assets/ui/potions/hp-m.webp','potion-hp-l':'./assets/ui/potions/hp-l.webp','potion-hp-xl':'./assets/ui/potions/hp-xl.webp',
+      'potion-mana-xs':'./assets/ui/potions/mana-xs.webp','potion-mana-s':'./assets/ui/potions/mana-s.webp','potion-mana-m':'./assets/ui/potions/mana-m.webp','potion-mana-l':'./assets/ui/potions/mana-l.webp','potion-mana-xl':'./assets/ui/potions/mana-xl.webp',
+      'potion-stam-xs':'./assets/ui/potions/stam-xs.webp','potion-stam-s':'./assets/ui/potions/stam-s.webp','potion-stam-m':'./assets/ui/potions/stam-m.webp','potion-stam-l':'./assets/ui/potions/stam-l.webp','potion-stam-xl':'./assets/ui/potions/stam-xl.webp',
+    };
+    icon = map[id] || './assets/ui/potions/hp-xs.webp';
+    items.push({
+      id, type:'potion', name:itemData ? itemData.name.toUpperCase() : id.toUpperCase(),
+      icon, buy:POTION_PRICES[id].buy, sell:POTION_PRICES[id].sell,
+      have, desc:POTION_PRICES[id].desc, price:POTION_PRICES[id].buy
+    });
+  });
+  return items;
+}
+
+function renderMarket(){
+  let el = document.getElementById('tabMarket');
+  let items = getMarketItems();
+  if(currentFilter==='res') items = items.filter(x=>x.type==='res');
+  if(currentFilter==='potion') items = items.filter(x=>x.type==='potion');
+  if(currentSort==='price-asc') items.sort((a,b)=>a.buy-b.buy);
+  else if(currentSort==='price-desc') items.sort((a,b)=>b.buy-a.buy);
+  else if(currentSort==='name') items.sort((a,b)=>a.name.localeCompare(b.name));
+  else if(currentSort==='have-desc') items.sort((a,b)=>b.have-a.have);
+
+  let filterHtml = `
+    <div class="market-card">
+      <div class="card-title">MARKET • BUY / SELL FOR GOLD</div>
+      <div class="filter-bar">
+        <div class="filter-group">
+          <button class="filter-btn ${currentFilter==='all'?'active':''}" onclick="setFilter('all')">ALL • ${getMarketItems().length}</button>
+          <button class="filter-btn ${currentFilter==='res'?'active':''}" onclick="setFilter('res')">RES • ${getMarketItems().filter(x=>x.type==='res').length}</button>
+          <button class="filter-btn ${currentFilter==='potion'?'active':''}" onclick="setFilter('potion')">POTIONS • ${getMarketItems().filter(x=>x.type==='potion').length}</button>
         </div>
+        <div class="sort-group">
+          <button class="sort-btn ${currentSort==='price-asc'?'active':''}" onclick="setSort('price-asc')">PRICE ↑</button>
+          <button class="sort-btn ${currentSort==='price-desc'?'active':''}" onclick="setSort('price-desc')">PRICE ↓</button>
+          <button class="sort-btn ${currentSort==='name'?'active':''}" onclick="setSort('name')">NAME</button>
+          <button class="sort-btn ${currentSort==='have-desc'?'active':''}" onclick="setSort('have-desc')">HAVE</button>
+        </div>
+      </div>
+      <div class="backpack-grid" id="marketGrid">
+  `;
+
+  items.forEach(it=>{
+    let haveClass = it.have>0 ? '' : 'zero';
+    filterHtml += `
+      <div class="bag-slot ${it.type}-type" onclick="openModal('${it.id}')" title="${it.name} • BUY ${it.buy}g / SELL ${it.sell}g">
+        <div class="type-dot"></div>
+        <img src="${it.icon}" onerror="this.style.display='none'; this.parentElement.textContent='💎'">
+        <div class="qty-badge ${haveClass}">x${it.have}</div>
       </div>
     `;
   });
-  html += `</div><div class="log" id="marketLog"></div></div>`;
-  el.innerHTML = html;
-  setTimeout(()=>{
-    Object.keys(RES_NAMES).forEach(id=>{ try{updateItemPrice(id);}catch(e){} });
-    Object.keys(POTION_PRICES).forEach(id=>{ try{updatePotionPrice(id);}catch(e){} });
-  }, 10);
+
+  filterHtml += `</div><div class="log" id="marketLog"></div></div>`;
+  el.innerHTML = filterHtml;
+  renderResList();
 }
 
-function updatePotionPrice(id){
-  try{
-    let qty = getQty(id);
-    let prices = { 'potion-hp-xs':50,'potion-hp-s':150,'potion-hp-m':400,'potion-hp-l':1000,'potion-hp-xl':2500,'potion-mana-xs':50,'potion-mana-s':150,'potion-mana-m':400,'potion-mana-l':1000,'potion-mana-xl':2500,'potion-stam-xs':50,'potion-stam-s':150,'potion-stam-m':400,'potion-stam-l':1000,'potion-stam-xl':2500 };
-    let price = prices[id]||50;
-    let el = document.getElementById('price-'+id);
-    if(el) el.textContent = 'BUY '+(price*qty)+'g • SELL '+Math.floor(price*0.3*qty)+'g';
-  }catch(e){}
-}
-function buyPotion(id, qty){
-  try{
-    let prices = { 'potion-hp-xs':50,'potion-hp-s':150,'potion-hp-m':400,'potion-hp-l':1000,'potion-hp-xl':2500,'potion-mana-xs':50,'potion-mana-s':150,'potion-mana-m':400,'potion-mana-l':1000,'potion-mana-xl':2500,'potion-stam-xs':50,'potion-stam-s':150,'potion-stam-m':400,'potion-stam-l':1000,'potion-stam-xl':2500 };
-    let price = (prices[id]||50)*qty;
-    let gold = volandGetGold();
-    if(gold < price){ logMarket('Недостаточно золота'); return; }
-    volandAddGold(-price);
-    for(let i=0;i<qty;i++){ if(typeof volandAddToInventory==='function') volandAddToInventory(id); }
-    logMarket('Куплено '+id+' x'+qty);
-    renderMarket();
-    updateTop();
-  }catch(e){ console.log(e); }
-}
-function sellPotion(id, qty){
-  try{
-    let prices = { 'potion-hp-xs':50,'potion-hp-s':150,'potion-hp-m':400,'potion-hp-l':1000,'potion-hp-xl':2500,'potion-mana-xs':50,'potion-mana-s':150,'potion-mana-m':400,'potion-mana-l':1000,'potion-mana-xl':2500,'potion-stam-xs':50,'potion-stam-s':150,'potion-stam-m':400,'potion-stam-l':1000,'potion-stam-xl':2500 };
-    let price = Math.floor((prices[id]||50)*0.3*qty);
-    let inv = volandGetInventory ? volandGetInventory() : [];
-    let have = inv.filter(x=> (x.id||x)===id).length;
-    if(have < qty){ logMarket('Недостаточно банок'); return; }
-    for(let i=0;i<qty;i++){ if(typeof volandRemoveFromInventory==='function') volandRemoveFromInventory(id); }
-    volandAddGold(price);
-    logMarket('Продано '+id+' x'+qty+' за '+price+'g');
-    renderMarket();
-    updateTop();
-  }catch(e){ console.log(e); }
+function setFilter(f){ currentFilter=f; renderMarket(); }
+function setSort(s){ currentSort=s; renderMarket(); }
+
+function openModal(id){
+  let items = getMarketItems();
+  let it = items.find(x=>x.id===id);
+  if(!it) return;
+  currentModalItem = it;
+  document.getElementById('modalIcon').innerHTML = `<img src="${it.icon}" onerror="this.parentElement.textContent='💎'">`;
+  document.getElementById('modalName').textContent = it.name;
+  document.getElementById('modalDesc').textContent = it.desc + ' • ' + it.type.toUpperCase();
+  document.getElementById('modalHave').textContent = `В рюкзаке: x${it.have}`;
+  document.getElementById('modalQty').value = 1;
+  document.getElementById('modalLog').textContent = '';
+  document.getElementById('modalLog').className = 'log';
+  updateModalPrices();
+  document.getElementById('marketModal').classList.add('open');
 }
 
-
-function getQty(id){
-  let el = document.getElementById('qty-'+id);
-  let v = parseInt(el ? el.value : 1) || 1;
-  return Math.max(1, Math.min(9999, v));
+function closeModal(){
+  document.getElementById('marketModal').classList.remove('open');
+  currentModalItem = null;
 }
-function updateItemPrice(id){
-  let qty = getQty(id);
-  let price = MARKET_PRICES[id];
-  if(!price) return;
-  let priceEl = document.getElementById('price-'+id);
-  if(priceEl){
-    priceEl.textContent = `BUY ${price.buy*qty}g (${price.buy}g x${qty}) • SELL ${price.sell*qty}g`;
-  }
+
+function changeQty(delta){
+  let el = document.getElementById('modalQty');
+  let v = parseInt(el.value)||1;
+  v += delta;
+  v = Math.max(1, Math.min(999, v));
+  el.value = v;
+  updateModalPrices();
+}
+
+function updateModalPrices(){
+  if(!currentModalItem) return;
+  let qty = parseInt(document.getElementById('modalQty').value)||1;
+  qty = Math.max(1, Math.min(999, qty));
+  document.getElementById('modalQty').value = qty;
+  document.getElementById('modalBuyPrice').textContent = (currentModalItem.buy*qty)+'g ('+currentModalItem.buy+'g x'+qty+')';
+  document.getElementById('modalSellPrice').textContent = (currentModalItem.sell*qty)+'g ('+currentModalItem.sell+'g x'+qty+')';
   let gold = 0; try{ gold = volandGetGold(); }catch(e){}
-  let res = {}; try{ res = volandGetResources(); }catch(e){}
-  let buyBtn = document.getElementById('buy-'+id);
-  let sellBtn = document.getElementById('sell-'+id);
-  if(buyBtn) buyBtn.disabled = gold < price.buy*qty;
-  if(sellBtn) sellBtn.disabled = (res[id]||0) < qty;
-}
-function updateMarketQty(){ return; /* removed global qty */ }
-function _old_updateMarketQty(){
-  let globalEl = document.getElementById('marketGlobalQty');
-  let globalQty = parseInt(globalEl ? globalEl.value : 1) || 1;
-  globalQty = Math.max(1, Math.min(999, globalQty));
-  if(globalEl) globalEl.value = globalQty;
-  Object.keys(RES_NAMES).forEach(id=>{
-    let el = document.getElementById('qty-'+id);
-    if(el){ el.value = globalQty; updateItemPrice(id); }
-  });
+  let buyBtn = document.getElementById('modalBuyBtn');
+  let sellBtn = document.getElementById('modalSellBtn');
+  if(buyBtn) buyBtn.disabled = gold < currentModalItem.buy*qty;
+  if(sellBtn) sellBtn.disabled = currentModalItem.have < qty;
+  if(buyBtn) buyBtn.style.opacity = buyBtn.disabled ? '.4' : '1';
+  if(sellBtn) sellBtn.style.opacity = sellBtn.disabled ? '.4' : '1';
 }
 
+function confirmBuy(){
+  if(!currentModalItem) return;
+  let qty = parseInt(document.getElementById('modalQty').value)||1;
+  if(currentModalItem.type==='res') buyRes(currentModalItem.id, qty);
+  else buyPotion(currentModalItem.id, qty);
+}
+
+function confirmSell(){
+  if(!currentModalItem) return;
+  let qty = parseInt(document.getElementById('modalQty').value)||1;
+  if(currentModalItem.type==='res') sellRes(currentModalItem.id, qty);
+  else sellPotion(currentModalItem.id, qty);
+}
+
+function showLog(id, msg, type){
+  let el = document.getElementById(id);
+  if(!el) el = document.getElementById('modalLog');
+  if(!el) return;
+  el.textContent = msg;
+  el.className = 'log '+(type||'');
+  setTimeout(()=>{ if(el) el.textContent=''; }, 3000);
+}
+function logMarket(msg){ showLog('marketLog', msg, 'ok'); showLog('modalLog', msg, 'ok'); }
 
 function buyRes(id, qty){
   try{
     let price = MARKET_PRICES[id].buy * qty;
     let gold = volandGetGold();
-    if(gold < price){ showLog('marketLog','Недостаточно GOLD: '+gold+'/'+price,'err'); return; }
+    if(gold < price){ showLog('modalLog','Недостаточно GOLD: '+gold+'/'+price,'err'); return; }
     volandSetGold(gold - price);
     volandAddResource(id, qty);
-    showLog('marketLog','Куплено '+RES_NAMES[id]+' x'+qty+' за '+price+'g','ok');
-    renderResList(); renderMarket(); refreshTop();
-  }catch(e){ showLog('marketLog','Ошибка: '+e.message,'err'); }
+    showLog('modalLog','Куплено '+RES_NAMES[id]+' x'+qty+' за '+price+'g','ok');
+    renderMarket(); refreshTop();
+    if(currentModalItem && currentModalItem.id===id){
+      currentModalItem.have += qty;
+      document.getElementById('modalHave').textContent = `В рюкзаке: x${currentModalItem.have}`;
+      updateModalPrices();
+    }
+  }catch(e){ showLog('modalLog','Ошибка: '+e.message,'err'); }
 }
 function sellRes(id, qty){
   try{
     let res = volandGetResources();
     let have = res[id]||0;
-    if(have < qty){ showLog('marketLog','Недостаточно '+RES_NAMES[id],'err'); return; }
+    if(have < qty){ showLog('modalLog','Недостаточно '+RES_NAMES[id],'err'); return; }
     let price = MARKET_PRICES[id].sell * qty;
     volandAddResource(id, -qty);
     let gold = volandGetGold();
     volandSetGold(gold + price);
-    showLog('marketLog','Продано '+RES_NAMES[id]+' x'+qty+' за '+price+'g','ok');
-    renderResList(); renderMarket(); refreshTop();
-  }catch(e){ showLog('marketLog','Ошибка: '+e.message,'err'); }
+    showLog('modalLog','Продано '+RES_NAMES[id]+' x'+qty+' за '+price+'g','ok');
+    renderMarket(); refreshTop();
+    if(currentModalItem && currentModalItem.id===id){
+      currentModalItem.have -= qty;
+      document.getElementById('modalHave').textContent = `В рюкзаке: x${currentModalItem.have}`;
+      updateModalPrices();
+    }
+  }catch(e){ showLog('modalLog','Ошибка: '+e.message,'err'); }
 }
 
-// === TAB 2 EXCHANGE ===
+function buyPotion(id, qty){
+  try{
+    let price = POTION_PRICES[id].buy*qty;
+    let gold = volandGetGold();
+    if(gold < price){ showLog('modalLog','Недостаточно золота','err'); return; }
+    volandAddGold(-price);
+    for(let i=0;i<qty;i++){ if(typeof volandAddToInventory==='function') volandAddToInventory(id); }
+    showLog('modalLog','Куплено '+id+' x'+qty,'ok');
+    renderMarket(); refreshTop();
+    if(currentModalItem && currentModalItem.id===id){
+      currentModalItem.have += qty;
+      document.getElementById('modalHave').textContent = `В рюкзаке: x${currentModalItem.have}`;
+      updateModalPrices();
+    }
+  }catch(e){ console.log(e); showLog('modalLog','Ошибка: '+e.message,'err'); }
+}
+function sellPotion(id, qty){
+  try{
+    let price = POTION_PRICES[id].sell*qty;
+    let inv = volandGetInventory ? volandGetInventory() : [];
+    let have = inv.filter(x=> (x.id||x)===id).length;
+    if(have < qty){ showLog('modalLog','Недостаточно банок','err'); return; }
+    for(let i=0;i<qty;i++){ if(typeof volandRemoveFromInventory==='function') volandRemoveFromInventory(id); }
+    volandAddGold(price);
+    showLog('modalLog','Продано '+id+' x'+qty+' за '+price+'g','ok');
+    renderMarket(); refreshTop();
+    if(currentModalItem && currentModalItem.id===id){
+      currentModalItem.have -= qty;
+      document.getElementById('modalHave').textContent = `В рюкзаке: x${currentModalItem.have}`;
+      updateModalPrices();
+    }
+  }catch(e){ console.log(e); showLog('modalLog','Ошибка: '+e.message,'err'); }
+}
+
 function renderExchange(){
   let el = document.getElementById('tabExchange');
   let res = {}; try{ res = volandGetResources(); }catch(e){}
@@ -570,11 +609,10 @@ function doExchange(){
     volandAddResource(fromId, -amount);
     volandAddResource(toId, receive);
     showLog('exLog','Обмен: -'+amount+' '+RES_NAMES[fromId]+' +'+receive+' '+RES_NAMES[toId],'ok');
-    renderResList(); renderExchange(); refreshTop();
+    renderResList(); renderExchange(); refreshTop(); renderMarket();
   }catch(e){ showLog('exLog','Ошибка: '+e.message,'err'); }
 }
 
-// === TAB 3 P2P ===
 function getP2PList(){
   try{
     let raw = localStorage.getItem('voland_p2p_listings');
@@ -600,7 +638,7 @@ function renderP2P(){
         <input class="input" id="p2pAmt" type="number" min="1" value="1" placeholder="кол-во">
         <input class="input" id="p2pPrice" type="number" min="1" value="50" placeholder="цена за 1">
       </div>
-      <button class="btn primary" style="width:100%;margin-top:8px" onclick="createP2P()">ВЫСТАВИТЬ ЛОТ</button>
+      <button class="btn" style="width:100%;margin-top:8px;background:#1e2f3e;border-color:#e6d5a0;color:#e6d5a0" onclick="createP2P()">ВЫСТАВИТЬ ЛОТ</button>
       <div class="log" id="p2pLog"></div>
     </div>
     <div class="market-card" style="margin-top:12px">
@@ -641,13 +679,12 @@ function createP2P(){
     let res = volandGetResources();
     let have = res[resId]||0;
     if(have < amount){ showLog('p2pLog','Недостаточно '+RES_NAMES[resId]+': '+have+'/'+amount,'err'); return; }
-    // remove from inventory
     volandAddResource(resId, -amount);
     let listings = getP2PList();
     listings.push({resId, amount, pricePer, ts:Date.now()});
     setP2PList(listings);
     showLog('p2pLog','Лот выставлен: '+RES_NAMES[resId]+' x'+amount+' за '+pricePer+'g/шт','ok');
-    renderResList(); renderP2P(); refreshTop();
+    renderResList(); renderP2P(); refreshTop(); renderMarket();
   }catch(e){ showLog('p2pLog','Ошибка: '+e.message,'err'); }
 }
 
@@ -656,51 +693,22 @@ function removeP2P(idx){
     let listings = getP2PList();
     let lot = listings[idx];
     if(!lot) return;
-    // return resources
     volandAddResource(lot.resId, lot.amount);
     listings.splice(idx,1);
     setP2PList(listings);
     showLog('p2pLog','Лот снят, ресурсы возвращены','ok');
-    renderResList(); renderP2P(); refreshTop();
-  }catch(e){}
+    renderResList(); renderP2P(); refreshTop(); renderMarket();
+  }catch(e){ showLog('p2pLog','Ошибка: '+e.message,'err'); }
 }
 
-function showLog(id, msg, type){
-  let el = document.getElementById(id);
-  if(!el) return;
-  el.textContent = msg;
-  el.className = 'log ' + (type||'');
-  setTimeout(()=>{ if(el) el.textContent=''; }, 3000);
-}
+function updateTop(){ refreshTop(); }
 
-// INIT
-renderResList();
-switchTab('market');
-renderMarket();
-</script>
-<script>
-// Tooltip positioning
-document.querySelectorAll('.nav-group').forEach(g=>{
-  let label = g.querySelector('.nav-label');
-  if(!label) return;
-  g.addEventListener('mouseenter', ()=>{
-    let rect = g.getBoundingClientRect();
-    label.style.top = (rect.top + rect.height/2) + 'px';
-    label.style.transform = 'translateY(-50%) translateX(0)';
-  });
-  g.addEventListener('mouseleave', ()=>{
-    label.style.transform = 'translateY(-50%) translateX(-6px)';
-  });
+document.addEventListener('DOMContentLoaded', ()=>{
+  renderResList();
+  renderMarket();
+  refreshTop();
 });
-// active nav highlight fallback
-let path=location.pathname.toLowerCase();
-document.querySelectorAll('.nav-item').forEach(el=>{
-  let pg=el.dataset.page;
-  if(pg && path.includes(pg)){
-    el.classList.add('active');
-    el.closest('.nav-group')?.classList.add('active');
-  }
-});
+setTimeout(()=>{ renderResList(); renderMarket(); refreshTop(); }, 100);
 </script>
 </body>
 </html>
