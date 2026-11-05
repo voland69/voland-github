@@ -245,15 +245,28 @@ function showVictory(){
       if(enemyData && enemyData.equipChance && Math.random() < enemyData.equipChance){
         if(typeof VOLAND_ITEMS!=='undefined' && typeof volandAddToInventory==='function'){
           let heroId = (typeof volandGetHeroId==='function'?volandGetHeroId():'necro-f-new');
-          let classMap = {
-            'necro-f-new':'mage','necro-m':'tank','archer-f':'archer','archer-m':'archer',
-            'archmage-m':'mage','warrior-f':'warrior','warrior-m':'warrior','mage-f-new':'mage'
-          };
-          let heroClass = classMap[heroId] || 'mage';
-          let allowedWeaponBases = {
-            'mage':['staff'], 'archer':['bow'], 'warrior':['sword'], 'tank':['shield','sword']
-          };
-          let allowedBases = allowedWeaponBases[heroClass] || ['staff'];
+                    let allowedBases = [];
+          if(typeof VOLAND_HERO_WEAPON_TYPE!=='undefined' && typeof VOLAND_WEAPON_SETS!=='undefined'){
+            let wType = VOLAND_HERO_WEAPON_TYPE[heroId] || 'sword';
+            let weaponIds = VOLAND_WEAPON_SETS[wType] || [];
+            allowedBases = weaponIds.map(wid=>{
+              try{
+                let it = VOLAND_ITEMS.find(x=>x.id===wid);
+                return it ? (it.baseId || wid.split('-')[0]) : wid.split('-')[0];
+              }catch(e){ return wid.split('-')[0]; }
+            });
+          } else {
+            let classMap = {
+              'necro-f-new':'mage','necro-m':'tank','archer-f':'archer',
+              'archer-m':'archer',
+              'archmage-m':'mage','warrior-f':'warrior','warrior-m':'warrior','mage-f-new':'mage'
+            };
+            let heroClass = classMap[heroId] || 'mage';
+            let allowedWeaponBases = {
+              'mage':['staff'], 'archer':['bow'], 'warrior':['sword','shield'], 'tank':['shield','sword']
+            };
+            allowedBases = allowedWeaponBases[heroClass] || ['staff'];
+          }
           let pool = VOLAND_ITEMS.filter(it=>{
             if(!it.slot) return false;
             if(it.type==='potion') return false;

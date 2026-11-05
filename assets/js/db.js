@@ -1503,10 +1503,10 @@ function VOLAND_GET_STARTER_GEAR_FOR_HERO(heroId){
     return [...base, ...weapons];
   }catch(e){ return [...VOLAND_BASE_CLOTHING_IDS, 'sword-bw-lvl1','shield-bw-lvl1']; }
 }
-const VOLAND_STARTER_ITEMS = VOLAND_ITEMS.filter(it=>it.tier==='bw' && it.level===1).map(it=>it.id);
-const VOLAND_STARTER_GEAR_IDS = [...VOLAND_BASE_CLOTHING_IDS, 'bow-bw-lvl1','staff-bw-lvl1','sword-bw-lvl1','shield-bw-lvl1',
 
-  {id:'potion-hp-xs',name:'Зелье HP XS',baseId:'potion-hp',tier:'potion',level:1,slot:null,icon:'./assets/ui/potions/hp-xs.webp',emoji:'🧪',bonus:{},desc:'+250 HP',rarity:'common',type:'potion',potion:{stat:'HP',value:250,percent:false}},
+// Зелья - отдельный массив
+const VOLAND_POTIONS = [
+{id:'potion-hp-xs',name:'Зелье HP XS',baseId:'potion-hp',tier:'potion',level:1,slot:null,icon:'./assets/ui/potions/hp-xs.webp',emoji:'🧪',bonus:{},desc:'+250 HP',rarity:'common',type:'potion',potion:{stat:'HP',value:250,percent:false}},
   {id:'potion-hp-s',name:'Зелье HP S',baseId:'potion-hp',tier:'potion',level:2,slot:null,icon:'./assets/ui/potions/hp-s.webp',emoji:'🧪',bonus:{},desc:'+500 HP',rarity:'common',type:'potion',potion:{stat:'HP',value:500,percent:false}},
   {id:'potion-hp-m',name:'Зелье HP M',baseId:'potion-hp',tier:'potion',level:3,slot:null,icon:'./assets/ui/potions/hp-m.webp',emoji:'🧪',bonus:{},desc:'+1000 HP',rarity:'common',type:'potion',potion:{stat:'HP',value:1000,percent:false}},
   {id:'potion-hp-l',name:'Зелье HP L',baseId:'potion-hp',tier:'potion',level:4,slot:null,icon:'./assets/ui/potions/hp-l.webp',emoji:'🧪',bonus:{},desc:'100% HP',rarity:'rare',type:'potion',potion:{stat:'HP',value:100,percent:true}},
@@ -1521,5 +1521,8 @@ const VOLAND_STARTER_GEAR_IDS = [...VOLAND_BASE_CLOTHING_IDS, 'bow-bw-lvl1','sta
   {id:'potion-stam-m',name:'Зелье STAM M',baseId:'potion-stam',tier:'potion',level:3,slot:null,icon:'./assets/ui/potions/stam-m.webp',emoji:'⚡',bonus:{},desc:'+30 STAM',rarity:'common',type:'potion',potion:{stat:'STAM',value:30,percent:false}},
   {id:'potion-stam-l',name:'Зелье STAM L',baseId:'potion-stam',tier:'potion',level:4,slot:null,icon:'./assets/ui/potions/stam-l.webp',emoji:'⚡',bonus:{},desc:'100% STAM',rarity:'rare',type:'potion',potion:{stat:'STAM',value:100,percent:true}},
   {id:'potion-stam-xl',name:'Зелье STAM XL',baseId:'potion-stam',tier:'potion',level:5,slot:null,icon:'./assets/ui/potions/stam-xl.webp',emoji:'⚡',bonus:{},desc:'100% STAM +1000% реген 1ч',rarity:'epic',type:'potion',potion:{stat:'STAM',value:100,percent:true,tempBonus:{regen:1000,duration:3600}}},
-
 ];
+
+// Legacy для старых сейвов
+const VOLAND_STARTER_ITEMS = VOLAND_ITEMS.filter(it=>it.tier==='bw' && it.level===1).map(it=>it.id);
+const VOLAND_STARTER_GEAR_IDS = [...VOLAND_BASE_CLOTHING_IDS, 'bow-bw-lvl1','staff-bw-lvl1','sword-bw-lvl1','shield-bw-lvl1'];
