@@ -341,4 +341,374 @@ function getMarketItems(){
     let icon = itemData ? itemData.icon : `./assets/ui/potions/${id.replace('potion-','').replace('-','-')}.webp`;
     let map = {
       'potion-hp-xs':'./assets/ui/potions/hp-xs.webp','potion-hp-s':'./assets/ui/potions/hp-s.webp','potion-hp-m':'./assets/ui/potions/hp-m.webp','potion-hp-l':'./assets/ui/potions/hp-l.webp','potion-hp-xl':'./assets/ui/potions/hp-xl.webp',
-      'potion-mana-xs':'./assets/ui/p
+      'potion-mana-xs':'./assets/ui/potions/mana-xs.webp','potion-mana-s':'./assets/ui/potions/mana-s.webp','potion-mana-m':'./assets/ui/potions/mana-m.webp','potion-mana-l':'./assets/ui/potions/mana-l.webp','potion-mana-xl':'./assets/ui/potions/mana-xl.webp',
+      'potion-stam-xs':'./assets/ui/potions/stam-xs.webp','potion-stam-s':'./assets/ui/potions/stam-s.webp','potion-stam-m':'./assets/ui/potions/stam-m.webp','potion-stam-l':'./assets/ui/potions/stam-l.webp','potion-stam-xl':'./assets/ui/potions/stam-xl.webp',
+    };
+    icon = map[id] || './assets/ui/potions/hp-xs.webp';
+    items.push({
+      id, type:'potion', name:itemData ? itemData.name.toUpperCase() : id.toUpperCase(),
+      icon, buy:POTION_PRICES[id].buy, sell:POTION_PRICES[id].sell,
+      have, desc:POTION_PRICES[id].desc, price:POTION_PRICES[id].buy
+    });
+  });
+  return items;
+}
+
+function renderMarket(){
+  let el = document.getElementById('tabMarket');
+  let items = getMarketItems();
+  if(currentFilter==='res') items = items.filter(x=>x.type==='res');
+  if(currentFilter==='potion') items = items.filter(x=>x.type==='potion');
+  if(currentSort==='price-asc') items.sort((a,b)=>a.buy-b.buy);
+  else if(currentSort==='price-desc') items.sort((a,b)=>b.buy-a.buy);
+  else if(currentSort==='name') items.sort((a,b)=>a.name.localeCompare(b.name));
+  else if(currentSort==='have-desc') items.sort((a,b)=>b.have-a.have);
+
+  let filterHtml = `
+    <div class="market-card">
+      <div class="card-title">MARKET • BUY / SELL FOR GOLD</div>
+      <div class="filter-bar">
+        <div class="filter-group">
+          <button class="filter-btn ${currentFilter==='all'?'active':''}" onclick="setFilter('all')">ALL • ${getMarketItems().length}</button>
+          <button class="filter-btn ${currentFilter==='res'?'active':''}" onclick="setFilter('res')">RES • ${getMarketItems().filter(x=>x.type==='res').length}</button>
+          <button class="filter-btn ${currentFilter==='potion'?'active':''}" onclick="setFilter('potion')">POTIONS • ${getMarketItems().filter(x=>x.type==='potion').length}</button>
+        </div>
+        <div class="sort-group">
+          <button class="sort-btn ${currentSort==='price-asc'?'active':''}" onclick="setSort('price-asc')">PRICE ↑</button>
+          <button class="sort-btn ${currentSort==='price-desc'?'active':''}" onclick="setSort('price-desc')">PRICE ↓</button>
+          <button class="sort-btn ${currentSort==='name'?'active':''}" onclick="setSort('name')">NAME</button>
+          <button class="sort-btn ${currentSort==='have-desc'?'active':''}" onclick="setSort('have-desc')">HAVE</button>
+        </div>
+      </div>
+      <div class="backpack-grid" id="marketGrid">
+  `;
+
+  items.forEach(it=>{
+    let haveClass = it.have>0 ? '' : 'zero';
+    filterHtml += `
+      <div class="bag-slot ${it.type}-type" onclick="openModal('${it.id}')" title="${it.name} • BUY ${it.buy}g / SELL ${it.sell}g">
+        <div class="type-dot"></div>
+        <img src="${it.icon}" onerror="this.style.display='none'; this.parentElement.textContent='💎'">
+        <div class="qty-badge ${haveClass}">x${it.have}</div>
+      </div>
+    `;
+  });
+
+  filterHtml += `</div><div class="log" id="marketLog"></div></div>`;
+  el.innerHTML = filterHtml;
+  renderResList();
+}
+
+function setFilter(f){ currentFilter=f; renderMarket(); }
+function setSort(s){ currentSort=s; renderMarket(); }
+
+function openModal(id){
+  let items = getMarketItems();
+  let it = items.find(x=>x.id===id);
+  if(!it) return;
+  currentModalItem = it;
+  document.getElementById('modalIcon').innerHTML = `<img src="${it.icon}" onerror="this.parentElement.textContent='💎'">`;
+  document.getElementById('modalName').textContent = it.name;
+  document.getElementById('modalDesc').textContent = it.desc + ' • ' + it.type.toUpperCase();
+  document.getElementById('modalHave').textContent = `В рюкзаке: x${it.have}`;
+  document.getElementById('modalQty').value = 1;
+  document.getElementById('modalLog').textContent = '';
+  document.getElementById('modalLog').className = 'log';
+  updateModalPrices();
+  document.getElementById('marketModal').classList.add('open');
+}
+
+function closeModal(){
+  document.getElementById('marketModal').classList.remove('open');
+  currentModalItem = null;
+}
+
+function changeQty(delta){
+  let el = document.getElementById('modalQty');
+  let v = parseInt(el.value)||1;
+  v += delta;
+  v = Math.max(1, Math.min(999, v));
+  el.value = v;
+  updateModalPrices();
+}
+
+function updateModalPrices(){
+  if(!currentModalItem) return;
+  let qty = parseInt(document.getElementById('modalQty').value)||1;
+  qty = Math.max(1, Math.min(999, qty));
+  document.getElementById('modalQty').value = qty;
+  document.getElementById('modalBuyPrice').textContent = (currentModalItem.buy*qty)+'g ('+currentModalItem.buy+'g x'+qty+')';
+  document.getElementById('modalSellPrice').textContent = (currentModalItem.sell*qty)+'g ('+currentModalItem.sell+'g x'+qty+')';
+  let gold = 0; try{ gold = volandGetGold(); }catch(e){}
+  let buyBtn = document.getElementById('modalBuyBtn');
+  let sellBtn = document.getElementById('modalSellBtn');
+  if(buyBtn) buyBtn.disabled = gold < currentModalItem.buy*qty;
+  if(sellBtn) sellBtn.disabled = currentModalItem.have < qty;
+  if(buyBtn) buyBtn.style.opacity = buyBtn.disabled ? '.4' : '1';
+  if(sellBtn) sellBtn.style.opacity = sellBtn.disabled ? '.4' : '1';
+}
+
+function confirmBuy(){
+  if(!currentModalItem) return;
+  let qty = parseInt(document.getElementById('modalQty').value)||1;
+  if(currentModalItem.type==='res') buyRes(currentModalItem.id, qty);
+  else buyPotion(currentModalItem.id, qty);
+}
+
+function confirmSell(){
+  if(!currentModalItem) return;
+  let qty = parseInt(document.getElementById('modalQty').value)||1;
+  if(currentModalItem.type==='res') sellRes(currentModalItem.id, qty);
+  else sellPotion(currentModalItem.id, qty);
+}
+
+function showLog(id, msg, type){
+  let el = document.getElementById(id);
+  if(!el) el = document.getElementById('modalLog');
+  if(!el) return;
+  el.textContent = msg;
+  el.className = 'log '+(type||'');
+  setTimeout(()=>{ if(el) el.textContent=''; }, 3000);
+}
+function logMarket(msg){ showLog('marketLog', msg, 'ok'); showLog('modalLog', msg, 'ok'); }
+
+function buyRes(id, qty){
+  try{
+    let price = MARKET_PRICES[id].buy * qty;
+    let gold = volandGetGold();
+    if(gold < price){ showLog('modalLog','Недостаточно GOLD: '+gold+'/'+price,'err'); return; }
+    volandSetGold(gold - price);
+    volandAddResource(id, qty);
+    showLog('modalLog','Куплено '+RES_NAMES[id]+' x'+qty+' за '+price+'g','ok');
+    renderMarket(); refreshTop();
+    if(currentModalItem && currentModalItem.id===id){
+      currentModalItem.have += qty;
+      document.getElementById('modalHave').textContent = `В рюкзаке: x${currentModalItem.have}`;
+      updateModalPrices();
+    }
+  }catch(e){ showLog('modalLog','Ошибка: '+e.message,'err'); }
+}
+function sellRes(id, qty){
+  try{
+    let res = volandGetResources();
+    let have = res[id]||0;
+    if(have < qty){ showLog('modalLog','Недостаточно '+RES_NAMES[id],'err'); return; }
+    let price = MARKET_PRICES[id].sell * qty;
+    volandAddResource(id, -qty);
+    let gold = volandGetGold();
+    volandSetGold(gold + price);
+    showLog('modalLog','Продано '+RES_NAMES[id]+' x'+qty+' за '+price+'g','ok');
+    renderMarket(); refreshTop();
+    if(currentModalItem && currentModalItem.id===id){
+      currentModalItem.have -= qty;
+      document.getElementById('modalHave').textContent = `В рюкзаке: x${currentModalItem.have}`;
+      updateModalPrices();
+    }
+  }catch(e){ showLog('modalLog','Ошибка: '+e.message,'err'); }
+}
+
+function buyPotion(id, qty){
+  try{
+    let price = POTION_PRICES[id].buy*qty;
+    let gold = volandGetGold();
+    if(gold < price){ showLog('modalLog','Недостаточно золота','err'); return; }
+    volandAddGold(-price);
+    for(let i=0;i<qty;i++){ if(typeof volandAddToInventory==='function') volandAddToInventory(id); }
+    showLog('modalLog','Куплено '+id+' x'+qty,'ok');
+    renderMarket(); refreshTop();
+    if(currentModalItem && currentModalItem.id===id){
+      currentModalItem.have += qty;
+      document.getElementById('modalHave').textContent = `В рюкзаке: x${currentModalItem.have}`;
+      updateModalPrices();
+    }
+  }catch(e){ console.log(e); showLog('modalLog','Ошибка: '+e.message,'err'); }
+}
+function sellPotion(id, qty){
+  try{
+    let price = POTION_PRICES[id].sell*qty;
+    let inv = volandGetInventory ? volandGetInventory() : [];
+    let have = inv.filter(x=> (x.id||x)===id).length;
+    if(have < qty){ showLog('modalLog','Недостаточно банок','err'); return; }
+    for(let i=0;i<qty;i++){ if(typeof volandRemoveFromInventory==='function') volandRemoveFromInventory(id); }
+    volandAddGold(price);
+    showLog('modalLog','Продано '+id+' x'+qty+' за '+price+'g','ok');
+    renderMarket(); refreshTop();
+    if(currentModalItem && currentModalItem.id===id){
+      currentModalItem.have -= qty;
+      document.getElementById('modalHave').textContent = `В рюкзаке: x${currentModalItem.have}`;
+      updateModalPrices();
+    }
+  }catch(e){ console.log(e); showLog('modalLog','Ошибка: '+e.message,'err'); }
+}
+
+function renderExchange(){
+  let el = document.getElementById('tabExchange');
+  let res = {}; try{ res = volandGetResources(); }catch(e){}
+  let options = Object.keys(RES_NAMES).map(id=>`<option value="${id}">${RES_NAMES[id]} (x${res[id]||0})</option>`).join('');
+  let fromId = selectedResId || 'quartz';
+  let toId = 'wood';
+  if(fromId===toId) toId = 'diamond';
+  let rate = getExchangeRate(fromId, toId);
+  let needDesc = rate >=1 ? `${rate} ${RES_NAMES[fromId]} → 1 ${RES_NAMES[toId]}` : `1 ${RES_NAMES[fromId]} → ${Math.round(1/rate)} ${RES_NAMES[toId]}`;
+  el.innerHTML = `
+    <div class="market-card">
+      <div class="card-title">EXCHANGE • БЕЗ ЗОЛОТА</div>
+      <div style="font:400 8px 'JetBrains Mono',monospace;color:#6a7a8a;text-align:center">Курс: база quartz/wood/diamond между собой 1к2, с fang/essence 1к4</div>
+      <div class="select-row">
+        <select class="select" id="exFrom" onchange="updateExchangePreview()">${options}</select>
+        <span style="color:#e6d5a0">→</span>
+        <select class="select" id="exTo" onchange="updateExchangePreview()">${options}</select>
+      </div>
+      <div class="select-row" style="margin-top:8px">
+        <input class="input" id="exAmount" type="number" min="1" value="2" oninput="updateExchangePreview()">
+        <button class="btn primary" style="flex:1" onclick="doExchange()">ОБМЕНЯТЬ</button>
+      </div>
+      <div class="preview-empty" id="exPreview">${needDesc}</div>
+      <div class="log" id="exLog"></div>
+    </div>
+  `;
+  document.getElementById('exFrom').value = fromId;
+  document.getElementById('exTo').value = toId;
+  updateExchangePreview();
+}
+
+function updateExchangePreview(){
+  try{
+    let fromEl = document.getElementById('exFrom');
+    let toEl = document.getElementById('exTo');
+    let amtEl = document.getElementById('exAmount');
+    if(!fromEl||!toEl||!amtEl) return;
+    let fromId = fromEl.value;
+    let toId = toEl.value;
+    let amount = parseInt(amtEl.value)||1;
+    if(fromId===toId){ document.getElementById('exPreview').textContent = 'Выбери разные ресурсы'; return; }
+    let rate = getExchangeRate(fromId, toId);
+    let res = volandGetResources();
+    let have = res[fromId]||0;
+    let receive = rate >=1 ? Math.floor(amount / rate) : Math.floor(amount * (1/rate));
+    if(rate >=1){
+      document.getElementById('exPreview').innerHTML = `Отдаешь <b style="color:#e6d5a0">${amount} ${RES_NAMES[fromId]}</b> (есть x${have}) → Получишь <b style="color:#3ad080">${receive} ${RES_NAMES[toId]}</b><br><span style="font-size:8px;color:#6a7a8a">Курс: ${rate}:1 • ${rate} ${RES_NAMES[fromId]} = 1 ${RES_NAMES[toId]}</span>`;
+    } else {
+      document.getElementById('exPreview').innerHTML = `Отдаешь <b style="color:#e6d5a0">${amount} ${RES_NAMES[fromId]}</b> (есть x${have}) → Получишь <b style="color:#3ad080">${receive} ${RES_NAMES[toId]}</b><br><span style="font-size:8px;color:#6a7a8a">Курс: 1:${Math.round(1/rate)} • 1 ${RES_NAMES[fromId]} = ${Math.round(1/rate)} ${RES_NAMES[toId]}</span>`;
+    }
+  }catch(e){}
+}
+
+function doExchange(){
+  try{
+    let fromId = document.getElementById('exFrom').value;
+    let toId = document.getElementById('exTo').value;
+    let amount = parseInt(document.getElementById('exAmount').value)||1;
+    if(fromId===toId){ showLog('exLog','Выбери разные ресурсы','err'); return; }
+    let res = volandGetResources();
+    let have = res[fromId]||0;
+    if(have < amount){ showLog('exLog','Недостаточно '+RES_NAMES[fromId]+': '+have+'/'+amount,'err'); return; }
+    let rate = getExchangeRate(fromId, toId);
+    let receive = rate >=1 ? Math.floor(amount / rate) : Math.floor(amount * (1/rate));
+    if(receive < 1){ showLog('exLog','Слишком мало для обмена, увеличь количество','err'); return; }
+    volandAddResource(fromId, -amount);
+    volandAddResource(toId, receive);
+    showLog('exLog','Обмен: -'+amount+' '+RES_NAMES[fromId]+' +'+receive+' '+RES_NAMES[toId],'ok');
+    renderResList(); renderExchange(); refreshTop(); renderMarket();
+  }catch(e){ showLog('exLog','Ошибка: '+e.message,'err'); }
+}
+
+function getP2PList(){
+  try{
+    let raw = localStorage.getItem('voland_p2p_listings');
+    if(raw) return JSON.parse(raw);
+    return [];
+  }catch(e){ return []; }
+}
+function setP2PList(list){
+  try{ localStorage.setItem('voland_p2p_listings', JSON.stringify(list)); }catch(e){}
+}
+
+function renderP2P(){
+  let el = document.getElementById('tabP2P');
+  let res = {}; try{ res = volandGetResources(); }catch(e){}
+  let options = Object.keys(RES_NAMES).map(id=>`<option value="${id}">${RES_NAMES[id]} (x${res[id]||0})</option>`).join('');
+  let listings = getP2PList();
+  let html = `
+    <div class="market-card">
+      <div class="card-title">P2P • ВЫСТАВИТЬ СВОЙ РЕСУРС ЗА СВОЮ ЦЕНУ</div>
+      <div style="font:400 8px 'JetBrains Mono',monospace;color:#6a7a8a;text-align:center">Сейчас локальный мок (видишь только свои лоты). Потом подключим сервер без переделки UI.</div>
+      <div class="select-row">
+        <select class="select" id="p2pRes">${options}</select>
+        <input class="input" id="p2pAmt" type="number" min="1" value="1" placeholder="кол-во">
+        <input class="input" id="p2pPrice" type="number" min="1" value="50" placeholder="цена за 1">
+      </div>
+      <button class="btn" style="width:100%;margin-top:8px;background:#1e2f3e;border-color:#e6d5a0;color:#e6d5a0" onclick="createP2P()">ВЫСТАВИТЬ ЛОТ</button>
+      <div class="log" id="p2pLog"></div>
+    </div>
+    <div class="market-card" style="margin-top:12px">
+      <div class="card-title">МОИ ЛОТЫ (${listings.length})</div>
+      <div class="p2p-list" id="p2pMyList">
+  `;
+  if(listings.length===0){
+    html += `<div class="preview-empty">Нет лотов. Выстави свой ресурс выше.</div>`;
+  } else {
+    listings.forEach((lot,idx)=>{
+      let icon = RES_ICONS[lot.resId] || '';
+      html += `
+        <div class="p2p-item">
+          <div class="market-item-icon"><img src="${icon}" onerror="this.parentElement.textContent='💎'"></div>
+          <div class="p2p-item-info">
+            <div style="color:#e6d5a0">${RES_NAMES[lot.resId]} x${lot.amount} за ${lot.pricePer}g/шт (всего ${lot.amount*lot.pricePer}g)</div>
+            <div>Выставлен: ${new Date(lot.ts).toLocaleTimeString()}</div>
+          </div>
+          <button class="btn sell" onclick="removeP2P(${idx})">СНЯТЬ</button>
+        </div>
+      `;
+    });
+  }
+  html += `</div></div>
+    <div class="market-card" style="margin-top:12px;opacity:.6">
+      <div class="card-title">ЧУЖИЕ ЛОТЫ • SOON</div>
+      <div class="preview-empty">С бэком здесь будут лоты других игроков. Сейчас заглушка — место зарезервировано.</div>
+    </div>
+  `;
+  el.innerHTML = html;
+}
+
+function createP2P(){
+  try{
+    let resId = document.getElementById('p2pRes').value;
+    let amount = parseInt(document.getElementById('p2pAmt').value)||1;
+    let pricePer = parseInt(document.getElementById('p2pPrice').value)||1;
+    let res = volandGetResources();
+    let have = res[resId]||0;
+    if(have < amount){ showLog('p2pLog','Недостаточно '+RES_NAMES[resId]+': '+have+'/'+amount,'err'); return; }
+    volandAddResource(resId, -amount);
+    let listings = getP2PList();
+    listings.push({resId, amount, pricePer, ts:Date.now()});
+    setP2PList(listings);
+    showLog('p2pLog','Лот выставлен: '+RES_NAMES[resId]+' x'+amount+' за '+pricePer+'g/шт','ok');
+    renderResList(); renderP2P(); refreshTop(); renderMarket();
+  }catch(e){ showLog('p2pLog','Ошибка: '+e.message,'err'); }
+}
+
+function removeP2P(idx){
+  try{
+    let listings = getP2PList();
+    let lot = listings[idx];
+    if(!lot) return;
+    volandAddResource(lot.resId, lot.amount);
+    listings.splice(idx,1);
+    setP2PList(listings);
+    showLog('p2pLog','Лот снят, ресурсы возвращены','ok');
+    renderResList(); renderP2P(); refreshTop(); renderMarket();
+  }catch(e){ showLog('p2pLog','Ошибка: '+e.message,'err'); }
+}
+
+function updateTop(){ refreshTop(); }
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  renderResList();
+  renderMarket();
+  refreshTop();
+});
+setTimeout(()=>{ renderResList(); renderMarket(); refreshTop(); }, 100);
+</script>
+</body>
+</html>
