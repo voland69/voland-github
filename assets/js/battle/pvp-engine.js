@@ -1,6 +1,7 @@
 // VOLAND PVP ENGINE V2 - Fixed stun lock, auto skip
 (function(){
 const DIFF_MULT = { easy: 0.3, medium: 1.0, hard: 1.3 };
+const PVP_HP_MULT = 5; // x5 HP for PVP to make fights longer
 let player = null;
 let bot = null;
 let turn = 1;
@@ -44,10 +45,10 @@ function calcStats(heroId, mult){
     }catch(e){ console.log('calc error', e); }
   }
   if(!cur){
-    cur = { HP: Math.floor(st.HP * mult), DEF: Math.floor(st.DEF * mult), DMG: Math.floor(st.DMG * mult), MANA: Math.floor(st.MANA * mult), CRIT: st.CRIT || 15, DODGE: st.DODGE || 10, PARRY: st.PARRY || 0 };
+    cur = { HP: Math.floor(st.HP * mult * PVP_HP_MULT), DEF: Math.floor(st.DEF * mult), DMG: Math.floor(st.DMG * mult), MANA: Math.floor(st.MANA * mult), CRIT: st.CRIT || 15, DODGE: st.DODGE || 10, PARRY: st.PARRY || 0 };
   } else {
     if(mult !== 1.0){ cur.HP = Math.floor((cur.HP||st.HP) * mult); cur.DMG = Math.floor((cur.DMG||st.DMG) * mult); cur.DEF = Math.floor((cur.DEF||st.DEF) * mult); cur.MANA = Math.floor((cur.MANA||st.MANA) * mult); }
-    cur.HP = cur.HP || st.HP;
+    cur.HP = (cur.HP || st.HP) * PVP_HP_MULT;
     cur.DMG = cur.DMG || st.DMG;
     cur.DEF = cur.DEF || st.DEF;
     cur.MANA = cur.MANA || st.MANA;
@@ -66,7 +67,7 @@ function initBattle(playerHeroId, botHeroId, diff){
   bot = { id: botHeroId, name: bData.base.n, img: bData.base.img, role: bData.base.role, maxHp: bData.cur.HP, hp: bData.cur.HP, maxMana: bData.cur.MANA, mana: bData.cur.MANA, dmg: bData.cur.DMG, def: bData.cur.DEF, crit: bData.cur.CRIT, dodge: bData.cur.DODGE, sk: bData.base.sk };
   turn = 1; isOver = false; playerStun = 0; botStun = 0; playerCd = [0,0,0,0,0]; botCd = [0,0,0,0,0];
   setupUI();
-  addLog(`⚔️ PVP START: ${player.name} vs ${bot.name} [${diff.toUpperCase()} ${Math.round(bMult*100)}%]`, 'skill');
+  addLog(`⚔️ PVP START: ${player.name} vs ${bot.name} [${diff.toUpperCase()} ${Math.round(bMult*100)}%] HPx5`, 'skill');
   addLog(`Игрок: HP ${player.maxHp} DMG ${player.dmg} DEF ${player.def} | Бот: HP ${bot.maxHp} DMG ${bot.dmg} DEF ${bot.def}`, '');
   updateBars(); renderSkills();
 }
