@@ -3,224 +3,98 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>VOLAND - PVP ARENA</title>
+<title>VOLAND - PVP ARENA V1</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-/* === VOLAND NAV - SYMMETRIC 60px / 52x52 / gap 4 / no scroll / fixed tooltip === */
-.left-nav{
-  width:60px !important;
-  min-width:60px !important;
-  max-width:60px !important;
-  flex:0 0 60px !important;
-  background:rgba(18,24,30,.94) !important;
-  border-right:1px solid #2a3a4a !important;
-  display:flex !important;
-  flex-direction:column !important;
-  justify-content:space-between !important;
-  align-items:center !important;
-  height:100vh !important;
-  height:100dvh !important;
-  overflow:hidden !important;
-  overflow-y:hidden !important;
-  overflow-x:visible !important;
-  scrollbar-width:none !important;
-  -ms-overflow-style:none !important;
-  padding:6px 4px !important;
-  gap:0 !important;
-  position:relative !important;
-  z-index:20 !important;
-}
-.left-nav::-webkit-scrollbar{display:none !important;width:0 !important;height:0 !important;}
-.nav-top{
-  display:flex !important;
-  flex-direction:column !important;
-  gap:4px !important;
-  align-items:center !important;
-  width:100% !important;
-  overflow:hidden !important;
-}
-.nav-bottom{
-  margin-top:auto !important;
-  padding-top:8px !important;
-  border-top:1px solid rgba(255,255,255,.08) !important;
-  width:100% !important;
-  display:flex !important;
-  flex-direction:column !important;
-  align-items:center !important;
-  gap:4px !important;
-  overflow:hidden !important;
-}
-.nav-group{
-  cursor:pointer !important;
-  display:flex !important;
-  flex-direction:column !important;
-  align-items:center !important;
-  gap:0 !important;
-  width:100% !important;
-  position:relative !important;
-  overflow:visible !important;
-}
-.nav-item{
-  width:52px !important;
-  height:52px !important;
-  min-width:52px !important;
-  min-height:52px !important;
-  background:#1a252f !important;
-  border:1px solid #2a3a4a !important;
-  border-radius:9px !important;
-  display:flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-  opacity:.75 !important;
-  transition:.2s !important;
-  flex-shrink:0 !important;
-  padding:0 !important;
-  overflow:hidden !important;
-}
-.nav-item.active{
-  border-color:#e6d5a0 !important;
-  opacity:1 !important;
-  background:#1e2f3e !important;
-  box-shadow:0 0 10px rgba(230,213,160,.3) !important;
-}
-.nav-item:hover{
-  opacity:1 !important;
-  border-color:#e6d5a0 !important;
-}
-.nav-item img{
-  width:100% !important;
-  height:100% !important;
-  object-fit:cover !important;
-  display:block !important;
-  border-radius:8px !important;
-}
-.nav-label{
-  position:fixed !important;
-  left:64px !important;
-  background:rgba(20,26,34,.96) !important;
-  border:1px solid #e6d5a0 !important;
-  color:#e6d5a0 !important;
-  padding:5px 9px !important;
-  border-radius:6px !important;
-  font:700 8px 'JetBrains Mono',monospace !important;
-  letter-spacing:.15em !important;
-  white-space:nowrap !important;
-  opacity:0 !important;
-  pointer-events:none !important;
-  transition:.18s !important;
-  z-index:99999 !important;
-  box-shadow:0 4px 16px rgba(0,0,0,.5) !important;
-}
-.nav-group:hover .nav-label{
-  opacity:1 !important;
-}
-.wrap{
-  display:flex !important;
-  position:fixed !important;
-  inset:0 !important;
-}
-.center{
-  flex:1 !important;
-  padding:24px !important;
-  overflow:auto !important;
-  display:flex !important;
-  flex-direction:column !important;
-  align-items:center !important;
-  justify-content:flex-start !important;
-  background:rgba(16,22,30,.18) !important;
-  width:100% !important;
-}
-.page-title{
-  font:900 32px 'Cinzel Decorative',serif !important;
-  color:#e6d5a0 !important;
-  letter-spacing:.15em !important;
-  text-align:center !important;
-}
-.page-sub{
-  margin-top:8px !important;
-  font:400 9px 'JetBrains Mono',monospace !important;
-  letter-spacing:.35em !important;
-  color:#7a90a8 !important;
-  text-transform:uppercase !important;
-  text-align:center !important;
-}
-.placeholder-grid{
-  display:grid !important;
-  grid-template-columns:repeat(3,1fr) !important;
-  gap:18px !important;
-  width:100% !important;
-  max-width:1100px !important;
-  margin:28px auto 0 auto !important;
-  justify-content:center !important;
-  place-items:stretch !important;
-  justify-items:center !important;
-}
-.ph-card{
-  background:rgba(20,26,34,.88) !important;
-  border:1px solid rgba(122,144,168,.22) !important;
-  border-radius:12px !important;
-  padding:22px !important;
-  text-align:center !important;
-  backdrop-filter:blur(8px) !important;
-  transition:.2s !important;
-  width:100% !important;
-  max-width:340px !important;
-  margin:0 auto !important;
-}
-.ph-card:hover{
-  border-color:#e6d5a0 !important;
-  transform:translateY(-2px) !important;
-}
-.ph-icon{font-size:36px !important;margin-bottom:12px !important;}
-.ph-name{font:700 13px Inter,sans-serif !important;letter-spacing:.08em !important;color:#e6d5a0 !important;text-transform:uppercase !important;}
-.ph-desc{margin-top:8px !important;font:400 10px 'JetBrains Mono',monospace !important;color:#8a9aaa !important;line-height:1.5 !important;}
-.ph-badge{margin-top:14px !important;display:inline-block !important;font:900 10px 'JetBrains Mono',monospace !important;letter-spacing:.25em !important;color:#5a6e80 !important;border:1px solid #3a4a5a !important;border-radius:6px !important;padding:5px 10px !important;background:rgba(0,0,0,.2) !important;}
-
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
-
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,sans-serif;overflow:hidden}
 .bg{position:fixed;inset:0;z-index:0;background:url("./assets/heroes/bg-battlefield.webp") center/cover no-repeat fixed}
-.bg:after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.6)}
-
-
-
-
-
-
-
-
-
-.nav-group.active 
-.center{flex:1;padding:24px;overflow:auto;display:flex;flex-direction:column;align-items:center;background:rgba(16,22,30,.18)}
-.page-title{font:900 32px 'Cinzel Decorative',serif;color:#e6d5a0;letter-spacing:.15em;text-align:center}
-.page-sub{margin-top:8px;font:400 9px 'JetBrains Mono',monospace;letter-spacing:.35em;color:#7a90a8;text-transform:uppercase;text-align:center}
-.placeholder-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;width:100%;max-width:1100px;margin-top:28px}
-.ph-card{background:rgba(20,26,34,.88);border:1px solid rgba(122,144,168,.22);border-radius:12px;padding:22px;text-align:center;backdrop-filter:blur(8px);transition:.2s}
-.ph-card:hover{border-color:#e6d5a0;transform:translateY(-2px)}
-.ph-icon{font-size:36px;margin-bottom:12px}
-.ph-name{font:700 13px Inter,sans-serif;letter-spacing:.08em;color:#e6d5a0;text-transform:uppercase}
-.ph-desc{margin-top:8px;font:400 10px 'JetBrains Mono',monospace;color:#8a9aaa;line-height:1.5}
-.ph-badge{margin-top:14px;display:inline-block;font:900 10px 'JetBrains Mono',monospace;letter-spacing:.25em;color:#5a6e80;border:1px solid #3a4a5a;border-radius:6px;padding:5px 10px;background:rgba(0,0,0,.2)}
-
-
-
-
-
-/* VOLAND NAV FIX - 60px / 52x52 / gap 4 / no scroll / hover label */
-
-
-
-
-
-
-
-
-
-.nav-group:hover 
-
-
+.bg:after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.65)}
+.wrap{position:fixed;inset:0;display:flex;z-index:2}
+.left-nav{width:60px !important;min-width:60px !important;max-width:60px !important;flex:0 0 60px !important;background:rgba(18,24,30,.94) !important;border-right:1px solid #2a3a4a !important;display:flex !important;flex-direction:column !important;justify-content:space-between !important;align-items:center !important;height:100vh !important;height:100dvh !important;overflow:visible !important;padding:6px 4px !important;gap:0 !important;position:relative !important;z-index:20 !important}
+.left-nav::-webkit-scrollbar{display:none !important}
+.nav-top{display:flex !important;flex-direction:column !important;gap:4px !important;align-items:center !important;width:100% !important;overflow:visible !important}
+.nav-bottom{margin-top:auto !important;padding-top:8px !important;border-top:1px solid rgba(255,255,255,.08) !important;width:100% !important;display:flex !important;flex-direction:column !important;align-items:center !important;gap:4px !important;overflow:visible !important}
+.nav-group{cursor:pointer !important;display:flex !important;flex-direction:column !important;align-items:center !important;gap:0 !important;width:100% !important;position:relative !important;overflow:visible !important}
+.nav-item{width:52px !important;height:52px !important;min-width:52px !important;min-height:52px !important;background:#1a252f !important;border:1px solid #2a3a4a !important;border-radius:9px !important;display:flex !important;align-items:center !important;justify-content:center !important;opacity:.75 !important;transition:.2s !important;flex-shrink:0 !important;padding:0 !important;overflow:hidden !important}
+.nav-item.active{border-color:#e6d5a0 !important;opacity:1 !important;background:#1e2f3e !important;box-shadow:0 0 10px rgba(230,213,160,.3) !important}
+.nav-item:hover{opacity:1 !important;border-color:#e6d5a0 !important}
+.nav-item img{width:100% !important;height:100% !important;object-fit:cover !important;display:block !important;border-radius:8px !important}
+.nav-label{position:fixed !important;left:64px !important;background:rgba(20,26,34,.96) !important;border:1px solid #e6d5a0 !important;color:#e6d5a0 !important;padding:5px 9px !important;border-radius:6px !important;font:700 8px 'JetBrains Mono',monospace !important;letter-spacing:.15em !important;white-space:nowrap !important;opacity:0 !important;pointer-events:none !important;transition:.18s !important;z-index:99999 !important;box-shadow:0 4px 16px rgba(0,0,0,.5) !important}
+.nav-group:hover .nav-label{opacity:1 !important}
+.wrap{display:flex !important;position:fixed !important;inset:0 !important}
+.center{flex:1;display:flex;flex-direction:column;overflow:hidden;background:rgba(16,22,30,.18)}
+.top-bar{height:48px;background:rgba(18,24,33,.85);border-bottom:1px solid rgba(30,42,50,.5);display:flex;align-items:center;justify-content:space-between;padding:0 16px}
+.top-title{font:900 16px 'Cinzel Decorative',serif;letter-spacing:.2em;color:#e6d5a0}
+.top-sub{font:700 9px 'JetBrains Mono',monospace;color:#8a9aaa;letter-spacing:.15em}
+.main{flex:1;overflow:auto;padding:16px;display:flex;flex-direction:column;align-items:center;gap:16px}
+.lobby{width:100%;max-width:1000px;display:flex;flex-direction:column;gap:16px}
+.section{background:linear-gradient(180deg,#1e2a3a,#121a26);border:1px solid rgba(230,213,160,.2);border-radius:14px;padding:14px;box-shadow:0 12px 32px rgba(0,0,0,.5)}
+.section-title{font:900 12px 'Cinzel Decorative',serif;color:#e6d5a0;letter-spacing:.15em;text-align:center;margin-bottom:12px}
+.diff-bar{display:flex;gap:8px;justify-content:center}
+.diff-btn{flex:1;max-width:200px;padding:10px;background:#1a242f;border:1px solid #2a3a4a;border-radius:10px;font:700 10px 'JetBrains Mono',monospace;color:#8a9aaa;cursor:pointer;transition:.15s;text-align:center}
+.diff-btn.active{border-color:#e6d5a0;background:#1e2f3e;color:#e6d5a0;box-shadow:0 0 10px rgba(230,213,160,.2)}
+.diff-btn.easy.active{border-color:#3ad080;color:#3ad080}
+.diff-btn.hard.active{border-color:#e05050;color:#e08080}
+.diff-btn .pct{font:900 14px 'Cinzel Decorative',serif;display:block;margin-top:4px}
+.hero-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(140px,1fr));gap:10px}
+.hero-card{background:#1a242f;border:1px solid #2a3a4a;border-radius:10px;padding:10px;cursor:pointer;transition:.15s;text-align:center}
+.hero-card:hover{border-color:#e6d5a0;transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.4)}
+.hero-card.selected{border-color:#e6d5a0;background:#1e2f3e;box-shadow:0 0 15px rgba(230,213,160,.3)}
+.hero-card img{width:80px;height:80px;border-radius:8px;object-fit:cover;display:block;margin:0 auto 8px;background:#0a0e14}
+.hero-name{font:700 11px Inter,sans-serif;color:#e6d5a0;text-transform:uppercase}
+.hero-role{font:700 7px 'JetBrains Mono',monospace;color:#8a9aaa;margin-top:2px}
+.hero-stats{font:700 8px 'JetBrains Mono',monospace;color:#6a7a8a;margin-top:6px;line-height:1.4}
+.preview{display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap}
+.preview-card{flex:1;min-width:220px;background:#0a0e14;border:1px solid #2a3a4a;border-radius:10px;padding:12px;display:flex;gap:10px;align-items:center}
+.preview-card img{width:56px;height:56px;border-radius:8px;object-fit:cover}
+.preview-info{flex:1}
+.preview-name{font:700 12px Inter,sans-serif;color:#e6d5a0}
+.preview-role{font:700 7px 'JetBrains Mono',monospace;color:#8a9aaa}
+.preview-stats{font:700 8px 'JetBrains Mono',monospace;color:#d0b040;margin-top:4px}
+.fight-btn{width:100%;max-width:400px;margin:0 auto;display:block;padding:14px;background:linear-gradient(180deg,#1e3a2a,#123a22);border:1px solid #2a6a4a;border-radius:12px;font:900 14px 'Cinzel Decorative',serif;letter-spacing:.2em;color:#3ad080;cursor:pointer;transition:.2s;text-align:center}
+.fight-btn:hover{background:#1e4a32;border-color:#3ad080;box-shadow:0 0 20px rgba(58,208,128,.3)}
+.fight-btn:disabled{opacity:.4;cursor:not-allowed}
+.battle-area{width:100%;max-width:1100px;display:none;flex-direction:column;gap:12px}
+.battle-area.active{display:flex}
+.battle-top{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fighter{background:linear-gradient(180deg,#1e2a3a,#121a26);border:1px solid rgba(230,213,160,.2);border-radius:12px;padding:12px;display:flex;gap:12px;align-items:center}
+.fighter.enemy{border-color:rgba(224,80,80,.3)}
+.fighter img{width:64px;height:64px;border-radius:10px;object-fit:cover;background:#0a0e14}
+.fighter-info{flex:1}
+.fighter-name{font:700 13px Inter,sans-serif;color:#e6d5a0}
+.fighter-role{font:700 7px 'JetBrains Mono',monospace;color:#8a9aaa}
+.hp-bar-wrap{margin-top:8px;height:12px;background:#0a0e14;border:1px solid #2a3a4a;border-radius:6px;overflow:hidden;position:relative}
+.hp-bar{height:100%;background:linear-gradient(90deg,#3ad080,#2a8a5a);width:100%;transition:.4s}
+.hp-bar.enemy{background:linear-gradient(90deg,#e05050,#8a2a2a)}
+.mana-bar-wrap{margin-top:4px;height:6px;background:#0a0e14;border:1px solid #2a3a4a;border-radius:4px;overflow:hidden}
+.mana-bar{height:100%;background:linear-gradient(90deg,#5abaff,#2a5a8a);width:100%;transition:.4s}
+.bar-text{font:700 8px 'JetBrains Mono',monospace;color:#d8d2b8;margin-top:2px;display:flex;justify-content:space-between}
+.battle-log{height:280px;background:rgba(10,14,20,.8);border:1px solid #2a3a4a;border-radius:10px;padding:10px;overflow:auto;font:400 10px 'JetBrains Mono',monospace;line-height:1.6}
+.log-line{margin-bottom:4px}
+.log-line.hit{color:#d8d2b8}
+.log-line.crit{color:#e6d5a0;font-weight:700}
+.log-line.skill{color:#5abaff}
+.log-line.lose{color:#e08080}
+.log-line.enemy-hit{color:#ff9a5a}
+.log-line.win{color:#3ad080;font-weight:700}
+.skill-bar{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.skill-btn{min-width:90px;padding:10px 12px;background:#1a242f;border:1px solid #2a3a4a;border-radius:10px;cursor:pointer;transition:.15s;text-align:center}
+.skill-btn:hover{border-color:#e6d5a0;transform:translateY(-1px)}
+.skill-btn.disabled{opacity:.4;cursor:not-allowed}
+.skill-btn .key{font:900 14px 'JetBrains Mono',monospace;color:#e6d5a0}
+.skill-btn .name{font:700 9px Inter,sans-serif;color:#d8d2b8;margin-top:2px;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.skill-btn .meta{font:700 7px 'JetBrains Mono',monospace;color:#8a9aaa;margin-top:2px}
+.result-modal{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(4px);z-index:100;display:none;align-items:center;justify-content:center;padding:16px}
+.result-modal.show{display:flex}
+.result-box{width:100%;max-width:380px;background:linear-gradient(180deg,#1e2a3a,#121a26);border:1px solid rgba(230,213,160,.3);border-radius:16px;padding:20px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.7)}
+.result-icon{font-size:48px;margin-bottom:8px}
+.result-title{font:900 20px 'Cinzel Decorative',serif;color:#e6d5a0;letter-spacing:.1em}
+.result-sub{font:700 9px 'JetBrains Mono',monospace;color:#8a9aaa;margin-top:8px}
+.result-actions{display:flex;gap:8px;margin-top:16px}
+.btn{flex:1;padding:10px;border-radius:8px;border:1px solid #2a3a4a;background:#1a242f;color:#d8d2b8;font:700 9px 'JetBrains Mono',monospace;letter-spacing:.1em;cursor:pointer}
+.btn.primary{background:#1e2f3e;border-color:#e6d5a0;color:#e6d5a0}
 </style>
 </head>
 <body>
@@ -243,17 +117,75 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
   </div>
 </div>
 <div class="center">
-<div class="page-title">PVP ARENA</div>
-<div class="page-sub">VOLAND • PLAYER VS PLAYER • COMING SOON</div>
-
-<div class="placeholder-grid">
-  <div class="ph-card"><div class="ph-icon">🏆</div><div class="ph-name">ARENA 1v1</div><div class="ph-desc">Дуэль • Рейтинг<br>Без выдуманного баланса</div><div class="ph-badge">SOON</div></div>
-  <div class="ph-card"><div class="ph-icon">⚔️</div><div class="ph-name">RANKED</div><div class="ph-desc">Ранговый сезон • Лиги<br>Жду правил от тебя</div><div class="ph-badge">SOON</div></div>
-  <div class="ph-card"><div class="ph-icon">👥</div><div class="ph-name">LEADERBOARD</div><div class="ph-desc">Топ игроков • Награды<br>Данные — позже</div><div class="ph-badge">SOON</div></div>
+  <div class="top-bar">
+    <div class="top-title">PVP ARENA • BOT TEST</div>
+    <div class="top-sub" id="topSub">8 HEROES • 3 DIFFICULTIES • SMART SKILLS</div>
+  </div>
+  <div class="main" id="mainArea">
+    <div class="lobby" id="lobby">
+      <div class="section">
+        <div class="section-title">1 • ВЫБЕРИ СЛОЖНОСТЬ</div>
+        <div class="diff-bar">
+          <button class="diff-btn easy" data-diff="easy" onclick="selectDiff('easy')"><span>EASY</span><span class="pct">30%</span><span style="font:400 7px JetBrains Mono;margin-top:4px;display:block">Слабый • Рандом скилы</span></button>
+          <button class="diff-btn active" data-diff="medium" onclick="selectDiff('medium')"><span>MEDIUM</span><span class="pct">100%</span><span style="font:400 7px JetBrains Mono;margin-top:4px;display:block">Как ты • Умные скилы</span></button>
+          <button class="diff-btn hard" data-diff="hard" onclick="selectDiff('hard')"><span>HARD</span><span class="pct">130%</span><span style="font:400 7px JetBrains Mono;margin-top:4px;display:block">+30% статы • Идеальный AI</span></button>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-title">2 • ВЫБЕРИ ПРОТИВНИКА • 8 HEROES</div>
+        <div class="hero-grid" id="heroGrid"></div>
+      </div>
+      <div class="section" id="previewSection" style="display:none">
+        <div class="section-title">3 • PREVIEW & FIGHT</div>
+        <div class="preview" id="previewArea"></div>
+        <button class="fight-btn" id="fightBtn" onclick="startFight()" disabled>ВЫБЕРИ ГЕРОЯ</button>
+      </div>
+    </div>
+    <div class="battle-area" id="battleArea">
+      <div class="battle-top">
+        <div class="fighter">
+          <img id="pImg" src="" alt="">
+          <div class="fighter-info">
+            <div class="fighter-name" id="pName">YOU</div>
+            <div class="fighter-role" id="pRole">PLAYER</div>
+            <div class="hp-bar-wrap"><div class="hp-bar" id="pHpBar"></div></div>
+            <div class="bar-text"><span id="pHpText">0/0</span><span>HP</span></div>
+            <div class="mana-bar-wrap"><div class="mana-bar" id="pManaBar"></div></div>
+            <div class="bar-text"><span id="pManaText">0/0</span><span>MANA</span></div>
+          </div>
+        </div>
+        <div class="fighter enemy">
+          <img id="bImg" src="" alt="">
+          <div class="fighter-info">
+            <div class="fighter-name" id="bName">BOT</div>
+            <div class="fighter-role" id="bRole">BOT</div>
+            <div class="hp-bar-wrap"><div class="hp-bar enemy" id="bHpBar"></div></div>
+            <div class="bar-text"><span id="bHpText">0/0</span><span>HP</span></div>
+            <div class="mana-bar-wrap"><div class="mana-bar" id="bManaBar"></div></div>
+            <div class="bar-text"><span id="bManaText">0/0</span><span>MANA</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="battle-log" id="battleLog"></div>
+      <div class="skill-bar" id="skillBar"></div>
+      <button class="btn" onclick="backToLobby()" style="width:100%;max-width:300px;margin:0 auto">← BACK TO LOBBY</button>
+    </div>
+  </div>
+</div>
 </div>
 
+<div class="result-modal" id="resultModal">
+  <div class="result-box">
+    <div class="result-icon" id="resultIcon">🏆</div>
+    <div class="result-title" id="resultTitle">ПОБЕДА!</div>
+    <div class="result-sub" id="resultSub">Ты победил бота</div>
+    <div class="result-actions">
+      <button class="btn primary" onclick="rematch()">РЕВАНШ</button>
+      <button class="btn" onclick="backToLobby()">LOBBY</button>
+    </div>
+  </div>
 </div>
-</div>
+
 <script src="./assets/js/db/heroes.js"></script>
 <script src="./assets/js/db/tiers.js"></script>
 <script src="./assets/js/db/resources.js"></script>
@@ -263,41 +195,77 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 <script src="./assets/js/db/enemies.js"></script>
 <script src="./assets/js/db/missions.js"></script>
 <script src="./assets/js/storage.js"></script>
+<script src="./assets/js/battle/pvp-engine-v1.js"></script>
 <script>
-// active nav highlight fallback
-let path=location.pathname.toLowerCase();
-document.querySelectorAll('.nav-item').forEach(el=>{
-  let pg=el.dataset.page;
-  if(pg && path.includes(pg)){
-    el.classList.add('active');
-    el.closest('.nav-group')?.classList.add('active');
-  }
-});
-</script>
-
-<script>
-// Symmetric tooltip positioning
-document.querySelectorAll('.nav-group').forEach(g=>{
-  let label = g.querySelector('.nav-label');
-  if(!label) return;
-  g.addEventListener('mouseenter', ()=>{
-    let rect = g.getBoundingClientRect();
-    label.style.top = (rect.top + rect.height/2) + 'px';
-    label.style.transform = 'translateY(-50%) translateX(0)';
+let selectedHero = null;
+let selectedDiff = 'medium';
+window.CURRENT_DIFF = 'medium';
+function getAllHeroes(){
+  let list = [];
+  try{ if(window.VOLAND_HEROES){ Object.keys(VOLAND_HEROES).forEach(id=>{ let h = VOLAND_HEROES[id]; list.push({id, n:h.n, role:h.role, img:h.img, st:h.st}); }); } }catch(e){}
+  return list;
+}
+function renderHeroGrid(){
+  let grid = document.getElementById('heroGrid');
+  let heroes = getAllHeroes();
+  grid.innerHTML = '';
+  heroes.forEach(h=>{
+    let div = document.createElement('div');
+    div.className = 'hero-card' + (selectedHero===h.id ? ' selected':'');
+    div.innerHTML = `<img src="${h.img}" onerror="this.style.display='none'"><div class="hero-name">${h.n}</div><div class="hero-role">${h.role}</div><div class="hero-stats">HP ${h.st.HP} • DMG ${h.st.DMG}<br>DEF ${h.st.DEF} • MANA ${h.st.MANA}</div>`;
+    div.onclick = ()=> selectHero(h.id);
+    grid.appendChild(div);
   });
-  g.addEventListener('mouseleave', ()=>{
-    label.style.transform = 'translateY(-50%) translateX(-6px)';
-  });
-});
-let path=location.pathname.toLowerCase();
-document.querySelectorAll('.nav-item').forEach(el=>{
-  let pg=el.dataset.page;
-  if(pg && path.includes(pg)){
-    el.classList.add('active');
-    el.closest('.nav-group')?.classList.add('active');
-  }
-});
+}
+function selectDiff(diff){
+  selectedDiff = diff; window.CURRENT_DIFF = diff;
+  document.querySelectorAll('.diff-btn').forEach(b=> b.classList.toggle('active', b.dataset.diff===diff));
+  updatePreview();
+}
+function selectHero(id){ selectedHero = id; renderHeroGrid(); updatePreview(); }
+function updatePreview(){
+  let section = document.getElementById('previewSection');
+  let area = document.getElementById('previewArea');
+  let btn = document.getElementById('fightBtn');
+  if(!selectedHero){ section.style.display='none'; return; }
+  section.style.display='block';
+  let heroes = getAllHeroes();
+  let botHero = heroes.find(x=>x.id===selectedHero);
+  let playerHeroId = 'necro-f-new';
+  try{ if(typeof volandGetHeroId==='function') playerHeroId = volandGetHeroId(); }catch(e){}
+  let playerHero = heroes.find(x=>x.id===playerHeroId) || heroes[0];
+  let mult = selectedDiff==='easy'?0.3 : selectedDiff==='hard'?1.3 : 1.0;
+  let botHp = Math.floor(botHero.st.HP * mult);
+  let botDmg = Math.floor(botHero.st.DMG * mult);
+  let botDef = Math.floor(botHero.st.DEF * mult);
+  area.innerHTML = `<div class="preview-card"><img src="${playerHero.img}"><div class="preview-info"><div class="preview-name">YOU • ${playerHero.n}</div><div class="preview-role">${playerHero.role}</div><div class="preview-stats">HP ${playerHero.st.HP} • DMG ${playerHero.st.DMG} • DEF ${playerHero.st.DEF}<br>100% • Твои статы из инвентаря</div></div></div><div style="font:900 20px Cinzel Decorative;color:#e6d5a0">VS</div><div class="preview-card" style="border-color:${mult<1?'#3ad080':mult>1?'#e05050':'#e6d5a0'}"><img src="${botHero.img}"><div class="preview-info"><div class="preview-name">BOT • ${botHero.n} • ${selectedDiff.toUpperCase()}</div><div class="preview-role">${botHero.role}</div><div class="preview-stats">HP ${botHp} • DMG ${botDmg} • DEF ${botDef}<br>${Math.round(mult*100)}% • ${selectedDiff==='easy'?'Слабый AI':selectedDiff==='hard'?'Умный AI +30%':'Умный AI'}</div></div></div>`;
+  btn.disabled = false; btn.textContent = `FIGHT vs ${botHero.n} [${selectedDiff.toUpperCase()} ${Math.round(mult*100)}%]`; btn.style.display='block';
+}
+function startFight(){
+  if(!selectedHero) return;
+  let playerHeroId = 'necro-f-new';
+  try{ if(typeof volandGetHeroId==='function') playerHeroId = volandGetHeroId(); }catch(e){}
+  document.getElementById('lobby').style.display='none';
+  document.getElementById('battleArea').classList.add('active');
+  document.getElementById('resultModal').classList.remove('show');
+  window.CURRENT_DIFF = selectedDiff;
+  if(window.pvpInit) window.pvpInit(playerHeroId, selectedHero, selectedDiff);
+}
+function backToLobby(){
+  document.getElementById('battleArea').classList.remove('active');
+  document.getElementById('lobby').style.display='flex';
+  document.getElementById('resultModal').classList.remove('show');
+  document.getElementById('battleLog').innerHTML='';
+}
+function rematch(){
+  document.getElementById('resultModal').classList.remove('show');
+  document.getElementById('battleLog').innerHTML='';
+  let playerHeroId = 'necro-f-new';
+  try{ if(typeof volandGetHeroId==='function') playerHeroId = volandGetHeroId(); }catch(e){}
+  if(window.pvpInit) window.pvpInit(playerHeroId, selectedHero, selectedDiff);
+}
+document.addEventListener('DOMContentLoaded', ()=>{ renderHeroGrid(); updatePreview(); });
+setTimeout(()=>{ renderHeroGrid(); }, 200);
 </script>
 </body>
-
 </html>
