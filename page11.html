@@ -86,7 +86,7 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 .skill-btn .key{font:900 14px 'JetBrains Mono',monospace;color:#e6d5a0}
 .skill-btn .name{font:700 9px Inter,sans-serif;color:#d8d2b8;margin-top:2px;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .skill-btn .meta{font:700 7px 'JetBrains Mono',monospace;color:#8a9aaa;margin-top:2px}
-.result-modal{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(4px);z-index:100;display:none;align-items:center;justify-content:center;padding:16px}
+.result-modal{position:fixed;inset:0;background:rgba(0,0,0,.35);backdrop-filter:blur(2px);z-index:100;display:none;align-items:center;justify-content:center;padding:16px}
 .result-modal.show{display:flex}
 .result-box{width:100%;max-width:380px;background:linear-gradient(180deg,#1e2a3a,#121a26);border:1px solid rgba(230,213,160,.3);border-radius:16px;padding:20px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.7)}
 .result-icon{font-size:48px;margin-bottom:8px}
@@ -119,7 +119,7 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 <div class="center">
   <div class="top-bar">
     <div class="top-title">PVP ARENA • BOT TEST</div>
-    <div class="top-sub" id="topSub">8 HEROES • 3 DIFFICULTIES • SMART SKILLS</div>
+    <div class="top-sub" id="topSub">8 HEROES • 3 DIFFICULTIES • SMART SKILLS • HP x5</div>
   </div>
   <div class="main" id="mainArea">
     <div class="lobby" id="lobby">
@@ -218,7 +218,7 @@ function renderHeroGrid(){
   heroes.forEach(h=>{
     let div = document.createElement('div');
     div.className = 'hero-card' + (selectedHero===h.id ? ' selected':'');
-    div.innerHTML = `<img src="${h.img}" onerror="this.style.display='none'"><div class="hero-name">${h.n}</div><div class="hero-role">${h.role}</div><div class="hero-stats">HP ${h.st.HP} • DMG ${h.st.DMG}<br>DEF ${h.st.DEF} • MANA ${h.st.MANA}</div>`;
+    div.innerHTML = `<img src="${h.img}" onerror="this.style.display='none'"><div class="hero-name">${h.n}</div><div class="hero-role">${h.role}</div><div class="hero-stats">HP ${h.st.HP*5} (x5) • DMG ${h.st.DMG}<br>DEF ${h.st.DEF} • MANA ${h.st.MANA}</div>`;
     div.onclick = ()=> selectHero(h.id);
     grid.appendChild(div);
   });
@@ -241,11 +241,11 @@ function updatePreview(){
   try{ if(typeof volandGetHeroId==='function') playerHeroId = volandGetHeroId(); }catch(e){}
   let playerHero = heroes.find(x=>x.id===playerHeroId) || heroes[0];
   let mult = selectedDiff==='easy'?0.3 : selectedDiff==='hard'?1.3 : 1.0;
-  let botHp = Math.floor(botHero.st.HP * mult);
+  let botHp = Math.floor(botHero.st.HP * mult * 5);
   let botDmg = Math.floor(botHero.st.DMG * mult);
   let botDef = Math.floor(botHero.st.DEF * mult);
-  area.innerHTML = `<div class="preview-card"><img src="${playerHero.img}"><div class="preview-info"><div class="preview-name">YOU • ${playerHero.n}</div><div class="preview-role">${playerHero.role}</div><div class="preview-stats">HP ${playerHero.st.HP} • DMG ${playerHero.st.DMG} • DEF ${playerHero.st.DEF}<br>100% • Твои статы из инвентаря</div></div></div><div style="font:900 20px Cinzel Decorative;color:#e6d5a0">VS</div><div class="preview-card" style="border-color:${mult<1?'#3ad080':mult>1?'#e05050':'#e6d5a0'}"><img src="${botHero.img}"><div class="preview-info"><div class="preview-name">BOT • ${botHero.n} • ${selectedDiff.toUpperCase()}</div><div class="preview-role">${botHero.role}</div><div class="preview-stats">HP ${botHp} • DMG ${botDmg} • DEF ${botDef}<br>${Math.round(mult*100)}% • ${selectedDiff==='easy'?'Слабый AI':selectedDiff==='hard'?'Умный AI +30%':'Умный AI'}</div></div></div>`;
-  btn.disabled = false; btn.textContent = `FIGHT vs ${botHero.n} [${selectedDiff.toUpperCase()} ${Math.round(mult*100)}%]`; btn.style.display='block';
+  area.innerHTML = `<div class="preview-card"><img src="${playerHero.img}"><div class="preview-info"><div class="preview-name">YOU • ${playerHero.n}</div><div class="preview-role">${playerHero.role}</div><div class="preview-stats">HP ${playerHero.st.HP*5} (x5 PVP) • DMG ${playerHero.st.DMG} • DEF ${playerHero.st.DEF}<br>100% • Твои статы из инвентаря</div></div></div><div style="font:900 20px Cinzel Decorative;color:#e6d5a0">VS</div><div class="preview-card" style="border-color:${mult<1?'#3ad080':mult>1?'#e05050':'#e6d5a0'}"><img src="${botHero.img}"><div class="preview-info"><div class="preview-name">BOT • ${botHero.n} • ${selectedDiff.toUpperCase()}</div><div class="preview-role">${botHero.role}</div><div class="preview-stats">HP ${botHp} • DMG ${botDmg} • DEF ${botDef}<br>${Math.round(mult*100)}% • ${selectedDiff==='easy'?'Слабый AI':selectedDiff==='hard'?'Умный AI +30%':'Умный AI'}</div></div></div>`;
+  btn.disabled = false; btn.textContent = `FIGHT vs ${botHero.n} [${selectedDiff.toUpperCase()} ${Math.round(mult*100)}% HPx5]`; btn.style.display='block';
 }
 function startFight(){
   if(!selectedHero) return;
