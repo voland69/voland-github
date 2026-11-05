@@ -1,4 +1,4 @@
-// VOLAND PVP ENGINE V1 - Bot with 3 difficulties, uses skills with ума - FIXED
+// VOLAND PVP ENGINE V2 - Fixed stun lock, auto skip
 (function(){
 const DIFF_MULT = { easy: 0.3, medium: 1.0, hard: 1.3 };
 let player = null;
@@ -101,12 +101,12 @@ function addLog(msg, type){
 }
 
 function getSkillMeta(idx){
-  const metas = { 1: {name:'Skill1', mana:10, cd:3, mult:2.0, stun:0}, 2: {name:'Skill2', mana:20, cd:8, mult:3.0, stun:1}, 3: {name:'Skill3', mana:30, cd:15, mult:2.5, stun:0}, 4: {name:'ULT', mana:60, cd:20, mult:5.0, stun:0} };
-  return metas[idx] || metas[1];
+  const metas = { 0: {name:'ATK', mana:0, cd:1, mult:1.0, stun:0}, 1: {name:'Skill1', mana:10, cd:3, mult:2.0, stun:0}, 2: {name:'Skill2', mana:20, cd:8, mult:3.0, stun:1}, 3: {name:'Skill3', mana:30, cd:15, mult:2.5, stun:0}, 4: {name:'ULT', mana:60, cd:20, mult:5.0, stun:0} };
+  return metas[idx] || metas[0];
 }
 
 function getPlayerSkillMeta(idx){
-  if(idx===0) return {name:'ATK', mana:0, cd:1, mult:1.0};
+  if(idx===0) return {name:'ATK', mana:0, cd:1, mult:1.0, stun:0};
   try{ let VH = getVH(); let hero = VH ? VH[player.id] : null; if(hero && hero.sk && hero.sk[idx]){ let meta = getSkillMeta(idx); meta.name = hero.sk[idx][0]; if(idx===4) meta.mult = 5.5; return meta; } }catch(e){}
   return getSkillMeta(idx);
 }
@@ -121,7 +121,12 @@ function getBotSkillMeta(idx, diff){
 
 function playerAction(idx){
   if(isOver) return;
-  if(playerStun>0){ addLog(`💤 Ты оглушен ${playerStun}р, пропускаешь ход`, 'lose'); endPlayerTurn(); return; }
+  if(playerStun>0){
+    addLog(`💤 Ты оглушен ${playerStun}р, пропускаешь ход`, 'lose');
+    playerStun--;
+    endPlayerTurn();
+    return;
+  }
   if(playerCd[idx]>0){ addLog(`⛔ Скилл на КД ${playerCd[idx]}р`, 'lose'); return; }
   let meta = getPlayerSkillMeta(idx);
   if(player.mana < meta.mana){ addLog(`⛔ Не хватает маны ${meta.mana} (есть ${player.mana})`, 'lose'); return; }
@@ -136,16 +141,28 @@ function playerAction(idx){
 
 function endPlayerTurn(){
   for(let i=0;i<playerCd.length;i++) if(playerCd[i]>0) playerCd[i]--;
-  player.mana = Math.min(player.maxMana, player.mana+8); updateBars(); renderSkills(); setTimeout(botTurn, 500);
+  player.mana = Math.min(player.maxMana, player.mana+8); updateBars(); renderSkills();
+  setTimeout(botTurn, 500);
 }
 
 function botTurn(){
   if(isOver) return;
-  if(botStun>0){ addLog(`💤 ${bot.name} оглушен ${botStun}р`, 'hit'); botStun--; bot.mana = Math.min(bot.maxMana, bot.mana+8); for(let i=0;i<botCd.length;i++) if(botCd[i]>0) botCd[i]--; updateBars(); turn++; addLog(`--- Ход ${turn}: твой ход ---`, ''); renderSkills(); return; }
+  if(botStun>0){
+    addLog(`💤 ${bot.name} оглушен ${botStun}р, пропускает ход`, 'hit');
+    botStun--;
+    bot.mana = Math.min(bot.maxMana, bot.mana+8);
+    for(let i=0;i<botCd.length;i++) if(botCd[i]>0) botCd[i]--;
+    updateBars(); turn++; addLog(`--- Ход ${turn}: твой ход ---`, ''); renderSkills();
+    if(playerStun>0){ setTimeout(autoPlayerStunSkip, 700); }
+    return;
+  }
+
   let diff = window.CURRENT_DIFF || 'medium';
   let action = chooseBotAction(diff);
-  if(action.type==='skip'){ addLog(`💤 ${bot.name} пропускает ход (нет маны)`, 'hit'); }
-  else {
+
+  if(action.type==='skip'){
+    addLog(`💤 ${bot.name} пропускает ход (нет маны)`, 'hit');
+  } else {
     let idx = action.idx; let meta = getBotSkillMeta(idx, diff);
     bot.mana -= meta.mana; botCd[idx] = meta.cd;
     let dmg = Math.floor(bot.dmg * meta.mult); dmg = Math.max(10, dmg - player.def + rand(-15,15));
@@ -154,8 +171,29 @@ function botTurn(){
     if(isDodge){ addLog(`💨 Ты уклонился от ${meta.name} бота!`, 'hit'); }
     else { player.hp = Math.max(0, player.hp - dmg); addLog(`💥 ${bot.name} ${meta.name} [${Math.round(meta.mult*100)}%] → ты на ${dmg}${isCrit?' CRIT!':''}`, isCrit?'lose':'enemy-hit'); if(meta.stun>0){ playerStun = Math.max(playerStun, meta.stun); addLog(`💫 Ты оглушен ${meta.stun}р!`, 'lose'); } }
   }
+
   for(let i=0;i<botCd.length;i++) if(botCd[i]>0) botCd[i]--;
-  bot.mana = Math.min(bot.maxMana, bot.mana+8); updateBars(); if(player.hp<=0){ lose(); return; } turn++; addLog(`--- Ход ${turn}: твой ход ---`, ''); renderSkills();
+  bot.mana = Math.min(bot.maxMana, bot.mana+8); updateBars();
+  if(player.hp<=0){ lose(); return; }
+  turn++; addLog(`--- Ход ${turn}: твой ход ---`, ''); renderSkills();
+
+  if(playerStun>0){
+    setTimeout(autoPlayerStunSkip, 700);
+  }
+}
+
+function autoPlayerStunSkip(){
+  if(isOver) return;
+  if(playerStun<=0) return;
+  addLog(`💤 Ты оглушен ${playerStun}р, пропускаешь ход (авто)`, 'lose');
+  playerStun--;
+  for(let i=0;i<playerCd.length;i++) if(playerCd[i]>0) playerCd[i]--;
+  player.mana = Math.min(player.maxMana, player.mana+8);
+  updateBars();
+  turn++;
+  addLog(`--- Ход ${turn}: ход ${bot.name} ---`, '');
+  renderSkills();
+  setTimeout(botTurn, 600);
 }
 
 function chooseBotAction(diff){
