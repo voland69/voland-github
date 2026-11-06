@@ -1,4 +1,3 @@
-<!-- VOLAND page4-v15.html - FIX v15: исправлен SyntaxError в v14 (кавычки в onclick). На GitHub сохранять КАК page4.html -->
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -359,36 +358,17 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
   </div>
 </div>
 
-<script src="./assets/js/db.js"></script>
+<script src="./assets/js/db/heroes.js"></script>
+<script src="./assets/js/db/tiers.js"></script>
+<script src="./assets/js/db/resources.js"></script>
+<script src="./assets/js/db/items.js"></script>
+<script src="./assets/js/db/starter.js"></script>
+<script src="./assets/js/db/locations.js"></script>
+<script src="./assets/js/db/enemies.js"></script>
+<script src="./assets/js/db/missions.js"></script>
 <script src="./assets/js/storage.js"></script>
 <script>
-// v15 FIX (v14 SyntaxError): не кидать молча на page2, если storage.js не загрузился или сейва нет - показать причину
-(function(){
-  // если db.js / storage.js не загрузились - volandHasSave не существует, раньше тут был краш/редирект
-  if(typeof volandHasSave!=='function'){
-    console.error('[BAG v15] storage.js НЕ загрузился! Проверь что на GitHub есть ./assets/js/storage.js и ./assets/js/db.js');
-    let d=document.createElement('div');
-    d.style.cssText='position:fixed;inset:0;z-index:9999;background:#0a0e14;color:#e6d5a0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:24px;text-align:center;font-family:monospace';
-    d.innerHTML=`<div style="font-size:22px">⚠️ STORAGE НЕ ЗАГРУЗИЛСЯ</div><div>Файл ./assets/js/storage.js не найден на GitHub.<br>Ты залил page4-v13 как page4.html, но не залил storage-v13 как storage.js?</div><button onclick="location.href='./page2.html'" style="padding:10px 18px;background:#e6d5a0;border:0;border-radius:8px;font-weight:800;cursor:pointer">К ВЫБОРУ ГЕРОЯ</button>`;
-    document.body.appendChild(d);
-    return;
-  }
-  let has=false;
-  try{ has=volandHasSave(); }catch(e){ console.error('[BAG v15] volandHasSave err', e); has=false; }
-  if(!has){
-    // проверяем legacy ключи - вдруг сейв в старом формате
-    let legacy = null;
-    try{ legacy = localStorage.getItem('voland_hero') || localStorage.getItem('voland_v1_hero'); }catch(e){}
-    console.warn('[BAG v15] volandHasSave()=false, legacy hero=', legacy, 'saves=', localStorage.getItem('voland_v1_saves'));
-    // НЕ редиректим мгновенно - показываем что случилось, чтобы не терять игрока
-    let d=document.createElement('div');
-    d.style.cssText='position:fixed;inset:0;z-index:9999;background:rgba(10,14,20,.92);color:#e6d5a0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:24px;text-align:center;font-family:monospace';
-    d.innerHTML=`<div style="font-size:22px">😕 СЕЙВ НЕ НАЙДЕН</div><div>На этом домене в localStorage нет voland_v1_saves.<br>Если ты открывал игру на другом домене / в инкогнито / чистил кэш - сейв там и остался.<br><br>Нажми «Создать героя», или вернись на страницу где создавал героя.</div><div style="display:flex;gap:10px"><button onclick="location.href='./page2.html'" style="padding:10px 18px;background:#e6d5a0;border:0;border-radius:8px;font-weight:800;cursor:pointer">СОЗДАТЬ ГЕРОЯ → page2</button><button onclick="this.parentElement.parentElement.remove()" style="padding:10px 18px;background:#1a242f;color:#e6d5a0;border:1px solid #2a3a4a;border-radius:8px;cursor:pointer">ОСТАТЬСЯ В BAG</button></div><div style="font-size:11px;color:#6a7a8a">Для проверки в консоли (F12): localStorage.getItem('voland_v1_saves')</div>`;
-    document.body.appendChild(d);
-    return;
-  }
-  console.log('[BAG v15] сейв найден, остаёмся в BAG');
-})();
+if (!volandHasSave()){ location.href='./page2.html'; }
 let equipped = volandGetEquippedItems();
 let inv = [];
 function rebuildInv(){
@@ -439,21 +419,10 @@ function rebuildInv(){
     
     if(typeof volandGetInventory==='function'){
       let dropped = volandGetInventory();
-      let potionCounts = {};
-      for(let d of dropped){ let _id = d.id||d; if(String(_id).indexOf('potion-')===0){ potionCounts[_id] = (potionCounts[_id]||0)+1; } }
-      window.VOLAND_POTION_COUNTS = potionCounts;
-      let seenPotionBase = {};
       for(let d of dropped){
         let item = null;
         try{ item = VOLAND_ITEMS.find(i=>i.id===d.id); }catch(e){}
         if(!item) continue;
-        if(item.type==='potion'){
-          if(seenPotionBase[item.id]) continue;
-          seenPotionBase[item.id]=true;
-          let cnt = potionCounts[item.id]||1;
-          droppedGearMap[item.id] = {...item, isDropped:true, dropTime:d.time, isEquip:false, isPotion:true, count:cnt};
-          continue;
-        }
         if(ids.has(item.id)) continue;
         let base = item.baseId || item.id.split('-')[0];
         if(equippedBaseIds.has(base)) continue; // FIX: skip if base already equipped (e.g. red helmet when gold helmet equipped)
@@ -498,12 +467,12 @@ function rebuildInv(){
     let starterIds = [];
     if(heroId && typeof VOLAND_GET_STARTER_GEAR_FOR_HERO==='function'){
       starterIds = VOLAND_GET_STARTER_GEAR_FOR_HERO(heroId);
+    } else if(typeof VOLAND_BASE_CLOTHING_IDS!=='undefined' && typeof VOLAND_HERO_WEAPON_TYPE!=='undefined' && typeof VOLAND_WEAPON_SETS!=='undefined'){
+      let wType = VOLAND_HERO_WEAPON_TYPE[heroId] || 'sword';
+      let weapons = VOLAND_WEAPON_SETS[wType] || ['sword-bw-lvl1','shield-bw-lvl1'];
+      starterIds = [...VOLAND_BASE_CLOTHING_IDS, ...weapons];
     } else if(typeof VOLAND_BASE_CLOTHING_IDS!=='undefined'){
       starterIds = [...VOLAND_BASE_CLOTHING_IDS, 'sword-bw-lvl1','shield-bw-lvl1'];
-    } else if(typeof VOLAND_STARTER_GEAR_IDS !== 'undefined'){
-      starterIds = VOLAND_STARTER_GEAR_IDS;
-    } else if(typeof VOLAND_ITEMS !== 'undefined'){
-      starterIds = VOLAND_ITEMS.filter(it=>it.tier==='bw' && it.level===1).map(it=>it.id).slice(0,13);
     }
     starterIds.forEach(sid=>{
       if(inv.length>=50) return;
@@ -659,25 +628,6 @@ function renderInv(){
         cell.innerHTML=`<div class="item-icon">${iconHtml}</div><div class="badge">${it.count}</div>`;
         cell.onclick=()=>{ log(it.name+': '+it.count+' — стак 99, при 99+ новая ячейка'); };
         cell.title = it.name+' '+it.count;
-      } else if(it.isPotion){
-        cell.classList.add('equip','potion');
-        let iconHtml='';
-        if(it.icon && (it.icon.includes('.webp') || it.icon.includes('/potions/') || it.icon.includes('/loot/'))){
-          iconHtml = `<img src="${it.icon}" style="width:100%;height:100%;object-fit:contain" onerror="this.style.display='none'">`;
-        } else {
-          let emoji = it.emoji || '🧪';
-          iconHtml = `<span class="emoji-fallback">${emoji}</span>`;
-        }
-        let cnt = it.count||1;
-        cell.innerHTML=`<div class="item-icon">${iconHtml}</div><div class="badge">${cnt}</div>`;
-        cell.onclick=()=>{
-          if(typeof volandUsePotion==='function'){
-            let ok = volandUsePotion(it.id);
-            log(ok ? ('Использовано: '+it.name) : ('Не удалось использовать: '+it.name));
-            rebuildInv(); renderInv();
-          } else { openGearModal(it,i); }
-        };
-        cell.title = it.name+' x'+cnt+' — нажми чтобы использовать • '+(it.desc||'');
       } else {
         cell.classList.add('equip');
         if(it.rarity==='green') cell.classList.add('rarity-green');
