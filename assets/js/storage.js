@@ -1,4 +1,3 @@
-// VOLAND STORAGE v13 - potions stack, dedup fix - на GitHub сохранять КАК storage.js
 // VOLAND STORAGE v2 - 3 saves + backward compat
 const VOLAND_KEYS = {
   hero: 'voland_v1_hero',
@@ -619,28 +618,22 @@ function volandCompareItemLevel(idA, idB){
     return (a.level||0)-(b.level||0);
   }catch(e){ return 0; }
 }
-function volandIsPotionId(itemId){
-  try{
-    if(typeof VOLAND_ITEMS!=='undefined'){
-      let it = VOLAND_ITEMS.find(x=>x.id===itemId);
-      if(it) return it.type==='potion';
-    }
-    return String(itemId||'').indexOf('potion-')===0;
-  }catch(e){ return String(itemId||'').indexOf('potion-')===0; }
-}
 function volandDedupInventoryByBaseId(inv){
   try{
     if(!Array.isArray(inv)) return [];
     let map={};
-    let potions=[];
     inv.forEach(entry=>{
       if(!entry || !entry.id) return;
-      if(volandIsPotionId(entry.id)){ potions.push(entry); return; }
       let base = volandGetItemBaseId(entry.id);
-      if(!map[base]){ map[base]=entry; }
-      else { if(volandCompareItemLevel(entry.id, map[base].id)>0){ map[base]=entry; } }
+      if(!map[base]){
+        map[base]=entry;
+      } else {
+        if(volandCompareItemLevel(entry.id, map[base].id)>0){
+          map[base]=entry;
+        }
+      }
     });
-    let result = Object.values(map).concat(potions);
+    let result = Object.values(map);
     result.sort((a,b)=>(b.time||0)-(a.time||0));
     return result;
   }catch(e){ return inv; }
@@ -689,7 +682,6 @@ function volandSaveInventory(inv){
 function volandAddToInventory(itemId){
   try{
     let inv=volandGetInventory();
-    if(volandIsPotionId(itemId)){ inv.push({id:itemId, time:Date.now()}); return volandSaveInventory(inv); }
     let base = volandGetItemBaseId(itemId);
     let existingIdx = -1;
     for(let i=0;i<inv.length;i++){
@@ -711,7 +703,6 @@ function volandAddToInventory(itemId){
 function volandRemoveFromInventory(itemId){
   try{
     let inv=volandGetInventory();
-    if(volandIsPotionId(itemId)){ let idx = inv.findIndex(x=>x.id===itemId); if(idx>=0) inv.splice(idx,1); return volandSaveInventory(inv); }
     inv = inv.filter(x=>x.id!==itemId);
     return volandSaveInventory(inv);
   }catch(e){ return []; }
