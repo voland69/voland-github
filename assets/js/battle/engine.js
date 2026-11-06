@@ -199,9 +199,6 @@ function endRound(){
  addLog('--- Ход '+turn+': твой ход ---','');
 }
 
-
-
-
 function showVictory(){
   isBattleOver=true;
   // Берем награды из db.js VOLAND_ENEMIES, а не формулой
@@ -238,35 +235,24 @@ function showVictory(){
       if(enemyData && Array.isArray(enemyData.drops)){
         enemyData.drops.forEach(d=>{
           if(Math.random() < (d.chance||0)){
-            if(typeof volandAddResource==='function') volandAddResource(d.id, 1);
+            if(String(d.id).indexOf('potion-')===0){
+              if(typeof volandAddToInventory==='function') volandAddToInventory(d.id);
+            } else if(typeof volandAddResource==='function') volandAddResource(d.id, 1);
           }
         });
       }
       if(enemyData && enemyData.equipChance && Math.random() < enemyData.equipChance){
         if(typeof VOLAND_ITEMS!=='undefined' && typeof volandAddToInventory==='function'){
           let heroId = (typeof volandGetHeroId==='function'?volandGetHeroId():'necro-f-new');
-                    let allowedBases = [];
-          if(typeof VOLAND_HERO_WEAPON_TYPE!=='undefined' && typeof VOLAND_WEAPON_SETS!=='undefined'){
-            let wType = VOLAND_HERO_WEAPON_TYPE[heroId] || 'sword';
-            let weaponIds = VOLAND_WEAPON_SETS[wType] || [];
-            allowedBases = weaponIds.map(wid=>{
-              try{
-                let it = VOLAND_ITEMS.find(x=>x.id===wid);
-                return it ? (it.baseId || wid.split('-')[0]) : wid.split('-')[0];
-              }catch(e){ return wid.split('-')[0]; }
-            });
-          } else {
-            let classMap = {
-              'necro-f-new':'mage','necro-m':'tank','archer-f':'archer',
-              'archer-m':'archer',
-              'archmage-m':'mage','warrior-f':'warrior','warrior-m':'warrior','mage-f-new':'mage'
-            };
-            let heroClass = classMap[heroId] || 'mage';
-            let allowedWeaponBases = {
-              'mage':['staff'], 'archer':['bow'], 'warrior':['sword','shield'], 'tank':['shield','sword']
-            };
-            allowedBases = allowedWeaponBases[heroClass] || ['staff'];
-          }
+          let classMap = {
+            'necro-f-new':'mage','necro-m':'tank','archer-f':'archer','archer-m':'archer',
+            'archmage-m':'mage','warrior-f':'warrior','warrior-m':'warrior','mage-f-new':'mage'
+          };
+          let heroClass = classMap[heroId] || 'mage';
+          let allowedWeaponBases = {
+            'mage':['staff'], 'archer':['bow'], 'warrior':['sword'], 'tank':['shield','sword']
+          };
+          let allowedBases = allowedWeaponBases[heroClass] || ['staff'];
           let pool = VOLAND_ITEMS.filter(it=>{
             if(!it.slot) return false;
             if(it.type==='potion') return false;
@@ -301,9 +287,6 @@ function showVictory(){
       if(enemyData && enemyData.boss){
         volandUpdateMissionStat('kill_boss', null, 1);
         volandUpdateMissionStat('kill_boss_diff', null, loc+'-'+stage);
-        if(typeof volandAddBossKill==='function'){
-          try{ volandAddBossKill(loc); }catch(e){ console.log('boss kill save err', e); }
-        }
       }
     }
   }catch(e){ console.log('victory save error', e); }
@@ -338,7 +321,6 @@ function showDefeat(){
   document.getElementById('victoryModal').classList.add('show');
   renderSkillBar();
 }
-
 
 function tryNav(url){ if(!isBattleOver){ addLog('⛔ Нельзя выйти из боя! Закончи бой','lose'); return; } location.href=url; }
 window.tryNav=tryNav;
