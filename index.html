@@ -36,10 +36,11 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 <div class="bg"><img src="./assets/heroes/bg-battlefield.webp" onerror="this.style.display='none'"></div>
 <div class="wrap">
   <div class="logo">VOLAND</div>
-  <div class="sub">DARK FANTASY • RPG • v1.0 STABLE • 3 HERO SLOTS</div>
+  <div class="sub">DARK FANTASY • RPG • v<span id="voland-version">2.0</span> STABLE • 3 HERO SLOTS</div>
   <div id="content" style="width:100%;max-width:900px"></div>
   <div class="note">Сохранение хранится в браузере (localStorage) • 3 слота • ./assets/</div>
 </div>
+<script src="./assets/js/config.js"></script>
 <script src="./assets/js/db/heroes.js"></script>
 <script src="./assets/js/db/tiers.js"></script>
 <script src="./assets/js/db/resources.js"></script>
@@ -50,6 +51,8 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 <script src="./assets/js/db/missions.js"></script>
 <script src="./assets/js/storage.js"></script>
 <script>
+// Версия — только из конфига, не хардкодить
+try{ var _vEl = document.getElementById('voland-version'); if(_vEl && typeof VOLAND_CONFIG!=='undefined' && VOLAND_CONFIG.version) _vEl.textContent = VOLAND_CONFIG.version; }catch(e){}
 function render(){
   const saves = volandGetSaves();
   const c = document.getElementById('content');
