@@ -1,4 +1,4 @@
-// VOLAND STORAGE v12 - potions stack, dedup fix
+// VOLAND STORAGE v13 - potions stack, dedup fix - на GitHub сохранять КАК storage.js
 // VOLAND STORAGE v2 - 3 saves + backward compat
 const VOLAND_KEYS = {
   hero: 'voland_v1_hero',
