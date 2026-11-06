@@ -1,3 +1,5 @@
+// VOLAND BATTLE ENGINE v12 - full, fixed: single roll, dynamic rewardsBox, potions, bossKill
+// Base: engine_7.js (417 lines) + v12 header. Replaces old engine.js (347 lines) which had double-roll bug.
 // VOLAND BATTLE ENGINE v1 - база, чистый старт
 // DMG-DEF+rand, полоски HP/MANA, QWER, win/lose, грузит механику героя из heroes/${heroId}.js
 (function(){
@@ -199,22 +201,20 @@ function endRound(){
  addLog('--- Ход '+turn+': твой ход ---','');
 }
 
+
+
+
 function showVictory(){
   isBattleOver=true;
-  // Берем награды из db.js VOLAND_ENEMIES, а не формулой
   let goldReward = (enemyData && enemyData.gold) ? parseInt(enemyData.gold) : 5;
   let xpReward = (enemyData && enemyData.xp) ? parseInt(enemyData.xp) : 80;
-  // FIX: роллим лут ОДИН раз - и для показа, и для выдачи. Раньше было два независимых ролла:
-  // один для цифры в окне, второй для реальной выдачи - поэтому окно показывало 3, а падало 1.
+  // FIX: роллим ОДИН раз - и для показа, и для выдачи
   let rolledDrop = null;
-  let lootCount = 0;
-  let lootIcon = './assets/ui/loot/essence.webp';
-  let lootNames = [];
+  let allDrops = [];
   try{
     if(typeof volandRollDrops==='function'){
       rolledDrop = volandRollDrops(enemyData);
     } else {
-      // fallback: прямой ролл, если drop.js не загружен
       let res=[]; let potions=[]; let equips=[];
       if(enemyData && Array.isArray(enemyData.drops)){
         enemyData.drops.forEach(d=>{
@@ -227,75 +227,67 @@ function showVictory(){
       if(enemyData && enemyData.equipChance && Math.random() < enemyData.equipChance) equips.push('__equip__');
       rolledDrop = {resources:res, potions:potions, equips:equips};
     }
-    let allDrops = [];
     if(rolledDrop.resources) allDrops = allDrops.concat(rolledDrop.resources.map(r=>({kind:'res', id:r.id})));
     if(rolledDrop.potions) allDrops = allDrops.concat(rolledDrop.potions.map(p=>({kind:'potion', id:p.id})));
     if(rolledDrop.equips) allDrops = allDrops.concat(rolledDrop.equips.map(e=>({kind:'equip', id:e})));
-    lootCount = allDrops.length;
-    // Иконка = первый выпавший предмет, а не всегда essence
-    if(allDrops.length>0){
-      let first = allDrops[0];
-      if(first.kind==='res'){
-        let rdef = (typeof VOLAND_RESOURCES!=='undefined') ? VOLAND_RESOURCES.find(r=>r.id===first.id) : null;
-        if(rdef && rdef.icon) lootIcon = rdef.icon;
-        else lootIcon = './assets/ui/loot/'+first.id+'.webp';
-        lootNames.push(rdef ? (rdef.name||first.id) : first.id);
-      } else if(first.kind==='potion'){
-        let pdef = null;
-        if(typeof VOLAND_ITEMS!=='undefined') pdef = VOLAND_ITEMS.find(x=>x.id===first.id);
-        if(!pdef && typeof VOLAND_POTIONS!=='undefined') pdef = VOLAND_POTIONS.find(x=>x.id===first.id);
-        if(pdef && pdef.icon) lootIcon = pdef.icon;
-        lootNames.push(pdef ? (pdef.name||first.id) : first.id);
-      } else if(first.kind==='equip'){
-        let edef = (typeof VOLAND_ITEMS!=='undefined') ? VOLAND_ITEMS.find(x=>x.id===first.id) : null;
-        if(edef && edef.icon) lootIcon = edef.icon;
-        lootNames.push(edef ? (edef.name||first.id) : 'Шмотка');
-      }
-      // остальные дропы - для тултипа / подписи
-      for(let i=1;i<allDrops.length;i++){
-        let d = allDrops[i];
-        if(d.kind==='res'){
-          let rdef = (typeof VOLAND_RESOURCES!=='undefined') ? VOLAND_RESOURCES.find(r=>r.id===d.id) : null;
-          lootNames.push(rdef ? (rdef.name||d.id) : d.id);
-        } else if(d.kind==='potion'){
-          let pdef = null;
-          if(typeof VOLAND_ITEMS!=='undefined') pdef = VOLAND_ITEMS.find(x=>x.id===d.id);
-          if(!pdef && typeof VOLAND_POTIONS!=='undefined') pdef = VOLAND_POTIONS.find(x=>x.id===d.id);
-          lootNames.push(pdef ? (pdef.name||d.id) : d.id);
-        } else {
-          lootNames.push('Шмотка');
-        }
-      }
-    }
-  }catch(e){ console.log('roll loot err', e); }
+  }catch(e){ console.log('roll loot err', e); rolledDrop={resources:[], potions:[], equips:[]}; }
+  // FIX: каждый лут в своём окошке - строим награды динамически
   try{
-    document.getElementById('rewGold').textContent='+'+goldReward;
-    document.getElementById('rewXp').textContent='+'+xpReward;
-    let lootEl=document.getElementById('rewLoot');
-    if(lootEl) lootEl.textContent=String(lootCount);
-    let lootImg=document.getElementById('rewLootImg');
-    if(lootImg) lootImg.src=lootIcon;
-    let lootLbl=document.getElementById('rewLootLbl');
-    if(lootLbl) lootLbl.textContent = lootCount>0 ? lootNames.join(' + ') : 'LOOT';
-    let lootBox=document.getElementById('rewLootBox');
-    if(lootBox){
-      lootBox.title = lootCount>0 ? lootNames.join(', ') : 'Ничего не выпало';
-      lootBox.style.opacity = lootCount>0 ? '1' : '0.5';
+    let box = document.getElementById('rewardsBox');
+    if(box){
+      let html = '';
+      // GOLD - увеличенная иконка 42px
+      html += '<div class="reward"><div><img src="./assets/ui/loot/gold.webp" style="width:42px;height:42px;object-fit:contain;display:block"></div><div class="reward-val gold">+'+goldReward+'</div><div class="reward-lbl">GOLD</div></div>';
+      // XP - увеличенная звёздочка
+      html += '<div class="reward"><div style="font-size:42px;line-height:1">⭐</div><div class="reward-val xp">+'+xpReward+'</div><div class="reward-lbl">XP</div></div>';
+      if(allDrops.length===0){
+        html += '<div class="reward" style="opacity:0.5"><div><img src="./assets/ui/loot/essence.webp" style="width:42px;height:42px;object-fit:contain;display:block"></div><div class="reward-val">0</div><div class="reward-lbl">LOOT</div></div>';
+      } else {
+        allDrops.forEach(d=>{
+          let icon='./assets/ui/loot/essence.webp';
+          let name=d.id;
+          if(d.kind==='res'){
+            let rdef = (typeof VOLAND_RESOURCES!=='undefined') ? VOLAND_RESOURCES.find(r=>r.id===d.id) : null;
+            if(rdef && rdef.icon) icon=rdef.icon;
+            else icon='./assets/ui/loot/'+d.id+'.webp';
+            name = rdef ? (rdef.name||d.id) : d.id;
+          } else if(d.kind==='potion'){
+            let pdef=null;
+            if(typeof VOLAND_ITEMS!=='undefined') pdef=VOLAND_ITEMS.find(x=>x.id===d.id);
+            if(!pdef && typeof VOLAND_POTIONS!=='undefined') pdef=VOLAND_POTIONS.find(x=>x.id===d.id);
+            if(pdef && pdef.icon) icon=pdef.icon;
+            name = pdef ? (pdef.name||d.id) : d.id;
+          } else if(d.kind==='equip'){
+            let edef=(typeof VOLAND_ITEMS!=='undefined') ? VOLAND_ITEMS.find(x=>x.id===d.id) : null;
+            if(edef && edef.icon) icon=edef.icon;
+            name = edef ? (edef.name||'Шмотка') : 'Шмотка';
+          }
+          // каждое выпадение - своя ячейка
+          html += '<div class="reward" title="'+name+'"><div><img src="'+icon+'" style="width:42px;height:42px;object-fit:contain;display:block" onerror="this.src=\'./assets/ui/loot/essence.webp\'"></div><div class="reward-val">+1</div><div class="reward-lbl">'+name.toUpperCase()+'</div></div>';
+        });
+      }
+      box.innerHTML = html;
+      // для совместимости со старым кодом - обновим и старые id если есть
+      let lootEl=document.getElementById('rewLoot');
+      if(lootEl) lootEl.textContent=String(allDrops.length);
+    } else {
+      // fallback - старый статичный блок
+      document.getElementById('rewGold').textContent='+'+goldReward;
+      document.getElementById('rewXp').textContent='+'+xpReward;
+      let lootEl=document.getElementById('rewLoot');
+      if(lootEl) lootEl.textContent=String(allDrops.length);
     }
-  }catch(e){}
+  }catch(e){ console.log('render rewards err', e); }
   document.getElementById('modalTitle').textContent='ПОБЕДА!';
   document.getElementById('modalSub').textContent='Ты победил • '+enemyData.name+' • LOC'+loc+' STAGE'+stage;
   document.getElementById('victoryModal').classList.add('show');
   renderSkillBar();
-  // сохраняем награды - не конфликтуют с поражением
   try{
     if(typeof volandAddGold==='function') volandAddGold(goldReward);
     if(typeof volandAddXp==='function') volandAddXp(xpReward);
-    // выдаем ТОТ ЖЕ ролл, что показали - не роллим второй раз
     if(rolledDrop && typeof volandApplyDrops==='function'){
       volandApplyDrops(rolledDrop);
     } else if(rolledDrop){
-      // fallback без drop.js - выдаем вручную
       if(rolledDrop.resources) rolledDrop.resources.forEach(r=>{
         if(String(r.id).indexOf('potion-')===0){
           if(typeof volandAddToInventory==='function') volandAddToInventory(r.id);
@@ -312,7 +304,7 @@ function showVictory(){
           let heroId2 = (typeof volandGetHeroId==='function'?volandGetHeroId():'necro-f-new');
           let allowedBases2 = [];
           if(typeof VOLAND_HERO_WEAPON_TYPE!=='undefined' && typeof VOLAND_WEAPON_SETS!=='undefined'){
-            let wType = VOLAND_HERO_WEAPON_TYPE || 'sword';
+            let wType = VOLAND_HERO_WEAPON_TYPE[heroId2] || 'sword';
             let weaponIds = VOLAND_WEAPON_SETS[wType] || [];
             allowedBases2 = weaponIds.map(wid=>{
               try{
@@ -326,7 +318,7 @@ function showVictory(){
               'archer-m':'archer',
               'archmage-m':'mage','warrior-f':'warrior','warrior-m':'warrior','mage-f-new':'mage'
             };
-            let heroClass2 = classMap2 || 'mage';
+            let heroClass2 = classMap2[heroId2] || 'mage';
             let allowedWeaponBases2 = {
               'mage':['staff'], 'archer':['bow'], 'warrior':['sword','shield'], 'tank':['shield','sword']
             };
@@ -350,7 +342,6 @@ function showVictory(){
         }
       }
     }
-    // SAVE HP/MANA after battle - stays 780/1712 etc then regens 10/min and 3/min
     try{
       if(typeof volandSetCurrentHP==='function') volandSetCurrentHP(hHp);
       if(typeof volandSetCurrentMANA==='function') volandSetCurrentMANA(hMana);
@@ -403,6 +394,7 @@ function showDefeat(){
   document.getElementById('victoryModal').classList.add('show');
   renderSkillBar();
 }
+
 
 function tryNav(url){ if(!isBattleOver){ addLog('⛔ Нельзя выйти из боя! Закончи бой','lose'); return; } location.href=url; }
 window.tryNav=tryNav;
