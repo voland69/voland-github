@@ -1,4 +1,8 @@
-# VOLAND v2 Modular Structure
+# VOLAND v2.0 Modular Structure
+
+## Версия
+Единый источник — `VOLAND_CONFIG.version` в `assets/js/config.js` (сейчас `2.0`).
+`config.js` подключён на всех страницах первым, до файлов базы данных.
 
 ## Current (working)
 - assets/js/db.js - heroes, items, locations, enemies
