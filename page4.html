@@ -1,3 +1,4 @@
+<!-- VOLAND page4-v12.html - BAG, potions stack -->
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -120,11 +121,15 @@
   inset:0 !important;
 }
 
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") center/cover no-repeat fixed #0a0e14;color:#d8d2b8;font-family:Inter,Arial,sans-serif;overflow:hidden}
 .bg{position:fixed;inset:0;z-index:0}.bg img{width:100%;height:100%;object-fit:cover}
 .wrap{position:fixed;inset:0;display:flex;z-index:2}
+
+
+
 
 .center-col{flex:1;display:flex;flex-direction:column;background:rgba(16,22,30,.25);overflow:hidden;backdrop-filter: blur(2px)}
 .top-row{flex:0 0 480px;display:flex;gap:16px;background:rgba(19,26,34,.35);border-bottom:1px solid rgba(30,42,50,.5);overflow:hidden;align-items:stretch}
@@ -220,6 +225,7 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
   z-index:1 !important;
 }
 
+
 /* VOLAND NAV FIX - 60px / 52x52 / gap 4 / no scroll / hover label */
 
 .left-nav::-webkit-scrollbar{display:none !important; width:0 !important; height:0 !important;}
@@ -249,6 +255,7 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
   width:100% !important;
   position:relative !important;
 }
+
 
 .nav-item:hover{
   opacity:1 !important;
@@ -353,7 +360,7 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
 </div>
 
 <script src="./assets/js/db.js"></script>
-<script src="./assets/js/storage.js"></script>
+<script src="./assets/js/storage-v12.js"></script>
 <script>
 if (!volandHasSave()){ location.href='./page2.html'; }
 let equipped = volandGetEquippedItems();
@@ -406,21 +413,14 @@ function rebuildInv(){
     
     if(typeof volandGetInventory==='function'){
       let dropped = volandGetInventory();
-      // FIX: potions - count stacked copies, do not dedup by baseId
       let potionCounts = {};
-      for(let d of dropped){
-        let _id = d.id||d;
-        if(String(_id).indexOf('potion-')===0){
-          potionCounts[_id] = (potionCounts[_id]||0)+1;
-        }
-      }
+      for(let d of dropped){ let _id = d.id||d; if(String(_id).indexOf('potion-')===0){ potionCounts[_id] = (potionCounts[_id]||0)+1; } }
       window.VOLAND_POTION_COUNTS = potionCounts;
       let seenPotionBase = {};
       for(let d of dropped){
         let item = null;
         try{ item = VOLAND_ITEMS.find(i=>i.id===d.id); }catch(e){}
         if(!item) continue;
-        // FIX: potions - one cell per potion ID with count, not per base dedup
         if(item.type==='potion'){
           if(seenPotionBase[item.id]) continue;
           seenPotionBase[item.id]=true;
@@ -649,9 +649,7 @@ function renderInv(){
             let ok = volandUsePotion(it.id);
             log(ok ? ('Использовано: '+it.name) : ('Не удалось использовать: '+it.name));
             rebuildInv(); renderInv();
-          } else {
-            openGearModal(it,i);
-          }
+          } else { openGearModal(it,i); }
         };
         cell.title = it.name+' x'+cnt+' — нажми чтобы использовать • '+(it.desc||'');
       } else {
