@@ -1,4 +1,6 @@
-// VOLAND STORAGE v2 - 3 saves + backward compat
+// VOLAND STORAGE — версия проекта 2.0 (см. VOLAND_CONFIG.version в config.js)
+// Ключи localStorage намеренно остаются voland_v1_* — переименование убьёт старые сейвы.
+// 3 saves + backward compat
 const VOLAND_KEYS = {
   hero: 'voland_v1_hero',
   name: 'voland_v1_name',
