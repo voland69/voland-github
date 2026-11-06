@@ -1,3 +1,4 @@
+// VOLAND STORAGE v12 - potions stack, dedup fix
 // VOLAND STORAGE v2 - 3 saves + backward compat
 const VOLAND_KEYS = {
   hero: 'voland_v1_hero',
@@ -20,6 +21,7 @@ function volandSafeParse(str, fallback){ try { return JSON.parse(str); } catch(e
 
 function volandMigrate(){
   try {
+    // legacy single -> saves array
     let saves = volandSafeParse(localStorage.getItem(VOLAND_KEYS.saves), null);
     if(!saves){
       const oldHero = localStorage.getItem(VOLAND_KEYS.hero) || localStorage.getItem(VOLAND_KEYS.legacy_hero);
@@ -49,6 +51,7 @@ function volandGetSaves(){
   try{
     let saves = volandSafeParse(localStorage.getItem(VOLAND_KEYS.saves), []);
     if(!Array.isArray(saves)) saves=[];
+    // filter invalid
     saves = saves.filter(s=> s && s.hero && s.name && VOLAND_HEROES[s.hero]);
     return saves.slice(0,3);
   }catch(e){ return []; }
@@ -76,6 +79,7 @@ function volandGetHeroId(){
     let saves = volandGetSaves();
     let idx = volandGetActiveIndex();
     if(saves.length>0 && saves[idx]) return saves[idx].hero;
+    // fallback old single
     let id = localStorage.getItem(VOLAND_KEYS.hero) || localStorage.getItem(VOLAND_KEYS.legacy_hero);
     if(id && VOLAND_HEROES[id]) return id;
     return Object.keys(VOLAND_HEROES)[0]||'necro-f-new';
@@ -150,6 +154,7 @@ function volandCalcStats(){
   return {cur, bonus, heroId, hero: VOLAND_HEROES[heroId], equip: eq};
 }
 
+// New helpers for page3 stats
 function volandGetPlaytimeHours(){
   try{
     let cur = volandGetCurrentSave();
@@ -164,6 +169,7 @@ function volandGetQuests(){ try{ let cur=volandGetCurrentSave(); if(cur) return 
 function volandGetPvp(){ try{ let cur=volandGetCurrentSave(); if(cur) return cur.pvp||0; return parseInt(localStorage.getItem(VOLAND_KEYS.pvp)||'0'); }catch(e){return 0;} }
 
 function volandAddKill(){ try{ let saves=volandGetSaves(); let idx=volandGetActiveIndex(); if(saves[idx]){ saves[idx].kills=(saves[idx].kills||0)+1; volandSaveSaves(saves);} }catch(e){} }
+
 
 function volandGetMissionStats(){
  try{
@@ -194,6 +200,7 @@ function volandGetMissionStats(){
         volandSaveSaves(saves);
         return empty;
       }
+      // OLD HERO - migrate from global to preserve lvl4
       let raw = localStorage.getItem('voland_missions_stats');
       let s = raw ? JSON.parse(raw) : null;
       if(s && (s.kill_loc || s.kill_boss || s.login_days)){
@@ -241,6 +248,7 @@ function volandGetMissionStats(){
 
 function volandSaveMissionStats(stats){
  try{
+  // PER-HERO save
   let saves = volandGetSaves();
   let idx = volandGetActiveIndex();
   if(saves.length>0){
@@ -262,6 +270,7 @@ function volandGetMissionsDone(){
       let raw = localStorage.getItem('voland_missions_done');
       let done = raw ? JSON.parse(raw) : null;
       if(done && Array.isArray(done) && done.length>0){
+        // OLD HERO - migrate
         saves[idx].missions_done = done;
         volandSaveSaves(saves);
         return done;
@@ -291,6 +300,7 @@ function volandSaveMissionsDone(done){
 function volandIsMissionUnlocked(mission, doneList){
  try{
    let m = mission;
+   // If mission is id, find object
    if(typeof mission==='number'){
      let all = (typeof VOLAND_MISSIONS!=='undefined'&&VOLAND_MISSIONS.length>0)?VOLAND_MISSIONS:(typeof FALLBACK_MISSIONS!=='undefined'?FALLBACK_MISSIONS:[]);
      m = all.find(x=>x.id===mission) || {id:mission, prev:null};
@@ -339,6 +349,7 @@ function volandUpdateMissionStat(type, loc, value){
  }catch(e){ console.error('[MISSION] update error', e); }
 }
 
+
 function volandClaimMission(id){
  try{
   let all = (typeof VOLAND_MISSIONS!=='undefined'&&VOLAND_MISSIONS.length>0)?VOLAND_MISSIONS:(typeof FALLBACK_MISSIONS!=='undefined'?FALLBACK_MISSIONS:[]);
@@ -348,12 +359,14 @@ function volandClaimMission(id){
   if(done.includes(id)) return false;
   let prog = volandGetMissionProgress(m);
   if(prog < m.target) return false;
+  // give rewards
   if(m.reward){
     if(m.reward.gold && typeof volandAddGold==='function') volandAddGold(m.reward.gold);
     if(m.reward.xp && typeof volandAddXp==='function') volandAddXp(m.reward.xp);
   }
   done.push(id);
   volandSaveMissionsDone(done);
+  // per-hero save
   try{
     let saves = volandGetSaves();
     let idx = volandGetActiveIndex();
@@ -365,6 +378,7 @@ function volandClaimMission(id){
   return true;
  }catch(e){ console.error('claim error', e); return false; }
 }
+
 
 function volandCheckMissions(){
  try{
@@ -385,7 +399,11 @@ function volandCheckMissions(){
  }catch(e){ return []; }
 }
 
+// init login tracking
 try{ volandUpdateMissionStat('login'); }catch(e){}
+
+
+
 
 // ===== VOLAND STORAGE v3 - GOLD / XP / RESOURCES / INVENTORY / LEVEL =====
 function volandGetGold(){
@@ -394,6 +412,7 @@ function volandGetGold(){
     let idx=volandGetActiveIndex();
     if(saves.length>0 && saves[idx]){
       if(typeof saves[idx].gold!=='undefined') return parseInt(saves[idx].gold)||0;
+      // NEW HERO isolation: if save exists but no gold, return 0 (lvl1), don't leak global
       return 0;
     }
     let g = localStorage.getItem('voland_v1_gold');
@@ -427,6 +446,7 @@ function volandGetXp(){
     let idx=volandGetActiveIndex();
     if(saves.length>0 && saves[idx]){
       if(typeof saves[idx].xp!=='undefined') return parseInt(saves[idx].xp)||0;
+      // NEW HERO isolation: lvl1 if no xp
       return 0;
     }
     let x = localStorage.getItem('voland_v1_xp');
@@ -508,6 +528,7 @@ function volandCheckLevelUp(oldXp, newXp){
     return {leveled:false};
   }catch(e){ return {leveled:false}; }
 }
+// обертка для volandAddXp чтобы чекать lvl up
 (function(){
   try{
     let orig = volandAddXp;
@@ -531,6 +552,7 @@ function volandGetResources(){
     let idx=volandGetActiveIndex();
     if(saves.length>0 && saves[idx]){
       if(saves[idx].resources) return saves[idx].resources;
+      // NEW HERO isolation: empty resources for lvl1
       return {};
     }
     let raw = localStorage.getItem('voland_v1_resources');
@@ -573,9 +595,11 @@ function volandGetItemBaseId(itemId){
     if(typeof VOLAND_ITEMS!=='undefined'){
       let it = VOLAND_ITEMS.find(x=>x.id===resolved);
       if(it && it.baseId) return it.baseId;
+      // try original id if resolved not found
       let it2 = VOLAND_ITEMS.find(x=>x.id===itemId);
       if(it2 && it2.baseId) return it2.baseId;
     }
+    // fallback: first part before -
     return (resolved||itemId).split('-')[0];
   }catch(e){ return itemId.split('-')[0]; }
 }
@@ -611,19 +635,10 @@ function volandDedupInventoryByBaseId(inv){
     let potions=[];
     inv.forEach(entry=>{
       if(!entry || !entry.id) return;
-      // FIX: potions stack - do NOT dedup by baseId, keep every drop
-      if(volandIsPotionId(entry.id)){
-        potions.push(entry);
-        return;
-      }
+      if(volandIsPotionId(entry.id)){ potions.push(entry); return; }
       let base = volandGetItemBaseId(entry.id);
-      if(!map[base]){
-        map[base]=entry;
-      } else {
-        if(volandCompareItemLevel(entry.id, map[base].id)>0){
-          map[base]=entry;
-        }
-      }
+      if(!map[base]){ map[base]=entry; }
+      else { if(volandCompareItemLevel(entry.id, map[base].id)>0){ map[base]=entry; } }
     });
     let result = Object.values(map).concat(potions);
     result.sort((a,b)=>(b.time||0)-(a.time||0));
@@ -648,7 +663,7 @@ function volandGetInventory(){
         let saves2=volandGetSaves();
         let idx2=volandGetActiveIndex();
         if(saves2.length>0){
-          saves2.inventory=cleaned;
+          saves2[idx2].inventory=cleaned;
           volandSaveSaves(saves2);
         }
         localStorage.setItem('voland_v1_inventory', JSON.stringify(cleaned));
@@ -674,11 +689,7 @@ function volandSaveInventory(inv){
 function volandAddToInventory(itemId){
   try{
     let inv=volandGetInventory();
-    // FIX: potions stack - every drop is a separate entry, not replace by baseId
-    if(volandIsPotionId(itemId)){
-      inv.push({id:itemId, time:Date.now()});
-      return volandSaveInventory(inv);
-    }
+    if(volandIsPotionId(itemId)){ inv.push({id:itemId, time:Date.now()}); return volandSaveInventory(inv); }
     let base = volandGetItemBaseId(itemId);
     let existingIdx = -1;
     for(let i=0;i<inv.length;i++){
@@ -700,12 +711,7 @@ function volandAddToInventory(itemId){
 function volandRemoveFromInventory(itemId){
   try{
     let inv=volandGetInventory();
-    if(volandIsPotionId(itemId)){
-      // FIX: using one potion removes only ONE copy, not all stacked
-      let idx = inv.findIndex(x=>x.id===itemId);
-      if(idx>=0) inv.splice(idx,1);
-      return volandSaveInventory(inv);
-    }
+    if(volandIsPotionId(itemId)){ let idx = inv.findIndex(x=>x.id===itemId); if(idx>=0) inv.splice(idx,1); return volandSaveInventory(inv); }
     inv = inv.filter(x=>x.id!==itemId);
     return volandSaveInventory(inv);
   }catch(e){ return []; }
@@ -714,6 +720,7 @@ function volandRemoveFromInventory(itemId){
 // совместимость для page4
 function getGold(){ return volandGetGold(); }
 function getResources(){ return volandGetResources(); }
+
 
 // VOLAND UPGRADE SYSTEM v1
 function volandGetUpgradeCost(itemId){
@@ -795,16 +802,19 @@ function volandUpgradeItem(itemId){
   }catch(e){ return {success:false, reason:'EXCEPTION '+e}; }
 }
 
+
 // === STAMINA / HP / MANA REGEN SYSTEM ===
+// Rates: STAMINA 2 per 3 min = 1 per 90 sec, HP 10 per min = 1 per 6 sec, MANA 3 per min = 1 per 20 sec
 const VOLAND_STAMINA_MAX = 100;
-const VOLAND_STAMINA_REGEN_MS = 90 * 1000;
-const VOLAND_HP_REGEN_MS = 6 * 1000;
-const VOLAND_MANA_REGEN_MS = 20 * 1000;
+const VOLAND_STAMINA_REGEN_MS = 90 * 1000; // 90 sec per 1 stamina
+const VOLAND_HP_REGEN_MS = 6 * 1000; // 6 sec per 1 HP (10 per min)
+const VOLAND_MANA_REGEN_MS = 20 * 1000; // 20 sec per 1 MANA (3 per min)
 
 const VOLAND_STAMINA_COSTS = {
-  1: {1:1, 2:2, 3:3, 4:5},
-  2: {1:3, 2:4, 3:5, 4:10},
-  3: {1:5, 2:6, 3:7, 4:15}
+  // loc: { stage: cost }
+  1: {1:1, 2:2, 3:3, 4:5}, // desert 1,2,3 boss 5
+  2: {1:3, 2:4, 3:5, 4:10}, // forest 3,4,5 boss 10
+  3: {1:5, 2:6, 3:7, 4:15} // frost 5,6,7 boss 15
 };
 
 function volandGetStaminaMax(){ return VOLAND_STAMINA_MAX; }
@@ -818,8 +828,10 @@ function volandGetStaminaData(){
       if(typeof s.stamina === 'number' && typeof s.lastStaminaUpdate === 'number'){
         return {current: s.stamina, last: s.lastStaminaUpdate};
       }
+      // NEW HERO isolation: full stamina for lvl1 hero, not global leak
       return {current: VOLAND_STAMINA_MAX, last: Date.now()};
     }
+    // fallback localStorage (no active save)
     let cur = localStorage.getItem('voland_v1_stamina');
     let last = localStorage.getItem('voland_v1_stamina_last');
     if(cur!==null && last!==null){
@@ -856,6 +868,7 @@ function volandGetStamina(){
     if(regen > 0){
       let newCurrent = Math.min(VOLAND_STAMINA_MAX, data.current + regen);
       let newLast = data.last + regen * VOLAND_STAMINA_REGEN_MS;
+      // if capped at max, reset last to now to avoid overflow
       if(newCurrent >= VOLAND_STAMINA_MAX){
         newCurrent = VOLAND_STAMINA_MAX;
         newLast = now;
@@ -891,10 +904,12 @@ function volandGetStaminaCost(loc, stage){
     if(VOLAND_STAMINA_COSTS[loc] && VOLAND_STAMINA_COSTS[loc][stage]){
       return VOLAND_STAMINA_COSTS[loc][stage];
     }
+    // fallback: 1 + loc
     return loc;
   }catch(e){ return 1; }
 }
 
+// HP / MANA current with regen
 function volandGetHPData(){
   try{
     let saves = volandGetSaves();
@@ -903,6 +918,7 @@ function volandGetHPData(){
       if(typeof saves[idx].hp_current === 'number' && typeof saves[idx].lastHPUpdate === 'number'){
         return {current: saves[idx].hp_current, last: saves[idx].lastHPUpdate};
       }
+      // NEW HERO isolation: full HP for lvl1
       let max = 1000;
       try{ max = volandCalcStats().cur.HP || 1000; }catch(e){}
       return {current: max, last: Date.now()};
@@ -969,6 +985,7 @@ function volandGetMANAData(){
       if(typeof saves[idx].mana_current === 'number' && typeof saves[idx].lastMANAUpdate === 'number'){
         return {current: saves[idx].mana_current, last: saves[idx].lastMANAUpdate};
       }
+      // NEW HERO isolation: full MANA for lvl1
       let max = 200;
       try{ max = volandCalcStats().cur.MANA || 200; }catch(e){}
       return {current: max, last: Date.now()};
@@ -1027,6 +1044,7 @@ function volandSetCurrentMANA(val){
   return volandSetMANAData(val, Date.now());
 }
 
+
 // === BOSS DAILY LIMIT 10 PER BOSS (per loc) ===
 const VOLAND_BOSS_DAILY_LIMIT = 10;
 
@@ -1051,6 +1069,7 @@ function volandGetBossKillsData(){
         }
         return data;
       } else {
+        // OLD HERO - migrate from global if exists, else empty
         let raw = localStorage.getItem('voland_v1_boss_kills');
         if(raw){
           try{
@@ -1081,6 +1100,7 @@ function volandGetBossKillsData(){
 function volandSaveBossKillsData(data){
   try{
     localStorage.setItem('voland_v1_boss_kills', JSON.stringify(data));
+    // also save in saves for backup
     let saves = volandGetSaves();
     let idx = volandGetActiveIndex();
     if(saves.length>0){
@@ -1103,6 +1123,7 @@ function volandAddBossKill(loc){
     let data = volandGetBossKillsData();
     loc = String(parseInt(loc)||1);
     data.kills[loc] = (parseInt(data.kills[loc]||0)+1);
+    // cap at limit? keep counting but we check limit before battle
     volandSaveBossKillsData(data);
     return data.kills[loc];
   }catch(e){ return 0; }
@@ -1124,6 +1145,7 @@ function volandGetBossLimitInfo(loc){
   return {kills, limit: VOLAND_BOSS_DAILY_LIMIT, left: Math.max(0,left), canFight: kills < VOLAND_BOSS_DAILY_LIMIT};
 }
 
+
 function volandGetStaminaInfo(){
   let cur = volandGetStamina();
   let max = volandGetStaminaMax();
@@ -1135,6 +1157,7 @@ function volandGetStaminaInfo(){
   return {cur, max, toNext, pct: Math.round(cur/max*100)};
 }
 
+
 function volandGetItemById(itemId){
   try{
     if(typeof VOLAND_ITEMS!=='undefined'){
@@ -1144,6 +1167,7 @@ function volandGetItemById(itemId){
   }catch(e){ return null; }
 }
 
+// Backward compat mapping old ids to new bw lvl1
 const VOLAND_OLD_TO_NEW = {
   'head':'helmet-bw-lvl1',
   'armor':'armor-bw-lvl1',
@@ -1165,6 +1189,7 @@ function volandResolveItemId(itemId){
   }catch(e){ return itemId; }
 }
 
+// Override volandGetEquippedItems to resolve old ids
 (function(){
   try{
     let orig = volandGetEquippedItems;
@@ -1178,6 +1203,7 @@ function volandResolveItemId(itemId){
           if(typeof VOLAND_ITEMS!=='undefined'){
             item = VOLAND_ITEMS.find(x=>x.id===id);
             if(!item){
+              // try find by base id?
               item = VOLAND_ITEMS.find(x=>x.id===raw[slot]);
             }
           }
@@ -1188,6 +1214,7 @@ function volandResolveItemId(itemId){
     };
   }catch(e){}
 })();
+
 
 function volandUsePotion(potionId){
  try{
@@ -1209,12 +1236,14 @@ function volandUsePotion(potionId){
       return false;
     }
   }
+  // apply effect - FIXED LOGIC per user: XL 1 hour
   if(p.stat==='HP'){
     if(p.percent){
       if(p.value===100){
         let max = volandCalcStats().cur.HP;
         volandSetCurrentHP(max);
       } else if(p.value===200){
+        // HP XL: full +100% for 1h or until HP drops to normal
         let max = volandCalcStats().cur.HP;
         volandSetCurrentHP(max * 2);
         save.buffs = save.buffs || {};
@@ -1235,8 +1264,10 @@ function volandUsePotion(potionId){
           let max = volandCalcStats().cur.MANA;
           volandSetCurrentMANA(max);
         } else {
+          // MANA XL: +100% HP to existing HP (not full heal) for 1h
           let maxH = volandCalcStats().cur.HP;
           let curH = volandGetCurrentHP();
+          // adds +100% max to existing HP, not heal to 100%
           let newHP = curH + maxH;
           volandSetCurrentHP(Math.min(newHP, maxH*2));
           let maxM = volandCalcStats().cur.MANA;
@@ -1276,18 +1307,6 @@ function volandUsePotion(potionId){
   }
   volandSaveSaves(saves);
   return true;
- }catch(e){ console.error('potion use error', e```javascript
-  }
-  if(invIdx!==-1){
-    inv.splice(invIdx,1);
-    save.inventory = inv;
-    volandSaveSaves(saves);
-  }
-  if(typeof volandRemoveFromInventory==='function'){
-    volandRemoveFromInventory(potionId);
-  }
-  volandSaveSaves(saves);
-  return true;
  }catch(e){ console.error('potion use error', e); return false; }
 }
 
@@ -1316,6 +1335,7 @@ function volandCheckBuffs(){
  }catch(e){}
 }
 
+
 // Stamina regen boost handling - modify volandGetStamina regen if buff active
 function volandGetStaminaRegenBoost(){
  try{
@@ -1329,6 +1349,11 @@ function volandGetStaminaRegenBoost(){
  }catch(e){}
  return 0;
 }
+
+
+
+
+
 
 function volandCleanupNonClassWeapons(){
  try{
@@ -1360,3 +1385,4 @@ function volandCleanupNonClassWeapons(){
  }catch(e){ console.log('cleanup error', e); }
 }
 try{ volandCleanupNonClassWeapons(); }catch(e){}
+
