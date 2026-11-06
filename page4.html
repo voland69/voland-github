@@ -1,4 +1,4 @@
-<!-- VOLAND page4-v12.html - BAG, potions stack -->
+<!-- VOLAND page4-v14.html - FIX: не кидать молча на page2, диагностика сейва. На GitHub сохранять КАК page4.html -->
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -362,7 +362,33 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
 <script src="./assets/js/db.js"></script>
 <script src="./assets/js/storage.js"></script>
 <script>
-if (!volandHasSave()){ location.href='./page2.html'; }
+// v14 FIX: не кидать молча на page2, если storage.js не загрузился или сейва нет - показать причину
+(function(){
+  // если db.js / storage.js не загрузились - volandHasSave не существует, раньше тут был краш/редирект
+  if(typeof volandHasSave!=='function'){
+    console.error('[BAG v14] storage.js НЕ загрузился! Проверь что на GitHub есть ./assets/js/storage.js и ./assets/js/db.js');
+    let d=document.createElement('div');
+    d.style.cssText='position:fixed;inset:0;z-index:9999;background:#0a0e14;color:#e6d5a0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:24px;text-align:center;font-family:monospace';
+    d.innerHTML='<div style="font-size:22px">⚠️ STORAGE НЕ ЗАГРУЗИЛСЯ</div><div>Файл ./assets/js/storage.js не найден на GitHub.<br>Ты залил page4-v13 как page4.html, но не залил storage-v13 как storage.js?</div><button onclick="location.href='./page2.html'" style="padding:10px 18px;background:#e6d5a0;border:0;border-radius:8px;font-weight:800;cursor:pointer">К ВЫБОРУ ГЕРОЯ</button>';
+    document.body.appendChild(d);
+    return;
+  }
+  let has=false;
+  try{ has=volandHasSave(); }catch(e){ console.error('[BAG v14] volandHasSave err', e); has=false; }
+  if(!has){
+    // проверяем legacy ключи - вдруг сейв в старом формате
+    let legacy = null;
+    try{ legacy = localStorage.getItem('voland_hero') || localStorage.getItem('voland_v1_hero'); }catch(e){}
+    console.warn('[BAG v14] volandHasSave()=false, legacy hero=', legacy, 'saves=', localStorage.getItem('voland_v1_saves'));
+    // НЕ редиректим мгновенно - показываем что случилось, чтобы не терять игрока
+    let d=document.createElement('div');
+    d.style.cssText='position:fixed;inset:0;z-index:9999;background:rgba(10,14,20,.92);color:#e6d5a0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:24px;text-align:center;font-family:monospace';
+    d.innerHTML='<div style="font-size:22px">😕 СЕЙВ НЕ НАЙДЕН</div><div>На этом домене в localStorage нет voland_v1_saves.<br>Если ты открывал игру на другом домене / в инкогнито / чистил кэш - сейв там и остался.<br><br>Нажми «Создать героя», или вернись на страницу где создавал героя.</div><div style="display:flex;gap:10px"><button onclick="location.href='./page2.html'" style="padding:10px 18px;background:#e6d5a0;border:0;border-radius:8px;font-weight:800;cursor:pointer">СОЗДАТЬ ГЕРОЯ → page2</button><button onclick="this.parentElement.parentElement.remove()" style="padding:10px 18px;background:#1a242f;color:#e6d5a0;border:1px solid #2a3a4a;border-radius:8px;cursor:pointer">ОСТАТЬСЯ В BAG</button></div><div style="font-size:11px;color:#6a7a8a">Для проверки в консоли (F12): localStorage.getItem(\'voland_v1_saves\')</div>';
+    document.body.appendChild(d);
+    return;
+  }
+  console.log('[BAG v14] сейв найден, остаёмся в BAG');
+})();
 let equipped = volandGetEquippedItems();
 let inv = [];
 function rebuildInv(){
