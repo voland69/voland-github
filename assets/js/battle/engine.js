@@ -204,18 +204,83 @@ function showVictory(){
   // Берем награды из db.js VOLAND_ENEMIES, а не формулой
   let goldReward = (enemyData && enemyData.gold) ? parseInt(enemyData.gold) : 5;
   let xpReward = (enemyData && enemyData.xp) ? parseInt(enemyData.xp) : 80;
+  // FIX: роллим лут ОДИН раз - и для показа, и для выдачи. Раньше было два независимых ролла:
+  // один для цифры в окне, второй для реальной выдачи - поэтому окно показывало 3, а падало 1.
+  let rolledDrop = null;
+  let lootCount = 0;
+  let lootIcon = './assets/ui/loot/essence.webp';
+  let lootNames = [];
+  try{
+    if(typeof volandRollDrops==='function'){
+      rolledDrop = volandRollDrops(enemyData);
+    } else {
+      // fallback: прямой ролл, если drop.js не загружен
+      let res=[]; let potions=[]; let equips=[];
+      if(enemyData && Array.isArray(enemyData.drops)){
+        enemyData.drops.forEach(d=>{
+          if(Math.random() < (d.chance||0)){
+            if(String(d.id).indexOf('potion-')===0) potions.push({id:d.id, count:1});
+            else res.push({id:d.id, count:1});
+          }
+        });
+      }
+      if(enemyData && enemyData.equipChance && Math.random() < enemyData.equipChance) equips.push('__equip__');
+      rolledDrop = {resources:res, potions:potions, equips:equips};
+    }
+    let allDrops = [];
+    if(rolledDrop.resources) allDrops = allDrops.concat(rolledDrop.resources.map(r=>({kind:'res', id:r.id})));
+    if(rolledDrop.potions) allDrops = allDrops.concat(rolledDrop.potions.map(p=>({kind:'potion', id:p.id})));
+    if(rolledDrop.equips) allDrops = allDrops.concat(rolledDrop.equips.map(e=>({kind:'equip', id:e})));
+    lootCount = allDrops.length;
+    // Иконка = первый выпавший предмет, а не всегда essence
+    if(allDrops.length>0){
+      let first = allDrops[0];
+      if(first.kind==='res'){
+        let rdef = (typeof VOLAND_RESOURCES!=='undefined') ? VOLAND_RESOURCES.find(r=>r.id===first.id) : null;
+        if(rdef && rdef.icon) lootIcon = rdef.icon;
+        else lootIcon = './assets/ui/loot/'+first.id+'.webp';
+        lootNames.push(rdef ? (rdef.name||first.id) : first.id);
+      } else if(first.kind==='potion'){
+        let pdef = null;
+        if(typeof VOLAND_ITEMS!=='undefined') pdef = VOLAND_ITEMS.find(x=>x.id===first.id);
+        if(!pdef && typeof VOLAND_POTIONS!=='undefined') pdef = VOLAND_POTIONS.find(x=>x.id===first.id);
+        if(pdef && pdef.icon) lootIcon = pdef.icon;
+        lootNames.push(pdef ? (pdef.name||first.id) : first.id);
+      } else if(first.kind==='equip'){
+        let edef = (typeof VOLAND_ITEMS!=='undefined') ? VOLAND_ITEMS.find(x=>x.id===first.id) : null;
+        if(edef && edef.icon) lootIcon = edef.icon;
+        lootNames.push(edef ? (edef.name||first.id) : 'Шмотка');
+      }
+      // остальные дропы - для тултипа / подписи
+      for(let i=1;i<allDrops.length;i++){
+        let d = allDrops[i];
+        if(d.kind==='res'){
+          let rdef = (typeof VOLAND_RESOURCES!=='undefined') ? VOLAND_RESOURCES.find(r=>r.id===d.id) : null;
+          lootNames.push(rdef ? (rdef.name||d.id) : d.id);
+        } else if(d.kind==='potion'){
+          let pdef = null;
+          if(typeof VOLAND_ITEMS!=='undefined') pdef = VOLAND_ITEMS.find(x=>x.id===d.id);
+          if(!pdef && typeof VOLAND_POTIONS!=='undefined') pdef = VOLAND_POTIONS.find(x=>x.id===d.id);
+          lootNames.push(pdef ? (pdef.name||d.id) : d.id);
+        } else {
+          lootNames.push('Шмотка');
+        }
+      }
+    }
+  }catch(e){ console.log('roll loot err', e); }
   try{
     document.getElementById('rewGold').textContent='+'+goldReward;
     document.getElementById('rewXp').textContent='+'+xpReward;
     let lootEl=document.getElementById('rewLoot');
-    if(lootEl){
-      // посчитаем лут из drops
-      let lootCount=0;
-      if(enemyData && Array.isArray(enemyData.drops)){
-        enemyData.drops.forEach(d=>{ if(Math.random()<(d.chance||0)) lootCount++; });
-      }
-      if(enemyData && enemyData.equipChance && Math.random()<enemyData.equipChance) lootCount++;
-      lootEl.textContent=String(lootCount);
+    if(lootEl) lootEl.textContent=String(lootCount);
+    let lootImg=document.getElementById('rewLootImg');
+    if(lootImg) lootImg.src=lootIcon;
+    let lootLbl=document.getElementById('rewLootLbl');
+    if(lootLbl) lootLbl.textContent = lootCount>0 ? lootNames.join(' + ') : 'LOOT';
+    let lootBox=document.getElementById('rewLootBox');
+    if(lootBox){
+      lootBox.title = lootCount>0 ? lootNames.join(', ') : 'Ничего не выпало';
+      lootBox.style.opacity = lootCount>0 ? '1' : '0.5';
     }
   }catch(e){}
   document.getElementById('modalTitle').textContent='ПОБЕДА!';
@@ -226,45 +291,46 @@ function showVictory(){
   try{
     if(typeof volandAddGold==='function') volandAddGold(goldReward);
     if(typeof volandAddXp==='function') volandAddXp(xpReward);
-    // ресурсы и шмот через drop систему если есть
-    if(typeof volandRollDrops==='function' && typeof volandApplyDrops==='function'){
-      let drop = volandRollDrops(enemyData);
-      volandApplyDrops(drop);
-    } else {
-      // fallback прямой ролл ресурсов
-      if(enemyData && Array.isArray(enemyData.drops)){
-        enemyData.drops.forEach(d=>{
-          if(Math.random() < (d.chance||0)){
-            if(String(d.id).indexOf('potion-')===0){
-              if(typeof volandAddToInventory==='function') volandAddToInventory(d.id);
-            } else if(typeof volandAddResource==='function') volandAddResource(d.id, 1);
-          }
-        });
-      }
-      if(enemyData && enemyData.equipChance && Math.random() < enemyData.equipChance){
+    // выдаем ТОТ ЖЕ ролл, что показали - не роллим второй раз
+    if(rolledDrop && typeof volandApplyDrops==='function'){
+      volandApplyDrops(rolledDrop);
+    } else if(rolledDrop){
+      // fallback без drop.js - выдаем вручную
+      if(rolledDrop.resources) rolledDrop.resources.forEach(r=>{
+        if(String(r.id).indexOf('potion-')===0){
+          if(typeof volandAddToInventory==='function') volandAddToInventory(r.id);
+        } else if(typeof volandAddResource==='function') volandAddResource(r.id, 1);
+      });
+      if(rolledDrop.potions) rolledDrop.potions.forEach(p=>{
+        if(typeof volandAddToInventory==='function') volandAddToInventory(p.id);
+      });
+      if(rolledDrop.equips) rolledDrop.equips.forEach(eid=>{
+        if(eid!=='__equip__' && typeof volandAddToInventory==='function') volandAddToInventory(eid);
+      });
+      if(enemyData && enemyData.equipChance && rolledDrop.equips && rolledDrop.equips[0]==='__equip__'){
         if(typeof VOLAND_ITEMS!=='undefined' && typeof volandAddToInventory==='function'){
-          let heroId = (typeof volandGetHeroId==='function'?volandGetHeroId():'necro-f-new');
-                    let allowedBases = [];
+          let heroId2 = (typeof volandGetHeroId==='function'?volandGetHeroId():'necro-f-new');
+          let allowedBases2 = [];
           if(typeof VOLAND_HERO_WEAPON_TYPE!=='undefined' && typeof VOLAND_WEAPON_SETS!=='undefined'){
-            let wType = VOLAND_HERO_WEAPON_TYPE[heroId] || 'sword';
+            let wType = VOLAND_HERO_WEAPON_TYPE || 'sword';
             let weaponIds = VOLAND_WEAPON_SETS[wType] || [];
-            allowedBases = weaponIds.map(wid=>{
+            allowedBases2 = weaponIds.map(wid=>{
               try{
                 let it = VOLAND_ITEMS.find(x=>x.id===wid);
                 return it ? (it.baseId || wid.split('-')[0]) : wid.split('-')[0];
               }catch(e){ return wid.split('-')[0]; }
             });
           } else {
-            let classMap = {
+            let classMap2 = {
               'necro-f-new':'mage','necro-m':'tank','archer-f':'archer',
               'archer-m':'archer',
               'archmage-m':'mage','warrior-f':'warrior','warrior-m':'warrior','mage-f-new':'mage'
             };
-            let heroClass = classMap[heroId] || 'mage';
-            let allowedWeaponBases = {
+            let heroClass2 = classMap2 || 'mage';
+            let allowedWeaponBases2 = {
               'mage':['staff'], 'archer':['bow'], 'warrior':['sword','shield'], 'tank':['shield','sword']
             };
-            allowedBases = allowedWeaponBases[heroClass] || ['staff'];
+            allowedBases2 = allowedWeaponBases2[heroClass2] || ['staff'];
           }
           let pool = VOLAND_ITEMS.filter(it=>{
             if(!it.slot) return false;
@@ -272,7 +338,7 @@ function showVictory(){
             if(it.slot==='weapon'){
               let base = it.baseId || it.id.split('-')[0];
               if(['sword','bow','staff','shield'].includes(base)){
-                return allowedBases.includes(base);
+                return allowedBases2.includes(base);
               }
             }
             return true;
