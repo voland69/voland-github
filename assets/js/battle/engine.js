@@ -1,5 +1,5 @@
-// VOLAND BATTLE ENGINE v12 - full, fixed: single roll, dynamic rewardsBox, potions, bossKill
-// Base: engine_7.js (417 lines) + v12 header. Replaces old engine.js (347 lines) which had double-roll bug.
+// VOLAND BATTLE ENGINE v13 - full, fixed: single roll, dynamic rewardsBox, potions, bossKill
+// Base: engine_7.js (417 lines) + v13 header. На GitHub сохранять КАК engine.js. Replaces old engine.js (347 lines) which had double-roll bug.
 // VOLAND BATTLE ENGINE v1 - база, чистый старт
 // DMG-DEF+rand, полоски HP/MANA, QWER, win/lose, грузит механику героя из heroes/${heroId}.js
 (function(){
