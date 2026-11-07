@@ -532,6 +532,26 @@ const statsPanel=document.getElementById('statsPanel');
 const barsPanel=document.getElementById('barsPanel');
 const equipCount=document.getElementById('equipCount');
 const chatBody=document.getElementById('chatBody');
+  // Зелья в сумке: считаем банки по id, каждое зелье — своя ячейка со стаком
+  try{
+    if(typeof volandGetInventory==='function' && typeof VOLAND_POTIONS!=='undefined'){
+      let invAll = volandGetInventory();
+      let potionCounts = {};
+      invAll.forEach(entry=>{
+        let pid = entry && (entry.id || entry);
+        if(typeof pid==='string' && pid.indexOf('potion-')===0){
+          potionCounts[pid] = (potionCounts[pid]||0)+1;
+        }
+      });
+      Object.keys(potionCounts).forEach(pid=>{
+        if(inv.length>=50) return;
+        let pot = VOLAND_POTIONS.find(x=>x.id===pid);
+        if(!pot) return;
+        inv.push({id:pot.id, icon:pot.icon, name:pot.name, desc:pot.desc||pot.name, isPotion:true, count:potionCounts[pid], type:'potion', rarity:pot.rarity||'common', potion:pot.potion});
+      });
+    }
+  }catch(e){ console.log('potions in bag err', e); }
+
 function renderStats(){
   const {cur, bonus} = volandCalcStats();
   const heroId = (typeof volandGetHeroId==='function'?volandGetHeroId():'');
@@ -623,6 +643,12 @@ function renderInv(){
         cell.innerHTML=`<div class="item-icon">${iconHtml}</div><div class="badge">${it.count}</div>`;
         cell.onclick=()=>{ log('Золото: '+it.count+' — в одной ячейке бесконечно'); };
         cell.title = it.name+' '+it.count;
+      } else if(it.isPotion){
+        cell.classList.add('potion');
+        let iconHtml = `<img src="${it.icon}" style="width:100%;height:100%;object-fit:contain" onerror="this.style.display='none'">`;
+        cell.innerHTML=`<div class="item-icon">${iconHtml}</div><div class="badge">${it.count}</div>`;
+        cell.onclick=()=>{ try{ if(typeof volandUsePotion==='function' && volandUsePotion(it.id)){ rebuildInv(); renderInv(); log(it.name+': использовано'); } else { log(it.name+': не удалось использовать'); } }catch(e){ log('Ошибка зелья'); } };
+        cell.title = it.name+' '+(it.desc||'')+' x'+it.count;
       } else if(it.isResource){
         cell.classList.add('resource');
         let iconHtml = `<img src="${it.icon}" style="width:100%;height:100%;object-fit:contain" onerror="this.style.display='none'">`;
