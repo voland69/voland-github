@@ -6,6 +6,9 @@ const VOLAND_RESOURCES = [
  {id:'diamond', name:'Алмаз', icon:'./assets/ui/loot/diamond.webp', img:'./assets/ui/loot/diamond.webp', eng:'Diamond', desc:'Алмаз с ледяных, 10% дроп', color:'#6ab0ff'},
  {id:'fang', name:'Клык Хищника', icon:'./assets/ui/loot/fang.webp', img:'./assets/ui/loot/fang.webp', eng:'Predator Fang', desc:'Клык со всех мобов, 5% дроп', color:'#a0a0ff'},
  {id:'essence', name:'Эссенция', icon:'./assets/ui/loot/essence.webp', img:'./assets/ui/loot/essence.webp', eng:'Essence', desc:'Эссенция со всех мобов, 5% дроп', color:'#e6d5a0'},
+ {id:'water', name:'Вода', icon:'./assets/ui/loot/water.webp', img:'./assets/ui/loot/water.webp', eng:'Water', desc:'Вода с болота, 10% дроп', color:'#3ad0ff'},
+ {id:'stone', name:'Камень', icon:'./assets/ui/loot/stone.webp', img:'./assets/ui/loot/stone.webp', eng:'Stone', desc:'Камень с вулкана, 10% дроп', color:'#a0a0a0'},
+ {id:'bone', name:'Кость', icon:'./assets/ui/loot/bone.webp', img:'./assets/ui/loot/bone.webp', eng:'Bone', desc:'Кость с руин, 10% дроп', color:'#e6e6e6'},
 ];
 
 
