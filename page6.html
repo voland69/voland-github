@@ -186,7 +186,7 @@ html,body{height:100%;background:url("./assets/heroes/bg-battlefield.webp") cent
 
 <main class="center">
 <div class="title">BATTLEFIELD</div>
-<div class="sub">VOLAND • 3 ACTIVE + 3 SOON</div>
+<div class="sub">VOLAND • 6 ACTIVE + 2 SOON</div>
 <div class="loc-grid" id="locGrid"></div>
 </main>
 <aside class="right">
@@ -212,8 +212,8 @@ function render(){
  let a=[],s=[];
  try{
   if(window.VOLAND_LOCATIONS){
-   a=VOLAND_LOCATIONS.filter(l=>l.active).slice(0,3);
-   s=VOLAND_LOCATIONS.filter(l=>!l.active).slice(0,3);
+   a=VOLAND_LOCATIONS.filter(l=>l.active).slice(0,6);
+   s=VOLAND_LOCATIONS.filter(l=>!l.active).slice(0,2);
   }
  }catch(e){}
  if(!a.length) a=[{id:1,name:'ПУСТЫНЯ',eng:'DESERT',icon:'🏜️',type:'Жара • Песок'},{id:2,name:'ТЕМНЫЙ ЛЕС',eng:'DARK FOREST',icon:'🌲',type:'Тень • Яд'},{id:3,name:'ЛЕДЯНЫЕ ЗЕМЛИ',eng:'FROSTLANDS',icon:'❄️',type:'Холод • Лед'}];
