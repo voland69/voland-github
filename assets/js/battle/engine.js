@@ -22,7 +22,7 @@ document.getElementById('stageTitle').textContent='STAGE '+stage+' • '+enemyDa
 if(enemyData.img){ document.getElementById('enemyIcon').innerHTML='<img src="'+enemyData.img+'" style="width:100%;height:100%;object-fit:cover;border-radius:8px" onerror="this.parentNode.textContent=\''+enemyData.icon+'\'">'; } else { document.getElementById('enemyIcon').textContent=enemyData.icon; }
 document.getElementById('enemyName').textContent=enemyData.name;
 document.getElementById('enemyEng').textContent=enemyData.eng;
-document.getElementById('enemyDesc').textContent=enemyData.desc;
+document.getElementById('enemyDesc').textContent=enemyData.desc||'';
 document.getElementById('heroIcon').innerHTML='<img src="'+heroData.img+'" onerror="this.parentNode.textContent=\'🦁\'">';
 document.getElementById('heroName').textContent=profileName.toUpperCase();
 document.getElementById('heroRole').textContent=heroData.n+' • '+heroData.role;
@@ -41,6 +41,21 @@ if(loc==3){
   eDef = stage==4 ? 350 : stage==3 ? 300 : stage==2 ? 150 : 150;
   eDmg = stage==4 ? 300 : stage==3 ? 250 : stage==2 ? 300 : 250;
   eMaxHp = stage==4 ? 10000 : stage==3 ? 7000 : stage==2 ? 5000 : 5000;
+} else if(loc==6){
+  // РУИНЫ LOC6
+  eDef = stage==4 ? 600 : stage==3 ? 350 : stage==2 ? 350 : 400;
+  eDmg = stage==4 ? 550 : stage==3 ? 550 : stage==2 ? 500 : 350;
+  eMaxHp = stage==4 ? 23000 : stage==3 ? 15000 : stage==2 ? 9000 : 10000;
+} else if(loc==5){
+  // ВУЛКАН LOC5
+  eDef = stage==4 ? 500 : stage==3 ? 300 : stage==2 ? 400 : 300;
+  eDmg = stage==4 ? 500 : stage==3 ? 500 : stage==2 ? 450 : 400;
+  eMaxHp = stage==4 ? 20000 : stage==3 ? 11000 : stage==2 ? 10000 : 9000;
+} else if(loc==4){
+  // БОЛОТО LOC4
+  eDef = stage==4 ? 450 : stage==3 ? 400 : stage==2 ? 200 : 250;
+  eDmg = stage==4 ? 450 : stage==3 ? 250 : stage==2 ? 350 : 250;
+  eMaxHp = stage==4 ? 15000 : stage==3 ? 10000 : stage==2 ? 8000 : 9000;
 } else {
   // ПУСТЫНЯ LOC1
   eDef = stage==4 ? 200 : stage==3 ? 150 : stage==2 ? 200 : 100;
