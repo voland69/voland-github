@@ -13,7 +13,6 @@
   - skills.js - parse mana/cd/mult + applySkillEffect (block, stun, avatar)
   - ui.js - renderLocations, selectLocation, bars (numbers inside), actions, logs
   - engine.js - calcDamage, startBattle, heroAction, enemyTurn
-  - rewards.js - victory modal ¡VICTORIA! + 2 buttons (fight again / to mobs)
 
 - assets/js/ui/
   - modal.js - generic show/hide
@@ -21,7 +20,7 @@
 
 ## Future (folders ready, empty)
 - assets/js/quests/ - daily, boss, location quests
-- assets/js/loot/ - drop.js, chest.js
+- assets/js/loot/ - drop.js (единый ролл лута, модалка = сумка)
 - assets/js/progression/ - xp.js, gold.js, level.js
 - assets/js/audio/ - sfx.js, music.js
 - assets/data/locations/ - json per location
