@@ -247,29 +247,32 @@ function showVictory(){
     }
   }catch(e){ drop = {resources:[], equips:[]}; }
 
-  // Показ в модалке — из ТОГО ЖЕ drop, что выдаём
+  // Показ в модалке — из ТОГО ЖЕ drop, что выдаём. Каждый предмет — в своём окошке.
   try{
     document.getElementById('rewGold').textContent='+'+goldReward;
     document.getElementById('rewXp').textContent='+'+xpReward;
-    let lootCount = drop.resources.length + drop.equips.length;
-    let lootEl=document.getElementById('rewLoot');
-    if(lootEl) lootEl.textContent=String(lootCount);
-    let lootListEl=document.getElementById('rewLootList');
-    if(lootListEl){
-      if(lootCount===0){
-        lootListEl.textContent='Ничего не выпало';
-      } else {
-        let parts=[];
-        drop.resources.forEach(r=>{
-          let res = (typeof VOLAND_RESOURCES!=='undefined') ? VOLAND_RESOURCES.find(x=>x.id===r.id) : null;
-          parts.push((res?res.name:r.id) + ((r.count||1)>1 ? ' x'+(r.count||1) : ''));
-        });
-        drop.equips.forEach(eid=>{
-          let it = (typeof VOLAND_ITEMS!=='undefined') ? VOLAND_ITEMS.find(x=>x.id===eid) : null;
-          parts.push(it?it.name:eid);
-        });
-        lootListEl.textContent = parts.join(' • ');
+    let lootBoxesEl = document.getElementById('lootBoxes');
+    if(lootBoxesEl){
+      let boxesHtml = '';
+      // Ресурсы — каждый в своём окошке
+      drop.resources.forEach(r=>{
+        let res = (typeof VOLAND_RESOURCES!=='undefined') ? VOLAND_RESOURCES.find(x=>x.id===r.id) : null;
+        let icon = res && res.icon ? res.icon : './assets/ui/loot/essence.webp';
+        let name = res ? res.name : r.id;
+        let cnt = r.count||1;
+        boxesHtml += '<div class="reward"><div><img src="'+icon+'" style="width:42px;height:42px;object-fit:contain;display:block" onerror="this.style.display=\'none\'"></div><div class="reward-val">'+(cnt>1 ? 'x'+cnt : '1')+'</div><div class="reward-lbl">'+name+'</div></div>';
+      });
+      // Шмот — каждый в своём окошке
+      drop.equips.forEach(eid=>{
+        let it = (typeof VOLAND_ITEMS!=='undefined') ? VOLAND_ITEMS.find(x=>x.id===eid) : null;
+        let icon = it && it.icon ? it.icon : './assets/ui/loot/essence.webp';
+        let name = it ? it.name : eid;
+        boxesHtml += '<div class="reward"><div><img src="'+icon+'" style="width:42px;height:42px;object-fit:contain;display:block" onerror="this.style.display=\'none\'"></div><div class="reward-val">1</div><div class="reward-lbl">'+name+'</div></div>';
+      });
+      if(boxesHtml === ''){
+        boxesHtml = '<div class="reward"><div><img src="./assets/ui/loot/essence.webp" style="width:42px;height:42px;object-fit:contain;display:block"></div><div class="reward-val">0</div><div class="reward-lbl">Нет лута</div></div>';
       }
+      lootBoxesEl.innerHTML = boxesHtml;
     }
   }catch(e){}
   document.getElementById('modalTitle').textContent='ПОБЕДА!';
