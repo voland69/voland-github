@@ -587,6 +587,8 @@ function volandAddResource(id, add){
 // FIX: dedup helpers - baseId + tier comparison (handles old ids via OLD_TO_NEW)
 function volandGetItemBaseId(itemId){
   try{
+    // Зелья: каждое зелье — свой baseId (полный id), чтобы HP-XS и MANA-XS не схлопывались в один "potion"
+    if(typeof itemId==='string' && itemId.indexOf('potion-')===0) return itemId;
     let resolved = itemId;
     if(typeof volandResolveItemId==='function'){
       try{ resolved = volandResolveItemId(itemId); }catch(e){}
@@ -624,8 +626,11 @@ function volandDedupInventoryByBaseId(inv){
   try{
     if(!Array.isArray(inv)) return [];
     let map={};
+    let potionEntries=[];
     inv.forEach(entry=>{
       if(!entry || !entry.id) return;
+      // Зелья не дедупим — каждая банка отдельная запись, чтобы стак работал по количеству записей
+      if(typeof entry.id==='string' && entry.id.indexOf('potion-')===0){ potionEntries.push(entry); return; }
       let base = volandGetItemBaseId(entry.id);
       if(!map[base]){
         map[base]=entry;
@@ -636,6 +641,7 @@ function volandDedupInventoryByBaseId(inv){
       }
     });
     let result = Object.values(map);
+    result = result.concat(potionEntries);
     result.sort((a,b)=>(b.time||0)-(a.time||0));
     return result;
   }catch(e){ return inv; }
@@ -683,6 +689,12 @@ function volandSaveInventory(inv){
 }
 function volandAddToInventory(itemId){
   try{
+    // Зелья: всегда новая запись, чтобы стак считался по количеству банок
+    if(typeof itemId==='string' && itemId.indexOf('potion-')===0){
+      let invP = volandGetInventory();
+      invP.push({id:itemId, time:Date.now()});
+      return volandSaveInventory(invP);
+    }
     let inv=volandGetInventory();
     let base = volandGetItemBaseId(itemId);
     let existingIdx = -1;
@@ -1211,7 +1223,7 @@ function volandResolveItemId(itemId){
 
 function volandUsePotion(potionId){
  try{
-  let item = (typeof VOLAND_ITEMS!=='undefined') ? VOLAND_ITEMS.find(x=>x.id===potionId) : null;
+  let item = null; if(typeof VOLAND_POTIONS!=='undefined') item = VOLAND_POTIONS.find(x=>x.id===potionId); if(!item && typeof VOLAND_ITEMS!=='undefined') item = VOLAND_ITEMS.find(x=>x.id===potionId);
   if(!item || item.type!=='potion' || !item.potion) return false;
   let p = item.potion;
   let saves = volandGetSaves();
