@@ -211,7 +211,7 @@ function showVictory(){
   // ЕДИНЫЙ РОЛЛ ЛУТА — один раз на всю победу.
   // То, что выпало здесь, и показывается в модалке, и выдаётся в сумку.
   // Второго ролла больше нет, расхождения между модалкой и сумкой быть не может.
-  let drop = {resources:[], equips:[]};
+  let drop = {resources:[], potions:[]};
   try{
     if(typeof volandRollDrops==='function'){
       drop = volandRollDrops(enemyData) || drop;
@@ -222,30 +222,22 @@ function showVictory(){
           if(Math.random() < (d.chance||0)) drop.resources.push({id:d.id, count:1});
         });
       }
-      if(enemyData && enemyData.equipChance && Math.random() < enemyData.equipChance){
-        if(typeof VOLAND_ITEMS!=='undefined'){
-          let heroId = (typeof volandGetHeroId==='function'?volandGetHeroId():'necro-f-new');
-          let classMap = {'necro-f-new':'mage','necro-m':'tank','archer-f':'archer','archer-m':'archer','archmage-m':'mage','warrior-f':'warrior','warrior-m':'warrior','mage-f-new':'mage'};
-          let heroClass = classMap[heroId] || 'mage';
-          let allowedWeaponBases = {'mage':['staff'], 'archer':['bow'], 'warrior':['sword','shield'], 'tank':['shield','sword']};
-          let allowedBases = allowedWeaponBases[heroClass] || ['staff'];
-          let pool = VOLAND_ITEMS.filter(it=>{
-            if(!it.slot) return false;
-            if(it.type==='potion') return false;
-            if(it.slot==='weapon'){
-              let b = it.baseId || it.id.split('-')[0];
-              if(['sword','bow','staff','shield'].includes(b)) return allowedBases.includes(b);
-            }
-            return true;
-          });
-          if(pool.length>0){
-            let pick = pool[Math.floor(Math.random()*pool.length)];
-            drop.equips.push(pick.id);
-          }
+      // Зелья в fallback: шанс как у ресурсов, размер по стадии, XL не падает
+      {
+        let stageFallback = enemyData ? enemyData.stage : 1;
+        let sizeMapFallback = {1:'xs', 2:'s', 3:'m', 4:'l'};
+        let sizeFallback = sizeMapFallback[stageFallback] || 'xs';
+        let potionChanceFallback = 0.10;
+        if(enemyData && Array.isArray(enemyData.drops) && enemyData.drops.length>0) potionChanceFallback = enemyData.drops[0].chance || 0.10;
+        else if(enemyData && enemyData.boss) potionChanceFallback = 0.20;
+        if(Math.random() < potionChanceFallback){
+          let typesFallback = ['hp','mana','stam'];
+          let pickFallback = typesFallback[Math.floor(Math.random()*typesFallback.length)];
+          drop.potions.push({id:'potion-'+pickFallback+'-'+sizeFallback, count:1});
         }
       }
     }
-  }catch(e){ drop = {resources:[], equips:[]}; }
+  }catch(e){ drop = {resources:[], potions:[]}; }
 
   // Показ в модалке — из ТОГО ЖЕ drop, что выдаём. Каждый предмет — в своём окошке.
   try{
@@ -262,12 +254,16 @@ function showVictory(){
         let cnt = r.count||1;
         boxesHtml += '<div class="reward"><div><img src="'+icon+'" style="width:42px;height:42px;object-fit:contain;display:block" onerror="this.style.display=\'none\'"></div><div class="reward-val">'+(cnt>1 ? 'x'+cnt : '1')+'</div><div class="reward-lbl">'+name+'</div></div>';
       });
-      // Шмот — каждый в своём окошке
-      drop.equips.forEach(eid=>{
-        let it = (typeof VOLAND_ITEMS!=='undefined') ? VOLAND_ITEMS.find(x=>x.id===eid) : null;
-        let icon = it && it.icon ? it.icon : './assets/ui/loot/essence.webp';
-        let name = it ? it.name : eid;
-        boxesHtml += '<div class="reward"><div><img src="'+icon+'" style="width:42px;height:42px;object-fit:contain;display:block" onerror="this.style.display=\'none\'"></div><div class="reward-val">1</div><div class="reward-lbl">'+name+'</div></div>';
+      // Зелья — каждое в своём окошке
+      drop.potions.forEach(p=>{
+        let pid = p.id || p;
+        let it = null;
+        if(typeof VOLAND_POTIONS!=='undefined') it = VOLAND_POTIONS.find(x=>x.id===pid);
+        if(!it && typeof VOLAND_ITEMS!=='undefined') it = VOLAND_ITEMS.find(x=>x.id===pid);
+        let icon = it && it.icon ? it.icon : './assets/ui/potions/hp-xs.webp';
+        let name = it ? it.name : pid;
+        let cnt = p.count||1;
+        boxesHtml += '<div class="reward"><div><img src="'+icon+'" style="width:42px;height:42px;object-fit:contain;display:block" onerror="this.style.display=\'none\'"></div><div class="reward-val">'+(cnt>1 ? 'x'+cnt : '1')+'</div><div class="reward-lbl">'+name+'</div></div>';
       });
       if(boxesHtml === ''){
         boxesHtml = '<div class="reward"><div><img src="./assets/ui/loot/essence.webp" style="width:42px;height:42px;object-fit:contain;display:block"></div><div class="reward-val">0</div><div class="reward-lbl">Нет лута</div></div>';
@@ -290,8 +286,9 @@ function showVictory(){
       drop.resources.forEach(r=>{
         if(typeof volandAddResource==='function') volandAddResource(r.id, r.count||1);
       });
-      drop.equips.forEach(eid=>{
-        if(typeof volandAddToInventory==='function') volandAddToInventory(eid);
+      drop.potions.forEach(p=>{
+        let pid = p.id || p;
+        if(typeof volandAddToInventory==='function') volandAddToInventory(pid);
       });
     }
     // SAVE HP/MANA after battle
