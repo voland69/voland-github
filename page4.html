@@ -523,16 +523,7 @@ function rebuildInv(){
       });
     }
   }catch(e){ console.log('rebuild res err', e); }
-  while(inv.length<50) inv.push(null);
-  inv = inv.slice(0,50);
-}
-rebuildInv();
-const invGrid=document.getElementById('invGrid');
-const statsPanel=document.getElementById('statsPanel');
-const barsPanel=document.getElementById('barsPanel');
-const equipCount=document.getElementById('equipCount');
-const chatBody=document.getElementById('chatBody');
-  // Зелья в сумке: считаем банки по id, каждое зелье — своя ячейка со стаком
+  // Зелья в сумке: считаем банки по id, каждое зелье — своя ячейка со стаком. Внутри rebuildInv, ДО паддинга null, иначе inv уже 50 и зелья не влезут.
   try{
     if(typeof volandGetInventory==='function' && typeof VOLAND_POTIONS!=='undefined'){
       let invAll = volandGetInventory();
@@ -551,7 +542,15 @@ const chatBody=document.getElementById('chatBody');
       });
     }
   }catch(e){ console.log('potions in bag err', e); }
-
+  while(inv.length<50) inv.push(null);
+  inv = inv.slice(0,50);
+}
+rebuildInv();
+const invGrid=document.getElementById('invGrid');
+const statsPanel=document.getElementById('statsPanel');
+const barsPanel=document.getElementById('barsPanel');
+const equipCount=document.getElementById('equipCount');
+const chatBody=document.getElementById('chatBody');
 function renderStats(){
   const {cur, bonus} = volandCalcStats();
   const heroId = (typeof volandGetHeroId==='function'?volandGetHeroId():'');
