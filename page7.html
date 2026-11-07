@@ -217,9 +217,33 @@ const FROST_FALLBACK = [
    {stage:3, name:'ЛЕДЯНОЙ ТРОЛЛЬ', eng:'Frost Troll', icon:'🧌', img:'./assets/enemies/frost-troll.webp', desc:'Ледяная броня', lvl:'LVL 7', hp:85, hpColor:'#3ad080'},
    {stage:4, name:'МОРОЗНЫЙ ПАУК', eng:'Frost Spider - BOSS', icon:'🕷️', img:'./assets/enemies/frost-spider.webp', desc:'Босс Льда', lvl:'BOSS LVL 10', hp:100, hpColor:'#e6d5a0', boss:true},
 ];
+const SWAMP_FALLBACK = [
+   {stage:1, name:'ЧУДИЩЕ БОЛОТНОЕ', eng:'Toxic Toad', icon:'🐸', img:'./assets/enemies/toxic-toad.webp', hp:60, hpColor:'#3ad080'},
+   {stage:2, name:'БОЛОТНЫЙ ЖУК', eng:'Swamp Hag', icon:'🪲', img:'./assets/enemies/swamp-hag.webp', hp:70, hpColor:'#d0b040'},
+   {stage:3, name:'ЛОЗЯНОЙ УЖАС', eng:'Vine Horror', icon:'🌿', img:'./assets/enemies/vine-horror.webp', hp:85, hpColor:'#e05050'},
+   {stage:4, name:'ТОКСИЧНАЯ ЖАБА', eng:'Mire Crawler - BOSS', icon:'🐸', img:'./assets/enemies/mire-crawler.webp', hp:100, hpColor:'#e6d5a0', boss:true},
+];
+const VOLCANO_FALLBACK = [
+   {stage:1, name:'УГОЛЬНЫЙ БЕС', eng:'Ember Imp', icon:'🔥', img:'./assets/enemies/ember-imp.webp', hp:60, hpColor:'#6ab0ff'},
+   {stage:2, name:'МАГМОВАЯ САЛАМАНДРА', eng:'Magma Salamander', icon:'🦎', img:'./assets/enemies/magma-salamander.webp', hp:70, hpColor:'#a0a0ff'},
+   {stage:3, name:'ОБСИДИАНОВАЯ ГОРГУЛЬЯ', eng:'Obsidian Gargoyle', icon:'🗿', img:'./assets/enemies/obsidian-gargoyle.webp', hp:85, hpColor:'#3ad080'},
+   {stage:4, name:'ОГНЕННЫЙ ТРОЛЛЬ', eng:'Fire Troll - BOSS', icon:'🧌', img:'./assets/enemies/fire-troll.webp', hp:100, hpColor:'#e6d5a0', boss:true},
+];
+const RUINS_FALLBACK = [
+   {stage:1, name:'СКЕЛЕТ-ЛЕГИОНЕР', eng:'Skeleton Liegionnaire', icon:'💀', img:'./assets/enemies/skeleton-liegionnaire.webp', hp:60, hpColor:'#6ab0ff'},
+   {stage:2, name:'ПРИВИДЕНИЕ РУИН', eng:'Ruin Specter', icon:'👻', img:'./assets/enemies/ruin-specter.webp', hp:70, hpColor:'#a0a0ff'},
+   {stage:3, name:'КАМЕННАЯ ГОРГУЛЬЯ', eng:'Stone Gargoyle', icon:'🗿', img:'./assets/enemies/stone-gargoyle.webp', hp:85, hpColor:'#3ad080'},
+   {stage:4, name:'ПАДШИЙ ПАЛАДИН', eng:'Fallen Paladin - BOSS', icon:'⚔️', img:'./assets/enemies/fallen-paladin.webp', hp:100, hpColor:'#e6d5a0', boss:true},
+];
 try{
  if(window.VOLAND_ENEMIES && VOLAND_ENEMIES[locId]){
   enemies=VOLAND_ENEMIES[locId];
+ } else if(locId==6){
+  enemies=RUINS_FALLBACK;
+ } else if(locId==5){
+  enemies=VOLCANO_FALLBACK;
+ } else if(locId==4){
+  enemies=SWAMP_FALLBACK;
  } else if(locId==3){
   enemies=FROST_FALLBACK;
  } else if(locId==2){
@@ -227,18 +251,21 @@ try{
  } else {
   enemies=DESERT_FALLBACK;
  }
- locData=(window.VOLAND_LOCATIONS&&VOLAND_LOCATIONS.find(l=>l.id==locId))|| (locId==3 ? {name:'ЛЕДЯНЫЕ ЗЕМЛИ',eng:'FROSTLANDS',img:'./assets/enemies/bg-frostlands.webp'} : locId==2 ? {name:'ТЕМНЫЙ ЛЕС',eng:'DARK FOREST',img:'./assets/enemies/bg-dark-forest.webp'} : {name:'ПУСТЫНЯ',eng:'DESERT',img:'./assets/enemies/bg-desert-dark.jpg'});
+ locData=(window.VOLAND_LOCATIONS&&VOLAND_LOCATIONS.find(l=>l.id==locId))|| (locId==6 ? {name:'РУИНЫ',eng:'RUINS',img:'./assets/enemies/bg-ruins.webp'} : locId==5 ? {name:'ВУЛКАН',eng:'VOLCANO',img:'./assets/enemies/bg-volcano.webp'} : locId==4 ? {name:'БОЛОТО',eng:'SWAMP',img:'./assets/enemies/bg-swamp.webp'} : locId==3 ? {name:'ЛЕДЯНЫЕ ЗЕМЛИ',eng:'FROSTLANDS',img:'./assets/enemies/bg-frostlands.webp'} : locId==2 ? {name:'ТЕМНЫЙ ЛЕС',eng:'DARK FOREST',img:'./assets/enemies/bg-dark-forest.webp'} : {name:'ПУСТЫНЯ',eng:'DESERT',img:'./assets/enemies/bg-desert-dark.jpg'});
 }catch(e){
- if(locId==3) enemies=FROST_FALLBACK;
+ if(locId==6) enemies=RUINS_FALLBACK;
+ else if(locId==5) enemies=VOLCANO_FALLBACK;
+ else if(locId==4) enemies=SWAMP_FALLBACK;
+ else if(locId==3) enemies=FROST_FALLBACK;
  else if(locId==2) enemies=FOREST_FALLBACK;
  else enemies=DESERT_FALLBACK;
- locData= locId==3 ? {name:'ЛЕДЯНЫЕ ЗЕМЛИ',eng:'FROSTLANDS',img:'./assets/enemies/bg-frostlands.webp'} : locId==2 ? {name:'ТЕМНЫЙ ЛЕС',eng:'DARK FOREST',img:'./assets/enemies/bg-dark-forest.webp'} : {name:'ПУСТЫНЯ',eng:'DESERT',img:'./assets/enemies/bg-desert-dark.jpg'};
+ locData= locId==6 ? {name:'РУИНЫ',eng:'RUINS',img:'./assets/enemies/bg-ruins.webp'} : locId==5 ? {name:'ВУЛКАН',eng:'VOLCANO',img:'./assets/enemies/bg-volcano.webp'} : locId==4 ? {name:'БОЛОТО',eng:'SWAMP',img:'./assets/enemies/bg-swamp.webp'} : locId==3 ? {name:'ЛЕДЯНЫЕ ЗЕМЛИ',eng:'FROSTLANDS',img:'./assets/enemies/bg-frostlands.webp'} : locId==2 ? {name:'ТЕМНЫЙ ЛЕС',eng:'DARK FOREST',img:'./assets/enemies/bg-dark-forest.webp'} : {name:'ПУСТЫНЯ',eng:'DESERT',img:'./assets/enemies/bg-desert-dark.jpg'};
 }
 document.getElementById('locTitle').innerHTML=locData.name+'<span id="locSub">'+locData.eng+' • '+enemies.length+' STAGES • CLICK TO FIGHT</span>';
 try{
  let bgEl=document.getElementById('bgImg');
  if(bgEl){
-  let bgSrc = locData.img || (locId==3 ? './assets/enemies/bg-frostlands.webp' : locId==2 ? './assets/enemies/bg-dark-forest.webp' : './assets/enemies/bg-desert-dark.jpg');
+  let bgSrc = locData.img || (locId==6 ? './assets/enemies/bg-ruins.webp' : locId==5 ? './assets/enemies/bg-volcano.webp' : locId==4 ? './assets/enemies/bg-swamp.webp' : locId==3 ? './assets/enemies/bg-frostlands.webp' : locId==2 ? './assets/enemies/bg-dark-forest.webp' : './assets/enemies/bg-desert-dark.jpg');
   bgEl.src=bgSrc;
  }
 }catch(e){}
