@@ -1,4 +1,4 @@
-// VOLAND BATTLE ENGINE v1 - база, чистый старт
+ // VOLAND BATTLE ENGINE v1 - база, чистый старт
 // DMG-DEF+rand, полоски HP/MANA, QWER, win/lose, грузит механику героя из heroes/${heroId}.js
 (function(){
 if(typeof volandHasSave==='function' && !volandHasSave()) location.href='./page2.html';
