@@ -206,7 +206,7 @@ html,body{height:100%;background:url("./assets/heroes/bg-battlefield.webp") cent
 <script src="./assets/js/db/missions.js"></script>
 <script src="./assets/js/storage.js"></script>
 <script>
-const LVLS=[1,5,10];
+const LVLS=[1,5,10,15,20,25];
 function render(){
  const g=document.getElementById('locGrid');
  let a=[],s=[];
@@ -216,8 +216,9 @@ function render(){
    s=VOLAND_LOCATIONS.filter(l=>!l.active).slice(0,2);
   }
  }catch(e){}
- if(!a.length) a=[{id:1,name:'ПУСТЫНЯ',eng:'DESERT',icon:'🏜️',type:'Жара • Песок'},{id:2,name:'ТЕМНЫЙ ЛЕС',eng:'DARK FOREST',icon:'🌲',type:'Тень • Яд'},{id:3,name:'ЛЕДЯНЫЕ ЗЕМЛИ',eng:'FROSTLANDS',icon:'❄️',type:'Холод • Лед'}];
- if(!s.length) s=[{id:4,name:'БОЛОТО',eng:'SWAMP',icon:'🐊'},{id:5,name:'ВУЛКАН',eng:'VOLCANO',icon:'🌋'},{id:6,name:'РУИНЫ',eng:'RUINS',icon:'🏛️'}];
+ if(!a.length) a=[{id:1,name:'ПУСТЫНЯ',eng:'DESERT',icon:'🏜️',img:'./assets/enemies/bg-desert-dark.jpg',type:'Жара • Песок'},{id:2,name:'ТЕМНЫЙ ЛЕС',eng:'DARK FOREST',icon:'🌲',img:'./assets/enemies/bg-dark-forest.webp',type:'Тень • Яд'},{id:3,name:'ЛЕДЯНЫЕ ЗЕМЛИ',eng:'FROSTLANDS',icon:'❄️',img:'./assets/enemies/bg-frostlands.webp',type:'Холод • Лед'},{id:4,name:'БОЛОТО',eng:'SWAMP',icon:'🐊',img:'./assets/enemies/bg-swamp.webp',type:'Токсин • Вода'},{id:5,name:'ВУЛКАН',eng:'VOLCANO',icon:'🌋',img:'./assets/enemies/bg-volcano.webp',type:'Огонь • Лава'},{id:6,name:'РУИНЫ',eng:'RUINS',icon:'🏛️',img:'./assets/enemies/bg-ruins.webp',type:'Кость • Камень'}];
+ if(!s.length) s=[{id:7,name:'НЕБЕСА',eng:'SKY ISLANDS',icon:'☁️'},{id:8,name:'БЕЗДНА',eng:'ABYSS',icon:'🕳️'}];
+ try{ console.log('[PAGE6] render a='+a.map(x=>x.name).join(',')+' | s='+s.map(x=>x.name).join(',')); }catch(e){}
  const top=a.map((l,i)=>{
   let fallback = l.id==1 ? './assets/enemies/bg-desert-dark.jpg' : l.id==2 ? './assets/enemies/bg-dark-forest.webp' : l.id==3 ? './assets/enemies/bg-frostlands.webp' : null;
   let img = l.img || fallback;
