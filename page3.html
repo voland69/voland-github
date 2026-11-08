@@ -340,9 +340,13 @@ function renderStatPoints(){
     {key:'CRIT', name:'CRIT', per:'1 очко = +0,5% CRIT', max:20},
     {key: isParryHero ? 'PARRY' : 'DODGE', name: isParryHero ? 'PARRY' : 'DODGE', per:'1 очко = +0,5% ' + (isParryHero ? 'PARRY' : 'DODGE'), max:20},
   ];
-  let rowsHtml = rows.map(r=>{
+  let savedAllocForRows = {HP:0,DEF:0,DMG:0,MANA:0,CRIT:0,DODGE:0,PARRY:0};
+  try{ savedAllocForRows = volandGetStatAlloc(); }catch(e){}
+  rowsHtml = rows.map(r=>{
     let v = parseInt(temp[r.key]||0)||0;
-    return `<div class="stat-row"><div class="stat-row-name">${r.name}</div><div class="stat-row-info">${r.per} • Вложено: ${v} / ${r.max}<br><span style="color:#6a7a8a">Бонус: ${r.key==='CRIT'||r.key==='DODGE'||r.key==='PARRY' ? (v*0.5).toFixed(1)+'%' : (r.key==='HP' ? v*30 : r.key==='DEF' ? v*5 : r.key==='DMG' ? v*10 : v*20)}</span></div><div class="stat-row-pts">${v}</div><button class="stat-btn" onclick="changeStatPoint('${r.key}', -1)" ${v<=0?'disabled':''}>−</button><button class="stat-btn plus" onclick="changeStatPoint('${r.key}', 1)" ${remaining<=0 || v>=r.max ? 'disabled' : ''}>+</button></div>`;
+    let savedV = parseInt(savedAllocForRows[r.key]||0)||0;
+    let lockedNote = savedV>0 ? `<br><span style="color:#FFD700;font-size:8px">Сохранено: ${savedV} — снять только через СБРОС</span>` : '';
+    return `<div class="stat-row"><div class="stat-row-name">${r.name}</div><div class="stat-row-info">${r.per} • Вложено: ${v} / ${r.max}${lockedNote}<br><span style="color:#6a7a8a">Бонус: ${r.key==='CRIT'||r.key==='DODGE'||r.key==='PARRY' ? (v*0.5).toFixed(1)+'%' : (r.key==='HP' ? v*30 : r.key==='DEF' ? v*5 : r.key==='DMG' ? v*10 : v*20)}</span></div><div class="stat-row-pts">${v}</div><button class="stat-btn" onclick="changeStatPoint('${r.key}', -1)" ${v<=savedV?'disabled':''} title="${v<=savedV && savedV>0 ? 'Сохранённые очки — только через СБРОС' : ''}">−</button><button class="stat-btn plus" onclick="changeStatPoint('${r.key}', 1)" ${remaining<=0 || v>=r.max ? 'disabled' : ''}>+</button></div>`;
   }).join('');
   let hasChanges = false;
   try{
@@ -351,7 +355,7 @@ function renderStatPoints(){
   }catch(e){}
   document.getElementById('statPointsPanel').innerHTML = `
     <div style="display:flex;justify-content:space-between;align-items:center"><div class="stat-points-title">⭐ ОЧКИ • РАСПРЕДЕЛЕНИЕ</div><button class="points-btn secondary" onclick="pointsExpanded=false; renderStatPoints();" style="padding:6px 10px;font-size:9px">СВЕРНУТЬ ▲</button></div>
-    <div class="stat-points-sub">Осталось очков: <b style="color:#FFD700;font-size:12px">${remaining}</b> • Уровень: ${lvlForName} • ${autoLabel}<br>Предохранители: CRIT — порог ${critTh.threshold}% / кап ${critTh.cap}% • DODGE/PARRY — порог 20% / кап 30% • После порога %/2<br>Милстоуны: каждые 10 уровней +1 очко + золото (10 ур. +500G, 20 ур. +1000G, 30 ур. +1500G...)</div>
+    <div class="stat-points-sub">Осталось очков: <b style="color:#FFD700;font-size:12px">${remaining}</b> • Уровень: ${lvlForName} • ${autoLabel}<br>Предохранители: CRIT — порог ${critTh.threshold}% / кап ${critTh.cap}% • DODGE/PARRY — порог 20% / кап 30% • После порога %/2<br>Милстоуны: каждые 10 уровней +1 очко + золото (10 ур. +500G, 20 ур. +1000G, 30 ур. +1500G...)<br><span style="color:#8a9aaa">Сохранённые очки минусиком не снимаются — только через СБРОС.</span></div>
     <div style="margin-top:12px">${rowsHtml}</div>
     <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
       <button class="points-btn" onclick="saveStatPoints()" ${!hasChanges?'disabled':''}>СОХРАНИТЬ</button>
@@ -366,6 +370,13 @@ function changeStatPoint(key, delta){
   let nv = v + delta;
   if(nv<0) return;
   if(nv>20) return;
+  if(delta<0){
+    // Баг-фикс: сохранённые очки нельзя снять минусиком — только через СБРОС
+    let saved = {HP:0,DEF:0,DMG:0,MANA:0,CRIT:0,DODGE:0,PARRY:0};
+    try{ saved = volandGetStatAlloc(); }catch(e){}
+    let savedV = parseInt(saved[key]||0)||0;
+    if(nv < savedV) return;
+  }
   if(delta>0){
     let remaining = getRemainingForUI();
     if(remaining<=0) return;
