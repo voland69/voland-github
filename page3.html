@@ -191,6 +191,15 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
 .points-btn.secondary{border-color:#2a3a4a;background:#1a252f;color:#e6d5a0}
 .points-btn:disabled{opacity:.4;cursor:default}
 
+
+.stat-points-strip{margin:0 20px 0 20px;background:rgba(19,26,34,.92);border:1px solid #e6d5a0;border-radius:8px;padding:10px 14px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.stat-points-strip:hover{border-color:#fff}
+.stat-points-strip-title{font:900 11px 'Cinzel Decorative',serif;color:#e6d5a0;letter-spacing:.1em}
+.stat-points-strip-info{font:400 9px 'JetBrains Mono',monospace;color:#8a9aaa}
+.stat-bonus-gear{color:#3ad080;font:700 9px 'JetBrains Mono',monospace}
+.stat-bonus-points{color:#e6d5a0;font:700 9px 'JetBrains Mono',monospace}
+.stat-bonus-wrap{margin-top:4px;font:400 8px 'JetBrains Mono',monospace;line-height:1.5}
+
 </style>
 </head>
 <body>
@@ -256,18 +265,33 @@ let lvlForName = (typeof volandGetCurrentLevelInfo==='function' ? volandGetCurre
 document.getElementById('heroName').textContent = profileName.toUpperCase() + ' LVL ' + lvlForName;
 document.getElementById('heroClass').textContent = heroData.n + ' • ' + heroData.role;
 
+function fmtBonus(v, isPct){ if(!v) return ''; let s = (Math.round(v*100)/100); return (s>0?'+':'') + s + (isPct?'%':''); }
+let gear = calc.equipBonus || {};
+let ptsB = calc.pointsBonus || {};
+let baseWithAuto = calc.baseWithAuto || {};
+function card(label, total, gearV, ptsV, isPct){
+  let gearHtml = gearV ? `<span class="stat-bonus-gear">Шмот ${fmtBonus(gearV, isPct)}</span>` : '';
+  let ptsHtml = ptsV ? `<span class="stat-bonus-points">Очки ${fmtBonus(ptsV, isPct)}</span>` : '';
+  let sep = (gearV && ptsV) ? ' • ' : '';
+  let wrap = (gearV || ptsV) ? `<div class="stat-bonus-wrap">${gearHtml}${sep}${ptsHtml}</div>` : `<div class="stat-bonus-wrap" style="color:#6a7a8a">База ${Math.round((baseWithAuto[label]||total)*100)/100}${isPct?'%':''} (с лвлом)</div>`;
+  return `<div class="stat-card"><div class="stat-label">${label}</div><div class="stat-value">${total}${isPct?'%':''}</div>${wrap}</div>`;
+}
+let isParry = cur.PARRY>0;
 document.getElementById('statsGrid').innerHTML = `
-  <div class="stat-card"><div class="stat-label">HP</div><div class="stat-value">${cur.HP}</div><div class="stat-bonus">${bonus.HP? '+'+bonus.HP:''}</div></div>
-  <div class="stat-card"><div class="stat-label">DEF</div><div class="stat-value">${cur.DEF}</div><div class="stat-bonus">${bonus.DEF? '+'+bonus.DEF:''}</div></div>
-  <div class="stat-card"><div class="stat-label">DAMAGE</div><div class="stat-value">${cur.DMG}</div><div class="stat-bonus">${bonus.DMG? '+'+bonus.DMG:''}</div></div>
-  <div class="stat-card"><div class="stat-label">MANA</div><div class="stat-value">${cur.MANA}</div><div class="stat-bonus">${bonus.MANA? '+'+bonus.MANA:''}</div></div>
-  <div class="stat-card"><div class="stat-label">CRIT</div><div class="stat-value">${cur.CRIT}%</div><div class="stat-bonus">${bonus.CRIT? '+'+bonus.CRIT+'%':''}</div></div>
-  <div class="stat-card"><div class="stat-label">${cur.PARRY>0?'PARRY':'DODGE'}</div><div class="stat-value">${cur.PARRY>0?cur.PARRY:cur.DODGE}%</div><div class="stat-bonus">${bonus.PARRY||bonus.DODGE? '+'+(bonus.PARRY||bonus.DODGE)+'%':''}</div></div>
+  ${card('HP', cur.HP, gear.HP, ptsB.HP, false)}
+  ${card('DEF', cur.DEF, gear.DEF, ptsB.DEF, false)}
+  ${card('DAMAGE', cur.DMG, gear.DMG, ptsB.DMG, false)}
+  ${card('MANA', cur.MANA, gear.MANA, ptsB.MANA, false)}
+  ${card('CRIT', cur.CRIT, gear.CRIT, ptsB.CRIT, true)}
+  ${card(isParry?'PARRY':'DODGE', isParry?cur.PARRY:cur.DODGE, isParry?gear.PARRY:gear.DODGE, isParry?ptsB.PARRY:ptsB.DODGE, true)}
 `;
 
-// ===== STAT POINTS UI v6 — распределение, сброс, милстоуны =====
+// ===== STAT POINTS UI v7 — узкая полоска + фикс пропущенных очков =====
 let tempAlloc = null;
+let pointsExpanded = false;
+try{ if(typeof volandFixMissingStatPoints==='function') volandFixMissingStatPoints(); }catch(e){}
 try{ if(typeof volandClaimMissedMilestones==='function') volandClaimMissedMilestones(); }catch(e){}
+try{ if(typeof volandFixMissingStatPoints==='function') volandFixMissingStatPoints(); }catch(e){}
 function getTempAlloc(){
   if(!tempAlloc){
     try{ tempAlloc = (typeof volandGetStatAlloc==='function') ? volandGetStatAlloc() : {HP:0,DEF:0,DMG:0,MANA:0,CRIT:0,DODGE:0,PARRY:0}; }catch(e){ tempAlloc = {HP:0,DEF:0,DMG:0,MANA:0,CRIT:0,DODGE:0,PARRY:0}; }
@@ -285,11 +309,25 @@ function getRemainingForUI(){
 }
 function renderStatPoints(){
   let heroId2 = heroId;
+  // Узкая полоска — если свёрнуто, показываем только полоску
+  if(!pointsExpanded){
+    let remaining0 = getRemainingForUI();
+    let temp0 = getTempAlloc();
+    let spent0 = 0; for(let k in temp0) spent0 += parseInt(temp0[k]||0)||0;
+    let allocStr = ['HP','DEF','DMG','MANA','CRIT'].map(k=>k+' '+ (parseInt(temp0[k]||0)||0)).join(' • ');
+    document.getElementById('statPointsPanel').innerHTML = `
+      <div class="stat-points-strip" onclick="pointsExpanded=true; renderStatPoints();">
+        <div><span class="stat-points-strip-title">⭐ ОЧКИ • РАСПРЕДЕЛЕНИЕ</span> <span class="stat-points-strip-info">Осталось: ${remaining0} • Вложено: ${spent0} • ${allocStr}</span></div>
+        <div style="font:700 10px 'JetBrains Mono',monospace;color:#e6d5a0">РАЗВЕРНУТЬ ▼</div>
+      </div>
+    `;
+    return;
+  }
   let isParryHero = (cur.PARRY||0) > 0 || (VOLAND_HEROES[heroId2]?.st?.PARRY||0) > 0;
   let remaining = getRemainingForUI();
   let temp = getTempAlloc();
-  let autoLabel = '';
-  try{ let a = volandGetClassAutoBonus(heroId2); autoLabel = a.label || ''; }catch(e){}
+  let autoLabel = 'База уже с лвлом: оригинал + (уровень-1)*бонус';
+  // Автомат не расписываем отдельно — он уже в базе, как ты сказал
   let critTh = null;
   try{ critTh = volandGetCritThresholds(heroId2); }catch(e){ critTh = {threshold:30, cap:40}; }
   let respecUsed = false; try{ respecUsed = volandGetStatRespecUsed(); }catch(e){}
@@ -312,8 +350,8 @@ function renderStatPoints(){
     for(let k in temp){ if((parseInt(temp[k]||0)||0) !== (parseInt(saved[k]||0)||0)) hasChanges = true; }
   }catch(e){}
   document.getElementById('statPointsPanel').innerHTML = `
-    <div class="stat-points-title">⭐ ОЧКИ • РАСПРЕДЕЛЕНИЕ</div>
-    <div class="stat-points-sub">Осталось очков: <b style="color:#e6d5a0;font-size:12px">${remaining}</b> • Уровень: ${lvlForName} • ${autoLabel}<br>Предохранители: CRIT — порог ${critTh.threshold}% / кап ${critTh.cap}% • DODGE/PARRY — порог 20% / кап 30% • После порога %/2 • Дебаф Вариант А — минус пункты от эффективного значения<br>Милстоуны: каждые 10 уровней +1 очко + золото (10 ур. +500G, 20 ур. +1000G, 30 ур. +1500G...)</div>
+    <div style="display:flex;justify-content:space-between;align-items:center"><div class="stat-points-title">⭐ ОЧКИ • РАСПРЕДЕЛЕНИЕ</div><button class="points-btn secondary" onclick="pointsExpanded=false; renderStatPoints();" style="padding:6px 10px;font-size:9px">СВЕРНУТЬ ▲</button></div>
+    <div class="stat-points-sub">Осталось очков: <b style="color:#e6d5a0;font-size:12px">${remaining}</b> • Уровень: ${lvlForName} • ${autoLabel}<br>Предохранители: CRIT — порог ${critTh.threshold}% / кап ${critTh.cap}% • DODGE/PARRY — порог 20% / кап 30% • После порога %/2 • Дебаф Вариант А — минус пункты от эффективного значения<br>Милстоуны: каждые 10 уровней +1 очко + золото (10 ур. +500G, 20 ур. +1000G, 30 ур. +1500G...)<br><span style="color:#e6d5a0">СБРОС сбрасывает только жёлтое — очки. База (с лвлом) и шмот остаются.</span></div>
     <div style="margin-top:12px">${rowsHtml}</div>
     <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
       <button class="points-btn" onclick="saveStatPoints()" ${!hasChanges?'disabled':''}>СОХРАНИТЬ</button>
