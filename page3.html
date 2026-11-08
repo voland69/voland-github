@@ -197,7 +197,7 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
 .stat-points-strip-title{font:900 11px 'Cinzel Decorative',serif;color:#e6d5a0;letter-spacing:.1em}
 .stat-points-strip-info{font:400 9px 'JetBrains Mono',monospace;color:#8a9aaa}
 .stat-bonus-gear{color:#3ad080;font:700 13.5px 'JetBrains Mono',monospace}
-.stat-bonus-points{color:#e6d5a0;font:700 13.5px 'JetBrains Mono',monospace}
+.stat-bonus-points{color:#FFD700;font:700 13.5px 'JetBrains Mono',monospace}
 .stat-bonus-wrap{margin-top:4px;font:400 12px 'JetBrains Mono',monospace;line-height:1.5}
 
 </style>
@@ -314,10 +314,10 @@ function renderStatPoints(){
     let remaining0 = getRemainingForUI();
     let temp0 = getTempAlloc();
     let spent0 = 0; for(let k in temp0) spent0 += parseInt(temp0[k]||0)||0;
-    let allocStr = ['HP','DEF','DMG','MANA','CRIT'].map(k=>{ let v = parseInt(temp0[k]||0)||0; if(v>0) return `<span style="color:#e6d5a0;font-weight:700">${k} ${v}</span>`; return `<span style="color:#8a9aaa">${k} ${v}</span>`; }).join(' • ');
+    let allocStr = ['HP','DEF','DMG','MANA','CRIT'].map(k=>{ let v = parseInt(temp0[k]||0)||0; if(v>0) return `<span style="color:#FFD700;font-weight:700">${k} ${v}</span>`; return `<span style="color:#8a9aaa">${k} ${v}</span>`; }).join(' • ');
     document.getElementById('statPointsPanel').innerHTML = `
       <div class="stat-points-strip" onclick="pointsExpanded=true; renderStatPoints();">
-        <div><span class="stat-points-strip-title">⭐ ОЧКИ • РАСПРЕДЕЛЕНИЕ</span> <span class="stat-points-strip-info">Осталось: <span style="color:${remaining0>0?'#e6d5a0':'#8a9aaa'};font-weight:700">${remaining0}</span> • Вложено: <span style="color:${spent0>0?'#e6d5a0':'#8a9aaa'};font-weight:700">${spent0}</span> • ${allocStr}</span></div>
+        <div><span class="stat-points-strip-title">⭐ ОЧКИ • РАСПРЕДЕЛЕНИЕ</span> <span class="stat-points-strip-info">Осталось: <span style="color:${remaining0>0?'#FFD700':'#8a9aaa'};font-weight:700">${remaining0}</span> • Вложено: <span style="color:${spent0>0?'#FFD700':'#8a9aaa'};font-weight:700">${spent0}</span> • ${allocStr}</span></div>
         <div style="font:700 10px 'JetBrains Mono',monospace;color:#e6d5a0">РАЗВЕРНУТЬ ▼</div>
       </div>
     `;
@@ -351,7 +351,7 @@ function renderStatPoints(){
   }catch(e){}
   document.getElementById('statPointsPanel').innerHTML = `
     <div style="display:flex;justify-content:space-between;align-items:center"><div class="stat-points-title">⭐ ОЧКИ • РАСПРЕДЕЛЕНИЕ</div><button class="points-btn secondary" onclick="pointsExpanded=false; renderStatPoints();" style="padding:6px 10px;font-size:9px">СВЕРНУТЬ ▲</button></div>
-    <div class="stat-points-sub">Осталось очков: <b style="color:#e6d5a0;font-size:12px">${remaining}</b> • Уровень: ${lvlForName} • ${autoLabel}<br>Предохранители: CRIT — порог ${critTh.threshold}% / кап ${critTh.cap}% • DODGE/PARRY — порог 20% / кап 30% • После порога %/2<br>Милстоуны: каждые 10 уровней +1 очко + золото (10 ур. +500G, 20 ур. +1000G, 30 ур. +1500G...)</div>
+    <div class="stat-points-sub">Осталось очков: <b style="color:#FFD700;font-size:12px">${remaining}</b> • Уровень: ${lvlForName} • ${autoLabel}<br>Предохранители: CRIT — порог ${critTh.threshold}% / кап ${critTh.cap}% • DODGE/PARRY — порог 20% / кап 30% • После порога %/2<br>Милстоуны: каждые 10 уровней +1 очко + золото (10 ур. +500G, 20 ур. +1000G, 30 ур. +1500G...)</div>
     <div style="margin-top:12px">${rowsHtml}</div>
     <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
       <button class="points-btn" onclick="saveStatPoints()" ${!hasChanges?'disabled':''}>СОХРАНИТЬ</button>
