@@ -143,7 +143,7 @@ async function useAction(idx){
  // хук героя
  if(window.VOLAND_HERO_USE_SKILL){
    let handled = await window.VOLAND_HERO_USE_SKILL(idx, {cur, eDef, eDmg, eMaxHp, get eHp(){return eHp}, set eHp(v){eHp=v}, get hHp(){return hHp}, set hHp(v){hHp=v}, get hMana(){return hMana}, set hMana(v){hMana=v}, hMax, hMaxMana, enemyData, heroData, activeSkills, getMult, rand, addLog, updBars, cooldowns, turn, spellCount, enemyStun, setEnemyStun:v=>enemyStun=v, isBattleOver, allSkills});
-   if(handled){ spellCount++; afterHeroAction(); return; }
+   if(handled){ if(idx===4 && typeof volandUpdateMissionStat==='function'){ try{ volandUpdateMissionStat('ult', null, 1); }catch(e){} } spellCount++; afterHeroAction(); return; }
  }
  // база
  let dmg=0, isCrit=false;
@@ -157,6 +157,7 @@ async function useAction(idx){
  }else{
   const sk=activeSkills[idx-1];
   if(hMana<sk.mana){ addLog('⛔ Не хватает маны! Нужно '+sk.mana,'lose'); return; }
+  if(idx===4 && typeof volandUpdateMissionStat==='function'){ try{ volandUpdateMissionStat('ult', null, 1); }catch(e){} }
   hMana-=sk.mana; cooldowns[idx]=sk.cd||1; if(cooldowns[idx]==0) cooldowns[idx]=1;
   let mult=getMult(sk, idx-1);
   let base=Math.floor(cur.DMG*mult);
