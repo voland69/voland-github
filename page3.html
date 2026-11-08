@@ -175,6 +175,22 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
   inset:0 !important;
 }
 
+
+.stat-points-panel{margin:0 20px 0 20px;background:rgba(19,26,34,.88);border:1px solid #e6d5a0;border-radius:10px;padding:16px;backdrop-filter:blur(4px)}
+.stat-points-title{font:900 13px 'Cinzel Decorative',serif;color:#e6d5a0;letter-spacing:.12em}
+.stat-points-sub{margin-top:6px;font:400 9px 'JetBrains Mono',monospace;color:#8a9aaa;line-height:1.5}
+.stat-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #1e2a32}
+.stat-row:last-child{border-bottom:none}
+.stat-row-name{width:90px;font:700 10px 'JetBrains Mono',monospace;color:#e6d5a0}
+.stat-row-info{flex:1;font:400 9px 'JetBrains Mono',monospace;color:#8a9aaa;line-height:1.4}
+.stat-row-pts{width:70px;text-align:center;font:700 12px 'JetBrains Mono',monospace;color:#fff}
+.stat-btn{width:28px;height:28px;border-radius:6px;border:1px solid #2a3a4a;background:#1a252f;color:#e6d5a0;font:700 14px 'JetBrains Mono',monospace;cursor:pointer}
+.stat-btn:disabled{opacity:.3;cursor:default}
+.stat-btn.plus{border-color:#3ad080;color:#3ad080}
+.points-btn{font:700 10px 'JetBrains Mono',monospace;padding:10px 16px;border-radius:8px;border:1px solid #e6d5a0;background:#e6d5a0;color:#0a0e14;cursor:pointer}
+.points-btn.secondary{border-color:#2a3a4a;background:#1a252f;color:#e6d5a0}
+.points-btn:disabled{opacity:.4;cursor:default}
+
 </style>
 </head>
 <body>
@@ -205,6 +221,7 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
   </div>
   <div class="main">
     <div class="stats-grid" id="statsGrid"></div>
+    <div class="stat-points-panel" id="statPointsPanel"></div>
     <div class="bars-panel" id="barsPanel"></div>
     <div class="stats-extra-grid" id="extraGrid"></div>
   </div>
@@ -247,6 +264,106 @@ document.getElementById('statsGrid').innerHTML = `
   <div class="stat-card"><div class="stat-label">CRIT</div><div class="stat-value">${cur.CRIT}%</div><div class="stat-bonus">${bonus.CRIT? '+'+bonus.CRIT+'%':''}</div></div>
   <div class="stat-card"><div class="stat-label">${cur.PARRY>0?'PARRY':'DODGE'}</div><div class="stat-value">${cur.PARRY>0?cur.PARRY:cur.DODGE}%</div><div class="stat-bonus">${bonus.PARRY||bonus.DODGE? '+'+(bonus.PARRY||bonus.DODGE)+'%':''}</div></div>
 `;
+
+// ===== STAT POINTS UI v6 — распределение, сброс, милстоуны =====
+let tempAlloc = null;
+try{ if(typeof volandClaimMissedMilestones==='function') volandClaimMissedMilestones(); }catch(e){}
+function getTempAlloc(){
+  if(!tempAlloc){
+    try{ tempAlloc = (typeof volandGetStatAlloc==='function') ? volandGetStatAlloc() : {HP:0,DEF:0,DMG:0,MANA:0,CRIT:0,DODGE:0,PARRY:0}; }catch(e){ tempAlloc = {HP:0,DEF:0,DMG:0,MANA:0,CRIT:0,DODGE:0,PARRY:0}; }
+  }
+  return tempAlloc;
+}
+function getRemainingForUI(){
+  let savedAlloc = {HP:0,DEF:0,DMG:0,MANA:0,CRIT:0,DODGE:0,PARRY:0};
+  try{ savedAlloc = volandGetStatAlloc(); }catch(e){}
+  let savedSpent = 0; for(let k in savedAlloc) savedSpent += parseInt(savedAlloc[k]||0)||0;
+  let temp = getTempAlloc();
+  let tempSpent = 0; for(let k in temp) tempSpent += parseInt(temp[k]||0)||0;
+  let remaining = 0; try{ remaining = volandGetStatPointsRemaining(); }catch(e){}
+  return remaining - (tempSpent - savedSpent);
+}
+function renderStatPoints(){
+  let heroId2 = heroId;
+  let isParryHero = (cur.PARRY||0) > 0 || (VOLAND_HEROES[heroId2]?.st?.PARRY||0) > 0;
+  let remaining = getRemainingForUI();
+  let temp = getTempAlloc();
+  let autoLabel = '';
+  try{ let a = volandGetClassAutoBonus(heroId2); autoLabel = a.label || ''; }catch(e){}
+  let critTh = null;
+  try{ critTh = volandGetCritThresholds(heroId2); }catch(e){ critTh = {threshold:30, cap:40}; }
+  let respecUsed = false; try{ respecUsed = volandGetStatRespecUsed(); }catch(e){}
+  let respecCost = 200; try{ respecCost = volandGetStatRespecCost(); }catch(e){}
+  let rows = [
+    {key:'HP', name:'HP', per:'1 очко = +30 HP', max:20},
+    {key:'DEF', name:'DEF', per:'1 очко = +5 DEF', max:20},
+    {key:'DMG', name:'DMG', per:'1 очко = +10 DMG', max:20},
+    {key:'MANA', name:'MANA', per:'1 очко = +20 MANA', max:20},
+    {key:'CRIT', name:'CRIT', per:'1 очко = +0,5% CRIT', max:20},
+    {key: isParryHero ? 'PARRY' : 'DODGE', name: isParryHero ? 'PARRY' : 'DODGE', per:'1 очко = +0,5% ' + (isParryHero ? 'PARRY' : 'DODGE'), max:20},
+  ];
+  let rowsHtml = rows.map(r=>{
+    let v = parseInt(temp[r.key]||0)||0;
+    return `<div class="stat-row"><div class="stat-row-name">${r.name}</div><div class="stat-row-info">${r.per} • Вложено: ${v} / ${r.max}<br><span style="color:#6a7a8a">Бонус: ${r.key==='CRIT'||r.key==='DODGE'||r.key==='PARRY' ? (v*0.5).toFixed(1)+'%' : (r.key==='HP' ? v*30 : r.key==='DEF' ? v*5 : r.key==='DMG' ? v*10 : v*20)}</span></div><div class="stat-row-pts">${v}</div><button class="stat-btn" onclick="changeStatPoint('${r.key}', -1)" ${v<=0?'disabled':''}>−</button><button class="stat-btn plus" onclick="changeStatPoint('${r.key}', 1)" ${remaining<=0 || v>=r.max ? 'disabled' : ''}>+</button></div>`;
+  }).join('');
+  let hasChanges = false;
+  try{
+    let saved = volandGetStatAlloc();
+    for(let k in temp){ if((parseInt(temp[k]||0)||0) !== (parseInt(saved[k]||0)||0)) hasChanges = true; }
+  }catch(e){}
+  document.getElementById('statPointsPanel').innerHTML = `
+    <div class="stat-points-title">⭐ ОЧКИ • РАСПРЕДЕЛЕНИЕ</div>
+    <div class="stat-points-sub">Осталось очков: <b style="color:#e6d5a0;font-size:12px">${remaining}</b> • Уровень: ${lvlForName} • ${autoLabel}<br>Предохранители: CRIT — порог ${critTh.threshold}% / кап ${critTh.cap}% • DODGE/PARRY — порог 20% / кап 30% • После порога %/2 • Дебаф Вариант А — минус пункты от эффективного значения<br>Милстоуны: каждые 10 уровней +1 очко + золото (10 ур. +500G, 20 ур. +1000G, 30 ур. +1500G...)</div>
+    <div style="margin-top:12px">${rowsHtml}</div>
+    <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
+      <button class="points-btn" onclick="saveStatPoints()" ${!hasChanges?'disabled':''}>СОХРАНИТЬ</button>
+      <button class="points-btn secondary" onclick="resetStatPointsUI()">${respecUsed ? 'СБРОС — ' + respecCost + 'G' : 'СБРОС — БЕСПЛАТНО (1 раз)'}</button>
+    </div>
+    <div id="statPointsMsg" style="margin-top:8px;font:400 9px 'JetBrains Mono',monospace;color:#3ad080"></div>
+  `;
+}
+function changeStatPoint(key, delta){
+  let temp = getTempAlloc();
+  let v = parseInt(temp[key]||0)||0;
+  let nv = v + delta;
+  if(nv<0) return;
+  if(nv>20) return;
+  if(delta>0){
+    let remaining = getRemainingForUI();
+    if(remaining<=0) return;
+  }
+  temp[key] = nv;
+  renderStatPoints();
+}
+function saveStatPoints(){
+  let temp = getTempAlloc();
+  let res = null;
+  try{ res = volandSpendStatPoints(temp); }catch(e){ res = {ok:false, reason:String(e)}; }
+  let msg = document.getElementById('statPointsMsg');
+  if(res && res.ok){
+    if(msg) msg.textContent = 'Сохранено! Перезагружаю...';
+    setTimeout(()=>location.reload(), 500);
+  } else {
+    if(msg) { msg.style.color = '#e05050'; msg.textContent = 'Ошибка: ' + (res ? res.reason : 'неизвестно'); }
+  }
+}
+function resetStatPointsUI(){
+  let used = false; try{ used = volandGetStatRespecUsed(); }catch(e){}
+  let cost = 200; try{ cost = volandGetStatRespecCost(); }catch(e){}
+  let text = used ? 'Сброс стоит ' + cost + 'G. Сбросить все очки?' : 'Первый сброс — бесплатно. Сбросить все очки?';
+  if(!confirm(text)) return;
+  let res = null;
+  try{ res = volandResetStatPoints(); }catch(e){ res = {ok:false, reason:String(e)}; }
+  let msg = document.getElementById('statPointsMsg');
+  if(res && res.ok){
+    if(msg) msg.textContent = 'Сброшено! Перезагружаю...';
+    tempAlloc = null;
+    setTimeout(()=>location.reload(), 500);
+  } else {
+    if(msg) { msg.style.color = '#e05050'; msg.textContent = 'Ошибка: ' + (res ? res.reason : 'неизвестно'); }
+  }
+}
+renderStatPoints();
 
 let totalXp = 0;
 try{ totalXp = typeof volandGetXp==='function' ? volandGetXp() : 0; }catch(e){}
