@@ -140,7 +140,7 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
 .stat-card.boosted{border-color:#3ad080;box-shadow:0 0 12px rgba(58,208,128,.3)}
 .stat-label{font-size:8px;letter-spacing:.15em;color:#6a7a8a;font-family:'JetBrains Mono',monospace}
 .stat-value{margin-top:4px;font-size:18px;font-weight:800;color:#e6d5a0;font-family:'JetBrains Mono',monospace}
-.stat-bonus{font-size:18px;color:#3ad080;font-family:'JetBrains Mono',monospace;margin-top:6px;min-height:20px;font-weight:800;line-height:1.1}
+.stat-bonus{font-family:'JetBrains Mono',monospace;margin-top:6px;min-height:28px;font-weight:800;line-height:1.3;display:flex;flex-direction:column;gap:2px;align-items:center}.stat-bonus-gear{font-size:13.5px;color:#3ad080;font-weight:800}.stat-bonus-points{font-size:13.5px;color:#e6d5a0;font-weight:800}
 .equip-zone{flex:1;padding:12px 16px 16px 16px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;background:rgba(16,22,30,.15)}
 .equip-grid{width:100%;max-width:680px;display:flex;gap:14px;align-items:stretch;justify-content:center;margin-top:6px}
 .equip-col{display:flex;flex-direction:column;gap:10px}
@@ -552,7 +552,10 @@ const barsPanel=document.getElementById('barsPanel');
 const equipCount=document.getElementById('equipCount');
 const chatBody=document.getElementById('chatBody');
 function renderStats(){
-  const {cur, bonus} = volandCalcStats();
+  const calc = volandCalcStats();
+  const cur = calc.cur;
+  const gear = calc.equipBonus || calc.bonus || {};
+  const pts = calc.pointsBonus || {};
   const heroId = (typeof volandGetHeroId==='function'?volandGetHeroId():'');
   const heroData = (typeof VOLAND_HEROES!=='undefined' && VOLAND_HEROES[heroId]) ? VOLAND_HEROES[heroId] : null;
   const isTank = heroId.includes('warrior') || (heroData && heroData.role && heroData.role.includes('TANK'));
@@ -563,10 +566,17 @@ function renderStats(){
   statsPanel.innerHTML=''; statsPanel.appendChild(title);
   const grid=document.createElement('div'); grid.className='stats-grid-inner';
   order.forEach(o=>{
-    const total=cur[o.key]||0; const add=bonus[o.key]||0;
+    const total=cur[o.key]||0;
+    const gearV = gear[o.key]||0;
+    const ptsV = pts[o.key]||0;
+    const add = gearV + ptsV;
     const div=document.createElement('div'); div.className='stat-card'+(add>0?' boosted':'');
     const suf=o.suffix||'';
-    div.innerHTML=`<div class="stat-label">${o.label}</div><div class="stat-value">${total}${suf}</div><div class="stat-bonus">${add>0?`+${add}${suf} от шмота`:''}</div>`;
+    const fmt = (v)=>{ let s = Math.round(v*100)/100; return (s>0?'+':'')+s+suf; };
+    let bonusHtml = '';
+    if(gearV) bonusHtml += `<span class="stat-bonus-gear">Шмот ${fmt(gearV)}</span>`;
+    if(ptsV) bonusHtml += `<span class="stat-bonus-points">Очки ${fmt(ptsV)}</span>`;
+    div.innerHTML=`<div class="stat-label">${o.label}</div><div class="stat-value">${total}${suf}</div><div class="stat-bonus">${bonusHtml}</div>`;
     grid.appendChild(div);
   });
   statsPanel.appendChild(grid);
