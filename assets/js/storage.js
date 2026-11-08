@@ -816,13 +816,13 @@ const VOLAND_HP_REGEN_MS = 6 * 1000; // 6 sec per 1 HP (10 per min)
 const VOLAND_MANA_REGEN_MS = 20 * 1000; // 20 sec per 1 MANA (3 per min)
 
 const VOLAND_STAMINA_COSTS = {
-  // loc: { stage: cost }
+  // loc: { stage: cost } — формула: loc, loc+1, loc+2, loc x 5
   1: {1:1, 2:2, 3:3, 4:5}, // desert 1,2,3 boss 5
-  2: {1:3, 2:4, 3:5, 4:10}, // forest 3,4,5 boss 10
-  3: {1:5, 2:6, 3:7, 4:15}, // frost 5,6,7 boss 15
-  4: {1:7, 2:8, 3:9, 4:20}, // swamp 7,8,9 boss 20
-  5: {1:9, 2:10, 3:11, 4:25}, // volcano 9,10,11 boss 25
-  6: {1:11, 2:12, 3:13, 4:30} // ruins 11,12,13 boss 30
+  2: {1:2, 2:3, 3:4, 4:10}, // forest 2,3,4 boss 10
+  3: {1:3, 2:4, 3:5, 4:15}, // frost 3,4,5 boss 15
+  4: {1:4, 2:5, 3:6, 4:20}, // swamp 4,5,6 boss 20
+  5: {1:5, 2:6, 3:7, 4:25}, // volcano 5,6,7 boss 25
+  6: {1:6, 2:7, 3:8, 4:30} // ruins 6,7,8 boss 30
 };
 
 function volandGetStaminaMax(){ return VOLAND_STAMINA_MAX; }
