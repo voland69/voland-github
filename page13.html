@@ -205,35 +205,51 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 .section-card{background:rgba(20,26,34,.88);border:1px solid rgba(122,144,168,.22);border-radius:12px;padding:22px;backdrop-filter:blur(8px)}
 .section-title{font:900 16px 'Cinzel Decorative',serif;color:#e6d5a0;letter-spacing:.12em}
 .section-sub{margin-top:6px;font:400 9px 'JetBrains Mono',monospace;letter-spacing:.2em;color:#7a90a8;text-transform:uppercase}
+.back-btn{margin-bottom:12px;font:700 10px 'JetBrains Mono',monospace;padding:8px 14px;border-radius:8px;border:1px solid #e6d5a0;background:#0a0e14;color:#e6d5a0;cursor:pointer}
 .season-bar{margin-top:14px;height:10px;background:#0a0e14;border:1px solid #2a3a4a;border-radius:6px;overflow:hidden}
-.season-fill{height:100%;background:linear-gradient(90deg,#3ad080,#e6d5a0);transition:width .3s}
+.season-fill{height:100%;background:linear-gradient(90deg,#3ad080,#e6d5a0)}
 .news-list{margin-top:14px;display:flex;flex-direction:column;gap:8px}
 .news-item{padding:10px 12px;background:#0a0e14;border:1px solid #2a3a4a;border-radius:8px;font:400 11px Inter,sans-serif;color:#d8d2b8;line-height:1.5}
 .news-item b{color:#e6d5a0}
 .calendar-grid{margin-top:16px;display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+@media(max-width:900px){.calendar-grid{grid-template-columns:repeat(5,1fr)}}
 .day-cell{background:#0a0e14;border:1px solid #2a3a4a;border-radius:8px;padding:10px 6px;text-align:center;min-height:78px;display:flex;flex-direction:column;gap:4px;align-items:center;justify-content:center}
 .day-cell.today{border-color:#e6d5a0;box-shadow:0 0 12px rgba(230,213,160,.35)}
 .day-cell.claimed{border-color:rgba(58,208,128,.5);opacity:.75}
 .day-cell.missed{opacity:.45}
-.day-cell.locked{opacity:.6}
 .day-num{font:700 10px 'JetBrains Mono',monospace;color:#e6d5a0}
 .day-gift{font-size:18px}
 .day-label{font:400 8px 'JetBrains Mono',monospace;color:#8a9aaa;line-height:1.3}
 .day-btn{margin-top:4px;font:700 8px 'JetBrains Mono',monospace;padding:5px 8px;border-radius:6px;border:1px solid #e6d5a0;background:#e6d5a0;color:#0a0e14;cursor:pointer}
-.day-btn:disabled{opacity:.5;cursor:default}
-.pass-bar{margin-top:14px;height:10px;background:#0a0e14;border:1px solid #2a3a4a;border-radius:6px;overflow:hidden}
-.pass-fill{height:100%;background:linear-gradient(90deg,#6ab0ff,#e6d5a0);transition:width .3s}
-.pass-grid{margin-top:16px;display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
-@media(max-width:900px){.pass-grid{grid-template-columns:repeat(2,1fr)}.calendar-grid{grid-template-columns:repeat(5,1fr)}}
-.pass-card{background:#0a0e14;border:1px solid #2a3a4a;border-radius:8px;padding:10px;text-align:center;display:flex;flex-direction:column;gap:6px}
-.pass-card.unlocked{border-color:rgba(58,208,128,.5)}
-.pass-card.current{border-color:#e6d5a0;box-shadow:0 0 10px rgba(230,213,160,.3)}
-.pass-lvl{font:900 12px 'JetBrains Mono',monospace;color:#e6d5a0}
-.pass-free{font:400 9px 'JetBrains Mono',monospace;color:#d8d2b8;line-height:1.4;min-height:28px}
-.pass-prem{font:400 9px 'JetBrains Mono',monospace;color:#a0a0ff;line-height:1.4;min-height:28px}
-.pass-btn{font:700 8px 'JetBrains Mono',monospace;padding:5px 8px;border-radius:6px;border:1px solid #3ad080;background:#3ad080;color:#0a0e14;cursor:pointer}
-.pass-btn:disabled{opacity:.5;cursor:default}
-.pass-prem-btn{font:700 8px 'JetBrains Mono',monospace;padding:5px 8px;border-radius:6px;border:1px solid #6a4a9a;background:#1a1a2a;color:#8a8aaa;cursor:default}
+/* PASS — как на скринах */
+.pass-top{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-top:14px;padding:16px;background:#0a0e14;border:1px solid #2a3a4a;border-radius:12px}
+.pass-circle{width:110px;height:110px;min-width:110px;border-radius:50%;border:3px solid #e6d5a0;background:radial-gradient(circle,#1e2f3e,#0a0e14);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.pass-circle-lvl{font:900 10px 'JetBrains Mono',monospace;color:#e6d5a0;letter-spacing:.15em}
+.pass-circle-num{font:900 26px 'JetBrains Mono',monospace;color:#fff;line-height:1}
+.pass-circle-max{font:400 9px 'JetBrains Mono',monospace;color:#8a9aaa}
+.pass-top-info{flex:1;min-width:220px}
+.pass-xp{font:700 18px 'JetBrains Mono',monospace;color:#fff}
+.pass-xp span{color:#6ab0ff}
+.pass-xp-bar{margin-top:8px;height:8px;background:#121a26;border:1px solid #2a3a4a;border-radius:4px;overflow:hidden}
+.pass-xp-fill{height:100%;background:#e6d5a0}
+.pass-time{margin-top:10px;font:700 12px 'JetBrains Mono',monospace;color:#e6d5a0}
+.claim-all{font:700 11px 'JetBrains Mono',monospace;padding:12px 18px;border-radius:10px;border:1px solid #3ad080;background:#3ad080;color:#0a0e14;cursor:pointer;white-space:nowrap}
+.claim-all:disabled{opacity:.45;cursor:default}
+.pass-scroll{margin-top:16px;overflow-x:auto;padding-bottom:8px}
+.pass-inner{display:flex;flex-direction:column;gap:8px;min-width:calc(50*78px)}
+.pass-row{display:flex;gap:6px}
+.pass-header-cell{width:72px;min-width:72px;text-align:center;font:700 10px 'JetBrains Mono',monospace;color:#8a9aaa;padding:6px 0;background:#121a26;border:1px solid #2a3a4a;border-radius:6px}
+.pass-header-cell.cur{color:#e6d5a0;border-color:#e6d5a0}
+.pass-label{width:92px;min-width:92px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;font:700 10px Inter,sans-serif;color:#e6d5a0;background:#121a26;border:1px solid #2a3a4a;border-radius:8px;padding:8px 4px}
+.pass-cell{width:72px;min-width:72px;background:#0a0e14;border:1px solid #2a3a4a;border-radius:8px;padding:8px 4px;text-align:center;display:flex;flex-direction:column;gap:4px;align-items:center;justify-content:center;cursor:pointer;min-height:86px}
+.pass-cell.free.unlocked{border-color:rgba(58,208,128,.5)}
+.pass-cell.free.current{border-color:#e6d5a0;box-shadow:0 0 8px rgba(230,213,160,.3)}
+.pass-cell.prem{cursor:default;opacity:.9}
+.pass-cell-icon{font-size:20px}
+.pass-cell-label{font:400 8px 'JetBrains Mono',monospace;color:#d8d2b8;line-height:1.3}
+.pass-dot{width:10px;height:10px;border-radius:50%;background:#2a3a4a;margin:2px auto 0 auto}
+.pass-dot.avail{background:#3ad080;box-shadow:0 0 6px #3ad080}
+.pass-dot.done{background:#3ad080;opacity:.5}
 
 </style>
 </head>
@@ -260,12 +276,29 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 <div class="page-title">PASS</div>
 <div class="page-sub">VOLAND • SEASON • REWARDS • BATTLE PASS</div>
 
-<div style="width:100%;max-width:1100px;margin:28px auto 0 auto;display:flex;flex-direction:column;gap:22px">
-  <!-- 1. SEASON -->
+<div id="mainView" style="width:100%;max-width:1100px;margin:28px auto 0 auto">
+  <div class="placeholder-grid" style="grid-template-columns:repeat(3,1fr)">
+    <div class="ph-card" onclick="openView('season')" style="cursor:pointer"><div class="ph-icon">⭐</div><div class="ph-name">SEASON</div><div class="ph-desc">Сезон 1 • 1 ноября — 31 декабря<br>Новости и изменения</div><div class="ph-badge" id="seasonBadge">SEASON 1</div></div>
+    <div class="ph-card" onclick="openView('rewards')" style="cursor:pointer"><div class="ph-icon">🎁</div><div class="ph-name">REWARDS</div><div class="ph-desc">Календарь месяца • Ежедневные подарки<br>Пропустил — сгорел</div><div class="ph-badge" id="rewardsBadge">НОЯБРЬ 2026</div></div>
+    <div class="ph-card" onclick="openView('pass')" style="cursor:pointer"><div class="ph-icon">🎫</div><div class="ph-name">BATTLE PASS</div><div class="ph-desc">1 — 50 • FREE / PREMIUM<br>От общего XP героя</div><div class="ph-badge" id="passBadge">LVL 1 / 50</div></div>
+  </div>
+</div>
+
+<!-- SEASON FULLSCREEN -->
+<div id="seasonView" style="display:none;width:100%;max-width:1100px;margin:28px auto 0 auto">
+  <button class="back-btn" onclick="closeView()">← BACK</button>
   <div class="section-card" id="seasonCard"></div>
-  <!-- 2. REWARDS -->
+</div>
+
+<!-- REWARDS FULLSCREEN -->
+<div id="rewardsView" style="display:none;width:100%;max-width:1100px;margin:28px auto 0 auto">
+  <button class="back-btn" onclick="closeView()">← BACK</button>
   <div class="section-card" id="rewardsCard"></div>
-  <!-- 3. BATTLE PASS -->
+</div>
+
+<!-- PASS FULLSCREEN -->
+<div id="passView" style="display:none;width:100%;max-width:1100px;margin:28px auto 0 auto">
+  <button class="back-btn" onclick="closeView()">← BACK</button>
   <div class="section-card" id="passCard"></div>
 </div>
 
@@ -273,24 +306,45 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 </div>
 
 <script>
-// ===== PAGE13 — SEASON / REWARDS / BATTLE PASS =====
+// ===== PAGE13 v2 — 3 окошка + fullscreen =====
+function openView(name){
+  document.getElementById('mainView').style.display='none';
+  document.getElementById('seasonView').style.display='none';
+  document.getElementById('rewardsView').style.display='none';
+  document.getElementById('passView').style.display='none';
+  if(name==='season'){ document.getElementById('seasonView').style.display='block'; renderSeason(); }
+  if(name==='rewards'){ document.getElementById('rewardsView').style.display='block'; renderRewards(); }
+  if(name==='pass'){ document.getElementById('passView').style.display='block'; renderPass(); }
+  window.scrollTo(0,0);
+}
+function closeView(){
+  document.getElementById('mainView').style.display='block';
+  document.getElementById('seasonView').style.display='none';
+  document.getElementById('rewardsView').style.display='none';
+  document.getElementById('passView').style.display='none';
+  updateBadges();
+}
 function getSeasonInfo(){
   let now = new Date();
   let y = now.getFullYear(), m = now.getMonth();
   let startMonth = Math.floor(m/2)*2;
   let start = new Date(y, startMonth, 1);
-  let end = new Date(y, startMonth+2, 0);
+  let end = new Date(y, startMonth+2, 0, 23,59,59);
   let seasonNum = 1;
   if(!(y===2026 && startMonth===10)){
     seasonNum = 1 + ((y-2026)*6 + (startMonth/2 - 5));
     if(seasonNum<1) seasonNum=1;
   }
-  let total = Math.floor((end - start)/86400000)+1;
-  let passed = Math.floor((now - start)/86400000)+1;
+  let total = Math.floor((new Date(y,startMonth+2,0) - new Date(y,startMonth,1))/86400000)+1;
+  let passed = Math.floor((now - new Date(y,startMonth,1))/86400000)+1;
   if(passed<0) passed=0; if(passed>total) passed=total;
   let left = total - passed;
   let pct = Math.floor(passed/total*100);
-  return {num:seasonNum, start:start, end:end, total:total, passed:passed, left:left, pct:pct, now:now};
+  let diff = end - now;
+  if(diff<0) diff=0;
+  let daysLeft = Math.floor(diff/86400000);
+  let hoursLeft = Math.floor((diff % 86400000)/3600000);
+  return {num:seasonNum, start:start, end:end, total:total, passed:passed, left:left, pct:pct, now:now, daysLeft:daysLeft, hoursLeft:hoursLeft};
 }
 function fmtDate(d){
   let months=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
@@ -310,19 +364,18 @@ function renderSeason(){
       <div class="news-item"><b>Battle Pass и календарь:</b> новый PASS — сезон, ежедневные подарки и пасс от общего XP героя.</div>
     `;
   } else {
-    news = `<div class="news-item">Новости Сезона ${s.num} появятся в начале сезона. Следи за обновлениями.</div>`;
+    news = `<div class="news-item">Новости Сезона ${s.num} появятся в начале сезона.</div>`;
   }
   document.getElementById('seasonCard').innerHTML = `
     <div class="section-title">⭐ SEASON ${s.num}</div>
     <div class="section-sub">${fmtDate(s.start)} — ${fmtDate(s.end)} • 2 месяца • ${s.total} дней</div>
-    <div style="margin-top:12px;font:400 11px Inter,sans-serif;color:#d8d2b8">Прошло <b style="color:#e6d5a0">${s.passed} / ${s.total} дней</b> • Осталось <b style="color:#e6d5a0">${s.left} дней</b> • ${s.pct}% сезона</div>
+    <div style="margin-top:12px;font:400 11px Inter,sans-serif;color:#d8d2b8">Прошло <b style="color:#e6d5a0">${s.passed} / ${s.total} дней</b> • Осталось <b style="color:#e6d5a0">${s.daysLeft}D ${s.hoursLeft}H</b> • ${s.pct}% сезона</div>
     <div class="season-bar"><div class="season-fill" style="width:${s.pct}%"></div></div>
+    <div style="margin-top:10px;font:700 11px 'JetBrains Mono',monospace;color:#e6d5a0">⏳ LA TEMPORADA FINALIZA EN — ${s.daysLeft}D ${s.hoursLeft}H</div>
     <div style="margin-top:16px;font:700 11px Inter,sans-serif;color:#e6d5a0;letter-spacing:.08em">НОВОСТИ И ИЗМЕНЕНИЯ СЕЗОНА</div>
     <div class="news-list">${news}</div>
   `;
 }
-
-// ===== DAILY REWARDS =====
 function getDailyGift(day, totalDays){
   let resCycle = ['quartz','wood','diamond','water','stone','bone'];
   let resNames = {quartz:'Кварц',wood:'Дерево',diamond:'Алмаз',water:'Вода',stone:'Камень',bone:'Кость'};
@@ -336,29 +389,15 @@ function getDailyGift(day, totalDays){
     return {icon:'🧪', label:'Potion + 200G', give:function(){ try{volandAddToInventory('potion-hp-xs');}catch(e){} try{volandAddGold(200);}catch(e){} }};
   }
   let mod = day % 4;
-  if(mod===1){
-    let amt = 50 + (day % 3) * 25;
-    return {icon:'💰', label:amt+'G', give:function(){ try{volandAddGold(amt);}catch(e){} }};
-  }
-  if(mod===2){
-    let amt = 50 + (day % 3) * 25;
-    return {icon:'⭐', label:amt+' XP', give:function(){ try{volandAddXp(amt);}catch(e){} }};
-  }
-  if(mod===3){
-    let rid = resCycle[Math.floor(day/4) % resCycle.length];
-    return {icon:resIcons[rid], label:'1 '+resNames[rid], give:function(){ try{volandAddResource(rid,1);}catch(e){} }};
-  }
+  if(mod===1){ let amt = 50 + (day % 3) * 25; return {icon:'💰', label:amt+'G', give:function(){ try{volandAddGold(amt);}catch(e){} }}; }
+  if(mod===2){ let amt = 50 + (day % 3) * 25; return {icon:'⭐', label:amt+' XP', give:function(){ try{volandAddXp(amt);}catch(e){} }}; }
+  if(mod===3){ let rid = resCycle[Math.floor(day/4) % resCycle.length]; return {icon:resIcons[rid], label:'1 '+resNames[rid], give:function(){ try{volandAddResource(rid,1);}catch(e){} }}; }
   return {icon:'💰', label:'75G', give:function(){ try{volandAddGold(75);}catch(e){} }};
 }
-function getDailyKey(y,m){
-  return 'voland_daily_'+y+'-'+String(m+1).padStart(2,'0');
-}
-function getDailyClaimed(y,m){
-  try{ let v = localStorage.getItem(getDailyKey(y,m)); return v ? JSON.parse(v) : []; }catch(e){ return []; }
-}
+function getDailyKey(y,m){ return 'voland_daily_'+y+'-'+String(m+1).padStart(2,'0'); }
+function getDailyClaimed(y,m){ try{ let v = localStorage.getItem(getDailyKey(y,m)); return v ? JSON.parse(v) : []; }catch(e){ return []; } }
 function claimDaily(day){
-  let now = new Date();
-  let y = now.getFullYear(), m = now.getMonth();
+  let now = new Date(); let y = now.getFullYear(), m = now.getMonth();
   if(day !== now.getDate()) return;
   let claimed = getDailyClaimed(y,m);
   if(claimed.includes(day)) return;
@@ -367,12 +406,10 @@ function claimDaily(day){
   try{ gift.give(); }catch(e){}
   claimed.push(day);
   try{ localStorage.setItem(getDailyKey(y,m), JSON.stringify(claimed)); }catch(e){}
-  renderRewards();
-  renderPass();
+  renderRewards(); updateBadges();
 }
 function renderRewards(){
-  let now = new Date();
-  let y = now.getFullYear(), m = now.getMonth();
+  let now = new Date(); let y = now.getFullYear(), m = now.getMonth();
   let months = ['ЯНВАРЬ','ФЕВРАЛЬ','МАРТ','АПРЕЛЬ','МАЙ','ИЮНЬ','ИЮЛЬ','АВГУСТ','СЕНТЯБРЬ','ОКТЯБРЬ','НОЯБРЬ','ДЕКАБРЬ'];
   let totalDays = new Date(y, m+1, 0).getDate();
   let claimed = getDailyClaimed(y,m);
@@ -390,74 +427,33 @@ function renderRewards(){
   html += `</div>`;
   document.getElementById('rewardsCard').innerHTML = html;
 }
-
-// ===== BATTLE PASS =====
-function getPassLevel(totalXp){
-  let lvl = Math.floor((parseInt(totalXp)||0) / 1000) + 1;
-  if(lvl<1) lvl=1; if(lvl>50) lvl=50;
-  return lvl;
-}
+function getPassLevel(totalXp){ let lvl = Math.floor((parseInt(totalXp)||0) / 1000) + 1; if(lvl<1) lvl=1; if(lvl>50) lvl=50; return lvl; }
 function getFreePrize(lvl){
   let potCycle = ['potion-hp-xs','potion-mana-xs','potion-stam-xs'];
   let potNames = {'potion-hp-xs':'Potion HP XS','potion-mana-xs':'Potion Mana XS','potion-stam-xs':'Potion Stam XS'};
   let resCycle = ['quartz','wood','diamond','water','stone','bone'];
   let resNames = {quartz:'Кварц',wood:'Дерево',diamond:'Алмаз',water:'Вода',stone:'Камень',bone:'Кость'};
   let mod = lvl % 5;
-  if(mod===1){
-    let amt = 100 + (lvl-1)*10;
-    return {label: amt+'G', icon:'💰', give:function(){ try{volandAddGold(amt);}catch(e){} }};
-  }
-  if(mod===2){
-    let amt = 100 + (lvl-2)*10;
-    return {label: amt+' XP', icon:'⭐', give:function(){ try{volandAddXp(amt);}catch(e){} }};
-  }
-  if(mod===3){
-    let pid = potCycle[Math.floor(lvl/5) % 3];
-    return {label: potNames[pid], icon:'🧪', give:function(){ try{volandAddToInventory(pid);}catch(e){} }};
-  }
-  if(mod===4){
-    let rid = resCycle[Math.floor(lvl/5) % resCycle.length];
-    return {label: '1 '+resNames[rid], icon:'💎', give:function(){ try{volandAddResource(rid,1);}catch(e){} }};
-  }
-  // mod 0
-  if(lvl % 10 === 0){
-    return {label: 'Potion S + 200G', icon:'🧪', give:function(){ try{volandAddToInventory('potion-hp-s');}catch(e){} try{volandAddGold(200);}catch(e){} }};
-  }
+  if(mod===1){ let amt = 100 + (lvl-1)*10; return {label: amt+'G', icon:'💰', give:function(){ try{volandAddGold(amt);}catch(e){} }}; }
+  if(mod===2){ let amt = 100 + (lvl-2)*10; return {label: amt+' XP', icon:'⭐', give:function(){ try{volandAddXp(amt);}catch(e){} }}; }
+  if(mod===3){ let pid = potCycle[Math.floor(lvl/5) % 3]; return {label: potNames[pid], icon:'🧪', give:function(){ try{volandAddToInventory(pid);}catch(e){} }}; }
+  if(mod===4){ let rid = resCycle[Math.floor(lvl/5) % resCycle.length]; return {label: '1 '+resNames[rid], icon:'💎', give:function(){ try{volandAddResource(rid,1);}catch(e){} }}; }
+  if(lvl % 10 === 0){ return {label: 'Potion S + 200G', icon:'🧪', give:function(){ try{volandAddToInventory('potion-hp-s');}catch(e){} try{volandAddGold(200);}catch(e){} }}; }
   return {label: '200G + 100 XP', icon:'🎁', give:function(){ try{volandAddGold(200);}catch(e){} try{volandAddXp(100);}catch(e){} }};
 }
 function getPremiumPrize(lvl){
   let free = getFreePrize(lvl);
-  // Premium = x10 от Free + эксклюзив
-  if(free.label.includes('G') && free.label.includes('XP')){
-    return {label:'2000G + 1000 XP + RUNA', icon:'🔮'};
-  }
-  if(free.label.includes('Potion S')){
-    return {label:'Potion HP XL + RUNA', icon:'🔮'};
-  }
-  if(free.label.includes('Potion')){
-    let xl = free.label.replace('XS','XL').replace('S','XL');
-    return {label: xl+' + RUNA', icon:'🔮'};
-  }
-  if(free.label.includes('G')){
-    let amt = parseInt(free.label) * 10;
-    return {label: amt+'G', icon:'💰'};
-  }
-  if(free.label.includes('XP')){
-    let amt = parseInt(free.label) * 10;
-    return {label: amt+' XP', icon:'⭐'};
-  }
-  // Ресурс
+  if(free.label.includes('G') && free.label.includes('XP')) return {label:'2000G + 1000 XP + RUNA', icon:'🔮'};
+  if(free.label.includes('Potion S')) return {label:'Potion HP XL + RUNA', icon:'🔮'};
+  if(free.label.includes('Potion')){ let xl = free.label.replace('XS','XL'); return {label: xl+' + RUNA', icon:'🔮'}; }
+  if(free.label.includes('G')){ let amt = parseInt(free.label) * 10; return {label: amt+'G', icon:'💰'}; }
+  if(free.label.includes('XP')){ let amt = parseInt(free.label) * 10; return {label: amt+' XP', icon:'⭐'}; }
   return {label:'10x ресурс + RUNA', icon:'🔮'};
 }
-function getPassKey(seasonNum){
-  return 'voland_pass_claimed_s'+seasonNum;
-}
-function getPassClaimed(seasonNum){
-  try{ let v = localStorage.getItem(getPassKey(seasonNum)); return v ? JSON.parse(v) : []; }catch(e){ return []; }
-}
+function getPassKey(seasonNum){ return 'voland_pass_claimed_s'+seasonNum; }
+function getPassClaimed(seasonNum){ try{ let v = localStorage.getItem(getPassKey(seasonNum)); return v ? JSON.parse(v) : []; }catch(e){ return []; } }
 function claimPass(lvl){
-  let totalXp = 0;
-  try{ totalXp = volandGetXp(); }catch(e){}
+  let totalXp = 0; try{ totalXp = volandGetXp(); }catch(e){}
   let curLvl = getPassLevel(totalXp);
   if(lvl > curLvl) return;
   let s = getSeasonInfo();
@@ -467,33 +463,84 @@ function claimPass(lvl){
   try{ prize.give(); }catch(e){}
   claimed.push(lvl);
   try{ localStorage.setItem(getPassKey(s.num), JSON.stringify(claimed)); }catch(e){}
-  renderPass();
+  renderPass(); updateBadges();
+}
+function claimAllPass(){
+  let totalXp = 0; try{ totalXp = volandGetXp(); }catch(e){}
+  let curLvl = getPassLevel(totalXp);
+  let s = getSeasonInfo();
+  let claimed = getPassClaimed(s.num);
+  let toClaim = [];
+  for(let lvl=1; lvl<=curLvl; lvl++){ if(!claimed.includes(lvl)) toClaim.push(lvl); }
+  if(toClaim.length===0) return;
+  toClaim.forEach(lvl=>{
+    let prize = getFreePrize(lvl);
+    try{ prize.give(); }catch(e){}
+    claimed.push(lvl);
+  });
+  try{ localStorage.setItem(getPassKey(s.num), JSON.stringify(claimed)); }catch(e){}
+  renderPass(); updateBadges();
 }
 function renderPass(){
-  let totalXp = 0;
-  try{ totalXp = volandGetXp(); }catch(e){}
+  let totalXp = 0; try{ totalXp = volandGetXp(); }catch(e){}
   let curLvl = getPassLevel(totalXp);
   let inLvl = (parseInt(totalXp)||0) % 1000;
   let toNext = curLvl>=50 ? 0 : 1000 - inLvl;
   let pct = Math.floor(inLvl/1000*100);
   let s = getSeasonInfo();
   let claimed = getPassClaimed(s.num);
-  let html = `<div class="section-title">🎫 BATTLE PASS • 1 — 50</div><div class="section-sub">От общего XP героя • Твой XP: ${totalXp} • Уровень пасса: ${curLvl} / 50 • До следующего: ${toNext} XP</div><div class="pass-bar"><div class="pass-fill" style="width:${pct}%"></div></div><div style="margin-top:10px;font:400 10px Inter,sans-serif;color:#8a9aaa">FREE — посредственные призы, забрать можно. PREMIUM — x10 от FREE + XL зелья и Руны, видно, но забрать нельзя — <b style="color:#a0a0ff">PREMIUM SOON</b>.</div><div class="pass-grid">`;
+  let avail = 0;
+  for(let lvl=1; lvl<=curLvl; lvl++){ if(!claimed.includes(lvl)) avail++; }
+  let headerCells = '', freeCells = '', premCells = '';
   for(let lvl=1; lvl<=50; lvl++){
+    let isCur = lvl===curLvl;
+    headerCells += `<div class="pass-header-cell ${isCur?'cur':''}">${lvl}</div>`;
     let free = getFreePrize(lvl);
     let prem = getPremiumPrize(lvl);
-    let cls = '', btn = '';
-    if(claimed.includes(lvl)){ cls='unlocked'; btn='<div style="font:700 8px JetBrains Mono,monospace;color:#3ad080">FREE DONE</div>'; }
-    else if(lvl <= curLvl){ cls='current'; btn=`<button class="pass-btn" onclick="claimPass(${lvl})">CLAIM FREE</button>`; }
-    else { cls=''; btn='<div style="font:700 8px JetBrains Mono,monospace;color:#5a6a7a">LOCKED</div>'; }
-    html += `<div class="pass-card ${cls}"><div class="pass-lvl">LVL ${lvl}</div><div class="pass-free">FREE<br>${free.icon} ${free.label}</div><div class="pass-prem">PREMIUM<br>${prem.icon} ${prem.label}</div>${btn}<button class="pass-prem-btn" disabled>PREMIUM SOON</button></div>`;
+    let freeCls = '', freeDot = '<div class="pass-dot"></div>';
+    if(claimed.includes(lvl)){ freeCls='unlocked'; freeDot='<div class="pass-dot done"></div>'; }
+    else if(lvl<=curLvl){ freeCls='current'; freeDot='<div class="pass-dot avail"></div>'; }
+    freeCells += `<div class="pass-cell free ${freeCls}" onclick="claimPass(${lvl})" title="FREE LVL ${lvl} — ${free.label} — нажми чтобы забрать"><div class="pass-cell-icon">${free.icon}</div><div class="pass-cell-label">${free.label}</div>${freeDot}</div>`;
+    premCells += `<div class="pass-cell prem" title="PREMIUM LVL ${lvl} — ${prem.label} — SOON"><div class="pass-cell-icon">${prem.icon}</div><div class="pass-cell-label">${prem.label}</div><div class="pass-dot"></div></div>`;
   }
-  html += `</div>`;
-  document.getElementById('passCard').innerHTML = html;
+  document.getElementById('passCard').innerHTML = `
+    <div class="section-title">🎫 BATTLE PASS • SEASON ${s.num}</div>
+    <div class="section-sub">1 — 50 • От общего XP героя • FREE — забрать можно • PREMIUM — SOON</div>
+    <div class="pass-top">
+      <div class="pass-circle"><div class="pass-circle-lvl">NIVEL</div><div class="pass-circle-num">${curLvl}</div><div class="pass-circle-max">/ 50</div></div>
+      <div class="pass-top-info">
+        <div style="font:700 12px 'JetBrains Mono',monospace;color:#e6d5a0;letter-spacing:.15em">SEASON ${s.num} • PROGRESO DE LA TEMPORADA</div>
+        <div class="pass-xp">${inLvl} / <span>1000 XP</span></div>
+        <div class="pass-xp-bar"><div class="pass-xp-fill" style="width:${pct}%"></div></div>
+        <div style="margin-top:6px;font:400 10px 'JetBrains Mono',monospace;color:#8a9aaa">🏆 Lv ${curLvl}/50 • Siguiente: Lv ${curLvl>=50?'MAX':curLvl+1} • До следующего: ${toNext} XP • Всего XP: ${totalXp}</div>
+        <div class="pass-time">⏳ LA TEMPORADA FINALIZA EN — ${s.daysLeft}D ${s.hoursLeft}H</div>
+        <div style="margin-top:6px;font:400 9px 'JetBrains Mono',monospace;color:#3ad080">● Premium activo — +20% XP • Items de raza • Cofres y pociones extra — SOON</div>
+      </div>
+      <button class="claim-all" onclick="claimAllPass()" ${avail===0?'disabled':''}>🎁 RECLAMAR TODO • ${avail}</button>
+    </div>
+    <div class="pass-scroll"><div class="pass-inner">
+      <div class="pass-row"><div class="pass-label">NIVEL</div>${headerCells}</div>
+      <div class="pass-row"><div class="pass-label">🎁<br>GRATIS<br><span style="font:400 8px JetBrains Mono,monospace;color:#3ad080">FREE</span></div>${freeCells}</div>
+      <div class="pass-row"><div class="pass-label">👑<br>PREMIUM<br><span style="font:400 8px JetBrains Mono,monospace;color:#a0a0ff">ACTIVO • SOON</span></div>${premCells}</div>
+    </div></div>
+    <div style="margin-top:10px;font:400 9px 'JetBrains Mono',monospace;color:#8a9aaa;text-align:center">Нажми на окошко FREE — забрать по отдельности. Кнопка RECLAMAR TODO — забрать всё активное сразу. PREMIUM — видно, но забрать нельзя.</div>
+  `;
 }
-renderSeason();
-renderRewards();
-renderPass();
+function updateBadges(){
+  try{
+    let s = getSeasonInfo();
+    let el = document.getElementById('seasonBadge');
+    if(el) el.textContent = 'SEASON '+s.num+' • '+s.daysLeft+'D '+s.hoursLeft+'H';
+    let now = new Date();
+    let months = ['ЯНВАРЬ','ФЕВРАЛЬ','МАРТ','АПРЕЛЬ','МАЙ','ИЮНЬ','ИЮЛЬ','АВГУСТ','СЕНТЯБРЬ','ОКТЯБРЬ','НОЯБРЬ','ДЕКАБРЬ'];
+    let rb = document.getElementById('rewardsBadge');
+    if(rb) rb.textContent = months[now.getMonth()]+' '+now.getFullYear();
+    let totalXp = 0; try{ totalXp = volandGetXp(); }catch(e){}
+    let pb = document.getElementById('passBadge');
+    if(pb) pb.textContent = 'LVL '+getPassLevel(totalXp)+' / 50';
+  }catch(e){}
+}
+updateBadges();
 </script>
 
 <script src="./assets/js/config.js"></script>
