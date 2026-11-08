@@ -222,6 +222,9 @@ const MARKET_PRICES = {
   quartz: {buy:50, sell:25},
   wood: {buy:50, sell:25},
   diamond: {buy:50, sell:25},
+  water: {buy:50, sell:25},
+  stone: {buy:50, sell:25},
+  bone: {buy:50, sell:25},
   fang: {buy:100, sell:50},
   essence: {buy:100, sell:50}
 };
@@ -246,11 +249,14 @@ const RES_ICONS = {
   quartz:'./assets/ui/loot/quartz.webp',
   wood:'./assets/ui/loot/wood.webp',
   diamond:'./assets/ui/loot/diamond.webp',
+  water:'./assets/ui/loot/water.webp',
+  stone:'./assets/ui/loot/stone.webp',
+  bone:'./assets/ui/loot/bone.webp',
   fang:'./assets/ui/loot/fang.webp',
   essence:'./assets/ui/loot/essence.webp'
 };
 const RES_NAMES = {
-  quartz:'QUARTZ', wood:'WOOD', diamond:'DIAMOND', fang:'FANG', essence:'ESSENCE'
+  quartz:'QUARTZ', wood:'WOOD', diamond:'DIAMOND', water:'WATER', stone:'STONE', bone:'BONE', fang:'FANG', essence:'ESSENCE'
 };
 
 let currentFilter = 'all';
@@ -259,7 +265,7 @@ let currentModalItem = null;
 
 function getExchangeRate(fromId, toId){
   if(fromId===toId) return 1;
-  const base = ['quartz','wood','diamond'];
+  const base = ['quartz','wood','diamond','water','stone','bone'];
   const rare = ['fang','essence'];
   const isBaseFrom = base.includes(fromId);
   const isBaseTo = base.includes(toId);
@@ -554,7 +560,7 @@ function renderExchange(){
   el.innerHTML = `
     <div class="market-card">
       <div class="card-title">EXCHANGE • БЕЗ ЗОЛОТА</div>
-      <div style="font:400 8px 'JetBrains Mono',monospace;color:#6a7a8a;text-align:center">Курс: база quartz/wood/diamond между собой 1к2, с fang/essence 1к4</div>
+      <div style="font:400 8px 'JetBrains Mono',monospace;color:#6a7a8a;text-align:center">Курс: база quartz/wood/diamond/water/stone/bone между собой 1к2, с fang/essence 1к4</div>
       <div class="select-row">
         <select class="select" id="exFrom" onchange="updateExchangePreview()">${options}</select>
         <span style="color:#e6d5a0">→</span>
