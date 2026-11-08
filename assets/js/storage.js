@@ -180,7 +180,7 @@ function volandGetMissionStats(){
     if(saves[idx].mission_stats){
       let s = saves[idx].mission_stats;
       return {
-       kill_loc: s.kill_loc || {1:0,2:0,3:0},
+       kill_loc: s.kill_loc || {1:0,2:0,3:0,4:0,5:0,6:0},
        kill_boss: s.kill_boss || 0,
        kill_boss_diff: s.kill_boss_diff || [],
        login_days: s.login_days || [],
@@ -189,14 +189,14 @@ function volandGetMissionStats(){
        max_win_streak: s.max_win_streak || 0,
        collect_green: s.collect_green || 0,
        collect_blue: s.collect_blue || 0,
-       collect_legend: s.collect_legend || 0,
+       collect_legend: s.collect_legend || 0, collect_red: s.collect_red || 0, collect_gold: s.collect_gold || 0,
        equip_dmg_max: s.equip_dmg_max || 0
       };
     } else {
       let isNewHero = (parseInt(saves[idx].xp||0)===0 && (Date.now() - parseInt(saves[idx].created||0)) < 60000);
       if(isNewHero){
         let today = new Date().toISOString().slice(0,10);
-        let empty = {kill_loc:{1:0,2:0,3:0}, kill_boss:0, kill_boss_diff:[], login_days:[today], ult_uses:0, win_streak:0, max_win_streak:0, collect_green:0, collect_blue:0, collect_legend:0, equip_dmg_max:0};
+        let empty = {kill_loc:{1:0,2:0,3:0,4:0,5:0,6:0}, kill_boss:0, kill_boss_diff:[], login_days:[today], ult_uses:0, win_streak:0, max_win_streak:0, collect_green:0, collect_blue:0, collect_legend:0, collect_red:0, collect_gold:0, equip_dmg_max:0};
         saves[idx].mission_stats = empty;
         volandSaveSaves(saves);
         return empty;
@@ -206,7 +206,7 @@ function volandGetMissionStats(){
       let s = raw ? JSON.parse(raw) : null;
       if(s && (s.kill_loc || s.kill_boss || s.login_days)){
         let migrated = {
-          kill_loc: s.kill_loc || {1:0,2:0,3:0},
+          kill_loc: s.kill_loc || {1:0,2:0,3:0,4:0,5:0,6:0},
           kill_boss: s.kill_boss || 0,
           kill_boss_diff: s.kill_boss_diff || [],
           login_days: s.login_days || [],
@@ -215,7 +215,7 @@ function volandGetMissionStats(){
           max_win_streak: s.max_win_streak || 0,
           collect_green: s.collect_green || 0,
           collect_blue: s.collect_blue || 0,
-          collect_legend: s.collect_legend || 0,
+          collect_legend: s.collect_legend || 0, collect_red: s.collect_red || 0, collect_gold: s.collect_gold || 0,
           equip_dmg_max: s.equip_dmg_max || 0
         };
         saves[idx].mission_stats = migrated;
@@ -223,7 +223,7 @@ function volandGetMissionStats(){
         return migrated;
       }
       let today = new Date().toISOString().slice(0,10);
-      let empty = {kill_loc:{1:0,2:0,3:0}, kill_boss:0, kill_boss_diff:[], login_days:[today], ult_uses:0, win_streak:0, max_win_streak:0, collect_green:0, collect_blue:0, collect_legend:0, equip_dmg_max:0};
+      let empty = {kill_loc:{1:0,2:0,3:0,4:0,5:0,6:0}, kill_boss:0, kill_boss_diff:[], login_days:[today], ult_uses:0, win_streak:0, max_win_streak:0, collect_green:0, collect_blue:0, collect_legend:0, collect_red:0, collect_gold:0, equip_dmg_max:0};
       saves[idx].mission_stats = empty;
       volandSaveSaves(saves);
       return empty;
@@ -232,7 +232,7 @@ function volandGetMissionStats(){
   let raw = localStorage.getItem('voland_missions_stats');
   let s = raw ? JSON.parse(raw) : {};
   return {
-   kill_loc: s.kill_loc || {1:0,2:0,3:0},
+   kill_loc: s.kill_loc || {1:0,2:0,3:0,4:0,5:0,6:0},
    kill_boss: s.kill_boss || 0,
    kill_boss_diff: s.kill_boss_diff || [],
    login_days: s.login_days || [],
@@ -241,10 +241,10 @@ function volandGetMissionStats(){
    max_win_streak: s.max_win_streak || 0,
    collect_green: s.collect_green || 0,
    collect_blue: s.collect_blue || 0,
-   collect_legend: s.collect_legend || 0,
+   collect_legend: s.collect_legend || 0, collect_red: s.collect_red || 0, collect_gold: s.collect_gold || 0,
    equip_dmg_max: s.equip_dmg_max || 0
   };
- }catch(e){ return {kill_loc:{1:0,2:0,3:0},kill_boss:0,kill_boss_diff:[],login_days:[],ult_uses:0,win_streak:0,max_win_streak:0,collect_green:0,collect_blue:0,collect_legend:0,equip_dmg_max:0}; }
+ }catch(e){ return {kill_loc:{1:0,2:0,3:0,4:0,5:0,6:0},kill_boss:0,kill_boss_diff:[],login_days:[],ult_uses:0,win_streak:0,max_win_streak:0,collect_green:0,collect_blue:0,collect_legend:0, collect_red:0, collect_gold:0,equip_dmg_max:0}; }
 }
 
 function volandSaveMissionStats(stats){
@@ -325,6 +325,8 @@ function volandGetMissionProgress(mission){
   case 'collect_green': return Math.min(stats.collect_green||0, mission.target);
   case 'collect_blue': return Math.min(stats.collect_blue||0, mission.target);
   case 'collect_legend': return Math.min(stats.collect_legend||0, mission.target);
+  case 'collect_red': return Math.min(stats.collect_red||0, mission.target);
+  case 'collect_gold': return Math.min(stats.collect_gold||0, mission.target);
   case 'equip_dmg': return Math.min(stats.equip_dmg_max||0, mission.target);
   default: return 0;
  }
@@ -335,7 +337,7 @@ function volandUpdateMissionStat(type, loc, value){
   let stats = volandGetMissionStats();
   if(type==='kill_mob' && loc){
    let l = parseInt(loc)||1;
-   stats.kill_loc = stats.kill_loc || {1:0,2:0,3:0};
+   stats.kill_loc = stats.kill_loc || {1:0,2:0,3:0,4:0,5:0,6:0};
    stats.kill_loc[l] = (stats.kill_loc[l]||0) + value;
    stats.kill_loc[String(l)] = stats.kill_loc[l];
    console.log('[MISSION] kill_mob loc', l, 'now', stats.kill_loc[l]);
