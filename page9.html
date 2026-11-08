@@ -176,7 +176,7 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
   </div>
 </div>
 <div class="center">
-<h1 style="font:900 24px 'Cinzel Decorative';color:#e6d5a0">MISSIONS • 22</h1>
+<h1 style="font:900 24px 'Cinzel Decorative';color:#e6d5a0">MISSIONS • 51</h1>
 <div id="missGrid" class="miss-grid"></div>
 </div>
 </div>
@@ -192,28 +192,67 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 <script src="./assets/js/storage.js"></script>
 <script>
 const FALLBACK_MISSIONS=[
-{id:1,name:'ПЕСЧАНАЯ РЕЗНЯ I',icon:'🏜️',prev:null,type:'kill_mob',loc:1,target:20,reward:{gold:100,xp:200},desc:'Убей 20 мобов в Пустыне'},
-{id:2,name:'ПЕСЧАНАЯ РЕЗНЯ II',icon:'🏜️',prev:1,type:'kill_mob',loc:1,target:50,reward:{gold:250,xp:500},desc:'Убей 50 мобов в Пустыне'},
-{id:3,name:'ПЕСЧАНАЯ РЕЗНЯ III',icon:'🏜️',prev:2,type:'kill_mob',loc:1,target:100,reward:{gold:500,xp:1000},desc:'Убей 100 мобов в Пустыне'},
-{id:4,name:'ЛЕСНОЙ ОХОТНИК I',icon:'🌲',prev:null,type:'kill_mob',loc:2,target:20,reward:{gold:120,xp:300},desc:'Убей 20 мобов в Лесу'},
-{id:5,name:'ЛЕСНОЙ ОХОТНИК II',icon:'🌲',prev:4,type:'kill_mob',loc:2,target:50,reward:{gold:300,xp:750},desc:'Убей 50 мобов в Лесу'},
-{id:6,name:'ЛЕСНОЙ ОХОТНИК III',icon:'🌲',prev:5,type:'kill_mob',loc:2,target:100,reward:{gold:600,xp:1500},desc:'Убей 100 мобов в Лесу'},
-{id:7,name:'МОРОЗНЫЙ УБИЙЦА I',icon:'❄️',prev:null,type:'kill_mob',loc:3,target:20,reward:{gold:150,xp:400},desc:'Убей 20 мобов в Льдах'},
-{id:8,name:'МОРОЗНЫЙ УБИЙЦА II',icon:'❄️',prev:7,type:'kill_mob',loc:3,target:50,reward:{gold:350,xp:1000},desc:'Убей 50 мобов в Льдах'},
-{id:9,name:'МОРОЗНЫЙ УБИЙЦА III',icon:'❄️',prev:8,type:'kill_mob',loc:3,target:100,reward:{gold:700,xp:2000},desc:'Убей 100 мобов в Льдах'},
-{id:10,name:'ПЕРВЫЙ ТРОФЕЙ',icon:'👹',prev:null,type:'kill_boss',target:1,reward:{gold:200,xp:500},desc:'Убей 1 босса'},
-{id:11,name:'ОХОТНИК НА БОССОВ',icon:'💀',prev:10,type:'kill_boss_diff',target:3,reward:{gold:400,xp:1000},desc:'Убей 3 боссов'},
-{id:12,name:'ПОВЕЛИТЕЛЬ БОССОВ',icon:'👑',prev:11,type:'kill_boss',target:20,reward:{gold:1000,xp:2500},desc:'Убей 20 боссов'},
-{id:13,name:'НОВИЧОК',icon:'📅',prev:null,type:'login',target:7,reward:{gold:150,xp:300},desc:'Зайди 7 дней'},
-{id:14,name:'ВЕТЕРАН',icon:'📅',prev:13,type:'login',target:30,reward:{gold:800,xp:2000},desc:'Зайди 30 дней'},
-{id:15,name:'СОБИРАТЕЛЬ',icon:'🟢',prev:null,type:'collect_green',target:5,reward:{gold:300,xp:600},desc:'Собери зеленый сет'},
-{id:16,name:'КОЛЛЕКЦИОНЕР',icon:'🔵',prev:15,type:'collect_blue',target:6,reward:{gold:600,xp:1200},desc:'Собери синий сет'},
-{id:17,name:'ЛЕГЕНДА',icon:'🟣',prev:16,type:'collect_legend',target:1,reward:{gold:1000,xp:2500},desc:'Собери легенду'},
-{id:18,name:'ОРУЖЕЙНИК',icon:'⚔️',prev:17,type:'equip_dmg',target:100,reward:{gold:500,xp:1000},desc:'Надень +100 DMG'},
-{id:19,name:'УЧЕНИК МАГИИ I',icon:'🌌',prev:null,type:'ult',target:20,reward:{gold:150,xp:400},desc:'Используй ульту 20 раз'},
-{id:20,name:'УЧЕНИК МАГИИ II',icon:'🌌',prev:19,type:'ult',target:50,reward:{gold:350,xp:900},desc:'50 ульт'},
-{id:21,name:'УЧЕНИК МАГИИ III',icon:'🌌',prev:20,type:'ult',target:100,reward:{gold:700,xp:1800},desc:'100 ульт'},
-{id:22,name:'НЕУЯЗВИМЫЙ',icon:'🛡️',prev:21,type:'win_streak',target:10,reward:{gold:1200,xp:3000},desc:'10 побед подряд'}
+// --- DESERT — ПЕСЧАНАЯ РЕЗНЯ — 5+10 за моба ---
+ {id:1, name:'ПЕСЧАНАЯ РЕЗНЯ I', eng:'Sand Slayer I', icon:'🏜️', chain:'desert', prev:null, type:'kill_mob', loc:1, target:20, reward:{gold:100,xp:200}, desc:'Убей 20 мобов в Пустыне'},
+ {id:2, name:'ПЕСЧАНАЯ РЕЗНЯ II', eng:'Sand Slayer II', icon:'🏜️', chain:'desert', prev:1, type:'kill_mob', loc:1, target:50, reward:{gold:250,xp:500}, desc:'Убей 50 мобов в Пустыне'},
+ {id:3, name:'ПЕСЧАНАЯ РЕЗНЯ III', eng:'Sand Slayer III', icon:'🏜️', chain:'desert', prev:2, type:'kill_mob', loc:1, target:100, reward:{gold:500,xp:1000,title:'ПЕСЧАНЫЙ СТРАННИК',titleColor:'green'}, desc:'Убей 100 мобов в Пустыне'},
+ {id:4, name:'ПЕСЧАНАЯ РЕЗНЯ IV', eng:'Sand Slayer IV', icon:'🏜️', chain:'desert', prev:3, type:'kill_mob', loc:1, target:200, reward:{gold:1000,xp:2000,title:'ПЕСЧАНЫЙ ОХОТНИК',titleColor:'blue'}, desc:'Убей 200 мобов в Пустыне'},
+ {id:5, name:'ПЕСЧАНАЯ РЕЗНЯ V', eng:'Sand Slayer V', icon:'🏜️', chain:'desert', prev:4, type:'kill_mob', loc:1, target:300, reward:{gold:1500,xp:3000,title:'ПЕСЧАНЫЙ ДЕМОН',titleColor:'red'}, desc:'Убей 300 мобов в Пустыне'},
+ {id:6, name:'ПЕСЧАНАЯ РЕЗНЯ VI', eng:'Sand Slayer VI', icon:'🏜️', chain:'desert', prev:5, type:'kill_mob', loc:1, target:500, reward:{gold:2500,xp:5000,title:'ВЛАДЫКА ПУСТЫНИ',titleColor:'yellow'}, desc:'Убей 500 мобов в Пустыне'},
+ // --- FOREST — ЛЕСНОЙ ОХОТНИК — 10+15 за моба ---
+ {id:7, name:'ЛЕСНОЙ ОХОТНИК I', eng:'Forest Hunter I', icon:'🌲', chain:'forest', prev:null, type:'kill_mob', loc:2, target:20, reward:{gold:200,xp:300}, desc:'Убей 20 мобов в Темном Лесу'},
+ {id:8, name:'ЛЕСНОЙ ОХОТНИК II', eng:'Forest Hunter II', icon:'🌲', chain:'forest', prev:7, type:'kill_mob', loc:2, target:50, reward:{gold:500,xp:750}, desc:'Убей 50 мобов в Темном Лесу'},
+ {id:9, name:'ЛЕСНОЙ ОХОТНИК III', eng:'Forest Hunter III', icon:'🌲', chain:'forest', prev:8, type:'kill_mob', loc:2, target:100, reward:{gold:1000,xp:1500,title:'ЛЕСНОЙ СТРАННИК',titleColor:'green'}, desc:'Убей 100 мобов в Темном Лесу'},
+ {id:10, name:'ЛЕСНОЙ ОХОТНИК IV', eng:'Forest Hunter IV', icon:'🌲', chain:'forest', prev:9, type:'kill_mob', loc:2, target:200, reward:{gold:2000,xp:3000,title:'ЛЕСНОЙ ОХОТНИК',titleColor:'blue'}, desc:'Убей 200 мобов в Темном Лесу'},
+ {id:11, name:'ЛЕСНОЙ ОХОТНИК V', eng:'Forest Hunter V', icon:'🌲', chain:'forest', prev:10, type:'kill_mob', loc:2, target:300, reward:{gold:3000,xp:4500,title:'ЛЕСНОЙ ПРИЗРАК',titleColor:'red'}, desc:'Убей 300 мобов в Темном Лесу'},
+ {id:12, name:'ЛЕСНОЙ ОХОТНИК VI', eng:'Forest Hunter VI', icon:'🌲', chain:'forest', prev:11, type:'kill_mob', loc:2, target:500, reward:{gold:5000,xp:7500,title:'ВЛАДЫКА ЛЕСА',titleColor:'yellow'}, desc:'Убей 500 мобов в Темном Лесу'},
+ // --- FROST — МОРОЗНЫЙ УБИЙЦА — 13+20 за моба ---
+ {id:13, name:'МОРОЗНЫЙ УБИЙЦА I', eng:'Frost Slayer I', icon:'❄️', chain:'frost', prev:null, type:'kill_mob', loc:3, target:20, reward:{gold:260,xp:400}, desc:'Убей 20 мобов в Ледяных Землях'},
+ {id:14, name:'МОРОЗНЫЙ УБИЙЦА II', eng:'Frost Slayer II', icon:'❄️', chain:'frost', prev:13, type:'kill_mob', loc:3, target:50, reward:{gold:650,xp:1000}, desc:'Убей 50 мобов в Ледяных Землях'},
+ {id:15, name:'МОРОЗНЫЙ УБИЙЦА III', eng:'Frost Slayer III', icon:'❄️', chain:'frost', prev:14, type:'kill_mob', loc:3, target:100, reward:{gold:1300,xp:2000,title:'ЛЕДЯНОЙ СТРАННИК',titleColor:'green'}, desc:'Убей 100 мобов в Ледяных Землях'},
+ {id:16, name:'МОРОЗНЫЙ УБИЙЦА IV', eng:'Frost Slayer IV', icon:'❄️', chain:'frost', prev:15, type:'kill_mob', loc:3, target:200, reward:{gold:2600,xp:4000,title:'ЛЕДЯНОЙ ВОИН',titleColor:'blue'}, desc:'Убей 200 мобов в Ледяных Землях'},
+ {id:17, name:'МОРОЗНЫЙ УБИЙЦА V', eng:'Frost Slayer V', icon:'❄️', chain:'frost', prev:16, type:'kill_mob', loc:3, target:300, reward:{gold:3900,xp:6000,title:'ЛЕДЯНОЙ ПАЛАЧ',titleColor:'red'}, desc:'Убей 300 мобов в Ледяных Землях'},
+ {id:18, name:'МОРОЗНЫЙ УБИЙЦА VI', eng:'Frost Slayer VI', icon:'❄️', chain:'frost', prev:17, type:'kill_mob', loc:3, target:500, reward:{gold:6500,xp:10000,title:'ВЛАДЫКА ЛЬДА',titleColor:'yellow'}, desc:'Убей 500 мобов в Ледяных Землях'},
+ // --- SWAMP — БОЛОТНЫЙ ОХОТНИК — 15+25 за моба ---
+ {id:19, name:'БОЛОТНЫЙ ОХОТНИК I', eng:'Swamp Hunter I', icon:'🐊', chain:'swamp', prev:null, type:'kill_mob', loc:4, target:20, reward:{gold:300,xp:500}, desc:'Убей 20 мобов в Болоте'},
+ {id:20, name:'БОЛОТНЫЙ ОХОТНИК II', eng:'Swamp Hunter II', icon:'🐊', chain:'swamp', prev:19, type:'kill_mob', loc:4, target:50, reward:{gold:750,xp:1250}, desc:'Убей 50 мобов в Болоте'},
+ {id:21, name:'БОЛОТНЫЙ ОХОТНИК III', eng:'Swamp Hunter III', icon:'🐊', chain:'swamp', prev:20, type:'kill_mob', loc:4, target:100, reward:{gold:1500,xp:2500,title:'ТОПНИК',titleColor:'green'}, desc:'Убей 100 мобов в Болоте'},
+ {id:22, name:'БОЛОТНЫЙ ОХОТНИК IV', eng:'Swamp Hunter IV', icon:'🐊', chain:'swamp', prev:21, type:'kill_mob', loc:4, target:200, reward:{gold:3000,xp:5000,title:'ЯДОВИТЫЙ ДУХ',titleColor:'blue'}, desc:'Убей 200 мобов в Болоте'},
+ {id:23, name:'БОЛОТНЫЙ ОХОТНИК V', eng:'Swamp Hunter V', icon:'🐊', chain:'swamp', prev:22, type:'kill_mob', loc:4, target:300, reward:{gold:4500,xp:7500,title:'КОШМАР БОЛОТА',titleColor:'red'}, desc:'Убей 300 мобов в Болоте'},
+ {id:24, name:'БОЛОТНЫЙ ОХОТНИК VI', eng:'Swamp Hunter VI', icon:'🐊', chain:'swamp', prev:23, type:'kill_mob', loc:4, target:500, reward:{gold:7500,xp:12500,title:'ВЛАДЫКА БОЛОТА',titleColor:'yellow'}, desc:'Убей 500 мобов в Болоте'},
+ // --- VOLCANO — ОГНЕННЫЙ ОХОТНИК — 20+35 за моба ---
+ {id:25, name:'ОГНЕННЫЙ ОХОТНИК I', eng:'Fire Hunter I', icon:'🌋', chain:'volcano', prev:null, type:'kill_mob', loc:5, target:20, reward:{gold:400,xp:700}, desc:'Убей 20 мобов в Вулкане'},
+ {id:26, name:'ОГНЕННЫЙ ОХОТНИК II', eng:'Fire Hunter II', icon:'🌋', chain:'volcano', prev:25, type:'kill_mob', loc:5, target:50, reward:{gold:1000,xp:1750}, desc:'Убей 50 мобов в Вулкане'},
+ {id:27, name:'ОГНЕННЫЙ ОХОТНИК III', eng:'Fire Hunter III', icon:'🌋', chain:'volcano', prev:26, type:'kill_mob', loc:5, target:100, reward:{gold:2000,xp:3500,title:'ДИТЯ МАГМЫ',titleColor:'green'}, desc:'Убей 100 мобов в Вулкане'},
+ {id:28, name:'ОГНЕННЫЙ ОХОТНИК IV', eng:'Fire Hunter IV', icon:'🌋', chain:'volcano', prev:27, type:'kill_mob', loc:5, target:200, reward:{gold:4000,xp:7000,title:'КУЗНЕЦ ОГНЯ',titleColor:'blue'}, desc:'Убей 200 мобов в Вулкане'},
+ {id:29, name:'ОГНЕННЫЙ ОХОТНИК V', eng:'Fire Hunter V', icon:'🌋', chain:'volcano', prev:28, type:'kill_mob', loc:5, target:300, reward:{gold:6000,xp:10500,title:'СЕРДЦЕ ВУЛКАНА',titleColor:'red'}, desc:'Убей 300 мобов в Вулкане'},
+ {id:30, name:'ОГНЕННЫЙ ОХОТНИК VI', eng:'Fire Hunter VI', icon:'🌋', chain:'volcano', prev:29, type:'kill_mob', loc:5, target:500, reward:{gold:10000,xp:17500,title:'ВЛАДЫКА ВУЛКАНА',titleColor:'yellow'}, desc:'Убей 500 мобов в Вулкане'},
+ // --- RUINS — СТРАЖ РУИН — 25+50 за моба ---
+ {id:31, name:'СТРАЖ РУИН I', eng:'Ruin Guardian I', icon:'🏛️', chain:'ruins', prev:null, type:'kill_mob', loc:6, target:20, reward:{gold:500,xp:1000}, desc:'Убей 20 мобов в Руинах'},
+ {id:32, name:'СТРАЖ РУИН II', eng:'Ruin Guardian II', icon:'🏛️', chain:'ruins', prev:31, type:'kill_mob', loc:6, target:50, reward:{gold:1250,xp:2500}, desc:'Убей 50 мобов в Руинах'},
+ {id:33, name:'СТРАЖ РУИН III', eng:'Ruin Guardian III', icon:'🏛️', chain:'ruins', prev:32, type:'kill_mob', loc:6, target:100, reward:{gold:2500,xp:5000,title:'КОСТЯНОЙ СТРАЖ',titleColor:'green'}, desc:'Убей 100 мобов в Руинах'},
+ {id:34, name:'СТРАЖ РУИН IV', eng:'Ruin Guardian IV', icon:'🏛️', chain:'ruins', prev:33, type:'kill_mob', loc:6, target:200, reward:{gold:5000,xp:10000,title:'РЫЦАРЬ РУИН',titleColor:'blue'}, desc:'Убей 200 мобов в Руинах'},
+ {id:35, name:'СТРАЖ РУИН V', eng:'Ruin Guardian V', icon:'🏛️', chain:'ruins', prev:34, type:'kill_mob', loc:6, target:300, reward:{gold:7500,xp:15000,title:'ПОВЕЛИТЕЛЬ КОСТЕЙ',titleColor:'red'}, desc:'Убей 300 мобов в Руинах'},
+ {id:36, name:'СТРАЖ РУИН VI', eng:'Ruin Guardian VI', icon:'🏛️', chain:'ruins', prev:35, type:'kill_mob', loc:6, target:500, reward:{gold:12500,xp:25000,title:'ВЛАДЫКА РУИН',titleColor:'yellow'}, desc:'Убей 500 мобов в Руинах'},
+ // --- BOSS ---
+ {id:37, name:'ПЕРВЫЙ ТРОФЕЙ', eng:'First Trophy', icon:'👹', chain:'boss', prev:null, type:'kill_boss', target:1, reward:{gold:200,xp:500}, desc:'Убей 1 босса'},
+ {id:38, name:'ОХОТНИК НА БОССОВ', eng:'Boss Hunter', icon:'💀', chain:'boss', prev:37, type:'kill_boss_diff', target:3, reward:{gold:400,xp:1000}, desc:'Убей 3 разных боссов'},
+ {id:39, name:'ПОВЕЛИТЕЛЬ БОССОВ', eng:'Boss Lord', icon:'👑', chain:'boss', prev:38, type:'kill_boss_diff', target:6, reward:{gold:1000,xp:2500,title:'Убийца Титанов'}, desc:'Убей 6 разных боссов'},
+ // --- LOGIN ---
+ {id:40, name:'НОВИЧОК', eng:'Newcomer', icon:'📅', chain:'login', prev:null, type:'login', target:7, reward:{gold:500,xp:500}, desc:'Зайди 7 разных дней в игру'},
+ {id:41, name:'ВЕТЕРАН', eng:'Veteran', icon:'📅', chain:'login', prev:40, type:'login', target:30, reward:{gold:2000,xp:2000,title:'Ветеран VOLAND'}, desc:'Зайди 30 разных дней'},
+ // --- EQUIP — по тирам ---
+ {id:42, name:'СОБИРАТЕЛЬ', eng:'Collector', icon:'🟢', chain:'equip', prev:null, type:'collect_green', target:5, reward:{gold:1000,xp:1000}, desc:'Собери хотя бы 5 предметов экипировки зеленого тира'},
+ {id:43, name:'КОЛЛЕКЦИОНЕР', eng:'Hoarder', icon:'🔵', chain:'equip', prev:42, type:'collect_blue', target:4, reward:{gold:2000,xp:2000}, desc:'Собери хотя бы 4 предмета синего тира'},
+ {id:44, name:'ХРАНИТЕЛИ', eng:'Keepers', icon:'🔴', chain:'equip', prev:43, type:'collect_red', target:3, reward:{gold:3000,xp:3000}, desc:'Собери хотя бы 3 предмета красного тира'},
+ {id:45, name:'ЛЕГЕНДА', eng:'Legend', icon:'🟣', chain:'equip', prev:44, type:'collect_gold', target:1, reward:{gold:5000,xp:5000}, desc:'Собери 1 предмет золотого тира'},
+ // --- ULT — ульта на T, 6 фаз, та же логика 7+18 ---
+ {id:46, name:'УЧЕНИК МАГИИ I', eng:'Apprentice I', icon:'🌌', chain:'ult', prev:null, type:'ult', target:20, reward:{gold:150,xp:400}, desc:'Используй ульту (T) 20 раз'},
+ {id:47, name:'УЧЕНИК МАГИИ II', eng:'Apprentice II', icon:'🌌', chain:'ult', prev:46, type:'ult', target:50, reward:{gold:350,xp:900}, desc:'Используй ульту (T) 50 раз'},
+ {id:48, name:'УЧЕНИК МАГИИ III', eng:'Apprentice III', icon:'🌌', chain:'ult', prev:47, type:'ult', target:100, reward:{gold:700,xp:1800,title:'Архимаг'}, desc:'Используй ульту (T) 100 раз'},
+ {id:49, name:'УЧЕНИК МАГИИ IV', eng:'Apprentice IV', icon:'🌌', chain:'ult', prev:48, type:'ult', target:300, reward:{gold:2100,xp:5400}, desc:'Используй ульту (T) 300 раз'},
+ {id:50, name:'УЧЕНИК МАГИИ V', eng:'Apprentice V', icon:'🌌', chain:'ult', prev:49, type:'ult', target:600, reward:{gold:4200,xp:10800}, desc:'Используй ульту (T) 600 раз'},
+ {id:51, name:'УЧЕНИК МАГИИ VI', eng:'Apprentice VI', icon:'🌌', chain:'ult', prev:50, type:'ult', target:1000, reward:{gold:7000,xp:18000}, desc:'Используй ульту (T) 1000 раз'},
 ];
 function getMissions(){try{if(typeof VOLAND_MISSIONS!=='undefined'&&VOLAND_MISSIONS.length>0)return VOLAND_MISSIONS;}catch(e){}return FALLBACK_MISSIONS;}
 function isLocked(m){
@@ -232,7 +271,24 @@ function isDone(m){try{return volandGetMissionsDone().includes(m.id);}catch(e){r
 function getProgress(m){try{if(typeof volandGetMissionProgress==='function')return volandGetMissionProgress(m);}catch(e){}return 0;}
 function render(){
   let g=document.getElementById('missGrid');g.innerHTML='';
-  getMissions().forEach(m=>{
+  // Только активная фаза на цепочку: первая не сделанная в каждой цепочке.
+  // Если цепочка вся пройдена — показываем последнюю карточку как DONE для истории.
+  let allMissions = getMissions();
+  let byChain = {};
+  let chainOrder = [];
+  allMissions.forEach(m=>{
+    let ch = m.chain || ('single_'+m.id);
+    if(!byChain[ch]){ byChain[ch]=[]; chainOrder.push(ch); }
+    byChain[ch].push(m);
+  });
+  let visible = [];
+  chainOrder.forEach(ch=>{
+    let list = byChain[ch].slice().sort((a,b)=>a.id-b.id);
+    let active = list.find(m=>!isDone(m));
+    if(active) visible.push(active);
+    else if(list.length) visible.push(list[list.length-1]);
+  });
+  visible.forEach(m=>{
     let locked=isLocked(m);
     let done=isDone(m);
     let prog=getProgress(m);
@@ -243,7 +299,13 @@ function render(){
     else if(locked){c.className='miss-card locked';}
     else if(prog>=target){c.className='miss-card ready';}
     else{c.className='miss-card progress';}
-    let html=`<div class="miss-top"><div class="miss-icon">${m.icon}</div><div class="miss-title">${m.name}</div></div><div class="miss-desc">${m.desc}</div><div class="miss-reward">💰 ${m.reward.gold} • XP ${m.reward.xp}</div>`;
+    let titleHtml = '';
+    if(m.reward && m.reward.title){
+      let tc = m.reward.titleColor||'green';
+      let col = tc==='green' ? '#3ad080' : tc==='blue' ? '#6ab0ff' : tc==='red' ? '#e05050' : tc==='yellow' ? '#e6d5a0' : '#e6d5a0';
+      titleHtml = `<div style="color:${col};font-size:10px;margin-top:4px;text-shadow:0 0 8px ${col}">👑 ТИТУЛ: ${m.reward.title}</div>`;
+    }
+    let html=`<div class="miss-top"><div class="miss-icon">${m.icon}</div><div class="miss-title">${m.name}</div></div><div class="miss-desc">${m.desc}</div><div class="miss-reward">💰 ${m.reward.gold} • XP ${m.reward.xp}</div>${titleHtml}`;
     if(!done){
       html+=`<div class="miss-progress"><div class="miss-progress-fill" style="width:${pct}%"></div></div><div class="miss-progress-text">${prog}/${target} (${pct}%)</div>`;
     }
