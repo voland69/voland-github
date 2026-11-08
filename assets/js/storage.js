@@ -144,7 +144,11 @@ function volandSaveEquip(equipped){
 function volandGetStatAlloc(){
   try{
     let cur = volandGetCurrentSave();
-    if(cur && cur.stat_alloc) return {HP:0,DEF:0,DMG:0,MANA:0,CRIT:0,DODGE:0,PARRY:0, ...cur.stat_alloc};
+    if(cur){
+      // Баг-фикс: очки на героя, а не глобально. У нового героя в сейве нет stat_alloc — возвращаем 0, а не старый глобальный от прошлого героя
+      if(cur.stat_alloc) return {HP:0,DEF:0,DMG:0,MANA:0,CRIT:0,DODGE:0,PARRY:0, ...cur.stat_alloc};
+      return {HP:0,DEF:0,DMG:0,MANA:0,CRIT:0,DODGE:0,PARRY:0};
+    }
     let raw = localStorage.getItem('voland_v1_stat_alloc');
     if(raw) return {HP:0,DEF:0,DMG:0,MANA:0,CRIT:0,DODGE:0,PARRY:0, ...JSON.parse(raw)};
     return {HP:0,DEF:0,DMG:0,MANA:0,CRIT:0,DODGE:0,PARRY:0};
@@ -153,7 +157,11 @@ function volandGetStatAlloc(){
 function volandGetStatPointsRemaining(){
   try{
     let cur = volandGetCurrentSave();
-    if(cur && typeof cur.stat_points!=='undefined') return parseInt(cur.stat_points)||0;
+    if(cur){
+      // Баг-фикс: у нового героя нет stat_points — возвращаем 0, а не старый глобальный
+      if(typeof cur.stat_points!=='undefined') return parseInt(cur.stat_points)||0;
+      return 0;
+    }
     return parseInt(localStorage.getItem('voland_v1_stat_points')||'0')||0;
   }catch(e){ return 0; }
 }
@@ -262,6 +270,13 @@ function volandSpendStatPoints(newAlloc){
     let newSpent = 0; for(let k in newAlloc) newSpent += parseInt(newAlloc[k]||0)||0;
     // Проверка капа 20 в стат
     for(let k in newAlloc){ if((parseInt(newAlloc[k]||0)||0) > 20) return {ok:false, reason:'MAX 20 в стат'}; if((parseInt(newAlloc[k]||0)||0) < 0) return {ok:false, reason:'Отрицательное'}; }
+    // ЗАЩИТА ОТ БАГА: сохранённые очки нельзя снять минусиком — только через СБРОС
+    // newAlloc не может быть меньше oldAlloc ни по одному стату. Только добавлять сверху.
+    for(let k in oldAlloc){
+      let oldV = parseInt(oldAlloc[k]||0)||0;
+      let newV = parseInt(newAlloc[k]||0)||0;
+      if(newV < oldV) return {ok:false, reason:'Нельзя снять сохранённые очки без СБРОСА ('+k+': было '+oldV+', стало '+newV+')'};
+    }
     let diff = newSpent - oldSpent;
     if(diff > remaining) return {ok:false, reason:'Не хватает очков'};
     let newRemaining = remaining - diff;
@@ -315,6 +330,7 @@ function volandClaimMissedMilestones(){
     let saves = volandGetSaves(); let idx = volandGetActiveIndex();
     let claimed = [];
     if(saves[idx] && saves[idx].stat_milestones_claimed) claimed = saves[idx].stat_milestones_claimed;
+    else if(saves[idx]) claimed = [];
     else { try{ let raw = localStorage.getItem('voland_v1_stat_milestones'); if(raw) claimed = JSON.parse(raw); }catch(e){} }
     let newClaimed = [...claimed];
     let extraPoints = 0, extraGold = 0;
@@ -350,6 +366,8 @@ function volandFixMissingStatPoints(){
     try{
       let saves = volandGetSaves(); let idx = volandGetActiveIndex();
       if(saves[idx] && saves[idx].stat_milestones_claimed) claimed = saves[idx].stat_milestones_claimed;
+      // Баг-фикс: у нового героя нет claimed — возвращаем [], а не старый глобальный от прошлого героя
+      else if(saves[idx]) claimed = [];
       else { let raw = localStorage.getItem('voland_v1_stat_milestones'); if(raw) claimed = JSON.parse(raw); }
     }catch(e){}
     for(let m=10; m<=lvl; m+=10){ if(!claimed.includes(m)) shouldHave += 1; }
@@ -741,6 +759,7 @@ function volandCheckLevelUp(oldXp, newXp){
       // Милстоуны — каждые 10 уровней +1 очко + золото (500 * номер милстоуна)
       let claimed = [];
       if(saves[idx] && saves[idx].stat_milestones_claimed) claimed = saves[idx].stat_milestones_claimed;
+      else if(saves[idx]) claimed = [];
       else { try{ let raw = localStorage.getItem('voland_v1_stat_milestones'); if(raw) claimed = JSON.parse(raw); }catch(e){} }
       let extraPoints = 0, extraGold = 0, newMilestones = [];
       for(let lvl=oldInfo.lvl+1; lvl<=newInfo.lvl; lvl++){
