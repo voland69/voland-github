@@ -290,7 +290,13 @@ setInterval(renderBarsStamina, 1000);
 // 4 new windows
 let playHours = volandGetPlaytimeHours();
 let playText = playHours<1 ? '<1h' : playHours+'h';
-let quests = volandGetQuests();
+let missionsDone = 0, missionsTotal = 51;
+  try{
+    let doneList = (typeof volandGetMissionsDone==='function') ? volandGetMissionsDone() : [];
+    missionsDone = doneList.length;
+    if(typeof VOLAND_MISSIONS!=='undefined' && VOLAND_MISSIONS.length>0) missionsTotal = VOLAND_MISSIONS.length;
+    else if(typeof FALLBACK_MISSIONS!=='undefined' && FALLBACK_MISSIONS.length>0) missionsTotal = FALLBACK_MISSIONS.length;
+  }catch(e){}
 let kills = volandGetKills();
 let pvp = volandGetPvp();
 
@@ -301,11 +307,11 @@ document.getElementById('extraGrid').innerHTML = `
     <div class="extra-value">${playText}</div>
     <div class="extra-sub">${playHours*60} min • since ${new Date((volandGetCurrentSave()?.created||Date.now())).toLocaleDateString()}</div>
   </div>
-  <div class="extra-card">
+  <div class="extra-card" onclick="location.href='./page9.html'" style="cursor:pointer">
     <div class="extra-icon">📜</div>
-    <div class="extra-label">QUESTS</div>
-    <div class="extra-value">${quests.done}/${quests.total}</div>
-    <div class="extra-sub">${Math.round(quests.done/quests.total*100)}% completed</div>
+    <div class="extra-label">MISSIONS</div>
+    <div class="extra-value">${missionsDone}/${missionsTotal}</div>
+    <div class="extra-sub">${missionsTotal>0 ? Math.round(missionsDone/missionsTotal*100) : 0}% completed</div>
   </div>
   <div class="extra-card">
     <div class="extra-icon">💀</div>
