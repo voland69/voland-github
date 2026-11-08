@@ -235,6 +235,9 @@ function volandCalcStats(){
       autoBonus[k] = Math.round(add*100)/100;
     }
   }
+  // База уже с автоматом: база = оригинал + (уровень-1)*бонус. На 1 ур — оригинал, на 10 ур — оригинал + 9*бонус
+  let baseWithAuto = {...base};
+  for(let k in autoBonus){ baseWithAuto[k] = (baseWithAuto[k]||0) + autoBonus[k]; }
   // Предохранители — порог общий, после порога %/2, до капа. Вариант А для дебафов — отдельно в бою
   let rawCrit = cur.CRIT||0, rawDodge = cur.DODGE||0, rawParry = cur.PARRY||0;
   let critTh = volandGetCritThresholds(heroId);
@@ -244,11 +247,12 @@ function volandCalcStats(){
   cur.CRIT = effCrit;
   cur.DODGE = effDodge;
   cur.PARRY = effParry;
-  // Пересчёт бонуса для крита/доджа/парирования — эффективный минус база
-  bonus.CRIT = Math.round((effCrit - (base.CRIT||0))*100)/100;
-  bonus.DODGE = Math.round((effDodge - (base.DODGE||0))*100)/100;
-  bonus.PARRY = Math.round((effParry - (base.PARRY||0))*100)/100;
-  return {cur, bonus, heroId, hero: VOLAND_HEROES[heroId], equip: eq, equipBonus: equipBonus, pointsBonus: pointsBonus, autoBonus: autoBonus, alloc: alloc, lvl: lvl, raw: {CRIT: Math.round(rawCrit*100)/100, DODGE: Math.round(rawDodge*100)/100, PARRY: Math.round(rawParry*100)/100}, thresholds: {CRIT: critTh, DODGE: {threshold:20, cap:30}, PARRY: {threshold:20, cap:30}}};
+  // Бонус для отображения на page3 — только шмот (зелёный) + очки (жёлтый), без автомата. Автомат уже в базе.
+  let displayBonus = {};
+  for(let k in equipBonus){ displayBonus[k] = (displayBonus[k]||0) + equipBonus[k]; }
+  for(let k in pointsBonus){ displayBonus[k] = (displayBonus[k]||0) + pointsBonus[k]; }
+  // Для крита/доджа/парирования бонус для отображения — сырой, а тотал эффективный. Page3 покажет сырой + эффективный
+  return {cur, bonus: displayBonus, heroId, hero: VOLAND_HEROES[heroId], equip: eq, equipBonus: equipBonus, pointsBonus: pointsBonus, autoBonus: autoBonus, base: base, baseWithAuto: baseWithAuto, alloc: alloc, lvl: lvl, raw: {CRIT: Math.round(rawCrit*100)/100, DODGE: Math.round(rawDodge*100)/100, PARRY: Math.round(rawParry*100)/100}, thresholds: {CRIT: critTh, DODGE: {threshold:20, cap:30}, PARRY: {threshold:20, cap:30}}};
 }
 function volandSpendStatPoints(newAlloc){
   try{
@@ -332,6 +336,35 @@ function volandClaimMissedMilestones(){
     }
     return {claimed:newClaimed, extraPoints:0, extraGold:0};
   }catch(e){ return {claimed:[], extraPoints:0, extraGold:0}; }
+}
+
+function volandFixMissingStatPoints(){
+  try{
+    let lvl = 1; try{ lvl = volandGetLevel(); }catch(e){}
+    let remaining = volandGetStatPointsRemaining();
+    let alloc = volandGetStatAlloc();
+    let spent = 0; for(let k in alloc) spent += parseInt(alloc[k]||0)||0;
+    let shouldHave = Math.max(0, (parseInt(lvl)||1)-1);
+    // Милстоуны — каждые 10 уровней +1 очко
+    let claimed = [];
+    try{
+      let saves = volandGetSaves(); let idx = volandGetActiveIndex();
+      if(saves[idx] && saves[idx].stat_milestones_claimed) claimed = saves[idx].stat_milestones_claimed;
+      else { let raw = localStorage.getItem('voland_v1_stat_milestones'); if(raw) claimed = JSON.parse(raw); }
+    }catch(e){}
+    for(let m=10; m<=lvl; m+=10){ if(!claimed.includes(m)) shouldHave += 1; }
+    let have = remaining + spent;
+    if(shouldHave > have){
+      let missing = shouldHave - have;
+      let newRemaining = remaining + missing;
+      let saves = volandGetSaves(); let idx = volandGetActiveIndex();
+      if(saves[idx]){ saves[idx].stat_points = newRemaining; volandSaveSaves(saves); }
+      localStorage.setItem('voland_v1_stat_points', String(newRemaining));
+      console.log('[STAT] Fix missing points: +' + missing + ' (lvl ' + lvl + ', shouldHave ' + shouldHave + ', had ' + have + ')');
+      return {fixed:missing, remaining:newRemaining};
+    }
+    return {fixed:0, remaining:remaining};
+  }catch(e){ return {fixed:0, remaining:0}; }
 }
 
 // New helpers for page3 stats
