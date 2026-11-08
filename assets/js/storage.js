@@ -140,19 +140,198 @@ function volandSaveEquip(equipped){
   }catch(e){}
 }
 
+// ===== VOLAND STAT POINTS SYSTEM v6 — 1 очко за уровень + автомат от класса + предохранители =====
+function volandGetStatAlloc(){
+  try{
+    let cur = volandGetCurrentSave();
+    if(cur && cur.stat_alloc) return {HP:0,DEF:0,DMG:0,MANA:0,CRIT:0,DODGE:0,PARRY:0, ...cur.stat_alloc};
+    let raw = localStorage.getItem('voland_v1_stat_alloc');
+    if(raw) return {HP:0,DEF:0,DMG:0,MANA:0,CRIT:0,DODGE:0,PARRY:0, ...JSON.parse(raw)};
+    return {HP:0,DEF:0,DMG:0,MANA:0,CRIT:0,DODGE:0,PARRY:0};
+  }catch(e){ return {HP:0,DEF:0,DMG:0,MANA:0,CRIT:0,DODGE:0,PARRY:0}; }
+}
+function volandGetStatPointsRemaining(){
+  try{
+    let cur = volandGetCurrentSave();
+    if(cur && typeof cur.stat_points!=='undefined') return parseInt(cur.stat_points)||0;
+    return parseInt(localStorage.getItem('voland_v1_stat_points')||'0')||0;
+  }catch(e){ return 0; }
+}
+function volandGetStatRespecUsed(){
+  try{ let cur = volandGetCurrentSave(); if(cur) return !!cur.stat_respec_used; return localStorage.getItem('voland_v1_stat_respec_used')==='1'; }catch(e){ return false; }
+}
+function volandGetStatRespecCost(){
+  try{ let lvl = volandGetLevel(); return 200 * lvl; }catch(e){ return 200; }
+}
+function volandGetClassAutoBonus(heroId){
+  // Автомат от класса — за каждый уровень, сверх очка. (lvl-1) * bonus
+  if(heroId==='warrior-f' || heroId==='warrior-m') return {HP:30, DEF:5, label:'Танк: +30 HP +5 DEF за уровень'};
+  if(heroId==='archmage-m' || heroId==='mage-f-new') return {DMG:15, MANA:15, label:'Маг: +15 DMG +15 MANA за уровень'};
+  if(heroId==='necro-f-new' || heroId==='necro-m') return {HP:30, MANA:15, label:'Некромант: +30 HP +15 MANA за уровень'};
+  if(heroId==='archer-f' || heroId==='archer-m') return {DMG:10, CRIT:0.5, label:'Лук: +10 DMG +0,5% CRIT за уровень'};
+  return {HP:0, label:''};
+}
+function volandGetCritThresholds(heroId){
+  // Порог общий, сумма всего. После порога %/2, до капа. Вариант А — дебаф минус пункты от эффективного
+  if(heroId==='warrior-f' || heroId==='warrior-m' || heroId==='necro-m') return {threshold:20, cap:30, label:'Танк: порог 20% / кап 30%'};
+  if(heroId==='archmage-m' || heroId==='mage-f-new' || heroId==='necro-f-new') return {threshold:30, cap:40, label:'Маг: порог 30% / кап 40%'};
+  if(heroId==='archer-f' || heroId==='archer-m') return {threshold:40, cap:50, label:'Лук: порог 40% / кап 50%'};
+  return {threshold:30, cap:40, label:'Порог 30% / кап 40%'};
+}
+function volandApplyDiminishing(raw, threshold, cap){
+  raw = parseFloat(raw)||0;
+  if(raw <= threshold) return Math.round(raw*100)/100;
+  let eff = threshold + (raw - threshold)/2;
+  if(eff > cap) eff = cap;
+  return Math.round(eff*100)/100;
+}
+// Дебаф Вариант А — минус пункты от эффективного (максимального) значения
+function volandApplyDebuff(effective, debuffPct){
+  let eff = parseFloat(effective)||0;
+  let deb = parseFloat(debuffPct)||0;
+  let res = eff - deb;
+  if(res<0) res=0;
+  return Math.round(res*100)/100;
+}
 function volandCalcStats(){
   const heroId = volandGetHeroId();
   const base = VOLAND_HEROES[heroId]?.st || VOLAND_HEROES[Object.keys(VOLAND_HEROES)[0]].st;
   const cur = {...base};
   const eq = volandGetEquippedItems();
   const bonus = {};
+  const equipBonus = {};
   for(let slot in eq){
     for(let k in eq[slot].bonus){
       cur[k] = (cur[k]||0) + eq[slot].bonus[k];
       bonus[k] = (bonus[k]||0) + eq[slot].bonus[k];
+      equipBonus[k] = (equipBonus[k]||0) + eq[slot].bonus[k];
     }
   }
-  return {cur, bonus, heroId, hero: VOLAND_HEROES[heroId], equip: eq};
+  // Очки — 1 очко = 30 HP / 5 DEF / 10 DMG / 20 MANA / 0,5% CRIT/DODGE/PARRY, макс 20 в стат
+  let alloc = volandGetStatAlloc();
+  let pointsBonus = {};
+  let perPoint = {HP:30, DEF:5, DMG:10, MANA:20, CRIT:0.5, DODGE:0.5, PARRY:0.5};
+  for(let k in perPoint){
+    let pts = parseInt(alloc[k]||0)||0;
+    if(pts>0){
+      let add = pts * perPoint[k];
+      cur[k] = (cur[k]||0) + add;
+      bonus[k] = (bonus[k]||0) + add;
+      pointsBonus[k] = add;
+    }
+  }
+  // Автомат от класса — (lvl-1) * bonus
+  let lvl = 1;
+  try{ lvl = volandGetLevel(); }catch(e){}
+  let auto = volandGetClassAutoBonus(heroId);
+  let autoBonus = {};
+  let lvlMinus1 = Math.max(0, (parseInt(lvl)||1)-1);
+  for(let k in auto){
+    if(k==='label') continue;
+    let add = auto[k] * lvlMinus1;
+    if(add!==0){
+      cur[k] = (cur[k]||0) + add;
+      bonus[k] = (bonus[k]||0) + add;
+      autoBonus[k] = Math.round(add*100)/100;
+    }
+  }
+  // Предохранители — порог общий, после порога %/2, до капа. Вариант А для дебафов — отдельно в бою
+  let rawCrit = cur.CRIT||0, rawDodge = cur.DODGE||0, rawParry = cur.PARRY||0;
+  let critTh = volandGetCritThresholds(heroId);
+  let effCrit = volandApplyDiminishing(rawCrit, critTh.threshold, critTh.cap);
+  let effDodge = volandApplyDiminishing(rawDodge, 20, 30);
+  let effParry = volandApplyDiminishing(rawParry, 20, 30);
+  cur.CRIT = effCrit;
+  cur.DODGE = effDodge;
+  cur.PARRY = effParry;
+  // Пересчёт бонуса для крита/доджа/парирования — эффективный минус база
+  bonus.CRIT = Math.round((effCrit - (base.CRIT||0))*100)/100;
+  bonus.DODGE = Math.round((effDodge - (base.DODGE||0))*100)/100;
+  bonus.PARRY = Math.round((effParry - (base.PARRY||0))*100)/100;
+  return {cur, bonus, heroId, hero: VOLAND_HEROES[heroId], equip: eq, equipBonus: equipBonus, pointsBonus: pointsBonus, autoBonus: autoBonus, alloc: alloc, lvl: lvl, raw: {CRIT: Math.round(rawCrit*100)/100, DODGE: Math.round(rawDodge*100)/100, PARRY: Math.round(rawParry*100)/100}, thresholds: {CRIT: critTh, DODGE: {threshold:20, cap:30}, PARRY: {threshold:20, cap:30}}};
+}
+function volandSpendStatPoints(newAlloc){
+  try{
+    let remaining = volandGetStatPointsRemaining();
+    let oldAlloc = volandGetStatAlloc();
+    let oldSpent = 0; for(let k in oldAlloc) oldSpent += parseInt(oldAlloc[k]||0)||0;
+    let newSpent = 0; for(let k in newAlloc) newSpent += parseInt(newAlloc[k]||0)||0;
+    // Проверка капа 20 в стат
+    for(let k in newAlloc){ if((parseInt(newAlloc[k]||0)||0) > 20) return {ok:false, reason:'MAX 20 в стат'}; if((parseInt(newAlloc[k]||0)||0) < 0) return {ok:false, reason:'Отрицательное'}; }
+    let diff = newSpent - oldSpent;
+    if(diff > remaining) return {ok:false, reason:'Не хватает очков'};
+    let newRemaining = remaining - diff;
+    let saves = volandGetSaves(); let idx = volandGetActiveIndex();
+    let clean = {HP:parseInt(newAlloc.HP||0)||0, DEF:parseInt(newAlloc.DEF||0)||0, DMG:parseInt(newAlloc.DMG||0)||0, MANA:parseInt(newAlloc.MANA||0)||0, CRIT:parseInt(newAlloc.CRIT||0)||0, DODGE:parseInt(newAlloc.DODGE||0)||0, PARRY:parseInt(newAlloc.PARRY||0)||0};
+    if(saves[idx]){ saves[idx].stat_alloc = clean; saves[idx].stat_points = newRemaining; volandSaveSaves(saves); }
+    localStorage.setItem('voland_v1_stat_alloc', JSON.stringify(clean));
+    localStorage.setItem('voland_v1_stat_points', String(newRemaining));
+    return {ok:true, remaining:newRemaining, alloc:clean};
+  }catch(e){ return {ok:false, reason:String(e)}; }
+}
+function volandResetStatPoints(){
+  try{
+    let used = volandGetStatRespecUsed();
+    let lvl = 1; try{ lvl = volandGetLevel(); }catch(e){}
+    if(!used){
+      // Первый раз бесплатно
+      let alloc = volandGetStatAlloc();
+      let spent = 0; for(let k in alloc) spent += parseInt(alloc[k]||0)||0;
+      let remaining = volandGetStatPointsRemaining();
+      let newRemaining = remaining + spent;
+      let saves = volandGetSaves(); let idx = volandGetActiveIndex();
+      let clean = {HP:0,DEF:0,DMG:0,MANA:0,CRIT:0,DODGE:0,PARRY:0};
+      if(saves[idx]){ saves[idx].stat_alloc = clean; saves[idx].stat_points = newRemaining; saves[idx].stat_respec_used = true; volandSaveSaves(saves); }
+      localStorage.setItem('voland_v1_stat_alloc', JSON.stringify(clean));
+      localStorage.setItem('voland_v1_stat_points', String(newRemaining));
+      localStorage.setItem('voland_v1_stat_respec_used', '1');
+      return {ok:true, free:true, cost:0, remaining:newRemaining};
+    } else {
+      let cost = 200 * lvl;
+      let gold = 0; try{ gold = volandGetGold(); }catch(e){}
+      if(gold < cost) return {ok:false, reason:'Не хватает золота: нужно '+cost+'G, у тебя '+gold+'G'};
+      // Снимаем золото
+      try{ if(typeof volandAddGold==='function') volandAddGold(-cost); }catch(e){}
+      let alloc = volandGetStatAlloc();
+      let spent = 0; for(let k in alloc) spent += parseInt(alloc[k]||0)||0;
+      let remaining = volandGetStatPointsRemaining();
+      let newRemaining = remaining + spent;
+      let saves = volandGetSaves(); let idx = volandGetActiveIndex();
+      let clean = {HP:0,DEF:0,DMG:0,MANA:0,CRIT:0,DODGE:0,PARRY:0};
+      if(saves[idx]){ saves[idx].stat_alloc = clean; saves[idx].stat_points = newRemaining; volandSaveSaves(saves); }
+      localStorage.setItem('voland_v1_stat_alloc', JSON.stringify(clean));
+      localStorage.setItem('voland_v1_stat_points', String(newRemaining));
+      return {ok:true, free:false, cost:cost, remaining:newRemaining};
+    }
+  }catch(e){ return {ok:false, reason:String(e)}; }
+}
+function volandClaimMissedMilestones(){
+  try{
+    let lvl = 1; try{ lvl = volandGetLevel(); }catch(e){}
+    let saves = volandGetSaves(); let idx = volandGetActiveIndex();
+    let claimed = [];
+    if(saves[idx] && saves[idx].stat_milestones_claimed) claimed = saves[idx].stat_milestones_claimed;
+    else { try{ let raw = localStorage.getItem('voland_v1_stat_milestones'); if(raw) claimed = JSON.parse(raw); }catch(e){} }
+    let newClaimed = [...claimed];
+    let extraPoints = 0, extraGold = 0;
+    for(let m=10; m<=lvl; m+=10){
+      if(!newClaimed.includes(m)){
+        newClaimed.push(m);
+        extraPoints += 1;
+        extraGold += 500 * (m/10);
+      }
+    }
+    if(extraPoints>0){
+      let remaining = volandGetStatPointsRemaining();
+      let newRemaining = remaining + extraPoints;
+      if(saves[idx]){ saves[idx].stat_points = newRemaining; saves[idx].stat_milestones_claimed = newClaimed; volandSaveSaves(saves); }
+      localStorage.setItem('voland_v1_stat_points', String(newRemaining));
+      localStorage.setItem('voland_v1_stat_milestones', JSON.stringify(newClaimed));
+      if(extraGold>0){ try{ if(typeof volandAddGold==='function') volandAddGold(extraGold); }catch(e){} }
+      return {claimed:newClaimed, extraPoints:extraPoints, extraGold:extraGold};
+    }
+    return {claimed:newClaimed, extraPoints:0, extraGold:0};
+  }catch(e){ return {claimed:[], extraPoints:0, extraGold:0}; }
 }
 
 // New helpers for page3 stats
@@ -526,12 +705,28 @@ function volandCheckLevelUp(oldXp, newXp){
         curPoints = parseInt(localStorage.getItem('voland_v1_stat_points')||'0')||0;
       }
       curPoints += diff;
+      // Милстоуны — каждые 10 уровней +1 очко + золото (500 * номер милстоуна)
+      let claimed = [];
+      if(saves[idx] && saves[idx].stat_milestones_claimed) claimed = saves[idx].stat_milestones_claimed;
+      else { try{ let raw = localStorage.getItem('voland_v1_stat_milestones'); if(raw) claimed = JSON.parse(raw); }catch(e){} }
+      let extraPoints = 0, extraGold = 0, newMilestones = [];
+      for(let lvl=oldInfo.lvl+1; lvl<=newInfo.lvl; lvl++){
+        if(lvl%10===0 && !claimed.includes(lvl)){
+          claimed.push(lvl); newMilestones.push(lvl);
+          extraPoints += 1;
+          extraGold += 500 * (lvl/10);
+        }
+      }
+      curPoints += extraPoints;
+      if(extraGold>0){ try{ if(typeof volandAddGold==='function') volandAddGold(extraGold); }catch(e){} }
       localStorage.setItem('voland_v1_stat_points', String(curPoints));
       if(saves[idx]){
         saves[idx].stat_points = curPoints;
+        saves[idx].stat_milestones_claimed = claimed;
         volandSaveSaves(saves);
       }
-      return {leveled:true, oldLvl:oldInfo.lvl, newLvl:newInfo.lvl, points:diff, totalPoints:curPoints};
+      localStorage.setItem('voland_v1_stat_milestones', JSON.stringify(claimed));
+      return {leveled:true, oldLvl:oldInfo.lvl, newLvl:newInfo.lvl, points:diff, totalPoints:curPoints, extraPoints:extraPoints, extraGold:extraGold, newMilestones:newMilestones};
     }
     return {leveled:false};
   }catch(e){ return {leveled:false}; }
