@@ -346,6 +346,11 @@ function volandUpdateMissionStat(type, loc, value){
    console.log('[MISSION] kill_boss now', stats.kill_boss);
   } else if(type==='kill_boss_diff'){
    if(!stats.kill_boss_diff.includes(value)) stats.kill_boss_diff.push(value);
+  } else if(type==='ult'){
+   stats.ult_uses = (stats.ult_uses||0) + (parseInt(value)||1);
+   console.log('[MISSION] ult_uses now', stats.ult_uses);
+  } else if(type==='win_streak'){
+   // win_streak обрабатывается отдельно через max_win_streak, тут не трогаем
   }
   volandSaveMissionStats(stats);
   console.log('[MISSION] saved', JSON.stringify(stats).slice(0,400));
