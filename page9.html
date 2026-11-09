@@ -180,6 +180,7 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 <div id="missGrid" class="miss-grid"></div>
 </div>
 </div>
+<script src="./assets/js/lang.js"></script>
 <script src="./assets/js/config.js"></script>
 <script src="./assets/js/db/heroes.js"></script>
 <script src="./assets/js/db/tiers.js"></script>
@@ -303,9 +304,9 @@ function render(){
     if(m.reward && m.reward.title){
       let tc = m.reward.titleColor||'green';
       let col = tc==='green' ? '#3ad080' : tc==='blue' ? '#6ab0ff' : tc==='red' ? '#e05050' : tc==='yellow' ? '#e6d5a0' : '#e6d5a0';
-      titleHtml = `<div style="color:${col};font-size:10px;margin-top:4px;text-shadow:0 0 8px ${col}">👑 ТИТУЛ: ${m.reward.title}</div>`;
+      titleHtml = `<div style="color:${col};font-size:10px;margin-top:4px;text-shadow:0 0 8px ${col}">👑 ${volandT('ТИТУЛ', 'TITLE')}: ${volandMissionTitle(m.reward.title)}</div>`;
     }
-    let html=`<div class="miss-top"><div class="miss-icon">${m.icon}</div><div class="miss-title">${m.name}</div></div><div class="miss-desc">${m.desc}</div><div class="miss-reward">💰 ${m.reward.gold} • XP ${m.reward.xp}</div>${titleHtml}`;
+    let html=`<div class="miss-top"><div class="miss-icon">${m.icon}</div><div class="miss-title">${volandMissionName(m)}</div></div><div class="miss-desc">${volandMissionDesc(m)}</div><div class="miss-reward">💰 ${m.reward.gold} • XP ${m.reward.xp}</div>${titleHtml}`;
     if(!done){
       html+=`<div class="miss-progress"><div class="miss-progress-fill" style="width:${pct}%"></div></div><div class="miss-progress-text">${prog}/${target} (${pct}%)</div>`;
     }

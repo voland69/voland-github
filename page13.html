@@ -347,7 +347,7 @@ function getSeasonInfo(){
   return {num:seasonNum, start:start, end:end, total:total, passed:passed, left:left, pct:pct, now:now, daysLeft:daysLeft, hoursLeft:hoursLeft};
 }
 function fmtDate(d){
-  let months=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+  let months=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'].map(x=>volandMonthGen(x));
   return d.getDate()+' '+months[d.getMonth()]+' '+d.getFullYear();
 }
 function renderSeason(){
@@ -355,30 +355,30 @@ function renderSeason(){
   let news = '';
   if(s.num===1){
     news = `
-      <div class="news-item"><b>3 новые локи:</b> Болото, Вулкан, Руины — новые мобы, боссы и ресурсы Вода, Камень, Кость.</div>
-      <div class="news-item"><b>51 миссия вместо 22:</b> 6 фаз на каждой локе — 20, 50, 100, 200, 300, 500 мобов. Титулы на III фазе зелёные, IV — синие, V — красные, VI — жёлтые, <b>ВЛАДЫКА + лока</b>.</div>
-      <div class="news-item"><b>Новая формула стамины:</b> 100 + 1,5% за каждый стат героя — теперь стамина растёт с героем.</div>
-      <div class="news-item"><b>Market:</b> Вода, Камень, Кость по 50g BUY / 25g SELL, как у базы. Обмен как у базы — 1к2 внутри базы, 1к4 с Клыком и Эссенцией.</div>
-      <div class="news-item"><b>Починка ульты:</b> ульта теперь на <b>T</b>, а не на <b>R</b>, и считается в миссии «Ученик Магии» — каждое нажатие T в бою +1.</div>
-      <div class="news-item"><b>Page3:</b> карточка QUESTS заменена на MISSIONS — X / 51, процент, клик ведёт на страницу миссий.</div>
-      <div class="news-item"><b>Battle Pass и календарь:</b> новый PASS — сезон, ежедневные подарки и пасс от общего XP героя.</div>
+      <div class="news-item"><b>${volandT('3 новые локи:', '3 new locations:')}</b> ${volandT('Болото, Вулкан, Руины — новые мобы, боссы и ресурсы Вода, Камень, Кость.', 'Swamp, Volcano, Ruins — new mobs, bosses and resources Water, Stone, Bone.')}</div>
+      <div class="news-item"><b>${volandT('51 миссия вместо 22:', '51 missions instead of 22:')}</b> ${volandT('6 фаз на каждой локе — 20, 50, 100, 200, 300, 500 мобов. Титулы на III фазе зелёные, IV — синие, V — красные, VI — жёлтые, ', '6 phases per location — 20, 50, 100, 200, 300, 500 mobs. Titles on phase III green, IV blue, V red, VI yellow, ')}<b>${volandT('ВЛАДЫКА + лока', 'LORD + location')}</b>.</div>
+      <div class="news-item"><b>${volandT('Новая формула стамины:', 'New stamina formula:')}</b> ${volandT('100 + 1,5% за каждый стат героя — теперь стамина растёт с героем.', '100 + 1.5% per hero stat — stamina now grows with hero.')}</div>
+      <div class="news-item"><b>Market:</b> ${volandT('Вода, Камень, Кость по 50g BUY / 25g SELL, как у базы. Обмен как у базы — 1к2 внутри базы, 1к4 с Клыком и Эссенцией.', 'Water, Stone, Bone at 50g BUY / 25g SELL, like base. Exchange like base — 1:2 inside base, 1:4 with Fang and Essence.')}</div>
+      <div class="news-item"><b>${volandT('Починка ульты:', 'Ult fix:')}</b> ${volandT('ульта теперь на ', 'ult is now on ')}<b>T</b>${volandT(', а не на ', ', not on ')}<b>R</b>${volandT(', и считается в миссии «Ученик Магии» — каждое нажатие T в бою +1.', ', and counts in mission «Apprentice» — each T press in battle +1.')}</div>
+      <div class="news-item"><b>Page3:</b> ${volandT('карточка QUESTS заменена на MISSIONS — X / 51, процент, клик ведёт на страницу миссий.', 'QUESTS card replaced with MISSIONS — X / 51, percent, click goes to missions page.')}</div>
+      <div class="news-item"><b>${volandT('Battle Pass и календарь:', 'Battle Pass and calendar:')}</b> ${volandT('новый PASS — сезон, ежедневные подарки и пасс от общего XP героя.', 'new PASS — season, daily gifts and pass from total hero XP.')}</div>
     `;
   } else {
-    news = `<div class="news-item">Новости Сезона ${s.num} появятся в начале сезона.</div>`;
+    news = `<div class="news-item">${volandT('Новости Сезона ', 'Season ')}${s.num} ${volandT('появятся в начале сезона.', 'news will appear at season start.')}</div>`;
   }
   document.getElementById('seasonCard').innerHTML = `
     <div class="section-title">⭐ SEASON ${s.num}</div>
-    <div class="section-sub">${fmtDate(s.start)} — ${fmtDate(s.end)} • 2 месяца • ${s.total} дней</div>
-    <div style="margin-top:12px;font:400 11px Inter,sans-serif;color:#d8d2b8">Прошло <b style="color:#e6d5a0">${s.passed} / ${s.total} дней</b> • Осталось <b style="color:#e6d5a0">${s.daysLeft}D ${s.hoursLeft}H</b> • ${s.pct}% сезона</div>
+    <div class="section-sub">${fmtDate(s.start)} — ${fmtDate(s.end)} • ${volandT('2 месяца', '2 months')} • ${s.total} ${volandT('дней', 'days')}</div>
+    <div style="margin-top:12px;font:400 11px Inter,sans-serif;color:#d8d2b8">${volandT('Прошло ', 'Passed ')}<b style="color:#e6d5a0">${s.passed} / ${s.total} ${volandT('дней', 'days')}</b> • ${volandT('Осталось ', 'Left ')}<b style="color:#e6d5a0">${s.daysLeft}D ${s.hoursLeft}H</b> • ${s.pct}% ${volandT('сезона', 'of season')}</div>
     <div class="season-bar"><div class="season-fill" style="width:${s.pct}%"></div></div>
-    <div style="margin-top:10px;font:700 11px 'JetBrains Mono',monospace;color:#e6d5a0">⏳ СЕЗОН ЗАКАНЧИВАЕТСЯ ЧЕРЕЗ — ${s.daysLeft}D ${s.hoursLeft}H</div>
-    <div style="margin-top:16px;font:700 11px Inter,sans-serif;color:#e6d5a0;letter-spacing:.08em">НОВОСТИ И ИЗМЕНЕНИЯ СЕЗОНА</div>
+    <div style="margin-top:10px;font:700 11px 'JetBrains Mono',monospace;color:#e6d5a0">⏳ ${volandT('СЕЗОН ЗАКАНЧИВАЕТСЯ ЧЕРЕЗ — ', 'SEASON ENDS IN — ')}${s.daysLeft}D ${s.hoursLeft}H</div>
+    <div style="margin-top:16px;font:700 11px Inter,sans-serif;color:#e6d5a0;letter-spacing:.08em">${volandT('НОВОСТИ И ИЗМЕНЕНИЯ СЕЗОНА', 'SEASON NEWS AND CHANGES')}</div>
     <div class="news-list">${news}</div>
   `;
 }
 function getDailyGift(day, totalDays){
   let resCycle = ['quartz','wood','diamond','water','stone','bone'];
-  let resNames = {quartz:'Кварц',wood:'Дерево',diamond:'Алмаз',water:'Вода',stone:'Камень',bone:'Кость'};
+  let resNames = {quartz:volandResName('Кварц'),wood:volandResName('Дерево'),diamond:volandResName('Алмаз'),water:volandResName('Вода'),stone:volandResName('Камень'),bone:volandResName('Кость')};
   let resIcons = {quartz:'💎',wood:'🪵',diamond:'💠',water:'💧',stone:'🪨',bone:'🦴'};
   if(day===totalDays) return {icon:'🎁', label:'500G + 500 XP', give:function(){ try{volandAddGold(500);}catch(e){} try{volandAddXp(500);}catch(e){} }};
   if(day%7===0){
@@ -455,19 +455,19 @@ function claimDaily(day){
 }
 function renderRewards(){
   let now = new Date(); let y = now.getFullYear(), m = now.getMonth();
-  let months = ['ЯНВАРЬ','ФЕВРАЛЬ','МАРТ','АПРЕЛЬ','МАЙ','ИЮНЬ','ИЮЛЬ','АВГУСТ','СЕНТЯБРЬ','ОКТЯБРЬ','НОЯБРЬ','ДЕКАБРЬ'];
+  let months = ['ЯНВАРЬ','ФЕВРАЛЬ','МАРТ','АПРЕЛЬ','МАЙ','ИЮНЬ','ИЮЛЬ','АВГУСТ','СЕНТЯБРЬ','ОКТЯБРЬ','НОЯБРЬ','ДЕКАБРЬ'].map(x=>volandMonthUp(x));
   let totalDays = new Date(y, m+1, 0).getDate();
   let claimed = getDailyClaimed(y,m);
   let today = now.getDate();
-  let html = `<div class="section-title">🎁 REWARDS • ${months[m]} ${y}</div><div class="section-sub">${totalDays} дней • Забрать можно только сегодня • Пропустил день — подарок сгорел</div><div class="calendar-grid">`;
+  let html = `<div class="section-title">🎁 REWARDS • ${months[m]} ${y}</div><div class="section-sub">${totalDays} ${volandT('дней', 'days')} • ${volandT('Забрать можно только сегодня', 'Can claim only today')} • ${volandT('Пропустил день — подарок сгорел', 'Missed day — gift burned')}</div><div class="calendar-grid">`;
   for(let d=1; d<=totalDays; d++){
     let gift = getDailyGift(d, totalDays);
     let cls = '', btn = '';
-    if(claimed.includes(d)){ cls='claimed'; btn='<div style="font:700 8px JetBrains Mono,monospace;color:#3ad080">ЗАБРАНО</div>'; }
-    else if(d < today){ cls='missed'; btn='<div style="font:700 8px JetBrains Mono,monospace;color:#8a8aaa">ПРОПУЩЕН</div>'; }
-    else if(d === today){ cls='today'; btn=`<button class="day-btn" onclick="claimDaily(${d})">ЗАБРАТЬ</button>`; }
-    else { cls='locked'; btn='<div style="font:700 8px JetBrains Mono,monospace;color:#5a6a7a">ЗАКРЫТО</div>'; }
-    html += `<div class="day-cell ${cls}"><div class="day-num">ДЕНЬ ${d}</div><div class="day-gift">${gift.icon}</div><div class="day-label">${gift.label}</div>${btn}</div>`;
+    if(claimed.includes(d)){ cls='claimed'; btn='<div style="font:700 8px JetBrains Mono,monospace;color:#3ad080">' + volandT("ЗАБРАНО", "CLAIMED") + '</div>'; }
+    else if(d < today){ cls='missed'; btn='<div style="font:700 8px JetBrains Mono,monospace;color:#8a8aaa">' + volandT("ПРОПУЩЕН", "MISSED") + '</div>'; }
+    else if(d === today){ cls='today'; btn=`<button class="day-btn" onclick="claimDaily(${d})">${volandT('ЗАБРАТЬ', 'CLAIM')}</button>`; }
+    else { cls='locked'; btn='<div style="font:700 8px JetBrains Mono,monospace;color:#5a6a7a">' + volandT("ЗАКРЫТО", "CLOSED") + '</div>'; }
+    html += `<div class="day-cell ${cls}"><div class="day-num">${volandT('ДЕНЬ ', 'DAY ')}${d}</div><div class="day-gift">${gift.icon}</div><div class="day-label">${gift.label}</div>${btn}</div>`;
   }
   html += `</div>`;
   document.getElementById('rewardsCard').innerHTML = html;
@@ -479,7 +479,7 @@ function getFreePrize(lvl){
   let potCycle = ['potion-hp-xs','potion-mana-xs','potion-stam-xs'];
   let potNames = {'potion-hp-xs':'Potion HP XS','potion-mana-xs':'Potion Mana XS','potion-stam-xs':'Potion Stam XS'};
   let resCycle = ['quartz','wood','diamond','water','stone','bone'];
-  let resNames = {quartz:'Кварц',wood:'Дерево',diamond:'Алмаз',water:'Вода',stone:'Камень',bone:'Кость'};
+  let resNames = {quartz:volandResName('Кварц'),wood:volandResName('Дерево'),diamond:volandResName('Алмаз'),water:volandResName('Вода'),stone:volandResName('Камень'),bone:volandResName('Кость')};
   let mod = lvl % 5;
   if(mod===1){ let amt = 100 + (lvl-1)*10; return {label: amt+'G', icon:'💰', give:function(){ try{volandAddGold(amt);}catch(e){} }}; }
   if(mod===2){ let amt = 100 + (lvl-2)*10; return {label: amt+' XP', icon:'⭐', give:function(){ try{volandAddXp(amt);}catch(e){} }}; }
@@ -495,7 +495,7 @@ function getPremiumPrize(lvl){
   if(free.label.includes('Potion')){ let xl = free.label.replace('XS','XL'); return {label: xl+' + RUNA', icon:'🔮'}; }
   if(free.label.includes('G')){ let amt = parseInt(free.label) * 10; return {label: amt+'G', icon:'💰'}; }
   if(free.label.includes('XP')){ let amt = parseInt(free.label) * 10; return {label: amt+' XP', icon:'⭐'}; }
-  return {label:'10x ресурс + RUNA', icon:'🔮'};
+  return {label:volandT('10x ресурс + RUNA', '10x resource + RUNA'), icon:'🔮'};
 }
 function getPassKey(seasonNum){ return 'voland_pass_claimed_s'+seasonNum + getHeroSuffix(); }
 function getPassKeyGlobal(seasonNum){ return 'voland_pass_claimed_s'+seasonNum; }
@@ -579,30 +579,30 @@ function renderPass(){
     let freeCls = '', freeDot = '<div class="pass-dot"></div>';
     if(claimed.includes(lvl)){ freeCls='unlocked'; freeDot='<div class="pass-dot done"></div>'; }
     else if(lvl<=curLvl){ freeCls='current'; freeDot='<div class="pass-dot avail"></div>'; }
-    freeCells += `<div class="pass-cell free ${freeCls}" onclick="claimPass(${lvl})" title="БЕСПЛАТНО LVL ${lvl} — ${free.label} — нажми чтобы забрать"><div class="pass-cell-icon">${free.icon}</div><div class="pass-cell-label">${free.label}</div>${freeDot}</div>`;
-    premCells += `<div class="pass-cell prem" title="ПРЕМИУМ LVL ${lvl} — ${prem.label} — СКОРО"><div class="pass-cell-icon">${prem.icon}</div><div class="pass-cell-label">${prem.label}</div><div class="pass-dot"></div></div>`;
+    freeCells += `<div class="pass-cell free ${freeCls}" onclick="claimPass(${lvl})" title=volandT("БЕСПЛАТНО LVL ", "FREE LVL ") + lvl + " — " + free.label + volandT(" — нажми чтобы забрать", " — click to claim")><div class="pass-cell-icon">${free.icon}</div><div class="pass-cell-label">${free.label}</div>${freeDot}</div>`;
+    premCells += `<div class="pass-cell prem" title=volandT("ПРЕМИУМ LVL ", "PREMIUM LVL ") + lvl + " — " + prem.label + volandT(" — СКОРО", " — SOON")><div class="pass-cell-icon">${prem.icon}</div><div class="pass-cell-label">${prem.label}</div><div class="pass-dot"></div></div>`;
   }
   document.getElementById('passCard').innerHTML = `
     <div class="section-title">🎫 BATTLE PASS • SEASON ${s.num}</div>
-    <div class="section-sub">1 — 50 • От общего XP героя • БЕСПЛАТНО — забрать можно • ПРЕМИУМ — СКОРО</div>
+    <div class="section-sub">${volandT('1 — 50 • От общего XP героя • БЕСПЛАТНО — забрать можно • ПРЕМИУМ — СКОРО', '1 — 50 • From total hero XP • FREE — can claim • PREMIUM — SOON')}</div>
     <div class="pass-top">
-      <div class="pass-circle"><div class="pass-circle-lvl">УРОВЕНЬ</div><div class="pass-circle-num">${curLvl}</div><div class="pass-circle-max">/ 50</div></div>
+      <div class="pass-circle"><div class="pass-circle-lvl">${volandT('УРОВЕНЬ', 'LEVEL')}</div><div class="pass-circle-num">${curLvl}</div><div class="pass-circle-max">/ 50</div></div>
       <div class="pass-top-info">
-        <div style="font:700 12px 'JetBrains Mono',monospace;color:#e6d5a0;letter-spacing:.15em">SEASON ${s.num} • ПРОГРЕСС СЕЗОНА</div>
+        <div style="font:700 12px 'JetBrains Mono',monospace;color:#e6d5a0;letter-spacing:.15em">${volandT('SEASON ', 'SEASON ')}${s.num} • ${volandT('ПРОГРЕСС СЕЗОНА', 'SEASON PROGRESS')}</div>
         <div class="pass-xp">${inLvl} / <span>${needForCur} XP</span></div>
         <div class="pass-xp-bar"><div class="pass-xp-fill" style="width:${pct}%"></div></div>
-        <div style="margin-top:6px;font:400 10px 'JetBrains Mono',monospace;color:#8a9aaa">🏆 Ур. ${curLvl}/50 • Следующий: Ур. ${curLvl>=50?'МАКС':curLvl+1} • До следующего: ${toNext} XP • Всего XP: ${totalXp}</div>
+        <div style="margin-top:6px;font:400 10px 'JetBrains Mono',monospace;color:#8a9aaa">🏆 ${volandT('Ур.', 'Lvl.')} ${curLvl}/50 • ${volandT('Следующий: ', 'Next: ')}${volandT('Ур.', 'Lvl.')} ${curLvl>=50?'МАКС':curLvl+1} • ${volandT('До следующего: ', 'To next: ')}${toNext} XP • ${volandT('Всего XP: ', 'Total XP: ')}${totalXp}</div>
         <div class="pass-time">⏳ СЕЗОН ЗАКАНЧИВАЕТСЯ ЧЕРЕЗ — ${s.daysLeft}D ${s.hoursLeft}H</div>
-        <div style="margin-top:6px;font:400 9px 'JetBrains Mono',monospace;color:#3ad080">● Премиум активен — +20% XP • Предметы расы • Сундуки и зелья — СКОРО</div>
+        <div style="margin-top:6px;font:400 9px 'JetBrains Mono',monospace;color:#3ad080">● ${volandT('Премиум активен — +20% XP • Предметы расы • Сундуки и зелья — СКОРО', 'Premium active — +20% XP • Race items • Chests and potions — SOON')}</div>
       </div>
-      <button class="claim-all" onclick="claimAllPass()" ${avail===0?'disabled':''}>🎁 ЗАБРАТЬ ВСЁ • ${avail}</button>
+      <button class="claim-all" onclick="claimAllPass()" ${avail===0?'disabled':''}>🎁 ${volandT('ЗАБРАТЬ ВСЁ', 'CLAIM ALL')} • ${avail}</button>
     </div>
     <div class="pass-scroll"><div class="pass-inner">
       <div class="pass-row"><div class="pass-label">УРОВЕНЬ</div>${headerCells}</div>
-      <div class="pass-row"><div class="pass-label">🎁<br>БЕСПЛАТНО<br><span style="font:400 8px JetBrains Mono,monospace;color:#3ad080">БЕСПЛАТНО</span></div>${freeCells}</div>
-      <div class="pass-row"><div class="pass-label">👑<br>ПРЕМИУМ<br><span style="font:400 8px JetBrains Mono,monospace;color:#a0a0ff">АКТИВЕН • СКОРО</span></div>${premCells}</div>
+      <div class="pass-row"><div class="pass-label">🎁<br>${volandT('БЕСПЛАТНО', 'FREE')}<br><span style="font:400 8px JetBrains Mono,monospace;color:#3ad080">${volandT('БЕСПЛАТНО', 'FREE')}</span></div>${freeCells}</div>
+      <div class="pass-row"><div class="pass-label">👑<br>${volandT('ПРЕМИУМ', 'PREMIUM')}<br><span style="font:400 8px JetBrains Mono,monospace;color:#a0a0ff">${volandT('АКТИВЕН', 'ACTIVE')} • ${volandT('СКОРО', 'SOON')}</span></div>${premCells}</div>
     </div></div>
-    <div style="margin-top:10px;font:400 9px 'JetBrains Mono',monospace;color:#8a9aaa;text-align:center">Нажми на окошко БЕСПЛАТНО — забрать по отдельности. Кнопка ЗАБРАТЬ ВСЁ — забрать всё активное сразу. ПРЕМИУМ — видно, но забрать нельзя.</div>
+    <div style="margin-top:10px;font:400 9px 'JetBrains Mono',monospace;color:#8a9aaa;text-align:center">${volandT('Нажми на окошко БЕСПЛАТНО — забрать по отдельности. Кнопка ЗАБРАТЬ ВСЁ — забрать всё активное сразу. ПРЕМИУМ — видно, но забрать нельзя.', 'Click FREE cell — claim one by one. CLAIM ALL button — claim all active at once. PREMIUM — visible but cannot claim.')}</div>
   `;
 }
 function updateBadges(){
@@ -611,7 +611,7 @@ function updateBadges(){
     let el = document.getElementById('seasonBadge');
     if(el) el.textContent = 'SEASON '+s.num+' • '+s.daysLeft+'D '+s.hoursLeft+'H';
     let now = new Date();
-    let months = ['ЯНВАРЬ','ФЕВРАЛЬ','МАРТ','АПРЕЛЬ','МАЙ','ИЮНЬ','ИЮЛЬ','АВГУСТ','СЕНТЯБРЬ','ОКТЯБРЬ','НОЯБРЬ','ДЕКАБРЬ'];
+    let months = ['ЯНВАРЬ','ФЕВРАЛЬ','МАРТ','АПРЕЛЬ','МАЙ','ИЮНЬ','ИЮЛЬ','АВГУСТ','СЕНТЯБРЬ','ОКТЯБРЬ','НОЯБРЬ','ДЕКАБРЬ'].map(x=>volandMonthUp(x));
     let rb = document.getElementById('rewardsBadge');
     if(rb) rb.textContent = months[now.getMonth()]+' '+now.getFullYear();
     let totalXp = 0; try{ totalXp = volandGetXp(); }catch(e){}
@@ -622,6 +622,7 @@ function updateBadges(){
 updateBadges();
 </script>
 
+<script src="./assets/js/lang.js"></script>
 <script src="./assets/js/config.js"></script>
 <script src="./assets/js/db/heroes.js"></script>
 <script src="./assets/js/db/tiers.js"></script>

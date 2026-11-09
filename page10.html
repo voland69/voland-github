@@ -207,6 +207,7 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
   </div>
 </div>
 
+<script src="./assets/js/lang.js"></script>
 <script src="./assets/js/config.js"></script>
 <script src="./assets/js/db/heroes.js"></script>
 <script src="./assets/js/db/tiers.js"></script>
@@ -233,17 +234,17 @@ const POTION_PRICES = {
   'potion-hp-s':{buy:150,sell:45,desc:'+500 HP'},
   'potion-hp-m':{buy:400,sell:120,desc:'+1000 HP'},
   'potion-hp-l':{buy:1000,sell:300,desc:'100% HP'},
-  'potion-hp-xl':{buy:2500,sell:750,desc:'200% HP 1ч'},
+  'potion-hp-xl':{buy:2500,sell:750,desc:volandT('200% HP 1ч', '200% HP 1h')},
   'potion-mana-xs':{buy:50,sell:15,desc:'+100 MANA'},
   'potion-mana-s':{buy:150,sell:45,desc:'+200 MANA'},
   'potion-mana-m':{buy:400,sell:120,desc:'+400 MANA'},
   'potion-mana-l':{buy:1000,sell:300,desc:'100% MANA'},
-  'potion-mana-xl':{buy:2500,sell:750,desc:'100% MANA +100% HP 1ч'},
+  'potion-mana-xl':{buy:2500,sell:750,desc:volandT('100% MANA +100% HP 1ч', '100% MANA +100% HP 1h')},
   'potion-stam-xs':{buy:50,sell:15,desc:'+10 STAM'},
   'potion-stam-s':{buy:150,sell:45,desc:'+20 STAM'},
   'potion-stam-m':{buy:400,sell:120,desc:'+30 STAM'},
   'potion-stam-l':{buy:1000,sell:300,desc:'100% STAM'},
-  'potion-stam-xl':{buy:2500,sell:750,desc:'100% STAM +1000% реген 1ч'},
+  'potion-stam-xl':{buy:2500,sell:750,desc:volandT('100% STAM +1000% реген 1ч', '100% STAM +1000% regen 1h')},
 };
 const RES_ICONS = {
   quartz:'./assets/ui/loot/quartz.webp',
@@ -417,7 +418,7 @@ function openModal(id){
   document.getElementById('modalIcon').innerHTML = `<img src="${it.icon}" onerror="this.parentElement.textContent='💎'">`;
   document.getElementById('modalName').textContent = it.name;
   document.getElementById('modalDesc').textContent = it.desc + ' • ' + it.type.toUpperCase();
-  document.getElementById('modalHave').textContent = `В рюкзаке: x${it.have}`;
+  document.getElementById('modalHave').textContent = `${volandT('В рюкзаке: ', 'In bag: ')}x${it.have}`;
   document.getElementById('modalQty').value = 1;
   document.getElementById('modalLog').textContent = '';
   document.getElementById('modalLog').className = 'log';
@@ -483,28 +484,28 @@ function buyRes(id, qty){
   try{
     let price = MARKET_PRICES[id].buy * qty;
     let gold = volandGetGold();
-    if(gold < price){ showLog('modalLog','Недостаточно GOLD: '+gold+'/'+price,'err'); return; }
+    if(gold < price){ showLog('modalLog',volandT('Недостаточно GOLD: ', 'Not enough GOLD: ')+gold+'/'+price,'err'); return; }
     volandSetGold(gold - price);
     volandAddResource(id, qty);
-    showLog('modalLog','Куплено '+RES_NAMES[id]+' x'+qty+' за '+price+'g','ok');
+    showLog('modalLog',volandT('Куплено ', 'Bought ')+RES_NAMES[id]+' x'+qty+volandT(' за ', ' for ')+price+'g','ok');
     renderMarket(); refreshTop();
     if(currentModalItem && currentModalItem.id===id){
       currentModalItem.have += qty;
-      document.getElementById('modalHave').textContent = `В рюкзаке: x${currentModalItem.have}`;
+      document.getElementById('modalHave').textContent = `${volandT('В рюкзаке: ', 'In bag: ')}x${currentModalItem.have}`;
       updateModalPrices();
     }
-  }catch(e){ showLog('modalLog','Ошибка: '+e.message,'err'); }
+  }catch(e){ showLog('modalLog',volandT('Ошибка: ', 'Error: ')+e.message,'err'); }
 }
 function sellRes(id, qty){
   try{
     let res = volandGetResources();
     let have = res[id]||0;
-    if(have < qty){ showLog('modalLog','Недостаточно '+RES_NAMES[id],'err'); return; }
+    if(have < qty){ showLog('modalLog',volandT('Недостаточно ', 'Not enough ')+RES_NAMES[id],'err'); return; }
     let price = MARKET_PRICES[id].sell * qty;
     volandAddResource(id, -qty);
     let gold = volandGetGold();
     volandSetGold(gold + price);
-    showLog('modalLog','Продано '+RES_NAMES[id]+' x'+qty+' за '+price+'g','ok');
+    showLog('modalLog',volandT('Продано ', 'Sold ')+RES_NAMES[id]+' x'+qty+volandT(' за ', ' for ')+price+'g','ok');
     renderMarket(); refreshTop();
     if(currentModalItem && currentModalItem.id===id){
       currentModalItem.have -= qty;
@@ -518,7 +519,7 @@ function buyPotion(id, qty){
   try{
     let price = POTION_PRICES[id].buy*qty;
     let gold = volandGetGold();
-    if(gold < price){ showLog('modalLog','Недостаточно золота','err'); return; }
+    if(gold < price){ showLog('modalLog',volandT('Недостаточно золота', 'Not enough gold'),'err'); return; }
     volandAddGold(-price);
     for(let i=0;i<qty;i++){ if(typeof volandAddToInventory==='function') volandAddToInventory(id); }
     showLog('modalLog','Куплено '+id+' x'+qty,'ok');
@@ -535,10 +536,10 @@ function sellPotion(id, qty){
     let price = POTION_PRICES[id].sell*qty;
     let inv = volandGetInventory ? volandGetInventory() : [];
     let have = inv.filter(x=> (x.id||x)===id).length;
-    if(have < qty){ showLog('modalLog','Недостаточно банок','err'); return; }
+    if(have < qty){ showLog('modalLog',volandT('Недостаточно банок', 'Not enough jars'),'err'); return; }
     for(let i=0;i<qty;i++){ if(typeof volandRemoveFromInventory==='function') volandRemoveFromInventory(id); }
     volandAddGold(price);
-    showLog('modalLog','Продано '+id+' x'+qty+' за '+price+'g','ok');
+    showLog('modalLog','Продано '+id+' x'+qty+volandT(' за ', ' for ')+price+'g','ok');
     renderMarket(); refreshTop();
     if(currentModalItem && currentModalItem.id===id){
       currentModalItem.have -= qty;
@@ -559,8 +560,8 @@ function renderExchange(){
   let needDesc = rate >=1 ? `${rate} ${RES_NAMES[fromId]} → 1 ${RES_NAMES[toId]}` : `1 ${RES_NAMES[fromId]} → ${Math.round(1/rate)} ${RES_NAMES[toId]}`;
   el.innerHTML = `
     <div class="market-card">
-      <div class="card-title">EXCHANGE • БЕЗ ЗОЛОТА</div>
-      <div style="font:400 8px 'JetBrains Mono',monospace;color:#6a7a8a;text-align:center">Курс: база quartz/wood/diamond/water/stone/bone между собой 1к2, с fang/essence 1к4</div>
+      <div class="card-title">${volandT('EXCHANGE • БЕЗ ЗОЛОТА', 'EXCHANGE • NO GOLD')}</div>
+      <div style="font:400 8px 'JetBrains Mono',monospace;color:#6a7a8a;text-align:center">${volandT('Курс: база quartz/wood/diamond/water/stone/bone между собой 1к2, с fang/essence 1к4', 'Rate: base quartz/wood/diamond/water/stone/bone 1:2, with fang/essence 1:4')}</div>
       <div class="select-row">
         <select class="select" id="exFrom" onchange="updateExchangePreview()">${options}</select>
         <span style="color:#e6d5a0">→</span>
@@ -568,7 +569,7 @@ function renderExchange(){
       </div>
       <div class="select-row" style="margin-top:8px">
         <input class="input" id="exAmount" type="number" min="1" value="2" oninput="updateExchangePreview()">
-        <button class="btn primary" style="flex:1" onclick="doExchange()">ОБМЕНЯТЬ</button>
+        <button class="btn primary" style="flex:1" onclick="doExchange()">${volandT('ОБМЕНЯТЬ', 'EXCHANGE')}</button>
       </div>
       <div class="preview-empty" id="exPreview">${needDesc}</div>
       <div class="log" id="exLog"></div>
@@ -588,15 +589,15 @@ function updateExchangePreview(){
     let fromId = fromEl.value;
     let toId = toEl.value;
     let amount = parseInt(amtEl.value)||1;
-    if(fromId===toId){ document.getElementById('exPreview').textContent = 'Выбери разные ресурсы'; return; }
+    if(fromId===toId){ document.getElementById('exPreview').textContent = volandT('Выбери разные ресурсы', 'Choose different resources'); return; }
     let rate = getExchangeRate(fromId, toId);
     let res = volandGetResources();
     let have = res[fromId]||0;
     let receive = rate >=1 ? Math.floor(amount / rate) : Math.floor(amount * (1/rate));
     if(rate >=1){
-      document.getElementById('exPreview').innerHTML = `Отдаешь <b style="color:#e6d5a0">${amount} ${RES_NAMES[fromId]}</b> (есть x${have}) → Получишь <b style="color:#3ad080">${receive} ${RES_NAMES[toId]}</b><br><span style="font-size:8px;color:#6a7a8a">Курс: ${rate}:1 • ${rate} ${RES_NAMES[fromId]} = 1 ${RES_NAMES[toId]}</span>`;
+      document.getElementById('exPreview').innerHTML = `${volandT('Отдаешь ', 'You give ')}<b style="color:#e6d5a0">${amount} ${RES_NAMES[fromId]}</b> (${volandT('есть ', 'have ')}x${have}) → ${volandT('Получишь ', 'You get ')}<b style="color:#3ad080">${receive} ${RES_NAMES[toId]}</b><br><span style="font-size:8px;color:#6a7a8a">${volandT('Курс: ', 'Rate: ')}${rate}:1 • ${rate} ${RES_NAMES[fromId]} = 1 ${RES_NAMES[toId]}</span>`;
     } else {
-      document.getElementById('exPreview').innerHTML = `Отдаешь <b style="color:#e6d5a0">${amount} ${RES_NAMES[fromId]}</b> (есть x${have}) → Получишь <b style="color:#3ad080">${receive} ${RES_NAMES[toId]}</b><br><span style="font-size:8px;color:#6a7a8a">Курс: 1:${Math.round(1/rate)} • 1 ${RES_NAMES[fromId]} = ${Math.round(1/rate)} ${RES_NAMES[toId]}</span>`;
+      document.getElementById('exPreview').innerHTML = `${volandT('Отдаешь ', 'You give ')}<b style="color:#e6d5a0">${amount} ${RES_NAMES[fromId]}</b> (${volandT('есть ', 'have ')}x${have}) → ${volandT('Получишь ', 'You get ')}<b style="color:#3ad080">${receive} ${RES_NAMES[toId]}</b><br><span style="font-size:8px;color:#6a7a8a">${volandT('Курс: ', 'Rate: ')}1:${Math.round(1/rate)} • 1 ${RES_NAMES[fromId]} = ${Math.round(1/rate)} ${RES_NAMES[toId]}</span>`;
     }
   }catch(e){}
 }
@@ -606,16 +607,16 @@ function doExchange(){
     let fromId = document.getElementById('exFrom').value;
     let toId = document.getElementById('exTo').value;
     let amount = parseInt(document.getElementById('exAmount').value)||1;
-    if(fromId===toId){ showLog('exLog','Выбери разные ресурсы','err'); return; }
+    if(fromId===toId){ showLog('exLog', volandT('Выбери разные ресурсы','Choose different resources'),'err'); return; }
     let res = volandGetResources();
     let have = res[fromId]||0;
     if(have < amount){ showLog('exLog','Недостаточно '+RES_NAMES[fromId]+': '+have+'/'+amount,'err'); return; }
     let rate = getExchangeRate(fromId, toId);
     let receive = rate >=1 ? Math.floor(amount / rate) : Math.floor(amount * (1/rate));
-    if(receive < 1){ showLog('exLog','Слишком мало для обмена, увеличь количество','err'); return; }
+    if(receive < 1){ showLog('exLog',volandT('Слишком мало для обмена, увеличь количество', 'Too little for exchange, increase amount'),'err'); return; }
     volandAddResource(fromId, -amount);
     volandAddResource(toId, receive);
-    showLog('exLog','Обмен: -'+amount+' '+RES_NAMES[fromId]+' +'+receive+' '+RES_NAMES[toId],'ok');
+    showLog('exLog',volandT('Обмен: -', 'Exchange: -')+amount+' '+RES_NAMES[fromId]+' +'+receive+' '+RES_NAMES[toId],'ok');
     renderResList(); renderExchange(); refreshTop(); renderMarket();
   }catch(e){ showLog('exLog','Ошибка: '+e.message,'err'); }
 }
@@ -638,22 +639,22 @@ function renderP2P(){
   let listings = getP2PList();
   let html = `
     <div class="market-card">
-      <div class="card-title">P2P • ВЫСТАВИТЬ СВОЙ РЕСУРС ЗА СВОЮ ЦЕНУ</div>
-      <div style="font:400 8px 'JetBrains Mono',monospace;color:#6a7a8a;text-align:center">Сейчас локальный мок (видишь только свои лоты). Потом подключим сервер без переделки UI.</div>
+      <div class="card-title">${volandT('P2P • ВЫСТАВИТЬ СВОЙ РЕСУРС ЗА СВОЮ ЦЕНУ', 'P2P • LIST YOUR RESOURCE AT YOUR PRICE')}</div>
+      <div style="font:400 8px 'JetBrains Mono',monospace;color:#6a7a8a;text-align:center">${volandT('Сейчас локальный мок (видишь только свои лоты). Потом подключим сервер без переделки UI.', 'Local mock for now (you see only your listings). Server later without UI changes.')}</div>
       <div class="select-row">
         <select class="select" id="p2pRes">${options}</select>
-        <input class="input" id="p2pAmt" type="number" min="1" value="1" placeholder="кол-во">
-        <input class="input" id="p2pPrice" type="number" min="1" value="50" placeholder="цена за 1">
+        <input class="input" id="p2pAmt" type="number" min="1" value="1" placeholder=volandT('кол-во', 'qty')>
+        <input class="input" id="p2pPrice" type="number" min="1" value="50" placeholder=volandT('цена за 1', 'price per 1')>
       </div>
-      <button class="btn" style="width:100%;margin-top:8px;background:#1e2f3e;border-color:#e6d5a0;color:#e6d5a0" onclick="createP2P()">ВЫСТАВИТЬ ЛОТ</button>
+      <button class="btn" style="width:100%;margin-top:8px;background:#1e2f3e;border-color:#e6d5a0;color:#e6d5a0" onclick="createP2P()">${volandT('ВЫСТАВИТЬ ЛОТ', 'LIST ITEM')}</button>
       <div class="log" id="p2pLog"></div>
     </div>
     <div class="market-card" style="margin-top:12px">
-      <div class="card-title">МОИ ЛОТЫ (${listings.length})</div>
+      <div class="card-title">${volandT('МОИ ЛОТЫ', 'MY LISTINGS')} (${listings.length})</div>
       <div class="p2p-list" id="p2pMyList">
   `;
   if(listings.length===0){
-    html += `<div class="preview-empty">Нет лотов. Выстави свой ресурс выше.</div>`;
+    html += `<div class="preview-empty">${volandT('Нет лотов. Выстави свой ресурс выше.', 'No listings. List your resource above.')}</div>`;
   } else {
     listings.forEach((lot,idx)=>{
       let icon = RES_ICONS[lot.resId] || '';
@@ -661,18 +662,18 @@ function renderP2P(){
         <div class="p2p-item">
           <div class="market-item-icon"><img src="${icon}" onerror="this.parentElement.textContent='💎'"></div>
           <div class="p2p-item-info">
-            <div style="color:#e6d5a0">${RES_NAMES[lot.resId]} x${lot.amount} за ${lot.pricePer}g/шт (всего ${lot.amount*lot.pricePer}g)</div>
+            <div style="color:#e6d5a0">${RES_NAMES[lot.resId]} x${lot.amount} ${volandT('за ', 'for ')}${lot.pricePer}g/${volandT('шт', 'pc')} (${volandT('всего ', 'total ')}${lot.amount*lot.pricePer}g)</div>
             <div>Выставлен: ${new Date(lot.ts).toLocaleTimeString()}</div>
           </div>
-          <button class="btn sell" onclick="removeP2P(${idx})">СНЯТЬ</button>
+          <button class="btn sell" onclick="removeP2P(${idx})">${volandT('СНЯТЬ', 'REMOVE')}</button>
         </div>
       `;
     });
   }
   html += `</div></div>
     <div class="market-card" style="margin-top:12px;opacity:.6">
-      <div class="card-title">ЧУЖИЕ ЛОТЫ • SOON</div>
-      <div class="preview-empty">С бэком здесь будут лоты других игроков. Сейчас заглушка — место зарезервировано.</div>
+      <div class="card-title">${volandT('ЧУЖИЕ ЛОТЫ • SOON', 'OTHER LISTINGS • SOON')}</div>
+      <div class="preview-empty">${volandT('С бэком здесь будут лоты других игроков. Сейчас заглушка — место зарезервировано.', 'With backend, other players listings will be here. Placeholder for now.') } </div>
     </div>
   `;
   el.innerHTML = html;
@@ -690,7 +691,7 @@ function createP2P(){
     let listings = getP2PList();
     listings.push({resId, amount, pricePer, ts:Date.now()});
     setP2PList(listings);
-    showLog('p2pLog','Лот выставлен: '+RES_NAMES[resId]+' x'+amount+' за '+pricePer+'g/шт','ok');
+    showLog('p2pLog',volandT('Лот выставлен: ', 'Listing posted: ')+RES_NAMES[resId]+' x'+amount+volandT(' за ', ' for ')+pricePer+volandT('g/шт', 'g/pc'),'ok');
     renderResList(); renderP2P(); refreshTop(); renderMarket();
   }catch(e){ showLog('p2pLog','Ошибка: '+e.message,'err'); }
 }
@@ -703,7 +704,7 @@ function removeP2P(idx){
     volandAddResource(lot.resId, lot.amount);
     listings.splice(idx,1);
     setP2PList(listings);
-    showLog('p2pLog','Лот снят, ресурсы возвращены','ok');
+    showLog('p2pLog',volandT('Лот снят, ресурсы возвращены', 'Listing removed, resources returned'),'ok');
     renderResList(); renderP2P(); refreshTop(); renderMarket();
   }catch(e){ showLog('p2pLog','Ошибка: '+e.message,'err'); }
 }
