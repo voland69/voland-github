@@ -225,6 +225,7 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
   </div>
 </div>
 </div>
+<script src="./assets/js/lang.js"></script>
 <script src="./assets/js/config.js"></script>
 <script src="./assets/js/db/heroes.js"></script>
 <script src="./assets/js/db/tiers.js"></script>
@@ -379,7 +380,7 @@ function renderList(){
     div.innerHTML = `
       <div class="gear-icon">${iconHtml}</div>
       <div class="gear-info">
-        <div class="gear-name">${entry.item.name}</div>
+        <div class="gear-name">${volandItemName(entry.item)}</div>
         <div class="gear-tier ${entry.item.tier}">${entry.item.tier.toUpperCase()} LVL${entry.item.level} • ${entry.item.slot.toUpperCase()} ${entry.equipped?'[EQUIPPED]':''}</div>
         <div class="gear-lvl">${entry.item.desc}</div>
       </div>
@@ -411,7 +412,7 @@ function selectItem(entry, divEl){
   let cur = entry.item;
   let cost = entry.cost;
   if(!cost){
-    preview.innerHTML = `<div class="preview-empty">MAX LEVEL<br>${cur.name} уже GOLD LVL10</div>`;
+    preview.innerHTML = `<div class="preview-empty">MAX LEVEL<br>${volandItemName(cur)} ${volandT('уже', 'already')} GOLD LVL10</div>`;
     return;
   }
   let next = volandGetItemById(cost.nextId);
@@ -456,7 +457,7 @@ function selectItem(entry, divEl){
           <div class="up-icon">${nextIcon}</div>
         </div>
         <div class="up-info">
-          <div class="up-name">${cur.name} → ${next.name}</div>
+          <div class="up-name">${volandItemName(cur)} → ${volandItemName(next)}</div>
           <div class="up-stats">${curStats}</div>
           <div class="up-stats" style="margin-top:8px; border-top:1px solid rgba(42,58,74,.5); padding-top:6px">${nextStats}</div>
         </div>

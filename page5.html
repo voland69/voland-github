@@ -230,13 +230,13 @@ function render(){
   let html = '';
   for (let i=0;i<hero.sk.length;i++){
     const s = hero.sk[i];
-    const sName = s[0];
+    const sName = volandSkillName(s[0]);
     const sBadge = s[1];
     const icons = s[2];
     const firstIcon = icons[0];
     const emoji = s[3] || '🔮';
-    const sDesc = s[4];
-    const sMeta = s[5];
+    const sDesc = volandSkillLong(s[0], s[4]);
+    const sMeta = volandSkillShort(s[0], s[5]);
     html += `
       <div class="skill-big">
         <div class="skill-num">0${i+1}</div>

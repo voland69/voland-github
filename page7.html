@@ -184,6 +184,7 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 <div class="chat-body"><div class="sys" id="chatInfo">SYS: Click card → page8 same mob • hp% from db.js</div></div>
 </div>
 </div>
+<script src="./assets/js/lang.js"></script>
 <script src="./assets/js/config.js"></script>
 <script src="./assets/js/db/heroes.js"></script>
 <script src="./assets/js/db/tiers.js"></script>
@@ -261,7 +262,7 @@ try{
  else enemies=DESERT_FALLBACK;
  locData= locId==6 ? {name:'РУИНЫ',eng:'RUINS',img:'./assets/enemies/bg-ruins.webp'} : locId==5 ? {name:'ВУЛКАН',eng:'VOLCANO',img:'./assets/enemies/bg-volcano.webp'} : locId==4 ? {name:'БОЛОТО',eng:'SWAMP',img:'./assets/enemies/bg-swamp.webp'} : locId==3 ? {name:'ЛЕДЯНЫЕ ЗЕМЛИ',eng:'FROSTLANDS',img:'./assets/enemies/bg-frostlands.webp'} : locId==2 ? {name:'ТЕМНЫЙ ЛЕС',eng:'DARK FOREST',img:'./assets/enemies/bg-dark-forest.webp'} : {name:'ПУСТЫНЯ',eng:'DESERT',img:'./assets/enemies/bg-desert-dark.jpg'};
 }
-document.getElementById('locTitle').innerHTML=locData.name+'<span id="locSub">'+locData.eng+' • '+enemies.length+' STAGES • CLICK TO FIGHT</span>';
+document.getElementById('locTitle').innerHTML=(volandGetLang()==='en' ? locData.eng : locData.name)+'<span id="locSub">'+locData.eng+' • '+enemies.length+' STAGES • CLICK TO FIGHT</span>';
 try{
  let bgEl=document.getElementById('bgImg');
  if(bgEl){
@@ -346,7 +347,7 @@ document.getElementById('stagesGrid').innerHTML=enemies.map(e=>{
    }
  }catch(err){}
  let rs = (REAL_STATS[locId] && REAL_STATS[locId][e.stage]) || (REAL_STATS[1] && REAL_STATS[1][e.stage]) || {hp:2000,def:100,dmg:150};
- let iconHtml = e.img ? `<img src="${e.img}" alt="${e.name}" onerror="this.parentNode.innerHTML='${e.icon}'">` : `<div style="font-size:48px">${e.icon}</div>`;
+ let iconHtml = e.img ? `<img src="${e.img}" alt="${volandEnemyName(e)}" onerror="this.parentNode.innerHTML='${e.icon}'">` : `<div style="font-size:48px">${e.icon}</div>`;
  let staminaBadge = `<div class="boss-badge" style="background:rgba(30,60,30,.92);border:1px solid #3ad080;color:#3ad080;box-shadow:0 2px 8px rgba(0,0,0,.5)">${staminaCost} STAM</div>`;
  let bossCounterBadge = '';
  if(isBoss){
@@ -362,7 +363,7 @@ document.getElementById('stagesGrid').innerHTML=enemies.map(e=>{
   ${isBoss ? bossCounterBadge : staminaBadge}
   ${isBoss ? `<div class="boss-badge" style="top:36px;right:8px;background:rgba(30,60,30,.92);border:1px solid #3ad080;color:#3ad080">${staminaCost} STAM</div>` : ''}
   <div class="icon">${iconHtml}</div>
-  <div class="name">${e.name}<span style="display:block;margin-top:4px;font:400 8px 'JetBrains Mono',monospace;color:#8ab0d0;letter-spacing:.1em">HP ${rs.hp} • DEF ${rs.def} • DMG ${rs.dmg}</span></div>
+  <div class="name">${volandEnemyName(e)}<span style="display:block;margin-top:4px;font:400 8px 'JetBrains Mono',monospace;color:#8ab0d0;letter-spacing:.1em">HP ${rs.hp} • DEF ${rs.def} • DMG ${rs.dmg}</span></div>
  </div>
 `;
 }).join('');
