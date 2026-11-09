@@ -193,6 +193,146 @@ function volandMonthGen(ru){ return volandGetLang()==='en' && VOLAND_MONTH_GEN[r
 function volandMonthUp(ru){ return volandGetLang()==='en' && VOLAND_MONTH_UP[ru] ? VOLAND_MONTH_UP[ru] : ru; }
 function volandResName(ru){ return volandGetLang()==='en' && VOLAND_RES_RU[ru] ? VOLAND_RES_RU[ru] : ru; }
 
+
+// ===== VOLAND LANG v1.2 — Stage 3 helpers: items, heroes skills, enemies, resources =====
+var VOLAND_ITEM_SLOT = {
+  'Амулет': 'Amulet', 'Ботинки': 'Boots', 'Броня': 'Armor', 'Лук': 'Bow', 'Меч': 'Sword',
+  'Перчатки': 'Gloves', 'Посох': 'Staff', 'Шлем': 'Helmet', 'Щит': 'Shield',
+  'Кольцо': 'Ring', 'Серьга': 'Earring'
+};
+var VOLAND_ITEM_COLOR = {
+  'Серый': 'Gray', 'Зеленый': 'Green', 'Синий': 'Blue', 'Красный': 'Red', 'Золотой': 'Gold'
+};
+function volandItemName(item){
+  if(!item) return '';
+  let name = typeof item === 'string' ? item : (item.name || '');
+  if(volandGetLang()!=='en') return name;
+  // Паттерн: "Амулет Серый Lvl1", "Серьга 1 Серый Lvl1", "Кольцо 2 Синий Lvl5"
+  // Разбираем: [Слот] [номер?] [Цвет] LvlN
+  let m = name.match(/^(\S+)(?:\s+(\d+))?\s+(\S+)\s+(Lvl\d+)$/);
+  if(m){
+    let slot = VOLAND_ITEM_SLOT[m[1]] || m[1];
+    let num = m[2] ? ' ' + m[2] : '';
+    let col = VOLAND_ITEM_COLOR[m[3]] || m[3];
+    return slot + num + ' ' + col + ' ' + m[4];
+  }
+  return name;
+}
+function volandEnemyName(e){
+  if(!e) return '';
+  if(volandGetLang()==='en' && e.eng) return e.eng;
+  return e.name || '';
+}
+var VOLAND_RES_DESC = {
+  'Основная валюта': 'Main currency',
+  'Кварц с пустыни, 10% дроп': 'Quartz from desert, 10% drop',
+  'Дерево с лесных, 10% дроп': 'Wood from forest, 10% drop',
+  'Алмаз с ледяных, 10% дроп': 'Diamond from frostlands, 10% drop',
+  'Клык со всех мобов, 5% дроп': 'Fang from all mobs, 5% drop',
+  'Эссенция со всех мобов, 5% дроп': 'Essence from all mobs, 5% drop',
+  'Вода с болота, 10% дроп': 'Water from swamp, 10% drop',
+  'Камень с вулкана, 10% дроп': 'Stone from volcano, 10% drop',
+  'Кость с руин, 10% дроп': 'Bone from ruins, 10% drop'
+};
+function volandResourceName(r){
+  if(!r) return '';
+  if(volandGetLang()==='en' && r.eng) return r.eng;
+  return r.name || '';
+}
+function volandResourceDesc(desc){
+  if(!desc) return '';
+  if(volandGetLang()==='en' && VOLAND_RES_DESC[desc]) return VOLAND_RES_DESC[desc];
+  return desc;
+}
+var VOLAND_SKILL_DICT = {
+  'Шепот Аметиста': {en:'Amethyst Whisper', desc:'Every 3rd spell summons an amethyst spirit for 3 rounds. Spirit hits for 100% of caster damage and gives you +5 mana per round while alive.', short:'Spirit: 100% damage • Mana: +5 per round'},
+  'Проклятие Душ': {en:'Soul Curse', desc:'Beam deals 200% damage + steals 5 mana from enemy and applies Soul Fear: -20% enemy damage for 2 rounds.', short:'CD: 3 rounds • Mana: 10 • -20% enemy damage 2r'},
+  'Аметистовая Тюрьма': {en:'Amethyst Prison', desc:'Caster traps all enemies in a cage for 1 round. At end of round cage explodes dealing 300% damage to all.', short:'CD: 10 rounds • Mana: 15 • Control: Stun AOE 1 round'},
+  'Похищение Жизни': {en:'Life Steal', desc:'Link with enemy for 4 rounds: 30% of damage you take is reflected to enemy, and 30% of enemy damage heals you.', short:'CD: 18 rounds • Mana: 30 • 30% taken damage - reflect 30% lifesteal'},
+  'Аметистовый Закат': {en:'Amethyst Sunset', desc:'ULTIMATE: Releases 5 amethyst souls, each seeks enemy and deals 200% damage + stuns 1 round. If enemy is alone — all 5 hit it.', short:'CD: 25 rounds • Mana: 100 • Damage: up to 1000% + stun 1 round'},
+  'Костяной Легион': {en:'Bone Legion', desc:'Every round summons 1 skeleton helper (max 3). Skeletons inherit 100% of your damage. Skeletons are immortal and fight until end of battle.', short:'Skeleton 100% damage • Max skeletons: 3'},
+  'Костяное Копье': {en:'Bone Spear', desc:'Throws bone, deals +150% damage and applies Bone Vulnerability: +25% damage from summons for 2 rounds.', short:'CD: 4 rounds • Mana: 15 • +25% damage from summons'},
+  'Костяной Щит': {en:'Bone Shield', desc:'Summons bone shield: 20% max HP. When destroyed explodes, dealing +300% damage to all enemies.', short:'CD: 10 rounds • Mana: 30 • Shield: 20% HP • Damage +300% AOE'},
+  'Поднять Мертвых': {en:'Raise Dead', desc:'Resurrects 2 bomber skeletons. In round 1, 1 skeleton explodes dealing 200% damage to all. Second skeleton explodes in round 2 dealing 300% damage to all.', short:'CD: 18 rounds • Mana: 30 • Summons: 2'},
+  'Армия Погибели': {en:'Army of Doom', desc:'ULTIMATE: Summons 5 skeletons for 3 rounds. Each skeleton has 100% of summoner damage.', short:'CD: 25 rounds • Mana: 100 • Titan 200% damage'},
+  'Тропы Зверя': {en:'Beast Trails', desc:'On dodge, next hit is 100% critical.', short:'CD: — • Mana: 0'},
+  'Двойной Выстрел': {en:'Double Shot', desc:'Fires 2 arrows for 200% damage each. If both hit one target — bleeding 25% damage ignoring defense for 2 rounds.', short:'CD: 3 rounds • Mana: 5 • Damage: 400% + dot true 2r'},
+  'Ядовитая Лиана': {en:'Poison Vine', desc:'Throws vine at nearest enemy dealing 200% damage. Enemy is stunned 1 round and poisoned 3 rounds. Poisoned enemy takes 25% damage ignoring defense for 3 rounds.', short:'CD: 10 rounds • Mana: 15 • Damage 200% + stun 1r + poison 25% true 3r'},
+  'Глаз Ястреба': {en:'Hawk Eye', desc:'For 4 rounds sees all enemies in radius (even in invis) and gets +25% crit chance. Attacks ignore 20% armor.', short:'CD: 20 rounds • Mana: 20 • Crit: +25%'},
+  'Буря Стрел': {en:'Arrow Storm', desc:'ULTIMATE: Jump in air, 9 arrows over 3 rounds in area. Each 150% damage + 25% stun chance 1 round.', short:'CD: 25 rounds • Mana: 30 • Damage: up to 1350% + stun'},
+  'Метка Тени': {en:'Shadow Mark', desc:'Every 4th attack applies Shadow Mark for 2 rounds. Marked targets take +100% damage from your arrows. Killing marked target restores 15 mana.', short:'CD: — • Mana: 0 • +100% 2 rounds'},
+  'Беглый выстрел': {en:'Rapid Shot', desc:'Shoots nearest enemy, dealing 200% damage.', short:'CD: 3 rounds • Mana: 5 • Damage: 200%'},
+  'Шаг в Ничто': {en:'Step into Nothing', desc:'Becomes invisible for 3 rounds. Next attack in invis is guaranteed crit and removes invis effect.', short:'CD: 20 rounds • Mana: 25'},
+  'Призрачная Стрела': {en:'Ghost Arrow', desc:'Fires arrow passing through enemies. Deals 200% damage and stuns 1 round with 33% chance. Pierces up to 3 targets.', short:'CD: 5 rounds • Mana: 20 • Damage: 200% + stun 33%'},
+  'Залп Бездны': {en:'Abyss Volley', desc:'ULTIMATE: Fires 7 arrows. Each arrow deals 200% damage to one enemy. If target is alone — all damage hits it 1400% damage.', short:'CD: 25 rounds • Mana: 40 • Damage: 1400% (7×200%)'},
+  'Искривление Времени': {en:'Time Warp', desc:'Each spell increases base damage by 10%, stacks 5 rounds. At 5 stacks next spell casts +50% damage.', short:'Stacks: 5 rounds • Bonus: +50% base damage'},
+  'Ледяное Копье': {en:'Ice Spear', desc:'Throws ice spear at enemy back, dealing +250% damage and reduces its defense by 20%.', short:'CD: 3 rounds • Mana: 10 • Damage: 235×2.5 • DEF -20%'},
+  'Сфера Бури': {en:'Storm Sphere', desc:'Creates sphere that for 3 rounds hits nearest enemies with lightning (3 targets) for +160% damage each round.', short:'CD: 10 rounds • Mana: 20 • Ticks: 3×235×160%'},
+  'Лавина': {en:'Avalanche', desc:'Summons avalanche dealing +300% damage to all enemies.', short:'CD: 15 rounds • Mana: 30 • Damage: 235×3 to all enemies'},
+  'Аннигиляция Времени': {en:'Time Annihilation', desc:'ULTIMATE: Freezes time for 2 rounds (enemies cannot move/attack) (stun), then explosion for +350% damage to all.', short:'CD: 25 rounds • Mana: 50 • Damage: 350% + control 2 rounds'},
+  'Сердце Кальдеры': {en:'Caldera Heart', desc:'Every 4th spell ignites ground for 2 rounds dealing 100% damage to all enemies.', short:'CD: 4 • Mana: 20 • Damage: 100% 2 rounds'},
+  'Огненный Шар': {en:'Fireball', desc:'Fireball deals 150% damage + burn 20% damage for 2 rounds. On crit — all enemies take damage.', short:'CD: 4 rounds • Mana: 15 • Damage: 150% + 20% dot'},
+  'Извержение': {en:'Eruption', desc:'Explosion under feet, knocks back all enemies and deals 200% damage. Leaves lava for 3 rounds: 50% damage per round to all enemies.', short:'CD: 12 rounds • Mana: 25 • Damage 200% AOE + dot'},
+  'Метеор': {en:'Meteor', desc:'Meteor falls dealing 500% damage to all enemies. Next round shockwave deals another 300% damage to all enemies.', short:'CD: 20 rounds • Mana: 50 • Damage 500% + 300% AOE'},
+  'Судный День': {en:'Doomsday', desc:'ULTIMATE: 4 meteors over 4 rounds in area, each 200% damage. Last — supermeteor 400% + ground burn 50% damage for 2 rounds.', short:'CD: 25 rounds • Mana: 100 • Damage: 1000% AOE + dot'},
+  'Клятва Стаи': {en:'Pack Oath', desc:'At HP <30% damage +50% and +30% lifesteal from dealt damage.', short:'CD: — • Mana: 0'},
+  'Рассекающий Волк': {en:'Rending Wolf', desc:'2 sword hits for 200% damage each.', short:'CD: 3 rounds • Mana: 5 • Damage: 400%'},
+  'Щит Волчьего Вожака': {en:'Wolf Alpha Shield', desc:'Raises shield with wolf for 4 rounds, blocks damage with 50% chance. Successful block gives counterattack for 350% damage.', short:'CD: 15 rounds • Mana: 20 • Block: 50%'},
+  'Зов Стаи': {en:'Pack Call', desc:'Wolf howl stuns 1 enemy, all other enemies take 200% damage, stunned enemy takes damage twice.', short:'CD: 15 rounds • Mana: 20 • Wolves: 200% AOE + stun'},
+  'Альфа Хищник': {en:'Alpha Predator', desc:'ULTIMATE: Turns into wolf for 5 rounds: +50% max HP, +30% damage. Cast itself deals no damage. All attacks in wolf form cause bleeding 50% true damage.', short:'CD: 20 rounds • Mana: 20 • +50% HP +30% damage + 50% true bleed from attacks, no damage on cast'},
+  'Непоколебимая Стена': {en:'Unshakable Wall', desc:'For every 5% lost HP gets +3% DEF (up to 30%). At HP <30% gets shield 15% max HP for 4 rounds (once per battle).', short:'CD: - • Mana: 0 • DEF bonus: up to 30% • Shield: 15%'},
+  'Удар Льва': {en:'Lion Strike', desc:'Powerful shield hit, deals 200% damage + stun 1 round.', short:'CD: 8 rounds • Mana: 10 • Stun: 1 round • Damage 200%'},
+  'Имперский Бастион': {en:'Imperial Bastion', desc:'Raises shield for 3 rounds, blocks 50% damage and reflects 25% damage back. Allies behind take -20% damage.', short:'CD: 15 rounds • Mana: 30 • Block: 50% • Reflect 25%'},
+  'Рассекающий удар': {en:'Rending Strike', desc:'Sword hit 200% damage to nearest enemy.', short:'CD: 3 rounds • Mana: 5 • Damage 200%'},
+  'Аватар Империи': {en:'Empire Avatar', desc:'ULTIMATE: Invulnerable for 2 rounds, +50% max HP, +200% damage for 3 rounds. All enemies on field take 200% damage once.', short:'CD: 35 rounds • Mana: 50 • Damage: +200% • HP: +50%'}
+};
+function volandSkillName(name){
+  if(!name) return '';
+  if(volandGetLang()==='en' && VOLAND_SKILL_DICT[name]) return VOLAND_SKILL_DICT[name].en;
+  return name;
+}
+function volandSkillDesc(desc){
+  if(!desc) return '';
+  if(volandGetLang()!=='en') return desc;
+  for(let k in VOLAND_SKILL_DICT){
+    if(VOLAND_SKILL_DICT[k].desc && desc.indexOf(VOLAND_SKILL_DICT[k].desc)!==-1) return desc;
+    // Точное совпадение по русскому — ищем по ключу: если desc равен русскому описанию из словаря? Нет, словарь хранит только EN, поэтому ищем по русскому через обратный поиск
+  }
+  // Паттерн-замены для коротких описаний: КД, Мана, урона и т.д.
+  let out = desc;
+  out = out.replace(/КД:/g, 'CD:');
+  out = out.replace(/Мана:/g, 'Mana:');
+  out = out.replace(/раундов/g, 'rounds');
+  out = out.replace(/раунда/g, 'rounds');
+  out = out.replace(/раунд/g, 'round');
+  out = out.replace(/урона/g, 'damage');
+  out = out.replace(/Урон:/g, 'Damage:');
+  out = out.replace(/Урон/g, 'Damage');
+  out = out.replace(/Дух:/g, 'Spirit:');
+  out = out.replace(/Щит:/g, 'Shield:');
+  out = out.replace(/Крит:/g, 'Crit:');
+  out = out.replace(/Блок:/g, 'Block:');
+  out = out.replace(/Стан:/g, 'Stun:');
+  out = out.replace(/Стаки:/g, 'Stacks:');
+  out = out.replace(/Бонус:/g, 'Bonus:');
+  out = out.replace(/Тиков:/g, 'Ticks:');
+  out = out.replace(/Саммоны:/g, 'Summons:');
+  out = out.replace(/Скелет/g, 'Skeleton');
+  out = out.replace(/Макс скелетов:/g, 'Max skeletons:');
+  out = out.replace(/дот/g, 'dot');
+  out = out.replace(/яд/g, 'poison');
+  out = out.replace(/Контроль:/g, 'Control:');
+  return out;
+}
+function volandSkillLong(rusName, rusDesc){
+  if(volandGetLang()==='en' && VOLAND_SKILL_DICT[rusName]) return VOLAND_SKILL_DICT[rusName].desc;
+  return rusDesc;
+}
+function volandSkillShort(rusName, rusShort){
+  if(volandGetLang()==='en' && VOLAND_SKILL_DICT[rusName]) return VOLAND_SKILL_DICT[rusName].short;
+  return volandSkillDesc(rusShort);
+}
+
 document.addEventListener('DOMContentLoaded', function(){
   volandRenderLangToggle();
   volandApplyStaticLang();
