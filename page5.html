@@ -206,6 +206,7 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
     <div class="chat-input"><input id="chatIn" placeholder="..."><button id="chatBtn">▶</button></div>
   </div>
 </div>
+<script src="./assets/js/lang.js"></script>
 <script src="./assets/js/config.js"></script>
 <script src="./assets/js/db/heroes.js"></script>
 <script src="./assets/js/db/tiers.js"></script>
@@ -257,7 +258,7 @@ function render(){
     <div class="skill-big soon">
       <div class="soon-icon">🔒</div>
       <div class="soon-text">SOON</div>
-      <div class="soon-sub">6й СЛОТ • В РАЗРАБОТКЕ</div>
+      <div class="soon-sub">${volandT('6й СЛОТ • В РАЗРАБОТКЕ', '6th SLOT • IN DEVELOPMENT')}</div>
     </div>
   `;
   grid.innerHTML = html;
@@ -268,7 +269,7 @@ setInterval(render, 3000);
 
 function log(msg){ const d=document.createElement('div'); d.className='sys-msg'; d.textContent=msg; document.getElementById('chatBody').appendChild(d); document.getElementById('chatBody').scrollTop=9999; }
 const chatIn=document.getElementById('chatIn'); const chatBtn=document.getElementById('chatBtn');
-chatBtn.onclick=()=>{ const v=chatIn.value.trim(); if(!v) return; log('Ты: '+v); chatIn.value=''; };
+chatBtn.onclick=()=>{ const v=chatIn.value.trim(); if(!v) return; log(volandT('Ты: ', 'You: ')+v); chatIn.value=''; };
 chatIn.addEventListener('keydown',e=>{ if(e.key==='Enter') chatBtn.click(); });
 </script>
 
