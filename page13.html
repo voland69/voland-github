@@ -394,8 +394,53 @@ function getDailyGift(day, totalDays){
   if(mod===3){ let rid = resCycle[Math.floor(day/4) % resCycle.length]; return {icon:resIcons[rid], label:'1 '+resNames[rid], give:function(){ try{volandAddResource(rid,1);}catch(e){} }}; }
   return {icon:'💰', label:'75G', give:function(){ try{volandAddGold(75);}catch(e){} }};
 }
-function getDailyKey(y,m){ return 'voland_daily_'+y+'-'+String(m+1).padStart(2,'0'); }
-function getDailyClaimed(y,m){ try{ let v = localStorage.getItem(getDailyKey(y,m)); return v ? JSON.parse(v) : []; }catch(e){ return []; } }
+function getHeroSuffix(){
+  try{
+    let cur = null;
+    try{ if(typeof volandGetCurrentSave==='function') cur = volandGetCurrentSave(); }catch(e){}
+    if(!cur){
+      try{
+        let saves = volandGetSaves(); let idx = volandGetActiveIndex();
+        if(saves && saves[idx]) cur = saves[idx];
+      }catch(e){}
+    }
+    if(cur && cur.created) return '_' + cur.created;
+    try{ let idx = volandGetActiveIndex(); return '_idx'+idx; }catch(e){ return ''; }
+  }catch(e){ return ''; }
+}
+function getDailyKey(y,m){ return 'voland_daily_'+y+'-'+String(m+1).padStart(2,'0') + getHeroSuffix(); }
+function getDailyKeyGlobal(y,m){ return 'voland_daily_'+y+'-'+String(m+1).padStart(2,'0'); }
+function getDailyClaimed(y,m){
+  try{
+    let perHeroKey = getDailyKey(y,m);
+    let v = localStorage.getItem(perHeroKey);
+    if(v) return JSON.parse(v);
+    // Миграция: старый глобальный ключ — только для старого героя, не для нового LVL 1
+    try{
+      let globalKey = getDailyKeyGlobal(y,m);
+      let gv = localStorage.getItem(globalKey);
+      if(gv){
+        let gArr = JSON.parse(gv);
+        if(gArr && gArr.length>0){
+          let isFresh = false;
+          try{
+            let lvl = 1; try{ lvl = volandGetLevel(); }catch(e){}
+            let xp = 0; try{ xp = volandGetXp(); }catch(e){}
+            let gold = 0; try{ gold = volandGetGold(); }catch(e){}
+            if(lvl<=1 && xp<=0 && gold<=0) isFresh = true;
+          }catch(e){}
+          if(!isFresh){
+            // Старый герой — переносим его старые забранные дни на его ключ, и чистим глобальный
+            try{ localStorage.setItem(perHeroKey, JSON.stringify(gArr)); }catch(e){}
+            try{ localStorage.removeItem(globalKey); }catch(e){}
+            return gArr;
+          }
+        }
+      }
+    }catch(e){}
+    return [];
+  }catch(e){ return []; }
+}
 function claimDaily(day){
   let now = new Date(); let y = now.getFullYear(), m = now.getMonth();
   if(day !== now.getDate()) return;
@@ -452,8 +497,36 @@ function getPremiumPrize(lvl){
   if(free.label.includes('XP')){ let amt = parseInt(free.label) * 10; return {label: amt+' XP', icon:'⭐'}; }
   return {label:'10x ресурс + RUNA', icon:'🔮'};
 }
-function getPassKey(seasonNum){ return 'voland_pass_claimed_s'+seasonNum; }
-function getPassClaimed(seasonNum){ try{ let v = localStorage.getItem(getPassKey(seasonNum)); return v ? JSON.parse(v) : []; }catch(e){ return []; } }
+function getPassKey(seasonNum){ return 'voland_pass_claimed_s'+seasonNum + getHeroSuffix(); }
+function getPassKeyGlobal(seasonNum){ return 'voland_pass_claimed_s'+seasonNum; }
+function getPassClaimed(seasonNum){
+  try{
+    let perHeroKey = getPassKey(seasonNum);
+    let v = localStorage.getItem(perHeroKey);
+    if(v) return JSON.parse(v);
+    try{
+      let gv = localStorage.getItem(getPassKeyGlobal(seasonNum));
+      if(gv){
+        let gArr = JSON.parse(gv);
+        if(gArr && gArr.length>0){
+          let isFresh = false;
+          try{
+            let lvl = 1; try{ lvl = volandGetLevel(); }catch(e){}
+            let xp = 0; try{ xp = volandGetXp(); }catch(e){}
+            let gold = 0; try{ gold = volandGetGold(); }catch(e){}
+            if(lvl<=1 && xp<=0 && gold<=0) isFresh = true;
+          }catch(e){}
+          if(!isFresh){
+            try{ localStorage.setItem(perHeroKey, JSON.stringify(gArr)); }catch(e){}
+            try{ localStorage.removeItem(getPassKeyGlobal(seasonNum)); }catch(e){}
+            return gArr;
+          }
+        }
+      }
+    }catch(e){}
+    return [];
+  }catch(e){ return []; }
+}
 function claimPass(lvl){
   let totalXp = 0; try{ totalXp = volandGetXp(); }catch(e){}
   let curLvl = getPassLevel(totalXp);
