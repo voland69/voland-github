@@ -358,6 +358,7 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
   </div>
 </div>
 
+<script src="./assets/js/lang.js"></script>
 <script src="./assets/js/config.js"></script>
 <script src="./assets/js/db/heroes.js"></script>
 <script src="./assets/js/db/tiers.js"></script>
@@ -493,7 +494,7 @@ function rebuildInv(){
   try{
     let gold = getGold();
     if(gold>0 && inv.length<50){
-      inv.push({id:'gold', icon:'./assets/ui/loot/gold.webp', name:'Золото', desc:gold+' GOLD', isGold:true, count:gold, type:'gold', rarity:'gold'});
+      inv.push({id:'gold', icon:'./assets/ui/loot/gold.webp', name:volandT('Золото', 'Gold'), desc:gold+' GOLD', isGold:true, count:gold, type:'gold', rarity:'gold'});
     }
   }catch(e){}
   try{
@@ -574,8 +575,8 @@ function renderStats(){
     const suf=o.suffix||'';
     const fmt = (v)=>{ let s = Math.round(v*100)/100; return (s>0?'+':'')+s+suf; };
     let bonusHtml = '';
-    if(gearV) bonusHtml += `<span class="stat-bonus-gear">Шмот ${fmt(gearV)}</span>`;
-    if(ptsV) bonusHtml += `<span class="stat-bonus-points">Очки ${fmt(ptsV)}</span>`;
+    if(gearV) bonusHtml += `<span class="stat-bonus-gear">${volandT('Шмот ', 'Gear ')}${fmt(gearV)}</span>`;
+    if(ptsV) bonusHtml += `<span class="stat-bonus-points">${volandT('Очки ', 'Points ')}${fmt(ptsV)}</span>`;
     div.innerHTML=`<div class="stat-label">${o.label}</div><div class="stat-value">${total}${suf}</div><div class="stat-bonus">${bonusHtml}</div>`;
     grid.appendChild(div);
   });
@@ -650,19 +651,19 @@ function renderInv(){
         cell.classList.add('gold');
         let iconHtml = `<img src="${it.icon}" style="width:100%;height:100%;object-fit:contain" onerror="this.style.display='none'">`;
         cell.innerHTML=`<div class="item-icon">${iconHtml}</div><div class="badge">${it.count}</div>`;
-        cell.onclick=()=>{ log('Золото: '+it.count+' — в одной ячейке бесконечно'); };
+        cell.onclick=()=>{ log(volandT('Золото: ', 'Gold: ')+it.count+volandT(' — в одной ячейке бесконечно', ' — infinite in one cell')); };
         cell.title = it.name+' '+it.count;
       } else if(it.isPotion){
         cell.classList.add('potion');
         let iconHtml = `<img src="${it.icon}" style="width:100%;height:100%;object-fit:contain" onerror="this.style.display='none'">`;
         cell.innerHTML=`<div class="item-icon">${iconHtml}</div><div class="badge">${it.count}</div>`;
-        cell.onclick=()=>{ try{ if(typeof volandUsePotion==='function' && volandUsePotion(it.id)){ rebuildInv(); renderInv(); log(it.name+': использовано'); } else { log(it.name+': не удалось использовать'); } }catch(e){ log('Ошибка зелья'); } };
+        cell.onclick=()=>{ try{ if(typeof volandUsePotion==='function' && volandUsePotion(it.id)){ rebuildInv(); renderInv(); log(it.name+volandT(': использовано', ': used')); } else { log(it.name+volandT(': не удалось использовать', ': failed to use')); } }catch(e){ log(volandT('Ошибка зелья', 'Potion error')); } };
         cell.title = it.name+' '+(it.desc||'')+' x'+it.count;
       } else if(it.isResource){
         cell.classList.add('resource');
         let iconHtml = `<img src="${it.icon}" style="width:100%;height:100%;object-fit:contain" onerror="this.style.display='none'">`;
         cell.innerHTML=`<div class="item-icon">${iconHtml}</div><div class="badge">${it.count}</div>`;
-        cell.onclick=()=>{ log(it.name+': '+it.count+' — стак 99, при 99+ новая ячейка'); };
+        cell.onclick=()=>{ log(it.name+': '+it.count+volandT(' — стак 99, при 99+ новая ячейка', ' — stack 99, at 99+ new cell')); };
         cell.title = it.name+' '+it.count;
       } else {
         cell.classList.add('equip');
@@ -702,7 +703,7 @@ function openGearModal(item, idx){
   const bonusesEl = document.getElementById('gearModalBonuses');
   let iconHtml = (item.icon && (item.icon.includes('.webp') || item.icon.includes('/') || item.icon.includes('.jpg'))) ? `<img src="${item.icon}">` : item.icon;
   iconEl.innerHTML = iconHtml;
-  nameEl.textContent = item.name || 'Предмет';
+  nameEl.textContent = item.name || volandT('Предмет', 'Item');
   let rar = (item.rarity||'common').toLowerCase();
   if(rar==='legendary') rar='legend';
   rarityEl.className = 'gear-modal-rarity '+rar;
@@ -716,7 +717,7 @@ function openGearModal(item, idx){
   if(bonuses.length===0 && item.desc){
     bonuses.push(item.desc);
   }
-  if(bonuses.length===0) bonuses.push('Без бонусов');
+  if(bonuses.length===0) bonuses.push(volandT('Без бонусов', 'No bonuses'));
   bonusesEl.innerHTML = bonuses.map(b=>`<div class="gear-modal-bonus">${b}</div>`).join('');
   overlay.classList.add('show');
 }
@@ -775,11 +776,11 @@ function renderEquip(){
       nameEl.textContent=it.name; emptyEl.textContent=it.desc; emptyEl.style.color='#3ad080';
     } else {
       el.classList.remove('filled');
-      const defs={head:{name:'Шлем'},ear1:{name:'Серьга 1'},ear2:{name:'Серьга 2'},amulet:{name:'Амулет'},armor:{name:'Броня'},weapon:{name:'Оружие'},shield:{name:'Щит'},ring1:{name:'Кольцо 1'},ring2:{name:'Кольцо 2'},gloves:{name:'Перчатки'},boots:{name:'Ботинки'}};
+      const defs={head:{name:volandT('Шлем', 'Helmet')},ear1:{name:volandT('Серьга 1', 'Earring 1')},ear2:{name:volandT('Серьга 2', 'Earring 2')},amulet:{name:volandT('Амулет', 'Amulet')},armor:{name:volandT('Броня', 'Armor')},weapon:{name:volandT('Оружие', 'Weapon')},shield:{name:volandT('Щит', 'Shield')},ring1:{name:volandT('Кольцо 1', 'Ring 1')},ring2:{name:volandT('Кольцо 2', 'Ring 2')},gloves:{name:volandT('Перчатки', 'Gloves')},boots:{name:volandT('Ботинки', 'Boots')}};
       const def=defs[slot];
       iconEl.textContent='';
       if(def){ nameEl.textContent=def.name; }
-      emptyEl.textContent='пусто'; emptyEl.style.color='';
+      emptyEl.textContent=volandT('пусто', 'empty'); emptyEl.style.color='';
     }
   });
   equipCount.textContent=Object.keys(equipped).length+'/11';
@@ -796,7 +797,7 @@ function equipItem(item, idx){
       if(typeof volandAddToInventory==='function'){
         volandAddToInventory(old.id);
       }
-      log(`Снято: ${old.name}`);
+      log(`${volandT('Снято: ', 'Removed: ')}${old.name}`);
     }
   }catch(e){ console.log('equip inv err', e); }
   equipped[slot]=item;
@@ -807,7 +808,7 @@ function equipItem(item, idx){
     rebuildInv();
   }catch(e){}
   renderInv(); renderEquip(); renderStats(); renderBars();
-  log(`Экипировано: ${item.name} ${item.desc} — сохранено на всех страницах`);
+  log(`${volandT('Экипировано: ', 'Equipped: ')}${item.name} ${item.desc}${volandT(' — сохранено на всех страницах', ' — saved on all pages')}`);
 }
 function unequipSlot(el){
   const slot=el.dataset.slot; const it=equipped[slot]; if(!it) return;
@@ -824,12 +825,12 @@ function unequipSlot(el){
     rebuildInv();
   }catch(e){}
   renderInv(); renderEquip(); renderStats(); renderBars();
-  log(`Снято: ${it.name}`);
+  log(`${volandT('Снято: ', 'Removed: ')}${it.name}`);
 }
 document.querySelectorAll('.equip-slot').forEach(el=>{ el.onclick=()=>unequipSlot(el); });
 renderInv(); renderEquip(); renderStats(); renderBars();
 const chatIn=document.getElementById('chatIn'); const chatBtn=document.getElementById('chatBtn');
-chatBtn.onclick=()=>{ const v=chatIn.value.trim(); if(!v) return; log('Ты: '+v); chatIn.value=''; };
+chatBtn.onclick=()=>{ const v=chatIn.value.trim(); if(!v) return; log(volandT('Ты: ', 'You: ')+v); chatIn.value=''; };
 chatIn.addEventListener('keydown',e=>{ if(e.key==='Enter') chatBtn.click(); });
 </script>
 
