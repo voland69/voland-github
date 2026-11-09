@@ -17,6 +17,14 @@ function volandT(ru, en){
   return volandGetLang()==='en' ? en : ru;
 }
 var VOLAND_STATIC_DICT = {
+  'В рюкзаке: x0': 'In bag: x0',
+  'Сезон 1 • 1 ноября — 31 декабря': 'Season 1 • 1 November — 31 December',
+  'Новости и изменения': 'News and changes',
+  'Календарь месяца • Ежедневные подарки': 'Month calendar • Daily gifts',
+  'Пропустил — сгорел': 'Missed — burned',
+  'НОЯБРЬ 2026': 'NOVEMBER 2026',
+  '1 — 50 • БЕСПЛАТНО / ПРЕМИУМ': '1 — 50 • FREE / PREMIUM',
+  'От общего XP героя': 'From total hero XP',
   'SELECT HERO \u2022 8 \u0413\u0415\u0420\u041e\u0415\u0412': 'SELECT HERO \u2022 8 HEROES',
   '\u0412\u042b\u0411\u0415\u0420\u0418 \u0413\u0415\u0420\u041e\u042f \u2022 \u0412\u0412\u0415\u0414\u0418 \u0418\u041c\u042f \u2022 CONFIRM \u2192 HERO PAGE': 'CHOOSE HERO \u2022 ENTER NAME \u2022 CONFIRM \u2192 HERO PAGE',
   '\u0421\u0438\u0441\u0442\u0435\u043c\u0430: \u041b\u0435\u0439\u0430\u0443\u0442 \u043e\u0431\u043d\u043e\u0432\u043b\u0435\u043d \u2014 \u0443\u0431\u0440\u0430\u043d\u044b \u0437\u0430\u0447\u0435\u0440\u043a\u043d\u0443\u0442\u044b\u0435 \u0431\u043b\u043e\u043a\u0438': 'System: Layout updated \u2014 crossed blocks removed',
@@ -88,6 +96,103 @@ function volandRenderLangToggle(){
     document.body.appendChild(btn);
   }catch(e){}
 }
+
+// ===== VOLAND LANG v1.1 — Stage 2 helpers: missions, titles, months =====
+var VOLAND_TITLE_DICT = {
+  'ПЕСЧАНЫЙ СТРАННИК': 'SAND WANDERER',
+  'ПЕСЧАНЫЙ ОХОТНИК': 'SAND HUNTER',
+  'ПЕСЧАНЫЙ ДЕМОН': 'SAND DEMON',
+  'ВЛАДЫКА ПУСТЫНИ': 'LORD OF THE DESERT',
+  'ЛЕСНОЙ СТРАННИК': 'FOREST WANDERER',
+  'ЛЕСНОЙ ОХОТНИК': 'FOREST HUNTER',
+  'ЛЕСНОЙ ПРИЗРАК': 'FOREST GHOST',
+  'ВЛАДЫКА ЛЕСА': 'LORD OF THE FOREST',
+  'ЛЕДЯНОЙ СТРАННИК': 'ICE WANDERER',
+  'ЛЕДЯНОЙ ВОИН': 'ICE WARRIOR',
+  'ЛЕДЯНОЙ ПАЛАЧ': 'ICE EXECUTIONER',
+  'ВЛАДЫКА ЛЬДА': 'LORD OF ICE',
+  'ТОПНИК': 'SWAMP WALKER',
+  'ЯДОВИТЫЙ ДУХ': 'POISON SPIRIT',
+  'КОШМАР БОЛОТА': 'SWAMP NIGHTMARE',
+  'ВЛАДЫКА БОЛОТА': 'LORD OF THE SWAMP',
+  'ДИТЯ МАГМЫ': 'CHILD OF MAGMA',
+  'КУЗНЕЦ ОГНЯ': 'FIRE SMITH',
+  'СЕРДЦЕ ВУЛКАНА': 'HEART OF THE VOLCANO',
+  'ВЛАДЫКА ВУЛКАНА': 'LORD OF THE VOLCANO',
+  'КОСТЯНОЙ СТРАЖ': 'BONE GUARDIAN',
+  'РЫЦАРЬ РУИН': 'RUIN KNIGHT',
+  'ПОВЕЛИТЕЛЬ КОСТЕЙ': 'LORD OF BONES',
+  'ВЛАДЫКА РУИН': 'LORD OF THE RUINS',
+  'Убийца Титанов': 'TITAN SLAYER',
+  'Ветеран VOLAND': 'VOLAND VETERAN',
+  'Архимаг': 'ARCHMAGE'
+};
+function volandMissionName(m){
+  if(!m) return '';
+  if(volandGetLang()==='en' && m.eng) return m.eng;
+  return m.name || '';
+}
+function volandMissionTitle(title){
+  if(!title) return '';
+  if(volandGetLang()==='en' && VOLAND_TITLE_DICT[title]) return VOLAND_TITLE_DICT[title];
+  return title;
+}
+var VOLAND_LOC_EN = {
+  'Пустыне': 'Desert',
+  'Темном Лесу': 'Dark Forest',
+  'Ледяных Землях': 'Frostlands',
+  'Болоте': 'Swamp',
+  'Вулкане': 'Volcano',
+  'Руинах': 'Ruins'
+};
+function volandMissionDesc(m){
+  if(!m) return '';
+  let d = m.desc || '';
+  if(volandGetLang()!=='en') return d;
+  // Точные переводы для не-килл-миссий
+  let exact = {
+    'Убей 1 босса': 'Kill 1 boss',
+    'Убей 3 разных боссов': 'Kill 3 different bosses',
+    'Убей 6 разных боссов': 'Kill 6 different bosses',
+    'Зайди 7 разных дней в игру': 'Log in 7 different days',
+    'Зайди 30 разных дней': 'Log in 30 different days',
+    'Собери хотя бы 5 предметов экипировки зеленого тира': 'Collect at least 5 green tier gear items',
+    'Собери хотя бы 4 предмета синего тира': 'Collect at least 4 blue tier items',
+    'Собери хотя бы 3 предмета красного тира': 'Collect at least 3 red tier items',
+    'Собери 1 предмет золотого тира': 'Collect 1 gold tier item',
+    'Используй ульту (T) 20 раз': 'Use ultimate (T) 20 times',
+    'Используй ульту (T) 50 раз': 'Use ultimate (T) 50 times',
+    'Используй ульту (T) 100 раз': 'Use ultimate (T) 100 times',
+    'Используй ульту (T) 300 раз': 'Use ultimate (T) 300 times',
+    'Используй ульту (T) 600 раз': 'Use ultimate (T) 600 times',
+    'Используй ульту (T) 1000 раз': 'Use ultimate (T) 1000 times'
+  };
+  if(exact[d]) return exact[d];
+  // Паттерн: Убей X мобов в LOC
+  let mm = d.match(/^Убей\s+(\d+)\s+мобов\s+в\s+(.+)$/);
+  if(mm){
+    let n = mm[1];
+    let loc = mm[2];
+    let locEn = VOLAND_LOC_EN[loc] || loc;
+    return 'Kill ' + n + ' mobs in ' + locEn;
+  }
+  return d;
+}
+var VOLAND_MONTH_GEN = {
+  'января': 'January', 'февраля': 'February', 'марта': 'March', 'апреля': 'April', 'мая': 'May', 'июня': 'June',
+  'июля': 'July', 'августа': 'August', 'сентября': 'September', 'октября': 'October', 'ноября': 'November', 'декабря': 'December'
+};
+var VOLAND_MONTH_UP = {
+  'ЯНВАРЬ': 'JANUARY', 'ФЕВРАЛЬ': 'FEBRUARY', 'МАРТ': 'MARCH', 'АПРЕЛЬ': 'APRIL', 'МАЙ': 'MAY', 'ИЮНЬ': 'JUNE',
+  'ИЮЛЬ': 'JULY', 'АВГУСТ': 'AUGUST', 'СЕНТЯБРЬ': 'SEPTEMBER', 'ОКТЯБРЬ': 'OCTOBER', 'НОЯБРЬ': 'NOVEMBER', 'ДЕКАБРЬ': 'DECEMBER'
+};
+var VOLAND_RES_RU = {
+  'Кварц': 'Quartz', 'Дерево': 'Wood', 'Алмаз': 'Diamond', 'Вода': 'Water', 'Камень': 'Stone', 'Кость': 'Bone'
+};
+function volandMonthGen(ru){ return volandGetLang()==='en' && VOLAND_MONTH_GEN[ru] ? VOLAND_MONTH_GEN[ru] : ru; }
+function volandMonthUp(ru){ return volandGetLang()==='en' && VOLAND_MONTH_UP[ru] ? VOLAND_MONTH_UP[ru] : ru; }
+function volandResName(ru){ return volandGetLang()==='en' && VOLAND_RES_RU[ru] ? VOLAND_RES_RU[ru] : ru; }
+
 document.addEventListener('DOMContentLoaded', function(){
   volandRenderLangToggle();
   volandApplyStaticLang();
