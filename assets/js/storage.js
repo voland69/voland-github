@@ -992,14 +992,14 @@ function volandGetUpgradeCost(itemId){
 function volandCanUpgrade(itemId){
   try{
     let cost = volandGetUpgradeCost(itemId);
-    if(!cost) return {can:false, reason:'MAX LEVEL'};
+    if(!cost) return {can:false, reason:(typeof volandT==='function' ? volandT('МАКС УРОВЕНЬ','MAX LEVEL') : 'MAX LEVEL')};
     let gold = volandGetGold();
-    if(gold < cost.gold) return {can:false, reason:'NEED GOLD '+cost.gold, needGold:cost.gold-cost.gold, gold:cost.gold};
+    if(gold < cost.gold) return {can:false, reason:(typeof volandT==='function' ? volandT('НУЖНО ЗОЛОТО '+cost.gold,'NEED GOLD '+cost.gold) : 'NEED GOLD '+cost.gold), needGold:cost.gold-cost.gold, gold:cost.gold};
     let res = volandGetResources();
     for(let rid in cost.resources){
       let need = cost.resources[rid];
       let have = res[rid]||0;
-      if(have < need) return {can:false, reason:'NEED '+rid.toUpperCase()+' '+need, needRes:rid, needAmount:need-have};
+      if(have < need){ let rn = (typeof volandResourceName==='function' ? volandResourceName({id:rid, name:rid.toUpperCase()}) : rid.toUpperCase()); return {can:false, reason:(typeof volandT==='function' ? volandT('НУЖЕН '+rn+' '+need,'NEED '+rid.toUpperCase()+' '+need) : 'NEED '+rid.toUpperCase()+' '+need), needRes:rid, needAmount:need-have}; }
     }
     return {can:true, cost:cost};
   }catch(e){ return {can:false, reason:'ERROR'}; }
