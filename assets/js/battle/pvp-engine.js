@@ -493,15 +493,15 @@ function chooseBotAction(diff){
 function win(){
   isOver=true; addLog(`✅ ПОБЕДА! Ты победил ${bot.name} [${window.CURRENT_DIFF}]`, 'win');
   let m=document.getElementById('resultModal'); if(m) m.classList.add('show');
-  let t=document.getElementById('resultTitle'); if(t) t.textContent='ПОБЕДА!';
-  let s=document.getElementById('resultSub'); if(s) s.textContent=`${player.name} победил ${bot.name} • ${window.CURRENT_DIFF.toUpperCase()} • PVP V3 бафы/дебафы`;
+  let t=document.getElementById('resultTitle'); if(t) t.textContent=(typeof volandT==='function' ? volandT('ПОБЕДА!','VICTORY!') : 'ПОБЕДА!');
+  let s=document.getElementById('resultSub'); if(s) s.textContent=`${player.name} ${(typeof volandT==='function' ? volandT('победил','defeated') : 'победил')} ${bot.name} • ${window.CURRENT_DIFF.toUpperCase()} • PVP V3 ${(typeof volandT==='function' ? volandT('бафы/дебафы','buffs/debuffs') : 'бафы/дебафы')}`;
   try{ if(typeof volandAddGold==='function') volandAddGold(50); }catch(e){}
 }
 function lose(){
   isOver=true; addLog(`❌ ПОРАЖЕНИЕ! Тебя победил ${bot.name}`, 'lose');
   let m=document.getElementById('resultModal'); if(m) m.classList.add('show');
-  let t=document.getElementById('resultTitle'); if(t) t.textContent='ПОРАЖЕНИЕ!';
-  let s=document.getElementById('resultSub'); if(s) s.textContent=`${bot.name} победил • ${window.CURRENT_DIFF.toUpperCase()} • PVP V3`;
+  let t=document.getElementById('resultTitle'); if(t) t.textContent=(typeof volandT==='function' ? volandT('ПОРАЖЕНИЕ!','DEFEAT!') : 'ПОРАЖЕНИЕ!');
+  let s=document.getElementById('resultSub'); if(s) s.textContent=`${bot.name} ${(typeof volandT==='function' ? volandT('победил','defeated') : 'победил')} • ${window.CURRENT_DIFF.toUpperCase()} • PVP V3`;
 }
 function renderSkills(){
   let bar=document.getElementById('skillBar'); if(!bar) return; let html='';
