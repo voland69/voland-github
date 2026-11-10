@@ -14,13 +14,7 @@ const cur=calc.cur;
 const profileName=(typeof volandGetName==='function'?volandGetName():'VOLAND');
 
 let enemies=(VOLAND_ENEMIES&&VOLAND_ENEMIES[loc])?VOLAND_ENEMIES[loc]:null;
-if(!enemies){
-  // Fallback для 4,5,6, если enemies.js ещё старый — не в Пустыню, а в свою локу
-  if(loc==6) enemies=[{stage:1,name:'СКЕЛЕТ-ЛЕГИОНЕР',eng:'Skeleton Liegionnaire',icon:'💀',img:'./assets/enemies/skeleton-liegionnaire.webp',hp:60,hpColor:'#6ab0ff',gold:22,xp:450,drops:[{id:'bone',chance:0.10},{id:'fang',chance:0.05},{id:'essence',chance:0.05}]},{stage:2,name:'ПРИВИДЕНИЕ РУИН',eng:'Ruin Specter',icon:'👻',img:'./assets/enemies/ruin-specter.webp',hp:70,hpColor:'#a0a0ff',gold:28,xp:600,drops:[{id:'bone',chance:0.10},{id:'fang',chance:0.05},{id:'essence',chance:0.05}]},{stage:3,name:'КАМЕННАЯ ГОРГУЛЬЯ',eng:'Stone Gargoyle',icon:'🗿',img:'./assets/enemies/stone-gargoyle.webp',hp:85,hpColor:'#3ad080',gold:35,xp:850,drops:[{id:'bone',chance:0.10},{id:'fang',chance:0.05},{id:'essence',chance:0.05}]},{stage:4,name:'ПАДШИЙ ПАЛАДИН',eng:'Fallen Paladin - BOSS',icon:'⚔️',img:'./assets/enemies/fallen-paladin.webp',hp:100,hpColor:'#e6d5a0',boss:true,gold:75,xp:2200,drops:[{id:'bone',chance:0.20},{id:'fang',chance:0.10},{id:'essence',chance:0.10}]}];
-  else if(loc==5) enemies=[{stage:1,name:'УГОЛЬНЫЙ БЕС',eng:'Ember Imp',icon:'🔥',img:'./assets/enemies/ember-imp.webp',hp:60,hpColor:'#6ab0ff',gold:18,xp:350,drops:[{id:'stone',chance:0.10},{id:'fang',chance:0.05},{id:'essence',chance:0.05}]},{stage:2,name:'МАГМОВАЯ САЛАМАНДРА',eng:'Magma Salamander',icon:'🦎',img:'./assets/enemies/magma-salamander.webp',hp:70,hpColor:'#a0a0ff',gold:22,xp:450,drops:[{id:'stone',chance:0.10},{id:'fang',chance:0.05},{id:'essence',chance:0.05}]},{stage:3,name:'ОБСИДИАНОВАЯ ГОРГУЛЬЯ',eng:'Obsidian Gargoyle',icon:'🗿',img:'./assets/enemies/obsidian-gargoyle.webp',hp:85,hpColor:'#3ad080',gold:28,xp:650,drops:[{id:'stone',chance:0.10},{id:'fang',chance:0.05},{id:'essence',chance:0.05}]},{stage:4,name:'ОГНЕННЫЙ ТРОЛЛЬ',eng:'Fire Troll - BOSS',icon:'🧌',img:'./assets/enemies/fire-troll.webp',hp:100,hpColor:'#e6d5a0',boss:true,gold:60,xp:1800,drops:[{id:'stone',chance:0.20},{id:'fang',chance:0.10},{id:'essence',chance:0.10}]}];
-  else if(loc==4) enemies=[{stage:1,name:'ЧУДИЩЕ БОЛОТНОЕ',eng:'Toxic Toad',icon:'🐸',img:'./assets/enemies/toxic-toad.webp',hp:60,hpColor:'#3ad080',gold:15,xp:250,drops:[{id:'water',chance:0.10},{id:'fang',chance:0.05},{id:'essence',chance:0.05}]},{stage:2,name:'БОЛОТНЫЙ ЖУК',eng:'Swamp Hag',icon:'🪲',img:'./assets/enemies/swamp-hag.webp',hp:70,hpColor:'#d0b040',gold:18,xp:350,drops:[{id:'water',chance:0.10},{id:'fang',chance:0.05},{id:'essence',chance:0.05}]},{stage:3,name:'ЛОЗЯНОЙ УЖАС',eng:'Vine Horror',icon:'🌿',img:'./assets/enemies/vine-horror.webp',hp:85,hpColor:'#e05050',gold:22,xp:500,drops:[{id:'water',chance:0.10},{id:'fang',chance:0.05},{id:'essence',chance:0.05}]},{stage:4,name:'ТОКСИЧНАЯ ЖАБА',eng:'Mire Crawler - BOSS',icon:'🐸',img:'./assets/enemies/mire-crawler.webp',hp:100,hpColor:'#e6d5a0',boss:true,gold:50,xp:1500,drops:[{id:'water',chance:0.20},{id:'fang',chance:0.10},{id:'essence',chance:0.10}]}];
-  else enemies=VOLAND_ENEMIES[1];
-}
+if(!enemies){ enemies=VOLAND_ENEMIES[1]; }
 let enemyData=enemies.find(e=>e.stage===stage)||enemies[0];
 let locData=(VOLAND_LOCATIONS&&VOLAND_LOCATIONS.find(l=>l.id==loc))||{name:'ПУСТЫНЯ',eng:'DESERT'};
 
@@ -202,7 +196,7 @@ function enemyTurn(){
  addLog('💥 '+enemyData.name+' бьет тебя на '+dmgToHero+' — HP '+hHp+'/'+hMax,'enemy-hit');
  // instant link reflect - если есть у героя
  if(window.VOLAND_HERO_ON_ENEMY_HIT){
-  try{ window.VOLAND_HERO_ON_ENEMY_HIT({dmgToHero, cur, eDef, eDmg: effectiveDmg, addLog, updBars, rand}); }catch(e){ console.log('link err',e); }
+  try{ window.VOLAND_HERO_ON_ENEMY_HIT({dmgToHero, cur, eDef, eDmg: effectiveDmg, addLog, updBars, rand}); }catch(e){  }
  }
  updBars();
  if(hHp<=0){ addLog('❌ ПОРАЖЕНИЕ!','lose'); showDefeat(); return; }
@@ -221,8 +215,6 @@ function endRound(){
  updBars(); renderSkillBar();
  addLog('--- Ход '+turn+': твой ход ---','');
 }
-
-
 
 
 function showVictory(){
@@ -318,7 +310,7 @@ function showVictory(){
     try{
       if(typeof volandSetCurrentHP==='function') volandSetCurrentHP(hHp);
       if(typeof volandSetCurrentMANA==='function') volandSetCurrentMANA(hMana);
-    }catch(e){ console.log('save hp/mana err', e); }
+    }catch(e){  }
     if(typeof volandAddKill==='function') volandAddKill();
     else {
       let saves=JSON.parse(localStorage.getItem('voland_v1_saves')||'[]');
@@ -331,11 +323,11 @@ function showVictory(){
         volandUpdateMissionStat('kill_boss', null, 1);
         volandUpdateMissionStat('kill_boss_diff', null, loc+'-'+stage);
         if(typeof volandAddBossKill==='function'){
-          try{ volandAddBossKill(loc); }catch(e){ console.log('boss kill save err', e); }
+          try{ volandAddBossKill(loc); }catch(e){  }
         }
       }
     }
-  }catch(e){ console.log('victory save error', e); }
+  }catch(e){  }
 }
 
 
