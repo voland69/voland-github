@@ -361,6 +361,23 @@ function volandBattleLog(t){
   out = out.split('победил').join('defeated');
   out = out.split('ПОБЕДА!').join('VICTORY!');
   out = out.split('бафы/дебафы').join('buffs/debuffs');
+  // Хвосты со скринов page8 - урон / аватар / всем / кончился
+  out = out.split('конец аватара').join('avatar ended');
+  out = out.split('Конец аватара').join('Avatar ended');
+  out = out.split('уже активен').join('already active');
+  out = out.split('Аватар уже').join('Avatar already');
+  out = out.split('АВАТАР').join('AVATAR');
+  out = out.split('Аватар').join('Avatar');
+  out = out.split('аватар').join('avatar');
+  out = out.split('неуязвим').join('invulnerable');
+  out = out.split('неуязв').join('invuln');
+  out = out.split('кончился').join('ended');
+  out = out.split('кончилась').join('ended');
+  out = out.split('истек').join('expired');
+  out = out.split('сломан').join('broken');
+  out = out.split('всем').join('to all');
+  out = out.split('урон').join('damage');
+  out = out.split('Урон').join('Damage');
   // Hero-логи Lion Warden / Bastion со скринов page8 - целые фразы первыми
   out = out.split('Имперский Бастион').join('Imperial Bastion');
   out = out.split('Бастион блок').join('Bastion block');
