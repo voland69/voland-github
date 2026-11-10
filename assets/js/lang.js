@@ -207,9 +207,6 @@ function volandItemName(item){
   if(!item) return '';
   let name = typeof item === 'string' ? item : (item.name || '');
   if(volandGetLang()!=='en') return name;
-  // Зелья: "Зелье HP XS" -> "HP Potion XS"
-  let pm = name.match(/^Зелье\s+(HP|MANA|STAM)\s+(\S+)$/);
-  if(pm){ return pm[1] + ' Potion ' + pm[2]; }
   // Паттерн: "Амулет Серый Lvl1", "Серьга 1 Серый Lvl1", "Кольцо 2 Синий Lvl5"
   // Разбираем: [Слот] [номер?] [Цвет] LvlN
   let m = name.match(/^(\S+)(?:\s+(\d+))?\s+(\S+)\s+(Lvl\d+)$/);
@@ -364,6 +361,30 @@ function volandBattleLog(t){
   out = out.split('победил').join('defeated');
   out = out.split('ПОБЕДА!').join('VICTORY!');
   out = out.split('бафы/дебафы').join('buffs/debuffs');
+  // Hero-логи Lion Warden / Bastion со скринов page8 - целые фразы первыми
+  out = out.split('Имперский Бастион').join('Imperial Bastion');
+  out = out.split('Бастион блок').join('Bastion block');
+  out = out.split('Бастион').join('Bastion');
+  out = out.split('бьет тебя').join('hits you');
+  out = out.split('бьешь').join('hit');
+  out = out.split('оглушает').join('stuns');
+  out = out.split(' (из ').join(' (of ');
+  out = out.split('щит').join('shield');
+  out = out.split('Щит').join('Shield');
+  out = out.split('блок').join('block');
+  out = out.split('Блок').join('Block');
+  out = out.split('отраж').join('reflect');
+  // Имена мобов - через VOLAND_ENEMIES, чтобы в EN логе не было русских имён
+  try{
+    if(typeof VOLAND_ENEMIES!=='undefined'){
+      for(let k in VOLAND_ENEMIES){
+        let arr = VOLAND_ENEMIES[k]||[];
+        for(let e of arr){
+          if(e && e.name && e.eng && out.indexOf(e.name)!==-1) out = out.split(e.name).join(e.eng);
+        }
+      }
+    }
+  }catch(e){}
   // 1. Скиллы — целые имена, длинные первыми
   try{
     let keys = Object.keys(VOLAND_SKILL_DICT).sort((a,b)=>b.length-a.length);
