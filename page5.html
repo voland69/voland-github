@@ -192,7 +192,7 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
 </div>
   <div class="main">
     <div class="sk-header">
-      <div><div class="sk-title">SKILLS • 5 + SOON</div><div class="sk-sub">СТРАНИЦА 5 — СКИЛЫ ГЕРОЯ ИЗ DB.JS — 6 БОЛЬШИХ ОКОН</div></div>
+      <div><div class="sk-title" id="skTitle">SKILLS • 5 + SOON</div></div>
       <div class="sk-hero" id="heroInfo">Loading...</div>
     </div>
     <div class="sk-grid" id="skGrid"></div>
@@ -219,6 +219,7 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
 <script src="./assets/js/storage.js"></script>
 <script>
 function render(){
+  try{ let t=document.getElementById('skTitle'); if(t) t.textContent = volandT('НАВЫКИ • 5 + СКОРО', 'SKILLS • 5 + SOON'); }catch(e){}
   const heroId = volandGetHeroId();
   const hero = VOLAND_HEROES[heroId] || VOLAND_HEROES['mage-f-new'];
   const name = volandGetName();
@@ -257,7 +258,7 @@ function render(){
   html += `
     <div class="skill-big soon">
       <div class="soon-icon">🔒</div>
-      <div class="soon-text">SOON</div>
+      <div class="soon-text">${volandT('СКОРО', 'SOON')}</div>
       <div class="soon-sub">${volandT('6й СЛОТ • В РАЗРАБОТКЕ', '6th SLOT • IN DEVELOPMENT')}</div>
     </div>
   `;
