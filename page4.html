@@ -301,9 +301,9 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
   
   <div class="center-col">
     <div class="top-row">
-      <div class="stats-panel" id="statsPanel"><div class="panel-title">СТАТЫ ГЕРОЯ — 6 (A+B)</div></div>
+      <div class="stats-panel" id="statsPanel"><div class="panel-title" style="display:none"></div></div>
       <div class="equip-zone">
-        <div class="panel-title">ЭКИПИРОВКА — 11 • КЛИК СНЯТЬ</div>
+        
         <div class="equip-grid" id="equipGrid">
           <div class="equip-col left-col">
             <div class="equip-slot ear-l" data-slot="ear1"><div class="slot-icon">👂</div><div class="slot-name">Серьга 1</div><div class="slot-empty">пусто</div></div>
@@ -324,10 +324,10 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
           </div>
         </div>
       </div>
-      <div class="bars-panel" id="barsPanel"><div class="panel-title">БАРЫ ГЕРОЯ — 4 (C=D)</div></div>
+      <div class="bars-panel" id="barsPanel"><div class="panel-title" style="display:none"></div></div>
     </div>
     <div class="inventory-zone">
-      <div class="panel-title" style="display:flex;justify-content:space-between"><span>ИНВЕНТАРЬ — 50 • <span id="goldDisplay">0 GOLD</span> • <span id="resDisplay">0 RES</span> • КЛИК НАДЕТЬ</span><span id="equipCount">0/11</span></div>
+      <div class="panel-title" style="display:flex;justify-content:space-between"><span><span id="goldDisplay">0 GOLD</span> • <span id="resDisplay">0 RES</span></span><span id="equipCount">0/11</span></div>
       <div class="inv-grid" id="invGrid"></div>
     </div>
   </div>
@@ -678,7 +678,7 @@ function renderInv(){
         // badge empty for gear as requested
         cell.innerHTML=`<div class="item-icon">${iconHtml}</div>`;
         cell.onclick=()=>openGearModal(it,i);
-        cell.title = it.name+' '+(it.desc||'');
+        cell.title = volandItemName(it)+' '+(it.desc||'');
       }
     } else {
       cell.classList.add('empty');
