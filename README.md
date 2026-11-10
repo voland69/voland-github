@@ -4,14 +4,19 @@
 Open source browser RPG.
 
 ## Pages
-- `index.html` - Entry 
+- `index.html` - Entry, 3 save slots
 - `page2.html` - Hero select (8 heroes)
 - `page3.html` - Hero stats (BASE + gear from page4)
 - `page4.html` - Inventory / Bag (11 slots, equip system)
 - `page5.html` - Skills (5 skills per hero)
-- `page6.html` - Battlefield 
-- `page7.html` - DESERT location - 4 mobs, boss TITAN DUN 
-- `page8.html` - Battle page with log 
+- `page6.html` - Battlefield
+- `page7.html` - Locations, 6 active locations
+- `page8.html` - Battle page with log
+- `page9.html` - Missions (51 missions)
+- `page10.html` - Market
+- `page11.html` - PvP Arena
+- `page12.html` - Workshop, item upgrade
+- `page13.html` - Pass
 
 ## Mechanics v2.0
 - Tanks `LION WARDEN` & `IRON VOW`: PARRY 12% (was DODGE), DODGE 0%
