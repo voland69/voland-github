@@ -128,8 +128,6 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
 .wrap{position:fixed;inset:0;display:flex;z-index:2}
 
 
-
-
 .center-col{flex:1;display:flex;flex-direction:column;background:rgba(16,22,30,.25);overflow:hidden;backdrop-filter: blur(2px)}
 .top-row{flex:0 0 480px;display:flex;gap:16px;background:rgba(19,26,34,.35);border-bottom:1px solid rgba(30,42,50,.5);overflow:hidden;align-items:stretch}
 .stats-panel{width:250px;min-width:250px;max-width:250px;background:rgba(20,28,36,.45);border-right:1px solid rgba(30,42,50,.5);padding:12px 16px 16px 16px;display:flex;flex-direction:column;justify-content:flex-start;gap:0;height:100%}
@@ -412,12 +410,12 @@ function rebuildInv(){
           return true;
         });
         if(saves[idx].inventory.length !== before){
-          console.log('Force cleaned', before - saves[idx].inventory.length, 'weapons');
+          
           volandSaveSaves(saves);
           localStorage.setItem('voland_v1_inventory', JSON.stringify(saves[idx].inventory));
         }
       }
-    }catch(e){ console.log('force cleanup error', e); }
+    }catch(e){  }
     
     if(typeof volandGetInventory==='function'){
       let dropped = volandGetInventory();
@@ -437,7 +435,7 @@ function rebuildInv(){
           heroClassForFilter = cmap[hid] || 'mage';
         }catch(e){}
         if(heroClassForFilter==='mage' && ['bow','sword','shield'].includes(base)){
-          console.log('Filtered non-mage weapon', base, item.id);
+          
           continue;
         }
         if(allowedWeaponBases && ['bow','staff','sword','shield'].includes(base) && !allowedWeaponBases.has(base)){
@@ -461,7 +459,7 @@ function rebuildInv(){
         }
       }
     }
-  }catch(e){ console.log('rebuild dropped err', e); }
+  }catch(e){  }
   Object.values(droppedGearMap).forEach(it=>{
     if(inv.length<50) inv.push(it);
   });
@@ -523,7 +521,7 @@ function rebuildInv(){
         }
       });
     }
-  }catch(e){ console.log('rebuild res err', e); }
+  }catch(e){  }
   // Зелья в сумке: считаем банки по id, каждое зелье — своя ячейка со стаком. Внутри rebuildInv, ДО паддинга null, иначе inv уже 50 и зелья не влезут.
   try{
     if(typeof volandGetInventory==='function' && typeof VOLAND_POTIONS!=='undefined'){
@@ -542,7 +540,7 @@ function rebuildInv(){
         inv.push({id:pot.id, icon:pot.icon, name:pot.name, desc:pot.desc||pot.name, isPotion:true, count:potionCounts[pid], type:'potion', rarity:pot.rarity||'common', potion:pot.potion});
       });
     }
-  }catch(e){ console.log('potions in bag err', e); }
+  }catch(e){  }
   while(inv.length<50) inv.push(null);
   inv = inv.slice(0,50);
 }
@@ -799,7 +797,7 @@ function equipItem(item, idx){
       }
       log(`${volandT('Снято: ', 'Removed: ')}${volandItemName(old)}`);
     }
-  }catch(e){ console.log('equip inv err', e); }
+  }catch(e){  }
   equipped[slot]=item;
   try{
     volandSaveEquip(equipped);
@@ -816,7 +814,7 @@ function unequipSlot(el){
     if(typeof volandAddToInventory==='function'){
       volandAddToInventory(it.id);
     }
-  }catch(e){ console.log('unequip inv err', e); }
+  }catch(e){  }
   delete equipped[slot];
   try{
     volandSaveEquip(equipped);

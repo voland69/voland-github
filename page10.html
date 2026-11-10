@@ -529,7 +529,7 @@ function buyPotion(id, qty){
       document.getElementById('modalHave').textContent = `В рюкзаке: x${currentModalItem.have}`;
       updateModalPrices();
     }
-  }catch(e){ console.log(e); showLog('modalLog','Ошибка: '+e.message,'err'); }
+  }catch(e){  showLog('modalLog','Ошибка: '+e.message,'err'); }
 }
 function sellPotion(id, qty){
   try{
@@ -546,7 +546,7 @@ function sellPotion(id, qty){
       document.getElementById('modalHave').textContent = `В рюкзаке: x${currentModalItem.have}`;
       updateModalPrices();
     }
-  }catch(e){ console.log(e); showLog('modalLog','Ошибка: '+e.message,'err'); }
+  }catch(e){  showLog('modalLog','Ошибка: '+e.message,'err'); }
 }
 
 function renderExchange(){

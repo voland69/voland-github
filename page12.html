@@ -129,14 +129,6 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 /* NAV FIX 60px / 52x52 / no scroll */
 
 
-
-
-
-
-
-
-
-
 .nav-group:hover 
 
 
@@ -242,8 +234,8 @@ if (!volandHasSave()){ location.href='./page2.html'; }
 function getAllUpgradeable(){
   let equippedRaw = {};
   let inv = [];
-  try{ equippedRaw = volandGetEquipRaw(); }catch(e){ console.log('equipRaw err', e); }
-  try{ inv = volandGetInventory(); }catch(e){ console.log('inv err', e); }
+  try{ equippedRaw = volandGetEquipRaw(); }catch(e){  }
+  try{ inv = volandGetInventory(); }catch(e){  }
   let equippedIds = new Set(Object.values(equippedRaw).map(id=>volandResolveItemId(id)));
   let equippedBases = new Set();
   try{
@@ -281,8 +273,8 @@ function getAllUpgradeable(){
         });
       }
     }
-  }catch(e){ console.log('hero weapon err', e); }
-  console.log('DEBUG equippedBases', equippedBases, 'hero', heroId, 'allowed', allowedWeaponBases, 'inv', inv);
+  }catch(e){  }
+  
   let all = [];
   let baseMap = {};
   const tierOrder = {bw:0,green:1,blue:2,red:3,gold:4};
@@ -300,16 +292,16 @@ function getAllUpgradeable(){
       if(!it.level) it.level=1;
       let resolvedId = volandResolveItemId(it.id);
       if(equippedIds.has(it.id) || equippedIds.has(resolvedId)){
-        console.log('skip equipped id', it.id);
+        
         return;
       }
       let base = it.baseId || it.id.split('-')[0];
       if(equippedBases.has(base)){
-        console.log('skip base already equipped', base, it.id);
+        
         return;
       }
       if(allowedWeaponBases && ['bow','staff','sword','shield'].includes(base) && !allowedWeaponBases.has(base)){
-        console.log('skip weapon not allowed for class', base, 'hero', heroId);
+        
         return;
       }
       let cost = null;
@@ -329,7 +321,7 @@ function getAllUpgradeable(){
   all = Object.values(baseMap);
   // FALLBACK only if inventory truly empty - show starter gear NOT equipped and filtered by class
   if(all.length===0){
-    console.log('FALLBACK to starter gear by class (non-equipped, filtered)');
+    
     try{
       let starterIds = [];
       if(heroId && typeof VOLAND_GET_STARTER_GEAR_FOR_HERO==='function'){
@@ -353,7 +345,7 @@ function getAllUpgradeable(){
         baseMap[base] = {item:it, slot:it.slot, equipped:false, cost:cost, isMax:!cost, isFallback:true};
       });
       all = Object.values(baseMap);
-    }catch(e){ console.log('fallback err', e); }
+    }catch(e){  }
   }
   all.sort((a,b)=>{
     if((tierOrder[a.item.tier]||0)!==(tierOrder[b.item.tier]||0)) return (tierOrder[a.item.tier]||0)-(tierOrder[b.item.tier]||0);

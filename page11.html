@@ -213,7 +213,7 @@ function getAllHeroes(){
       let h = VH[id];
       list.push({id, n:h.n, role:h.role, img:h.img, st:h.st});
     });
-  }catch(e){ console.log('getAllHeroes error', e); }
+  }catch(e){  }
   return list;
 }
 function renderHeroGrid(){
