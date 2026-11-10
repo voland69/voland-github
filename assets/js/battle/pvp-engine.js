@@ -1,6 +1,6 @@
 // VOLAND PVP ENGINE V3 - Full PVE-like: buffs/debuffs/passives/summons for all 8 heroes
 (function(){
-const DIFF_MULT = { easy: 0.3, medium: 1.0, hard: 1.3 };
+const DIFF_MULT = { easy: 0.7, medium: 1.0, hard: 1.3 };
 const PVP_HP_MULT = 5;
 let player=null, bot=null, turn=1, isOver=false;
 let logEl, pHpBar, bHpBar, pManaBar, bManaBar, pHpText, bHpText, pManaText, bManaText;
