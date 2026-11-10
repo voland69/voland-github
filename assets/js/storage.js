@@ -378,7 +378,7 @@ function volandFixMissingStatPoints(){
       let saves = volandGetSaves(); let idx = volandGetActiveIndex();
       if(saves[idx]){ saves[idx].stat_points = newRemaining; volandSaveSaves(saves); }
       localStorage.setItem('voland_v1_stat_points', String(newRemaining));
-      console.log('[STAT] Fix missing points: +' + missing + ' (lvl ' + lvl + ', shouldHave ' + shouldHave + ', had ' + have + ')');
+      
       return {fixed:missing, remaining:newRemaining};
     }
     return {fixed:0, remaining:remaining};
@@ -570,20 +570,20 @@ function volandUpdateMissionStat(type, loc, value){
    stats.kill_loc = stats.kill_loc || {1:0,2:0,3:0,4:0,5:0,6:0};
    stats.kill_loc[l] = (stats.kill_loc[l]||0) + value;
    stats.kill_loc[String(l)] = stats.kill_loc[l];
-   console.log('[MISSION] kill_mob loc', l, 'now', stats.kill_loc[l]);
+   
   } else if(type==='kill_boss'){
    stats.kill_boss = (stats.kill_boss||0) + value;
-   console.log('[MISSION] kill_boss now', stats.kill_boss);
+   
   } else if(type==='kill_boss_diff'){
    if(!stats.kill_boss_diff.includes(value)) stats.kill_boss_diff.push(value);
   } else if(type==='ult'){
    stats.ult_uses = (stats.ult_uses||0) + (parseInt(value)||1);
-   console.log('[MISSION] ult_uses now', stats.ult_uses);
+   
   } else if(type==='win_streak'){
    // win_streak обрабатывается отдельно через max_win_streak, тут не трогаем
   }
   volandSaveMissionStats(stats);
-  console.log('[MISSION] saved', JSON.stringify(stats).slice(0,400));
+  
  }catch(e){ console.error('[MISSION] update error', e); }
 }
 
@@ -639,8 +639,6 @@ function volandCheckMissions(){
 
 // init login tracking
 try{ volandUpdateMissionStat('login'); }catch(e){}
-
-
 
 
 // ===== VOLAND STORAGE v3 - GOLD / XP / RESOURCES / INVENTORY / LEVEL =====
@@ -793,7 +791,7 @@ function volandCheckLevelUp(oldXp, newXp){
         let newXp = orig(amount);
         let lvlUp = volandCheckLevelUp(oldXp, newXp);
         if(lvlUp.leveled){
-          console.log('LEVEL UP! '+lvlUp.oldLvl+' -> '+lvlUp.newLvl);
+          
         }
         return newXp;
       }catch(e){ return orig(amount); }
@@ -1613,10 +1611,6 @@ function volandGetStaminaRegenBoost(){
 }
 
 
-
-
-
-
 function volandCleanupNonClassWeapons(){
  try{
   let heroId = 'necro-f-new';
@@ -1638,13 +1632,12 @@ function volandCleanupNonClassWeapons(){
       return true;
     });
     if(filtered.length !== inv.length){
-      console.log('Cleaned non-class weapons', inv.length - filtered.length);
+      
       saves[idx].inventory = filtered;
       volandSaveSaves(saves);
       try{ localStorage.setItem('voland_v1_inventory', JSON.stringify(filtered)); }catch(e){}
     }
   }
- }catch(e){ console.log('cleanup error', e); }
+ }catch(e){  }
 }
 try{ volandCleanupNonClassWeapons(); }catch(e){}
-
