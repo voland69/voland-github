@@ -348,7 +348,7 @@ document.getElementById('stagesGrid').innerHTML=enemies.map(e=>{
  }catch(err){}
  let rs = (REAL_STATS[locId] && REAL_STATS[locId][e.stage]) || (REAL_STATS[1] && REAL_STATS[1][e.stage]) || {hp:2000,def:100,dmg:150};
  let iconHtml = e.img ? `<img src="${e.img}" alt="${volandEnemyName(e)}" onerror="this.parentNode.innerHTML='${e.icon}'">` : `<div style="font-size:48px">${e.icon}</div>`;
- let staminaBadge = `<div class="boss-badge" style="background:rgba(30,60,30,.92);border:1px solid #3ad080;color:#3ad080;box-shadow:0 2px 8px rgba(0,0,0,.5)">${staminaCost} ${volandT('ВЫН', 'STAM')}</div>`;
+ let staminaBadge = `<div class="boss-badge" style="background:rgba(30,60,30,.92);border:1px solid #3ad080;color:#3ad080;box-shadow:0 2px 8px rgba(0,0,0,.5)">${staminaCost} STAM</div>`;
  let bossCounterBadge = '';
  if(isBoss){
    let kills = bossInfo.kills;
@@ -361,7 +361,7 @@ document.getElementById('stagesGrid').innerHTML=enemies.map(e=>{
  return `
  <div class="card ${e.boss?'boss':''} ${isBoss && !bossInfo.canFight ? 'boss-limit' : ''}" onclick="startBattle(${e.stage})" style="${isBoss && !bossInfo.canFight ? 'opacity:0.55;filter:grayscale(0.5)' : ''}">
   ${isBoss ? bossCounterBadge : staminaBadge}
-  ${isBoss ? `<div class="boss-badge" style="top:36px;right:8px;background:rgba(30,60,30,.92);border:1px solid #3ad080;color:#3ad080">${staminaCost} ${volandT('ВЫН', 'STAM')}</div>` : ''}
+  ${isBoss ? `<div class="boss-badge" style="top:36px;right:8px;background:rgba(30,60,30,.92);border:1px solid #3ad080;color:#3ad080">${staminaCost} STAM</div>` : ''}
   <div class="icon">${iconHtml}</div>
   <div class="name">${volandEnemyName(e)}<span style="display:block;margin-top:4px;font:400 8px 'JetBrains Mono',monospace;color:#8ab0d0;letter-spacing:.1em">HP ${rs.hp} • DEF ${rs.def} • DMG ${rs.dmg}</span></div>
  </div>
