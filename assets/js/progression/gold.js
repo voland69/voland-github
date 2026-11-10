@@ -1,6 +1,6 @@
 // VOLAND GOLD SYSTEM v3
 function volandGetGoldReal(){ try{ return typeof volandGetGold==='function' ? volandGetGold() : 0; }catch(e){ return 0; } }
-if(typeof volandAddGold==='undefined' || volandAddGold.toString().includes('console.log')){
+if(typeof volandAddGold==='undefined'){
   window.volandAddGold = function(amount){
     try{
       if(typeof volandGetGold==='function' && typeof volandSetGold==='function'){
