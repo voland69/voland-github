@@ -115,8 +115,8 @@ function addLog(msg, type){
   logEl.appendChild(div); logEl.scrollTop=logEl.scrollHeight;
 }
 function getSkillInfo(heroId, idx){
-  if(idx===0) return {name:'АТАКА', displayName: (typeof volandT==='function' ? volandT('АТАКА','ATTACK') : 'АТАКА'), mana:0, cd:1, desc:'100% урона'};
-  try{ let VH=getVH(); let h=VH[heroId]; if(h&&h.sk&&h.sk[idx]){ let s=h.sk[idx]; return {name: s[0], displayName: (typeof volandSkillName==='function' ? volandSkillName(s[0]) : s[0]), mana: parseMana(s[5]||''), cd: parseCd(s[5]||''), desc:s[5]||''}; } }catch(e){}
+  if(idx===0) return {name:'АТАКА', icon:'⚔️', displayName: (typeof volandT==='function' ? volandT('АТАКА','ATTACK') : 'АТАКА'), mana:0, cd:1, desc:'100% урона'};
+  try{ let VH=getVH(); let h=VH[heroId]; if(h&&h.sk&&h.sk[idx]){ let s=h.sk[idx]; return {name: s[0], icon: (s[2]&&s[2][0] ? s[2][0] : '🔮'), displayName: (typeof volandSkillName==='function' ? volandSkillName(s[0]) : s[0]), mana: parseMana(s[5]||''), cd: parseCd(s[5]||''), desc:s[5]||''}; } }catch(e){}
   const fallback=[{name:'Skill1',mana:10,cd:3},{name:'Skill2',mana:20,cd:8},{name:'Skill3',mana:30,cd:15},{name:'ULT',mana:60,cd:20}];
   return fallback[idx-1]||fallback[0];
 }
@@ -509,7 +509,7 @@ function renderSkills(){
     let info=getSkillInfo(player.id, i);
     let cd=player.cd[i]; let can=cd<=0 && player.mana>=info.mana && player.stunTurns===0 && !isOver;
     let key=['Q','W','E','R','T'][i];
-    html+=`<button class="skill-btn ${can?'':'disabled'}" onclick="window.pvpPlayerAction(${i})" ${can?'':'disabled'}><div class="key">${key}</div><div class="name">${info.displayName || info.name}</div><div class="meta">${info.mana} mana ${cd>0?'• CD '+cd:''}</div></button>`;
+    html+=`<button class="skill-btn ${can?'':'disabled'}" onclick="window.pvpPlayerAction(${i})" ${can?'':'disabled'}><div class="key">${key}</div><div class="skill-icon">${info.icon && info.icon.indexOf(".")!==-1 ? `<img src="${info.icon}" style="width:28px;height:28px;object-fit:cover;border-radius:6px;display:block;margin:0 auto 4px" onerror="this.style.display='none'">` : `<div style="font-size:22px;line-height:1;margin:0 auto 4px;text-align:center">${info.icon||"🔮"}</div>`}</div><div class="name">${info.displayName || info.name}</div><div class="meta">${info.mana} mana ${cd>0?'• CD '+cd:''}</div></button>`;
   }
   bar.innerHTML=html;
 }
