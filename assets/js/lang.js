@@ -334,70 +334,89 @@ function volandSkillShort(rusName, rusShort){
 }
 
 
-// ===== VOLAND LANG v1.3 — Stage 4: battle logs =====
+// ===== VOLAND LANG v1.3 — Stage 4: battle logs (FIX2 — whole phrases, no poisony) =====
 function volandBattleLog(t){
   if(!t) return t;
   if(volandGetLang()!=='en') return t;
   let out = String(t);
+  // 1. Скиллы — целые имена, длинные первыми
   try{
-    for(let k in VOLAND_SKILL_DICT){
+    let keys = Object.keys(VOLAND_SKILL_DICT).sort((a,b)=>b.length-a.length);
+    for(let k of keys){
       if(out.indexOf(k)!==-1) out = out.split(k).join(VOLAND_SKILL_DICT[k].en);
     }
   }catch(e){}
+  // 2. Целые фразы — длинные первыми, чтобы "эффекты: яды, скелеты, сферы" не разбилась на куски
   let phrases = [
-    ['ПОБЕДА!', 'VICTORY!'],
-    ['ПОРАЖЕНИЕ!', 'DEFEAT!'],
-    ['НИЧЬЯ!', 'DRAW!'],
-    ['ТВОЙ ХОД', 'YOUR TURN'],
+    ['эффекты: яды, скелеты, сферы', 'effects: poisons, skeletons, spheres'],
+    ['Эффекты: яды, скелеты, сферы', 'Effects: poisons, skeletons, spheres'],
+    ['Конец раунда', 'End of round'],
+    ['конец раунда', 'end of round'],
     ['Не хватает маны', 'Not enough mana'],
     ['Нет лута', 'No loot'],
     ['Ты победил', 'You defeated'],
     ['Тебя победил', 'Defeated you'],
-    ['убит!', 'killed!'],
+    ['Твой ход', 'Your turn'],
+    ['твой ход', 'your turn'],
+    ['ТВОЙ ХОД', 'YOUR TURN'],
+    ['ПОБЕДА!', 'VICTORY!'],
+    ['ПОРАЖЕНИЕ!', 'DEFEAT!'],
+    ['НИЧЬЯ!', 'DRAW!'],
+    ['пропускает ход (нет маны)', 'skips turn (no mana)'],
+    ['пропускает ход', 'skips turn'],
+    ['Ударная волна', 'Shockwave'],
+    ['Контратака Волка', 'Wolf Counter'],
+    ['Уязвимость Костей', 'Bone Vulnerability'],
+    ['Поджог земли', 'Ground burn'],
+    ['100% урона', '100% damage'],
+    ['без маны', 'no mana'],
     ['неуязвим', 'invulnerable'],
     ['уклонился', 'dodged'],
-    ['пропускает ход', 'skips turn'],
     ['оглушен', 'stunned'],
+    ['убит!', 'killed!'],
     ['Кровотечение', 'Bleeding'],
     ['кровотечение', 'bleeding'],
     ['Горение', 'Burning'],
-    ['Поджог земли', 'Ground burn'],
-    ['Ударная волна', 'Shockwave'],
-    ['Контратака', 'Counter'],
-    ['Отражение', 'Reflect'],
-    ['Лайфстил', 'Lifesteal'],
-    ['ХОД ', 'TURN '],
-    ['Конец раунда', 'End of round'],
-    ['Раунд', 'Round'],
+    ['эффекты', 'effects'],
+    ['Эффекты', 'Effects'],
+    ['яды', 'poisons'],
+    ['скелеты', 'skeletons'],
+    ['сферы', 'spheres'],
+    ['Сферы', 'Spheres'],
+    ['Скелеты', 'Skeletons'],
     ['Игрок:', 'Player:'],
     ['Бот:', 'Bot:'],
+    ['Раунд', 'Round'],
+    ['ХОД ', 'TURN '],
     ['взорвался', 'exploded'],
     ['в клетке', 'in cage'],
     ['невидимость', 'invisibility'],
     ['инвиз крит', 'invis crit'],
     ['инвиз', 'invis'],
-    ['100% урона', '100% damage'],
-    ['без маны', 'no mana'],
-    ['урона', 'damage'],
+    ['гарант крит', 'guaranteed crit'],
     ['Урон:', 'Damage:'],
     ['Мана:', 'Mana:'],
     ['маны', 'mana'],
     ['КД:', 'CD:'],
-    ['стан', 'stun'],
-    ['Яд', 'Poison'],
-    ['яд', 'poison'],
     ['Лава', 'Lava'],
     ['Щит', 'Shield'],
     ['Блок:', 'Block:'],
-    ['поглотил', 'absorbed']
+    ['поглотил', 'absorbed'],
+    ['урона', 'damage']
   ];
+  // Сортируем по длине, чтобы длинные фразы шли первыми
+  phrases.sort((a,b)=>b[0].length-a[0].length);
   for(let p of phrases){
     if(out.indexOf(p[0])!==-1) out = out.split(p[0]).join(p[1]);
   }
-  out = out.split('АТАКА').join('ATTACK');
+  out = out.replace(/стан(?=[\s,\:\]\!\.])/g, 'stun');
+  // 2b. Яд — только целое слово, чтобы не ломать Ядовитая
+  out = out.replace(/Яд(?=[\s,\:\]\!\.])/g, 'Poison');
+  out = out.replace(/яд(?=[\s,\:\]\!\.])/g, 'poison');
+  // 3. АТАКА — только целое слово, не внутри других слов
+  out = out.replace(/(^|[^A-Za-zА-Яа-яЁё])АТАКА([^A-Za-zА-Яа-яЁё]|$)/g, '$1ATTACK$2');
   return out;
 }
-
 document.addEventListener('DOMContentLoaded', function(){
   volandRenderLangToggle();
   volandApplyStaticLang();
