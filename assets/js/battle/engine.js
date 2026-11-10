@@ -89,7 +89,7 @@ window.VB={eDef, get eDmg(){return eDmg}, set eDmg(v){eDmg=v}, baseEDmg, eMaxHp,
 
 function rand(a,b){return Math.floor(Math.random()*(b-a+1))+a}
 const logZone=document.getElementById('logZone');
-function addLog(t,c=''){ const d=document.createElement('div'); d.className='log-line '+c; d.textContent=t; logZone.appendChild(d); logZone.scrollTop=9999; }
+function addLog(t,c=''){ try{ if(typeof volandBattleLog==='function') t=volandBattleLog(t); }catch(e){} const d=document.createElement('div'); d.className='log-line '+c; d.textContent=t; logZone.appendChild(d); logZone.scrollTop=9999; }
 window.VB.addLog=addLog;
 
 function parseSkill(sk){

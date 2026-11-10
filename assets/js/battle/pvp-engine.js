@@ -86,7 +86,7 @@ function initBattle(playerHeroId, botHeroId, diff){
   addLog(`Игрок: HP ${player.maxHp} DMG ${player.baseDmg} DEF ${player.baseDef} | Бот: HP ${bot.maxHp} DMG ${bot.baseDmg} DEF ${bot.baseDef}`, '');
 }
 function getPassiveName(id){
-  try{ let VH=getVH(); if(VH[id]&&VH[id].sk&&VH[id].sk[0]) return VH[id].sk[0][0]; }catch(e){}
+  try{ let VH=getVH(); if(VH[id]&&VH[id].sk&&VH[id].sk[0]) return (typeof volandSkillName==='function' ? volandSkillName(VH[id].sk[0][0]) : VH[id].sk[0][0]); }catch(e){}
   return 'PASSIVE';
 }
 function setupUI(){
@@ -110,12 +110,13 @@ function updateBars(){
 }
 function addLog(msg, type){
   if(!logEl) return;
+  try{ if(typeof volandBattleLog==='function') msg=volandBattleLog(msg); }catch(e){}
   let div=document.createElement('div'); div.className='log-line '+(type||''); div.textContent=`[${turn}] ${msg}`;
   logEl.appendChild(div); logEl.scrollTop=logEl.scrollHeight;
 }
 function getSkillInfo(heroId, idx){
   if(idx===0) return {name:'АТАКА', mana:0, cd:1, desc:'100% урона'};
-  try{ let VH=getVH(); let h=VH[heroId]; if(h&&h.sk&&h.sk[idx]){ let s=h.sk[idx]; return {name:s[0], mana: parseMana(s[5]||''), cd: parseCd(s[5]||''), desc:s[5]||''}; } }catch(e){}
+  try{ let VH=getVH(); let h=VH[heroId]; if(h&&h.sk&&h.sk[idx]){ let s=h.sk[idx]; return {name: (typeof volandSkillName==='function' ? volandSkillName(s[0]) : s[0]), mana: parseMana(s[5]||''), cd: parseCd(s[5]||''), desc:s[5]||''}; } }catch(e){}
   const fallback=[{name:'Skill1',mana:10,cd:3},{name:'Skill2',mana:20,cd:8},{name:'Skill3',mana:30,cd:15},{name:'ULT',mana:60,cd:20}];
   return fallback[idx-1]||fallback[0];
 }

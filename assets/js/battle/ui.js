@@ -48,7 +48,7 @@ function selectLocation(id){
   `).join('');
 }
 
-function backToLocations(){ hideVictory(); renderLocations(); logChat('Возврат к локациям'); }
+function backToLocations(){ hideVictory(); renderLocations(); logChat(volandT("Возврат к локациям","Back to locations")); }
 function backToHero(){ location.href='./page3.html'; }
 
 function clearBattleLog(){ document.getElementById('battleLog').innerHTML=''; if (battle) battle.log=[]; }
