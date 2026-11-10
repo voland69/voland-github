@@ -17,6 +17,21 @@ function volandT(ru, en){
   return volandGetLang()==='en' ? en : ru;
 }
 var VOLAND_STATIC_DICT = {
+  'РЫНОК • 3 ВКЛАДКИ': 'MARKET • 3 TABS',
+  'ЗОЛОТО:': 'GOLD:',
+  'РЕС:': 'RES:',
+  'РЕСУРСЫ В СУМКЕ': 'RESOURCES IN BAG',
+  '1 • РЫНОК': '1 • MARKET',
+  '2 • ОБМЕН': '2 • EXCHANGE',
+  'КВАРЦ': 'QUARTZ',
+  'РЕСУРС': 'RESOURCE',
+  'ЦЕНА ПОКУПКИ': 'BUY PRICE',
+  'ЦЕНА ПРОДАЖИ': 'SELL PRICE',
+  'КУПИТЬ': 'BUY',
+  'ПРОДАТЬ': 'SELL',
+  'ЗАКРЫТЬ': 'CLOSE',
+  'РЫНОК V1': 'MARKET V1',
+  'МИССИИ • 51': 'MISSIONS • 51',
   'В рюкзаке: x0': 'In bag: x0',
   'Сезон 1 • 1 ноября — 31 декабря': 'Season 1 • 1 November — 31 December',
   'Новости и изменения': 'News and changes',
@@ -187,7 +202,7 @@ var VOLAND_MONTH_UP = {
   'ИЮЛЬ': 'JULY', 'АВГУСТ': 'AUGUST', 'СЕНТЯБРЬ': 'SEPTEMBER', 'ОКТЯБРЬ': 'OCTOBER', 'НОЯБРЬ': 'NOVEMBER', 'ДЕКАБРЬ': 'DECEMBER'
 };
 var VOLAND_RES_RU = {
-  'Кварц': 'Quartz', 'Дерево': 'Wood', 'Алмаз': 'Diamond', 'Вода': 'Water', 'Камень': 'Stone', 'Кость': 'Bone', 'Золото': 'Gold', 'Клык Хищника': 'Predator Fang', 'Эссенция': 'Essence'
+  'Кварц': 'Quartz', 'Дерево': 'Wood', 'Алмаз': 'Diamond', 'Вода': 'Water', 'Камень': 'Stone', 'Кость': 'Bone'
 };
 function volandMonthGen(ru){ return volandGetLang()==='en' && VOLAND_MONTH_GEN[ru] ? VOLAND_MONTH_GEN[ru] : ru; }
 function volandMonthUp(ru){ return volandGetLang()==='en' && VOLAND_MONTH_UP[ru] ? VOLAND_MONTH_UP[ru] : ru; }
@@ -207,13 +222,6 @@ function volandItemName(item){
   if(!item) return '';
   let name = typeof item === 'string' ? item : (item.name || '');
   if(volandGetLang()!=='en') return name;
-  // Если у предмета есть поле eng (ресурсы, будущие предметы) - берём его
-  if(typeof item !== 'string' && item.eng) return item.eng;
-  // Ресурсы как строка: 'Кварц' -> 'Quartz'
-  if(typeof VOLAND_RES_RU !== 'undefined' && VOLAND_RES_RU[name]) return VOLAND_RES_RU[name];
-  // Зелья: 'Зелье HP M' -> 'HP Potion M'
-  let pm = name.match(/^Зелье\s+(HP|MANA|STAM)\s+(\S+)$/);
-  if(pm) return pm[1] + ' Potion ' + pm[2];
   // Паттерн: "Амулет Серый Lvl1", "Серьга 1 Серый Lvl1", "Кольцо 2 Синий Lvl5"
   // Разбираем: [Слот] [номер?] [Цвет] LvlN
   let m = name.match(/^(\S+)(?:\s+(\d+))?\s+(\S+)\s+(Lvl\d+)$/);
@@ -368,47 +376,6 @@ function volandBattleLog(t){
   out = out.split('победил').join('defeated');
   out = out.split('ПОБЕДА!').join('VICTORY!');
   out = out.split('бафы/дебафы').join('buffs/debuffs');
-  // Хвосты со скринов page8 - урон / аватар / всем / кончился
-  out = out.split('конец аватара').join('avatar ended');
-  out = out.split('Конец аватара').join('Avatar ended');
-  out = out.split('уже активен').join('already active');
-  out = out.split('Аватар уже').join('Avatar already');
-  out = out.split('АВАТАР').join('AVATAR');
-  out = out.split('Аватар').join('Avatar');
-  out = out.split('аватар').join('avatar');
-  out = out.split('неуязвим').join('invulnerable');
-  out = out.split('неуязв').join('invuln');
-  out = out.split('кончился').join('ended');
-  out = out.split('кончилась').join('ended');
-  out = out.split('истек').join('expired');
-  out = out.split('сломан').join('broken');
-  out = out.split('всем').join('to all');
-  out = out.split('урон').join('damage');
-  out = out.split('Урон').join('Damage');
-  // Hero-логи Lion Warden / Bastion со скринов page8 - целые фразы первыми
-  out = out.split('Имперский Бастион').join('Imperial Bastion');
-  out = out.split('Бастион блок').join('Bastion block');
-  out = out.split('Бастион').join('Bastion');
-  out = out.split('бьет тебя').join('hits you');
-  out = out.split('бьешь').join('hit');
-  out = out.split('оглушает').join('stuns');
-  out = out.split(' (из ').join(' (of ');
-  out = out.split('щит').join('shield');
-  out = out.split('Щит').join('Shield');
-  out = out.split('блок').join('block');
-  out = out.split('Блок').join('Block');
-  out = out.split('отраж').join('reflect');
-  // Имена мобов - через VOLAND_ENEMIES, чтобы в EN логе не было русских имён
-  try{
-    if(typeof VOLAND_ENEMIES!=='undefined'){
-      for(let k in VOLAND_ENEMIES){
-        let arr = VOLAND_ENEMIES[k]||[];
-        for(let e of arr){
-          if(e && e.name && e.eng && out.indexOf(e.name)!==-1) out = out.split(e.name).join(e.eng);
-        }
-      }
-    }
-  }catch(e){}
   // 1. Скиллы — целые имена, длинные первыми
   try{
     let keys = Object.keys(VOLAND_SKILL_DICT).sort((a,b)=>b.length-a.length);
