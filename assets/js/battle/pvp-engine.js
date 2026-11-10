@@ -86,7 +86,7 @@ function initBattle(playerHeroId, botHeroId, diff){
   addLog(`Игрок: HP ${player.maxHp} DMG ${player.baseDmg} DEF ${player.baseDef} | Бот: HP ${bot.maxHp} DMG ${bot.baseDmg} DEF ${bot.baseDef}`, '');
 }
 function getPassiveName(id){
-  try{ let VH=getVH(); if(VH[id]&&VH[id].sk&&VH[id].sk[0]) return (typeof volandSkillName==='function' ? volandSkillName(VH[id].sk[0][0]) : VH[id].sk[0][0]); }catch(e){}
+  try{ let VH=getVH(); if(VH[id]&&VH[id].sk&&VH[id].sk[0]) return VH[id].sk[0][0]; }catch(e){}
   return 'PASSIVE';
 }
 function setupUI(){
@@ -115,8 +115,8 @@ function addLog(msg, type){
   logEl.appendChild(div); logEl.scrollTop=logEl.scrollHeight;
 }
 function getSkillInfo(heroId, idx){
-  if(idx===0) return {name:'АТАКА', mana:0, cd:1, desc:'100% урона'};
-  try{ let VH=getVH(); let h=VH[heroId]; if(h&&h.sk&&h.sk[idx]){ let s=h.sk[idx]; return {name: (typeof volandSkillName==='function' ? volandSkillName(s[0]) : s[0]), mana: parseMana(s[5]||''), cd: parseCd(s[5]||''), desc:s[5]||''}; } }catch(e){}
+  if(idx===0) return {name:'АТАКА', displayName: (typeof volandT==='function' ? volandT('АТАКА','ATTACK') : 'АТАКА'), mana:0, cd:1, desc:'100% урона'};
+  try{ let VH=getVH(); let h=VH[heroId]; if(h&&h.sk&&h.sk[idx]){ let s=h.sk[idx]; return {name: s[0], displayName: (typeof volandSkillName==='function' ? volandSkillName(s[0]) : s[0]), mana: parseMana(s[5]||''), cd: parseCd(s[5]||''), desc:s[5]||''}; } }catch(e){}
   const fallback=[{name:'Skill1',mana:10,cd:3},{name:'Skill2',mana:20,cd:8},{name:'Skill3',mana:30,cd:15},{name:'ULT',mana:60,cd:20}];
   return fallback[idx-1]||fallback[0];
 }
@@ -509,7 +509,7 @@ function renderSkills(){
     let info=getSkillInfo(player.id, i);
     let cd=player.cd[i]; let can=cd<=0 && player.mana>=info.mana && player.stunTurns===0 && !isOver;
     let key=['Q','W','E','R','T'][i];
-    html+=`<button class="skill-btn ${can?'':'disabled'}" onclick="window.pvpPlayerAction(${i})" ${can?'':'disabled'}><div class="key">${key}</div><div class="name">${info.name}</div><div class="meta">${info.mana} mana ${cd>0?'• CD '+cd:''}</div></button>`;
+    html+=`<button class="skill-btn ${can?'':'disabled'}" onclick="window.pvpPlayerAction(${i})" ${can?'':'disabled'}><div class="key">${key}</div><div class="name">${info.displayName || info.name}</div><div class="meta">${info.mana} mana ${cd>0?'• CD '+cd:''}</div></button>`;
   }
   bar.innerHTML=html;
 }
