@@ -110,7 +110,7 @@ function updBars(){
  document.getElementById('enemyHpBar').textContent='HP '+eHp+'/'+eMaxHp;
  let stat='DEF '+eDef+' • DMG '+eDmg;
  if(enemyStun>0) stat+=' • STUN '+enemyStun;
- if(window.VB.extraStat){ let _es=window.VB.extraStat(); try{ if(typeof volandBattleLog==='function' && volandGetLang()==='en') _es=volandBattleLog(_es); }catch(e){} stat+=' • '+_es; }
+ if(window.VB.extraStat) stat+=' • '+window.VB.extraStat();
  document.getElementById('enemyStatBar').textContent=stat;
  document.getElementById('turnInfo').textContent=volandT('ХОД ','TURN ')+turn+' • '+(isBattleOver?volandT('КОНЕЦ','END'):volandT('ТВОЙ ХОД','YOUR TURN'))+' • MANA '+hMana;
 }
@@ -265,7 +265,7 @@ function showVictory(){
       drop.resources.forEach(r=>{
         let res = (typeof VOLAND_RESOURCES!=='undefined') ? VOLAND_RESOURCES.find(x=>x.id===r.id) : null;
         let icon = res && res.icon ? res.icon : './assets/ui/loot/essence.webp';
-        let name = res ? res.name : r.id;
+        let name = res ? (typeof volandResourceName==='function' ? volandResourceName(res) : res.name) : r.id;
         let cnt = r.count||1;
         boxesHtml += '<div class="reward"><div><img src="'+icon+'" style="width:42px;height:42px;object-fit:contain;display:block" onerror="this.style.display=\'none\'"></div><div class="reward-val">'+(cnt>1 ? 'x'+cnt : '1')+'</div><div class="reward-lbl">'+name+'</div></div>';
       });
@@ -276,7 +276,7 @@ function showVictory(){
         if(typeof VOLAND_POTIONS!=='undefined') it = VOLAND_POTIONS.find(x=>x.id===pid);
         if(!it && typeof VOLAND_ITEMS!=='undefined') it = VOLAND_ITEMS.find(x=>x.id===pid);
         let icon = it && it.icon ? it.icon : './assets/ui/potions/hp-xs.webp';
-        let name = it ? it.name : pid;
+        let name = it ? (typeof volandItemName==='function' ? volandItemName(it) : it.name) : pid;
         let cnt = p.count||1;
         boxesHtml += '<div class="reward"><div><img src="'+icon+'" style="width:42px;height:42px;object-fit:contain;display:block" onerror="this.style.display=\'none\'"></div><div class="reward-val">'+(cnt>1 ? 'x'+cnt : '1')+'</div><div class="reward-lbl">'+name+'</div></div>';
       });
