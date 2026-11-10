@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>VOLAND - MARKET V1</title>
+<title>VOLAND - РЫНОК V1</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
@@ -30,7 +30,7 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 .nav-group:hover .nav-label{opacity:1 !important}
 .wrap{display:flex !important;position:fixed !important;inset:0 !important}
 .center{flex:1;display:flex;flex-direction:column;overflow:hidden;background:rgba(16,22,30,.22)}
-.top-bar{height:48px;background:rgba(18,24,33,.85);border-bottom:1px solid rgba(30,42,50,.5);display:flex;align-items:center;justify-content:space-between;padding:0 16px}
+.top-bar{height:48px;background:rgba(18,24,33,.85);border-bottom:1px solid rgba(30,42,50,.5);display:flex;align-items:center;justify-content:space-between;padding:0 16px;padding-right:130px}.top-res{margin-right:10px}
 .top-title{font:900 16px 'Cinzel Decorative',serif;letter-spacing:.2em;color:#e6d5a0}
 .top-res{display:flex;gap:12px;font:700 10px 'JetBrains Mono',monospace;color:#8a9aaa}
 .top-res span{color:#d0b040}
@@ -146,21 +146,21 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 </div>
 <div class="center">
   <div class="top-bar">
-    <div class="top-title">MARKET • 3 TABS</div>
+    <div class="top-title">РЫНОК • 3 ВКЛАДКИ</div>
     <div class="top-res">
-      <div>GOLD: <span id="goldDisplay">0</span></div>
-      <div>RES: <span id="resDisplay">0</span></div>
+      <div>ЗОЛОТО: <span id="goldDisplay">0</span></div>
+      <div>РЕС: <span id="resDisplay">0</span></div>
     </div>
   </div>
   <div class="main-area">
     <div class="left-list">
-      <div class="list-header"><span>RESOURCES IN BAG</span><span id="countDisplay">0</span></div>
+      <div class="list-header"><span>РЕСУРСЫ В СУМКЕ</span><span id="countDisplay">0</span></div>
       <div class="res-list" id="resList"></div>
     </div>
     <div class="right-preview" id="previewArea">
       <div class="tabs">
-        <div class="tab active" data-tab="market" onclick="switchTab('market')">1 • MARKET</div>
-        <div class="tab" data-tab="exchange" onclick="switchTab('exchange')">2 • EXCHANGE</div>
+        <div class="tab active" data-tab="market" onclick="switchTab('market')">1 • РЫНОК</div>
+        <div class="tab" data-tab="exchange" onclick="switchTab('exchange')">2 • ОБМЕН</div>
         <div class="tab" data-tab="p2p" onclick="switchTab('p2p')">3 • P2P</div>
       </div>
       <div id="tabMarket" style="width:100%;max-width:800px"></div>
@@ -176,18 +176,18 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
     <div class="modal-header">
       <div class="modal-icon" id="modalIcon"><img src="" alt=""></div>
       <div class="modal-info">
-        <div class="modal-name" id="modalName">QUARTZ</div>
-        <div class="modal-desc" id="modalDesc">RESOURCE</div>
+        <div class="modal-name" id="modalName">КВАРЦ</div>
+        <div class="modal-desc" id="modalDesc">РЕСУРС</div>
         <div class="modal-have" id="modalHave">В рюкзаке: x0</div>
       </div>
     </div>
     <div class="modal-prices">
       <div class="price-chip buy">
-        <div class="price-label">BUY PRICE</div>
+        <div class="price-label">ЦЕНА ПОКУПКИ</div>
         <div class="price-val buy" id="modalBuyPrice">50g</div>
       </div>
       <div class="price-chip sell">
-        <div class="price-label">SELL PRICE</div>
+        <div class="price-label">ЦЕНА ПРОДАЖИ</div>
         <div class="price-val sell" id="modalSellPrice">25g</div>
       </div>
     </div>
@@ -199,10 +199,10 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
       <button class="qty-btn" onclick="changeQty(10)">+10</button>
     </div>
     <div class="action-row">
-      <button class="btn buy" id="modalBuyBtn" onclick="confirmBuy()">BUY</button>
-      <button class="btn sell" id="modalSellBtn" onclick="confirmSell()">SELL</button>
+      <button class="btn buy" id="modalBuyBtn" onclick="confirmBuy()">КУПИТЬ</button>
+      <button class="btn sell" id="modalSellBtn" onclick="confirmSell()">ПРОДАТЬ</button>
     </div>
-    <button class="btn close" onclick="closeModal()" style="width:100%">CLOSE</button>
+    <button class="btn close" onclick="closeModal()" style="width:100%">ЗАКРЫТЬ</button>
     <div class="log" id="modalLog"></div>
   </div>
 </div>
@@ -257,8 +257,12 @@ const RES_ICONS = {
   essence:'./assets/ui/loot/essence.webp'
 };
 const RES_NAMES = {
+  quartz:'Кварц', wood:'Дерево', diamond:'Алмаз', water:'Вода', stone:'Камень', bone:'Кость', fang:'Клык', essence:'Эссенция'
+};
+const RES_NAMES_EN = {
   quartz:'QUARTZ', wood:'WOOD', diamond:'DIAMOND', water:'WATER', stone:'STONE', bone:'BONE', fang:'FANG', essence:'ESSENCE'
 };
+function resName(id){ return (typeof volandT==='function' ? volandT(RES_NAMES[id]||id, RES_NAMES_EN[id]||id) : (RES_NAMES[id]||id)); }
 
 let currentFilter = 'all';
 let currentSort = 'price-asc';
@@ -308,8 +312,8 @@ function renderResList(){
     div.innerHTML = `
       <div class="res-icon">${iconHtml}</div>
       <div class="res-info">
-        <div class="res-name">${RES_NAMES[entry.id]} <span style="color:#3ad080">x${entry.amount}</span></div>
-        <div class="res-tier">${price ? price.buy+'g BUY / '+price.sell+'g SELL' : ''}</div>
+        <div class="res-name">${resName(entry.id)} <span style="color:#3ad080">x${entry.amount}</span></div>
+        <div class="res-tier">${price ? price.buy+'g '+volandT('КУПИТЬ','BUY')+' / '+price.sell+'g '+volandT('ПРОДАТЬ','SELL') : ''}</div>
       </div>
     `;
     listEl.appendChild(div);
@@ -338,9 +342,9 @@ function getMarketItems(){
   Object.keys(RES_NAMES).forEach(id=>{
     let have = res[id]||0;
     items.push({
-      id, type:'res', name:RES_NAMES[id], icon:RES_ICONS[id],
+      id, type:'res', name:resName(id), icon:RES_ICONS[id],
       buy:MARKET_PRICES[id].buy, sell:MARKET_PRICES[id].sell,
-      have, desc:'RESOURCE', price:MARKET_PRICES[id].buy
+      have, desc:volandT('РЕСУРС','RESOURCE'), price:MARKET_PRICES[id].buy
     });
   });
   Object.keys(POTION_PRICES).forEach(id=>{
@@ -354,7 +358,7 @@ function getMarketItems(){
     };
     icon = map[id] || './assets/ui/potions/hp-xs.webp';
     items.push({
-      id, type:'potion', name:itemData ? itemData.name.toUpperCase() : id.toUpperCase(),
+      id, type:'potion', name:itemData ? (typeof volandItemName==='function' ? volandItemName(itemData).toUpperCase() : itemData.name.toUpperCase()) : id.toUpperCase(),
       icon, buy:POTION_PRICES[id].buy, sell:POTION_PRICES[id].sell,
       have, desc:POTION_PRICES[id].desc, price:POTION_PRICES[id].buy
     });
@@ -374,18 +378,18 @@ function renderMarket(){
 
   let filterHtml = `
     <div class="market-card">
-      <div class="card-title">MARKET • BUY / SELL FOR GOLD</div>
+      <div class="card-title">${volandT('РЫНОК • КУПИТЬ / ПРОДАТЬ ЗА ЗОЛОТО','MARKET • BUY / SELL FOR GOLD')}</div>
       <div class="filter-bar">
         <div class="filter-group">
-          <button class="filter-btn ${currentFilter==='all'?'active':''}" onclick="setFilter('all')">ALL • ${getMarketItems().length}</button>
-          <button class="filter-btn ${currentFilter==='res'?'active':''}" onclick="setFilter('res')">RES • ${getMarketItems().filter(x=>x.type==='res').length}</button>
-          <button class="filter-btn ${currentFilter==='potion'?'active':''}" onclick="setFilter('potion')">POTIONS • ${getMarketItems().filter(x=>x.type==='potion').length}</button>
+          <button class="filter-btn ${currentFilter==='all'?'active':''}" onclick="setFilter('all')">${volandT('ВСЕ','ALL')} • ${getMarketItems().length}</button>
+          <button class="filter-btn ${currentFilter==='res'?'active':''}" onclick="setFilter('res')">${volandT('РЕС','RES')} • ${getMarketItems().filter(x=>x.type==='res').length}</button>
+          <button class="filter-btn ${currentFilter==='potion'?'active':''}" onclick="setFilter('potion')">${volandT('ЗЕЛЬЯ','POTIONS')} • ${getMarketItems().filter(x=>x.type==='potion').length}</button>
         </div>
         <div class="sort-group">
-          <button class="sort-btn ${currentSort==='price-asc'?'active':''}" onclick="setSort('price-asc')">PRICE ↑</button>
-          <button class="sort-btn ${currentSort==='price-desc'?'active':''}" onclick="setSort('price-desc')">PRICE ↓</button>
-          <button class="sort-btn ${currentSort==='name'?'active':''}" onclick="setSort('name')">NAME</button>
-          <button class="sort-btn ${currentSort==='have-desc'?'active':''}" onclick="setSort('have-desc')">HAVE</button>
+          <button class="sort-btn ${currentSort==='price-asc'?'active':''}" onclick="setSort('price-asc')">${volandT('ЦЕНА','PRICE')} ↑</button>
+          <button class="sort-btn ${currentSort==='price-desc'?'active':''}" onclick="setSort('price-desc')">${volandT('ЦЕНА','PRICE')} ↓</button>
+          <button class="sort-btn ${currentSort==='name'?'active':''}" onclick="setSort('name')">${volandT('ИМЯ','NAME')}</button>
+          <button class="sort-btn ${currentSort==='have-desc'?'active':''}" onclick="setSort('have-desc')">${volandT('ЕСТЬ','HAVE')}</button>
         </div>
       </div>
       <div class="backpack-grid" id="marketGrid">
@@ -394,7 +398,7 @@ function renderMarket(){
   items.forEach(it=>{
     let haveClass = it.have>0 ? '' : 'zero';
     filterHtml += `
-      <div class="bag-slot ${it.type}-type" onclick="openModal('${it.id}')" title="${it.name} • BUY ${it.buy}g / SELL ${it.sell}g">
+      <div class="bag-slot ${it.type}-type" onclick="openModal('${it.id}')" title="${it.name} • ${volandT('КУПИТЬ','BUY')} ${it.buy}g / ${volandT('ПРОДАТЬ','SELL')} ${it.sell}g">
         <div class="type-dot"></div>
         <img src="${it.icon}" onerror="this.style.display='none'; this.parentElement.textContent='💎'">
         <div class="qty-badge ${haveClass}">x${it.have}</div>
@@ -417,7 +421,7 @@ function openModal(id){
   currentModalItem = it;
   document.getElementById('modalIcon').innerHTML = `<img src="${it.icon}" onerror="this.parentElement.textContent='💎'">`;
   document.getElementById('modalName').textContent = it.name;
-  document.getElementById('modalDesc').textContent = it.desc + ' • ' + it.type.toUpperCase();
+  document.getElementById('modalDesc').textContent = it.desc + ' • ' + (it.type==='res' ? volandT('РЕСУРС','RESOURCE') : volandT('ЗЕЛЬЕ','POTION'));
   document.getElementById('modalHave').textContent = `${volandT('В рюкзаке: ', 'In bag: ')}x${it.have}`;
   document.getElementById('modalQty').value = 1;
   document.getElementById('modalLog').textContent = '';
@@ -487,7 +491,7 @@ function buyRes(id, qty){
     if(gold < price){ showLog('modalLog',volandT('Недостаточно GOLD: ', 'Not enough GOLD: ')+gold+'/'+price,'err'); return; }
     volandSetGold(gold - price);
     volandAddResource(id, qty);
-    showLog('modalLog',volandT('Куплено ', 'Bought ')+RES_NAMES[id]+' x'+qty+volandT(' за ', ' for ')+price+'g','ok');
+    showLog('modalLog',volandT('Куплено ', 'Bought ')+resName(id)+' x'+qty+volandT(' за ', ' for ')+price+'g','ok');
     renderMarket(); refreshTop();
     if(currentModalItem && currentModalItem.id===id){
       currentModalItem.have += qty;
@@ -500,12 +504,12 @@ function sellRes(id, qty){
   try{
     let res = volandGetResources();
     let have = res[id]||0;
-    if(have < qty){ showLog('modalLog',volandT('Недостаточно ', 'Not enough ')+RES_NAMES[id],'err'); return; }
+    if(have < qty){ showLog('modalLog',volandT('Недостаточно ', 'Not enough ')+resName(id),'err'); return; }
     let price = MARKET_PRICES[id].sell * qty;
     volandAddResource(id, -qty);
     let gold = volandGetGold();
     volandSetGold(gold + price);
-    showLog('modalLog',volandT('Продано ', 'Sold ')+RES_NAMES[id]+' x'+qty+volandT(' за ', ' for ')+price+'g','ok');
+    showLog('modalLog',volandT('Продано ', 'Sold ')+resName(id)+' x'+qty+volandT(' за ', ' for ')+price+'g','ok');
     renderMarket(); refreshTop();
     if(currentModalItem && currentModalItem.id===id){
       currentModalItem.have -= qty;
@@ -522,7 +526,7 @@ function buyPotion(id, qty){
     if(gold < price){ showLog('modalLog',volandT('Недостаточно золота', 'Not enough gold'),'err'); return; }
     volandAddGold(-price);
     for(let i=0;i<qty;i++){ if(typeof volandAddToInventory==='function') volandAddToInventory(id); }
-    showLog('modalLog','Куплено '+id+' x'+qty,'ok');
+    showLog('modalLog',volandT('Куплено ','Bought ')+(typeof volandItemName==='function' ? volandItemName({name: currentModalItem ? currentModalItem.name : id}) : id)+' x'+qty,'ok');
     renderMarket(); refreshTop();
     if(currentModalItem && currentModalItem.id===id){
       currentModalItem.have += qty;
@@ -539,7 +543,7 @@ function sellPotion(id, qty){
     if(have < qty){ showLog('modalLog',volandT('Недостаточно банок', 'Not enough jars'),'err'); return; }
     for(let i=0;i<qty;i++){ if(typeof volandRemoveFromInventory==='function') volandRemoveFromInventory(id); }
     volandAddGold(price);
-    showLog('modalLog','Продано '+id+' x'+qty+volandT(' за ', ' for ')+price+'g','ok');
+    showLog('modalLog',volandT('Продано ','Sold ')+(typeof volandItemName==='function' ? volandItemName({name: currentModalItem ? currentModalItem.name : id}) : id)+' x'+qty+volandT(' за ', ' for ')+price+'g','ok');
     renderMarket(); refreshTop();
     if(currentModalItem && currentModalItem.id===id){
       currentModalItem.have -= qty;
@@ -552,16 +556,16 @@ function sellPotion(id, qty){
 function renderExchange(){
   let el = document.getElementById('tabExchange');
   let res = {}; try{ res = volandGetResources(); }catch(e){}
-  let options = Object.keys(RES_NAMES).map(id=>`<option value="${id}">${RES_NAMES[id]} (x${res[id]||0})</option>`).join('');
+  let options = Object.keys(RES_NAMES).map(id=>`<option value="${id}">${resName(id)} (x${res[id]||0})</option>`).join('');
   let fromId = selectedResId || 'quartz';
   let toId = 'wood';
   if(fromId===toId) toId = 'diamond';
   let rate = getExchangeRate(fromId, toId);
-  let needDesc = rate >=1 ? `${rate} ${RES_NAMES[fromId]} → 1 ${RES_NAMES[toId]}` : `1 ${RES_NAMES[fromId]} → ${Math.round(1/rate)} ${RES_NAMES[toId]}`;
+  let needDesc = rate >=1 ? `${rate} ${resName(fromId)} → 1 ${resName(toId)}` : `1 ${resName(fromId)} → ${Math.round(1/rate)} ${resName(toId)}`;
   el.innerHTML = `
     <div class="market-card">
       <div class="card-title">${volandT('EXCHANGE • БЕЗ ЗОЛОТА', 'EXCHANGE • NO GOLD')}</div>
-      <div style="font:400 8px 'JetBrains Mono',monospace;color:#6a7a8a;text-align:center">${volandT('Курс: база quartz/wood/diamond/water/stone/bone между собой 1к2, с fang/essence 1к4', 'Rate: base quartz/wood/diamond/water/stone/bone 1:2, with fang/essence 1:4')}</div>
+      <div style="font:400 8px 'JetBrains Mono',monospace;color:#6a7a8a;text-align:center">${volandT('Курс: база Кварц/Дерево/Алмаз/Вода/Камень/Кость между собой 1к2, с Клык/Эссенция 1к4', 'Rate: base quartz/wood/diamond/water/stone/bone 1:2, with fang/essence 1:4')}</div>
       <div class="select-row">
         <select class="select" id="exFrom" onchange="updateExchangePreview()">${options}</select>
         <span style="color:#e6d5a0">→</span>
@@ -595,9 +599,9 @@ function updateExchangePreview(){
     let have = res[fromId]||0;
     let receive = rate >=1 ? Math.floor(amount / rate) : Math.floor(amount * (1/rate));
     if(rate >=1){
-      document.getElementById('exPreview').innerHTML = `${volandT('Отдаешь ', 'You give ')}<b style="color:#e6d5a0">${amount} ${RES_NAMES[fromId]}</b> (${volandT('есть ', 'have ')}x${have}) → ${volandT('Получишь ', 'You get ')}<b style="color:#3ad080">${receive} ${RES_NAMES[toId]}</b><br><span style="font-size:8px;color:#6a7a8a">${volandT('Курс: ', 'Rate: ')}${rate}:1 • ${rate} ${RES_NAMES[fromId]} = 1 ${RES_NAMES[toId]}</span>`;
+      document.getElementById('exPreview').innerHTML = `${volandT('Отдаешь ', 'You give ')}<b style="color:#e6d5a0">${amount} ${resName(fromId)}</b> (${volandT('есть ', 'have ')}x${have}) → ${volandT('Получишь ', 'You get ')}<b style="color:#3ad080">${receive} ${resName(toId)}</b><br><span style="font-size:8px;color:#6a7a8a">${volandT('Курс: ', 'Rate: ')}${rate}:1 • ${rate} ${resName(fromId)} = 1 ${resName(toId)}</span>`;
     } else {
-      document.getElementById('exPreview').innerHTML = `${volandT('Отдаешь ', 'You give ')}<b style="color:#e6d5a0">${amount} ${RES_NAMES[fromId]}</b> (${volandT('есть ', 'have ')}x${have}) → ${volandT('Получишь ', 'You get ')}<b style="color:#3ad080">${receive} ${RES_NAMES[toId]}</b><br><span style="font-size:8px;color:#6a7a8a">${volandT('Курс: ', 'Rate: ')}1:${Math.round(1/rate)} • 1 ${RES_NAMES[fromId]} = ${Math.round(1/rate)} ${RES_NAMES[toId]}</span>`;
+      document.getElementById('exPreview').innerHTML = `${volandT('Отдаешь ', 'You give ')}<b style="color:#e6d5a0">${amount} ${resName(fromId)}</b> (${volandT('есть ', 'have ')}x${have}) → ${volandT('Получишь ', 'You get ')}<b style="color:#3ad080">${receive} ${resName(toId)}</b><br><span style="font-size:8px;color:#6a7a8a">${volandT('Курс: ', 'Rate: ')}1:${Math.round(1/rate)} • 1 ${resName(fromId)} = ${Math.round(1/rate)} ${resName(toId)}</span>`;
     }
   }catch(e){}
 }
@@ -610,13 +614,13 @@ function doExchange(){
     if(fromId===toId){ showLog('exLog', volandT('Выбери разные ресурсы','Choose different resources'),'err'); return; }
     let res = volandGetResources();
     let have = res[fromId]||0;
-    if(have < amount){ showLog('exLog','Недостаточно '+RES_NAMES[fromId]+': '+have+'/'+amount,'err'); return; }
+    if(have < amount){ showLog('exLog','Недостаточно '+resName(fromId)+': '+have+'/'+amount,'err'); return; }
     let rate = getExchangeRate(fromId, toId);
     let receive = rate >=1 ? Math.floor(amount / rate) : Math.floor(amount * (1/rate));
     if(receive < 1){ showLog('exLog',volandT('Слишком мало для обмена, увеличь количество', 'Too little for exchange, increase amount'),'err'); return; }
     volandAddResource(fromId, -amount);
     volandAddResource(toId, receive);
-    showLog('exLog',volandT('Обмен: -', 'Exchange: -')+amount+' '+RES_NAMES[fromId]+' +'+receive+' '+RES_NAMES[toId],'ok');
+    showLog('exLog',volandT('Обмен: -', 'Exchange: -')+amount+' '+resName(fromId)+' +'+receive+' '+resName(toId),'ok');
     renderResList(); renderExchange(); refreshTop(); renderMarket();
   }catch(e){ showLog('exLog','Ошибка: '+e.message,'err'); }
 }
@@ -635,7 +639,7 @@ function setP2PList(list){
 function renderP2P(){
   let el = document.getElementById('tabP2P');
   let res = {}; try{ res = volandGetResources(); }catch(e){}
-  let options = Object.keys(RES_NAMES).map(id=>`<option value="${id}">${RES_NAMES[id]} (x${res[id]||0})</option>`).join('');
+  let options = Object.keys(RES_NAMES).map(id=>`<option value="${id}">${resName(id)} (x${res[id]||0})</option>`).join('');
   let listings = getP2PList();
   let html = `
     <div class="market-card">
@@ -662,8 +666,8 @@ function renderP2P(){
         <div class="p2p-item">
           <div class="market-item-icon"><img src="${icon}" onerror="this.parentElement.textContent='💎'"></div>
           <div class="p2p-item-info">
-            <div style="color:#e6d5a0">${RES_NAMES[lot.resId]} x${lot.amount} ${volandT('за ', 'for ')}${lot.pricePer}g/${volandT('шт', 'pc')} (${volandT('всего ', 'total ')}${lot.amount*lot.pricePer}g)</div>
-            <div>Выставлен: ${new Date(lot.ts).toLocaleTimeString()}</div>
+            <div style="color:#e6d5a0">${resName(lot.resId)} x${lot.amount} ${volandT('за ', 'for ')}${lot.pricePer}g/${volandT('шт', 'pc')} (${volandT('всего ', 'total ')}${lot.amount*lot.pricePer}g)</div>
+            <div>${volandT('Выставлен: ','Listed: ')}${new Date(lot.ts).toLocaleTimeString()}</div>
           </div>
           <button class="btn sell" onclick="removeP2P(${idx})">${volandT('СНЯТЬ', 'REMOVE')}</button>
         </div>
@@ -686,12 +690,12 @@ function createP2P(){
     let pricePer = parseInt(document.getElementById('p2pPrice').value)||1;
     let res = volandGetResources();
     let have = res[resId]||0;
-    if(have < amount){ showLog('p2pLog','Недостаточно '+RES_NAMES[resId]+': '+have+'/'+amount,'err'); return; }
+    if(have < amount){ showLog('p2pLog','Недостаточно '+resName(resId)+': '+have+'/'+amount,'err'); return; }
     volandAddResource(resId, -amount);
     let listings = getP2PList();
     listings.push({resId, amount, pricePer, ts:Date.now()});
     setP2PList(listings);
-    showLog('p2pLog',volandT('Лот выставлен: ', 'Listing posted: ')+RES_NAMES[resId]+' x'+amount+volandT(' за ', ' for ')+pricePer+volandT('g/шт', 'g/pc'),'ok');
+    showLog('p2pLog',volandT('Лот выставлен: ', 'Listing posted: ')+resName(resId)+' x'+amount+volandT(' за ', ' for ')+pricePer+volandT('g/шт', 'g/pc'),'ok');
     renderResList(); renderP2P(); refreshTop(); renderMarket();
   }catch(e){ showLog('p2pLog','Ошибка: '+e.message,'err'); }
 }
