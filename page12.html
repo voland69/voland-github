@@ -133,7 +133,7 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 
 
 .center{flex:1;display:flex;flex-direction:column;overflow:hidden;background:rgba(16,22,30,.22)}
-.top-bar{height:48px;background:rgba(18,24,33,.85);border-bottom:1px solid rgba(30,42,50,.5);display:flex;align-items:center;justify-content:space-between;padding:0 16px}
+.top-bar{height:48px;background:rgba(18,24,33,.85);border-bottom:1px solid rgba(30,42,50,.5);display:flex;align-items:center;justify-content:space-between;padding:0 16px;padding-right:130px}
 .top-title{font:900 16px 'Cinzel Decorative',serif;letter-spacing:.2em;color:#e6d5a0}
 .top-res{display:flex;gap:12px;font:700 10px 'JetBrains Mono',monospace;color:#8a9aaa}
 .top-res span{color:#d0b040}
@@ -154,14 +154,14 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 .gear-lvl{font:400 8px 'JetBrains Mono',monospace;color:#6a7a8a}
 .right-preview{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;overflow:auto;background:radial-gradient(ellipse at center, rgba(230,213,160,.05), transparent 70%)}
 .preview-empty{font:400 11px 'JetBrains Mono',monospace;color:#5a6a7a;text-align:center}
-.upgrade-card{width:100%;max-width:520px;background:linear-gradient(180deg,#1e2a3a,#121a26);border:1px solid rgba(230,213,160,.2);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:14px;box-shadow:0 12px 32px rgba(0,0,0,.5)}
+.upgrade-card{width:100%;max-width:680px;background:linear-gradient(180deg,#1e2a3a,#121a26);border:1px solid rgba(230,213,160,.2);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:14px;box-shadow:0 12px 32px rgba(0,0,0,.5)}
 .upgrade-top{display:flex;gap:16px;align-items:flex-start}
 .upgrade-icons{display:flex;gap:12px;align-items:center}
 .up-icon{width:64px;height:64px;border-radius:10px;background:#0a0e14;border:1px solid #2a3a4a;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:28px;position:relative}
 .up-icon img{width:100%;height:100%;object-fit:cover;display:block}
 .up-arrow{font:900 18px 'Cinzel Decorative',serif;color:#e6d5a0}
 .up-info{flex:1;display:flex;flex-direction:column;gap:6px}
-.up-name{font:800 13px Inter,sans-serif;color:#e6d5a0;text-transform:uppercase}
+.up-name{font:800 13px Inter,sans-serif;color:#e6d5a0;text-transform:uppercase;white-space:nowrap}
 .up-stats{display:flex;flex-direction:column;gap:3px;margin-top:4px}
 .up-stat{font:600 10px 'JetBrains Mono',monospace;color:#8a9aaa}
 .up-stat b{color:#3ad080}
@@ -200,10 +200,10 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 </div>
 <div class="center">
   <div class="top-bar">
-    <div class="top-title">WORKSHOP • UPGRADE</div>
+    <div class="top-title">МАСТЕРСКАЯ • МОДЕРНИЗАЦИЯ</div>
     <div class="top-res">
-      <div>GOLD: <span id="goldDisplay">0</span></div>
-      <div>RES: <span id="resDisplay">0</span></div>
+      <div>ЗОЛОТО: <span id="goldDisplay">0</span></div>
+      <div>РЕС: <span id="resDisplay">0</span></div>
     </div>
   </div>
   <div class="main-area">
@@ -212,7 +212,7 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
       <div class="item-list" id="itemList"></div>
     </div>
     <div class="right-preview" id="previewArea">
-      <div class="preview-empty">Выбери предмет слева для апгрейда<br><br>Система: 5 мастей (bw → green → blue → red → gold) × 10 уровней<br>Золото: 50×lvl, Ресурсы: quartz/wood/diamond + fang/essence</div>
+      <div class="preview-empty" id="previewEmpty">Выбери предмет слева для модернизации<br><br>Система: 5 мастей (bw → green → blue → red → gold) × 10 уровней<br>Золото: 50×lvl, Ресурсы: кварц/дерево/алмаз/вода/камень/кость + клык/эссенция</div>
     </div>
   </div>
 </div>
@@ -373,7 +373,7 @@ function renderList(){
       <div class="gear-icon">${iconHtml}</div>
       <div class="gear-info">
         <div class="gear-name">${volandItemName(entry.item)}</div>
-        <div class="gear-tier ${entry.item.tier}">${entry.item.tier.toUpperCase()} LVL${entry.item.level} • ${entry.item.slot.toUpperCase()} ${entry.equipped?'[EQUIPPED]':''}</div>
+        <div class="gear-tier ${entry.item.tier}">${entry.item.tier.toUpperCase()} LVL${entry.item.level} • ${entry.item.slot.toUpperCase()} ${entry.equipped?(typeof volandT==='function' ? volandT('[НАДЕТО]','[EQUIPPED]') : '[НАДЕТО]'):''}</div>
         <div class="gear-lvl">${entry.item.desc}</div>
       </div>
     `;
@@ -404,12 +404,12 @@ function selectItem(entry, divEl){
   let cur = entry.item;
   let cost = entry.cost;
   if(!cost){
-    preview.innerHTML = `<div class="preview-empty">MAX LEVEL<br>${volandItemName(cur)} ${volandT('уже', 'already')} GOLD LVL10</div>`;
+    preview.innerHTML = `<div class="preview-empty">${volandT('МАКС УРОВЕНЬ','MAX LEVEL')}<br>${volandItemName(cur)} ${volandT('уже', 'already')} GOLD LVL10</div>`;
     return;
   }
   let next = volandGetItemById(cost.nextId);
   if(!next){
-    preview.innerHTML = `<div class="preview-empty">Следующий предмет не найден: ${cost.nextId}</div>`;
+    preview.innerHTML = `<div class="preview-empty">${volandT('Следующий предмет не найден: ','Next item not found: ')}${cost.nextId}</div>`;
     return;
   }
   // check can upgrade
@@ -437,7 +437,8 @@ function selectItem(entry, divEl){
     let have = res[rid]||0;
     let cls = have>=need ? 'have' : 'need';
     let iconRes = `./assets/ui/loot/${rid}.webp`;
-    resHtml += `<div class="cost-item ${cls}"><img src="${iconRes}" style="width:16px;height:16px;object-fit:contain" onerror="this.style.display='none'"> ${rid.toUpperCase()}: ${have}/${need}</div>`;
+    let resName = (typeof volandResourceName==='function' ? volandResourceName({id:rid, name:rid.toUpperCase()}) : rid.toUpperCase());
+    resHtml += `<div class="cost-item ${cls}"><img src="${iconRes}" style="width:16px;height:16px;object-fit:contain" onerror="this.style.display='none'"> ${resName}: ${have}/${need}</div>`;
   }
   
   preview.innerHTML = `
@@ -455,13 +456,13 @@ function selectItem(entry, divEl){
         </div>
       </div>
       <div class="cost-box">
-        <div class="cost-title">СТОИМОСТЬ АПГРЕЙДА</div>
+        <div class="cost-title">${volandT('СТОИМОСТЬ МОДЕРНИЗАЦИИ','UPGRADE COST')}</div>
         <div class="cost-row">
-          <div class="cost-item gold ${goldClass}">🪙 GOLD: ${gold}/${goldNeed}</div>
+          <div class="cost-item gold ${goldClass}">🪙 ${volandT('ЗОЛОТО','GOLD')}: ${gold}/${goldNeed}</div>
           ${resHtml}
         </div>
       </div>
-      <button class="up-btn" id="upBtn" ${!can.can?'disabled':''}>${can.can ? 'АПГРЕЙД ЗА '+goldNeed+' GOLD' : can.reason}</button>
+      <button class="up-btn" id="upBtn" ${!can.can?'disabled':''}>${can.can ? volandT('МОДЕРНИЗАЦИЯ ЗА '+goldNeed+' ЗОЛОТО','UPGRADE FOR '+goldNeed+' GOLD') : can.reason}</button>
       <div class="up-log" id="upLog"></div>
     </div>
   `;
@@ -472,7 +473,7 @@ function selectItem(entry, divEl){
       let result = volandUpgradeItem(cur.id);
       let logEl = document.getElementById('upLog');
       if(result.success){
-        logEl.textContent = 'УСПЕХ! → ' + result.nextId;
+        logEl.textContent = volandT('УСПЕХ! → ','SUCCESS! → ') + result.nextId;
         logEl.style.color = '#3ad080';
         setTimeout(()=>{
           renderList();
@@ -485,11 +486,11 @@ function selectItem(entry, divEl){
             let idx = newList.indexOf(newEntry);
             if(divs[idx]) selectItem(newEntry, divs[idx]);
           } else {
-            document.getElementById('previewArea').innerHTML = '<div class="preview-empty">Апгрейд завершен! Выбери следующий предмет</div>';
+            document.getElementById('previewArea').innerHTML = '<div class="preview-empty">' + volandT('Модернизация завершена! Выбери следующий предмет','Upgrade complete! Choose next item') + '</div>';
           }
         }, 600);
       } else {
-        logEl.textContent = 'ОШИБКА: ' + result.reason;
+        logEl.textContent = volandT('ОШИБКА: ','ERROR: ') + result.reason;
         logEl.style.color = '#e05050';
       }
     };
