@@ -8,13 +8,15 @@ let passiveShield=0;
 let passiveUsed=false;
 let passiveShieldTurns=0;
 let lastCur=null;
+const T=(ru,en)=> (typeof volandT==='function' ? volandT(ru,en) : ru);
+const SN=(n)=> (typeof volandSkillName==='function' ? volandSkillName(n) : n);
 
 function extra(){
   let s=[];
-  if(bastionTurns>0) s.push('🛡️БАСТИОН '+bastionTurns+' 50%');
-  if(avatarTurns>0) s.push('👑АВАТАР '+avatarTurns+' неуязв');
+  if(bastionTurns>0) s.push('🛡️'+T('БАСТИОН ','BASTION ')+bastionTurns+' 50%');
+  if(avatarTurns>0) s.push('👑'+T('АВАТАР ','AVATAR ')+avatarTurns+' '+T('неуязв','invuln'));
   if(avatarDmgTurns>0) s.push('⚔️+200% '+avatarDmgTurns);
-  if(passiveShield>0) s.push('🛡️ЩИТ '+passiveShield+' '+passiveShieldTurns+'р');
+  if(passiveShield>0) s.push('🛡️'+T('ЩИТ ','SHIELD ')+passiveShield+' '+passiveShieldTurns+T('р','r'));
   if(window.VB){
     let hpPct = window.VB.hHp / window.VB.hMax * 100;
     let lost = 100 - hpPct;
@@ -44,13 +46,13 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
    let isCrit = Math.random()*100 < cur.CRIT;
    if(isCrit) base = Math.floor(base*1.5);
    ctx.eHp = Math.max(0, ctx.eHp - base);
-   addLog('⚔️ Атака '+base+(mult>1?' ['+Math.round(mult*100)+'% +200% аватар]':'')+(isCrit?' CRIT':''),'hit');
+   addLog('⚔️ '+T('Атака ','Attack ')+base+(mult>1?' ['+Math.round(mult*100)+'% +200% '+T('аватар','avatar')+']':'')+(isCrit?' CRIT':''),'hit');
    ctx.cooldowns[0]=1;
    updBars(); return true;
  }
 
  if(!sk) return false;
- if(ctx.hMana < sk.mana){ addLog('⛔ Не хватает маны!','lose'); return false; }
+ if(ctx.hMana < sk.mana){ addLog('⛔ '+T('Не хватает маны!','Not enough mana!'),'lose'); return false; }
 
  if(sk.name.includes('Льва')){
    ctx.hMana-=sk.mana; ctx.cooldowns[idx]=sk.cd||8;
@@ -61,14 +63,14 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
    if(isCrit) base = Math.floor(base*1.4);
    ctx.eHp = Math.max(0, ctx.eHp - base);
    setEnemyStun(1);
-   addLog('⚔️ Удар Льва '+base+' ['+Math.round(mult*100)+'%'+(avatarDmgTurns>0?' +200% аватар':'')+'] стан 1р'+(isCrit?' CRIT':''),'skill');
+   addLog('⚔️ '+SN('Удар Льва')+' '+base+' ['+Math.round(mult*100)+'%'+(avatarDmgTurns>0?' +200% '+T('аватар','avatar'):'')+'] '+T('стан ','stun ')+'1'+T('р','r')+(isCrit?' CRIT':''),'skill');
    updBars(); return true;
  }
 
  if(sk.name.includes('Бастион')){
    ctx.hMana-=sk.mana; ctx.cooldowns[idx]=sk.cd||15;
    bastionTurns = 3; // ровно 3р блока
-   addLog('🛡️ Имперский Бастион щит 3р блок 50% отраж 25%','skill');
+   addLog('🛡️ '+SN('Имперский Бастион')+' '+T('щит ','shield ')+'3'+T('р','r')+' '+T('блок ','block ')+'50% '+T('отраж ','reflect ')+'25%','skill');
    updBars(); return true;
  }
 
@@ -80,7 +82,7 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
    let isCrit = Math.random()*100 < cur.CRIT;
    if(isCrit) base = Math.floor(base*1.4);
    ctx.eHp = Math.max(0, ctx.eHp - base);
-   addLog('📯 Рассекающий удар '+base+' ['+Math.round(mult*100)+'%'+(avatarDmgTurns>0?' +200% аватар':'')+']'+(isCrit?' CRIT':''),'skill');
+   addLog('📯 '+SN('Рассекающий удар')+' '+base+' ['+Math.round(mult*100)+'%'+(avatarDmgTurns>0?' +200% '+T('аватар','avatar'):'')+']'+(isCrit?' CRIT':''),'skill');
    updBars(); return true;
  }
 
@@ -91,16 +93,16 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
    let isCrit = Math.random()*100 < cur.CRIT;
    if(isCrit) aoe = Math.floor(aoe*1.4);
    ctx.eHp = Math.max(0, ctx.eHp - aoe);
-   addLog('👑 Аватар Империи AOE всем '+aoe+' [200%]'+(isCrit?' CRIT':''),'skill');
+   addLog('👑 '+SN('Аватар Империи')+' AOE '+T('всем ','to all ')+aoe+' [200%]'+(isCrit?' CRIT':''),'skill');
    avatarTurns = 2; // неуязв 2р
    avatarDmgTurns = 3; // +300% 3р
    if(avatarHPBonus==0){
      avatarHPBonus = Math.floor(window.VB.hMax*0.5);
      window.VB.hMax = window.VB.hMax + avatarHPBonus;
      window.VB.hHp = window.VB.hHp + avatarHPBonus;
-     addLog('👑 +50% HP +'+avatarHPBonus+' → HP '+window.VB.hHp+'/'+window.VB.hMax+' неуязв 2р +200% урон 3р','skill');
+     addLog('👑 +50% HP +'+avatarHPBonus+' → HP '+window.VB.hHp+'/'+window.VB.hMax+' '+T('неуязв','invuln')+' 2'+T('р','r')+' +200% '+T('урон','damage')+' 3'+T('р','r'),'skill');
    } else {
-     addLog('👑 Аватар уже активен неуязв '+avatarTurns+'р +300% '+avatarDmgTurns+'р','skill');
+     addLog('👑 '+T('Аватар уже активен ','Avatar already active ')+T('неуязв','invuln')+' '+avatarTurns+T('р','r')+' +300% '+avatarDmgTurns+T('р','r'),'skill');
    }
    updBars(); return true;
  }
@@ -111,7 +113,7 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
 window.VOLAND_HERO_ON_ENEMY_TURN = function(ctx){
  // Аватар неуязв 2р
  if(avatarTurns>0){
-   ctx.addLog('👑 Аватар неуязвим! ['+avatarTurns+'р]','skill');
+   ctx.addLog('👑 '+T('Аватар ','Avatar ')+T('неуязвим!','invulnerable!')+' ['+avatarTurns+T('р','r')+']','skill');
    return true;
  }
  // Бастион - правильный расчет с DEF
@@ -126,16 +128,16 @@ window.VOLAND_HERO_ON_ENEMY_TURN = function(ctx){
      let absorbed = Math.min(passiveShield, blocked);
      passiveShield -= absorbed;
      blocked -= absorbed;
-     ctx.addLog('🛡️ Щит пассива поглотил '+absorbed+' осталось '+passiveShield,'skill');
+     ctx.addLog('🛡️ '+T('Щит пассива ','Passive shield ')+T('поглотил ','absorbed ')+absorbed+' '+T('осталось ','left ')+passiveShield,'skill');
      if(passiveShield<=0){
        passiveShield=0;
        passiveShieldTurns=0;
-       ctx.addLog('🛡️ Щит пассива сломан','hit');
+       ctx.addLog('🛡️ '+T('Щит пассива ','Passive shield ')+T('сломан','broken'),'hit');
      }
    }
    window.VB.hHp = Math.max(0, window.VB.hHp - blocked);
    window.VB.eHp = Math.max(0, window.VB.eHp - refl);
-   ctx.addLog('🛡️ Бастион блок 50% '+blocked+' (из '+origDmg+') отраж '+refl+' [25%] DEF+'+defBonus+'%','skill');
+   ctx.addLog('🛡️ '+T('Бастион ','Bastion ')+T('блок ','block ')+'50% '+blocked+' ('+T('из ','of ')+origDmg+') '+T('отраж ','reflect ')+refl+' [25%] DEF+'+defBonus+'%','skill');
    ctx.updBars();
    return true; // скип обычного урона врага
  }
@@ -148,11 +150,11 @@ window.VOLAND_HERO_ON_ENEMY_TURN = function(ctx){
    passiveShield -= absorbed;
    let remaining = origDmg - absorbed;
    window.VB.hHp = Math.max(0, window.VB.hHp - remaining);
-   ctx.addLog('🛡️ Щит пассива блок '+absorbed+' урон '+remaining+' DEF+'+defBonus+'%','skill');
+   ctx.addLog('🛡️ '+T('Щит пассива ','Passive shield ')+T('блок ','block ')+absorbed+' '+T('урон','damage')+' '+remaining+' DEF+'+defBonus+'%','skill');
    if(passiveShield<=0){
      passiveShield=0;
      passiveShieldTurns=0;
-     ctx.addLog('🛡️ Щит пассива сломан','hit');
+     ctx.addLog('🛡️ '+T('Щит пассива ','Passive shield ')+T('сломан','broken'),'hit');
    }
    ctx.updBars();
    return true;
@@ -163,20 +165,20 @@ window.VOLAND_HERO_ON_ENEMY_TURN = function(ctx){
 window.VOLAND_HERO_ON_ROUND_END = function(){
  if(bastionTurns>0){
    bastionTurns--;
-   if(bastionTurns==0 && window.VB) window.VB.addLog('🛡️ Бастион кончился','hit');
+   if(bastionTurns==0 && window.VB) window.VB.addLog('🛡️ '+T('Бастион ','Bastion ')+T('кончился','ended'),'hit');
  }
  if(avatarTurns>0){
    avatarTurns--;
-   if(avatarTurns==0 && window.VB) window.VB.addLog('👑 Аватар неуязв кончился','hit');
+   if(avatarTurns==0 && window.VB) window.VB.addLog('👑 '+T('Аватар ','Avatar ')+T('неуязв','invuln')+' '+T('кончился','ended'),'hit');
  }
  if(avatarDmgTurns>0){
    avatarDmgTurns--;
    if(avatarDmgTurns==0 && window.VB){
-     window.VB.addLog('⚔️ +200% урон кончился','hit');
+     window.VB.addLog('⚔️ +200% '+T('урон','damage')+' '+T('кончился','ended'),'hit');
      if(avatarHPBonus>0){
        window.VB.hMax = Math.max(100, window.VB.hMax - avatarHPBonus);
        window.VB.hHp = Math.min(window.VB.hHp, window.VB.hMax);
-       window.VB.addLog('👑 -'+avatarHPBonus+' HP (конец аватара) → '+window.VB.hHp+'/'+window.VB.hMax,'hit');
+       window.VB.addLog('👑 -'+avatarHPBonus+' HP ('+T('конец аватара','avatar ended')+') → '+window.VB.hHp+'/'+window.VB.hMax,'hit');
        avatarHPBonus=0;
        window.VB.updBars();
      }
@@ -186,11 +188,11 @@ window.VOLAND_HERO_ON_ROUND_END = function(){
    passiveShield = Math.floor(window.VB.hMax*0.15);
    passiveShieldTurns = 4;
    passiveUsed = true;
-   window.VB.addLog('🦁 Непоколебимая Стена! Щит '+passiveShield+' 15% HP на 4р (1 раз за бой) DEF+'+getDefBonus()+'%','skill');
+   window.VB.addLog('🦁 '+SN('Непоколебимая Стена')+'! '+T('Щит ','Shield ')+passiveShield+' 15% HP '+T('на ','for ')+'4'+T('р','r')+' ('+T('1 раз за бой','once per battle')+') DEF+'+getDefBonus()+'%','skill');
  } else if(passiveShieldTurns>0){
    passiveShieldTurns--;
    if(passiveShieldTurns==0){
-     if(passiveShield>0 && window.VB) window.VB.addLog('🛡️ Щит пассива истек '+passiveShield,'hit');
+     if(passiveShield>0 && window.VB) window.VB.addLog('🛡️ '+T('Щит пассива ','Passive shield ')+T('истек ','expired ')+passiveShield,'hit');
      passiveShield=0;
    }
  }
