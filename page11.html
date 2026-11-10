@@ -30,7 +30,7 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 .nav-group:hover .nav-label{opacity:1 !important}
 .wrap{display:flex !important;position:fixed !important;inset:0 !important}
 .center{flex:1;display:flex;flex-direction:column;overflow:hidden;background:rgba(16,22,30,.18)}
-.top-bar{height:48px;background:rgba(18,24,33,.85);border-bottom:1px solid rgba(30,42,50,.5);display:flex;align-items:center;justify-content:space-between;padding:0 16px}
+.top-bar{height:48px;background:rgba(18,24,33,.85);border-bottom:1px solid rgba(30,42,50,.5);display:flex;align-items:center;justify-content:space-between;padding:0 16px;padding-right:130px}
 .top-title{font:900 16px 'Cinzel Decorative',serif;letter-spacing:.2em;color:#e6d5a0}
 .top-sub{font:700 9px 'JetBrains Mono',monospace;color:#8a9aaa;letter-spacing:.15em}
 .main{flex:1;overflow:auto;padding:16px;display:flex;flex-direction:column;align-items:center;gap:16px}
@@ -47,13 +47,13 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 .hero-card{background:#1a242f;border:1px solid #2a3a4a;border-radius:10px;padding:10px;cursor:pointer;transition:.15s;text-align:center}
 .hero-card:hover{border-color:#e6d5a0;transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.4)}
 .hero-card.selected{border-color:#e6d5a0;background:#1e2f3e;box-shadow:0 0 15px rgba(230,213,160,.3)}
-.hero-card img{width:80px;height:80px;border-radius:8px;object-fit:cover;display:block;margin:0 auto 8px;background:#0a0e14}
+.hero-card img{width:80px;height:80px;border-radius:8px;object-fit:cover;object-position:top;display:block;margin:0 auto 8px;background:#0a0e14}
 .hero-name{font:700 11px Inter,sans-serif;color:#e6d5a0;text-transform:uppercase}
 .hero-role{font:700 7px 'JetBrains Mono',monospace;color:#8a9aaa;margin-top:2px}
 .hero-stats{font:700 8px 'JetBrains Mono',monospace;color:#6a7a8a;margin-top:6px;line-height:1.4}
 .preview{display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap}
 .preview-card{flex:1;min-width:220px;background:#0a0e14;border:1px solid #2a3a4a;border-radius:10px;padding:12px;display:flex;gap:10px;align-items:center}
-.preview-card img{width:56px;height:56px;border-radius:8px;object-fit:cover}
+.preview-card img{width:56px;height:56px;border-radius:8px;object-fit:cover;object-position:top}
 .preview-info{flex:1}
 .preview-name{font:700 12px Inter,sans-serif;color:#e6d5a0}
 .preview-role{font:700 7px 'JetBrains Mono',monospace;color:#8a9aaa}
@@ -66,7 +66,7 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 .battle-top{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .fighter{background:linear-gradient(180deg,#1e2a3a,#121a26);border:1px solid rgba(230,213,160,.2);border-radius:12px;padding:12px;display:flex;gap:12px;align-items:center}
 .fighter.enemy{border-color:rgba(224,80,80,.3)}
-.fighter img{width:64px;height:64px;border-radius:10px;object-fit:cover;background:#0a0e14}
+.fighter img{width:64px;height:64px;border-radius:10px;object-fit:cover;object-position:top;background:#0a0e14}
 .fighter-info{flex:1}
 .fighter-name{font:700 13px Inter,sans-serif;color:#e6d5a0}
 .fighter-role{font:700 7px 'JetBrains Mono',monospace;color:#8a9aaa}
