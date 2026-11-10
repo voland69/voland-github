@@ -1,5 +1,8 @@
 // IRON VOW warrior-f - clean version for antivirus
 (function(){
+const T=(ru,en)=> (typeof volandT==='function' ? volandT(ru,en) : ru);
+const SN=(n)=> (typeof volandSkillName==='function' ? volandSkillName(n) : n);
+const EN=(e)=> (typeof volandEnemyName==='function' ? volandEnemyName(e) : (e&&e.name||''));
 let wolfShield=0;
 let alphaTurns=0;
 let alphaHPBonus=0;
@@ -7,8 +10,8 @@ let lastCur=null;
 
 function extra(){
   let s=[];
-  if(wolfShield>0) s.push('VOLK '+wolfShield+' 50%');
-  if(alphaTurns>0) s.push('ALFA '+alphaTurns+' +30%');
+  if(wolfShield>0) s.push(T('ВОЛК ','WOLF ')+wolfShield+' 50%');
+  if(alphaTurns>0) s.push(T('АЛЬФА ','ALPHA ')+alphaTurns+' +30%');
   return s.join(' ');
 }
 setTimeout(function(){ if(window.VB) window.VB.extraStat=extra; },100);
@@ -51,15 +54,15 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
      let heal = Math.floor(total*0.3);
      window.VB.hHp = Math.min(window.VB.hMax, window.VB.hHp + heal);
      if(bleedExtra>0){
-       addLog('Ataka '+base+' +30% alfa + krov '+bleedExtra+' pure = '+total+(isCrit?' CRIT':'')+' +50% stai + hil '+heal,'hit');
+       addLog(T('Атака ','Attack ')+base+' +30% '+T('альфа ','alpha ')+'+ '+T('кровь ','bleed ')+bleedExtra+' pure = '+total+(isCrit?' CRIT':'')+' +50% '+T('стаи ','pack ')+'+ '+T('хил ','heal ')+heal,'hit');
      } else {
-       addLog('Ataka '+base+(isCrit?' CRIT':'')+' +50% stai + hil '+heal,'hit');
+       addLog(T('Атака ','Attack ')+base+(isCrit?' CRIT':'')+' +50% '+T('стаи ','pack ')+'+ '+T('хил ','heal ')+heal,'hit');
      }
    } else {
      if(bleedExtra>0){
-       addLog('Ataka '+base+' + krov '+bleedExtra+' pure = '+total+(isCrit?' CRIT':'')+' [100%+30%+50% pure]','hit');
+       addLog(T('Атака ','Attack ')+base+' + '+T('кровь ','bleed ')+bleedExtra+' pure = '+total+(isCrit?' CRIT':'')+' [100%+30%+50% pure]','hit');
      } else {
-       addLog('Ataka '+base+(isCrit?' CRIT':''),'hit');
+       addLog(T('Атака ','Attack ')+base+(isCrit?' CRIT':''),'hit');
      }
    }
    ctx.cooldowns[0]=1;
@@ -67,7 +70,7 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
  }
 
  if(!sk) return false;
- if(ctx.hMana < sk.mana){ addLog('No mana!','lose'); return false; }
+ if(ctx.hMana < sk.mana){ addLog(T('Нет маны!','No mana!'),'lose'); return false; }
 
  if(sk.name.includes('Rassekayushchiy') || sk.name.includes('Рассекающий')){
    ctx.hMana-=sk.mana; ctx.cooldowns[idx]=sk.cd||3;
@@ -96,9 +99,9 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
      window.VB.hHp = Math.min(window.VB.hMax, window.VB.hHp + heal);
    }
    if(bleedExtra>0){
-     addLog(sk.name+' '+base1+' + '+base2+' + krov '+bleedExtra+' pure = '+total+' [200%+200%+30%+50% pure]'+(isCrit1||isCrit2?' CRIT':'')+(low?' +50% stai + hil '+heal:''),'skill');
+     addLog(SN(sk.name)+' '+base1+' + '+base2+' + '+T('кровь ','bleed ')+bleedExtra+' pure = '+total+' [200%+200%+30%+50% pure]'+(isCrit1||isCrit2?' CRIT':'')+(low?' +50% '+T('стаи ','pack ')+'+ '+T('хил ','heal ')+heal:''),'skill');
    } else {
-     addLog(sk.name+' '+base1+' + '+base2+' = '+total+' [200%+200%'+(low?' +50% stai':'')+']'+(isCrit1||isCrit2?' CRIT':'')+(low?' + hil '+heal:''),'skill');
+     addLog(SN(sk.name)+' '+base1+' + '+base2+' = '+total+' [200%+200%'+(low?' +50% '+T('стаи ','pack '):'')+']'+(isCrit1||isCrit2?' CRIT':'')+(low?' + '+T('хил ','heal ')+heal:''),'skill');
    }
    updBars(); return true;
  }
@@ -106,7 +109,7 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
  if(sk.name.includes('Shchit') || sk.name.includes('Щит')){
    ctx.hMana-=sk.mana; ctx.cooldowns[idx]=sk.cd||15;
    wolfShield = 5;
-   addLog(sk.name+' shchit 4r blok 50% + kontra 350%','skill');
+   addLog(SN(sk.name)+' '+T('щит ','shield ')+'4'+T('р','r')+' '+T('блок ','block ')+'50% + '+T('контра ','counter ')+'350%','skill');
    updBars(); return true;
  }
 
@@ -137,9 +140,9 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
      window.VB.hHp = Math.min(window.VB.hMax, window.VB.hHp + heal);
    }
    if(bleedExtra>0){
-     addLog(sk.name+' stan 1r + '+base1+' + '+base2+' + krov '+bleedExtra+' pure = '+total+' [200%x1.3 + 200%x1.3 + 50% pure]'+(isCrit1||isCrit2?' CRIT':'')+(low?' +50% stai + hil '+heal:''),'skill');
+     addLog(SN(sk.name)+' '+T('стан ','stun ')+'1'+T('р','r')+' + '+base1+' + '+base2+' + '+T('кровь ','bleed ')+bleedExtra+' pure = '+total+' [200%x1.3 + 200%x1.3 + 50% pure]'+(isCrit1||isCrit2?' CRIT':'')+(low?' +50% '+T('стаи ','pack ')+'+ '+T('хил ','heal ')+heal:''),'skill');
    } else {
-     addLog(sk.name+' stan 1r + '+base1+' + '+base2+' = '+total+' [200% + 200% 2 raza]'+(isCrit1||isCrit2?' CRIT':'')+(low?' + hil '+heal:''),'skill');
+     addLog(SN(sk.name)+' '+T('стан ','stun ')+'1'+T('р','r')+' + '+base1+' + '+base2+' = '+total+' [200% + 200% 2 '+T('раза','times')+']'+(isCrit1||isCrit2?' CRIT':'')+(low?' + '+T('хил ','heal ')+heal:''),'skill');
    }
    updBars(); return true;
  }
@@ -150,9 +153,9 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
      alphaHPBonus = Math.floor(window.VB.hMax*0.5);
      window.VB.hMax = window.VB.hMax + alphaHPBonus;
      window.VB.hHp = window.VB.hHp + alphaHPBonus;
-     addLog(sk.name+' +50% HP +'+alphaHPBonus+' -> HP '+window.VB.hHp+'/'+window.VB.hMax+' +30% uron 5r + krov 50% pure ot atak','skill');
+     addLog(SN(sk.name)+' +50% HP +'+alphaHPBonus+' -> HP '+window.VB.hHp+'/'+window.VB.hMax+' +30% '+T('урон ','damage ')+'5'+T('р','r')+' + '+T('кровь ','bleed ')+'50% pure '+T('от атак','from attacks'),'skill');
    } else {
-     addLog(sk.name+' uzhe aktiven '+alphaTurns+'r','skill');
+     addLog(SN(sk.name)+' '+T('уже активен ','already active ')+alphaTurns+'r','skill');
    }
    alphaTurns = 5;
    updBars(); return true;
@@ -166,7 +169,7 @@ window.VOLAND_HERO_ON_ENEMY_TURN = function(ctx){
    let base = Math.max(10, Math.floor(ctx.cur.DMG*3.5) - (window.VB ? window.VB.eDef : 10) + (Math.floor(Math.random()*21)-10));
    if(Math.random()*100 < ctx.cur.CRIT) base = Math.floor(base*1.4);
    window.VB.eHp = Math.max(0, window.VB.eHp - base);
-   window.VB.addLog('Volk shchit blok! Kontra '+base+' [350%]','skill');
+   window.VB.addLog(T('Волк ','Wolf ')+T('щит ','shield ')+T('блок!','block! ')+T('Контра ','Counter ')+base+' [350%]','skill');
    window.VB.updBars();
    return true;
  }
@@ -176,16 +179,16 @@ window.VOLAND_HERO_ON_ENEMY_TURN = function(ctx){
 window.VOLAND_HERO_ON_ROUND_END = function(){
  if(wolfShield>0){
    wolfShield--;
-   if(wolfShield==0 && window.VB) window.VB.addLog('Shchit Volka konchilsya','hit');
+   if(wolfShield==0 && window.VB) window.VB.addLog(T('Щит Волка ','Wolf Shield ')+T('кончился','ended'),'hit');
  }
  if(alphaTurns>0){
    alphaTurns--;
    if(alphaTurns==0){
-     if(window.VB) window.VB.addLog('Alfa konchilas','hit');
+     if(window.VB) window.VB.addLog(T('Альфа ','Alpha ')+T('кончилась','ended'),'hit');
      if(alphaHPBonus>0 && window.VB){
        window.VB.hMax = Math.max(100, window.VB.hMax - alphaHPBonus);
        window.VB.hHp = Math.min(window.VB.hHp, window.VB.hMax);
-       window.VB.addLog('-'+alphaHPBonus+' HP (konec alfy) -> '+window.VB.hHp+'/'+window.VB.hMax,'hit');
+       window.VB.addLog('-'+alphaHPBonus+' HP ('+T('конец альфы','alpha ended')+') -> '+window.VB.hHp+'/'+window.VB.hMax,'hit');
        alphaHPBonus=0;
        window.VB.updBars();
      }

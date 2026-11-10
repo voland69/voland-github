@@ -1,14 +1,17 @@
 // WILD PATH archer-f - обновленные скилы: W 200% x2 + бличка 25% true 2р, E 200% + яд 25% true 3р, T 150%
 (function(){
+const T=(ru,en)=> (typeof volandT==='function' ? volandT(ru,en) : ru);
+const SN=(n)=> (typeof volandSkillName==='function' ? volandSkillName(n) : n);
+const EN=(e)=> (typeof volandEnemyName==='function' ? volandEnemyName(e) : (e&&e.name||''));
 let bleedTurns=0, bleedDmg=0, poisonTurns=0, poisonDmg=0, hawkEyeTurns=0, stormTurns=0, stormLeft=0, nextCrit=false;
 
 function extraStat(){
  let s=[];
- if(bleedTurns>0) s.push('🩸БЛИЧКА '+bleedTurns+' true');
- if(poisonTurns>0) s.push('☠️ЯД '+poisonTurns+' true');
- if(hawkEyeTurns>0) s.push('🦅ГЛАЗ '+hawkEyeTurns);
- if(stormTurns>0) s.push('🌪️БУРЯ '+stormTurns+' ('+stormLeft+')');
- if(nextCrit) s.push('🐾КРИТ-след');
+ if(bleedTurns>0) s.push('🩸'+T('БЛИЧКА ','BLEED ')+bleedTurns+' true');
+ if(poisonTurns>0) s.push('☠️'+T('ЯД ','POISON ')+poisonTurns+' true');
+ if(hawkEyeTurns>0) s.push('🦅'+T('ГЛАЗ ','EYE ')+hawkEyeTurns);
+ if(stormTurns>0) s.push('🌪️'+T('БУРЯ ','STORM ')+stormTurns+' ('+stormLeft+')');
+ if(nextCrit) s.push('🐾'+T('КРИТ-след','CRIT-next'));
  return s.join(' ');
 }
 setTimeout(()=>{ if(window.VB) window.VB.extraStat=extraStat; },100);
@@ -23,14 +26,14 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
   let base = Math.max(10, cur.DMG - effDefBase + rand(-12,12));
   if(isCrit) base = Math.floor(base*1.5);
   ctx.eHp = Math.max(0, ctx.eHp - base);
-  addLog('⚔️ Ты бьешь '+ctx.enemyData.name+' [АТАКА] на '+base+(isCrit?' CRIT!':''),'hit');
-  if(nextCrit){ nextCrit=false; addLog('🐾 Тропы Зверя: крит использован','skill'); }
+  addLog('⚔️ '+T('Ты бьешь ','You hit ')+EN(ctx.enemyData)+' ['+T('АТАКА','ATTACK')+'] '+T('на ','for ')+base+(isCrit?' CRIT!':''),'hit');
+  if(nextCrit){ nextCrit=false; addLog('🐾 '+SN('Тропы Зверя')+': '+T('крит использован','crit used'),'skill'); }
   updBars(); return true;
  }
 
  let sk=activeSkills[idx-1];
  if(!sk) return false;
- if(ctx.hMana < sk.mana){ addLog('⛔ Не хватает маны! Нужно '+sk.mana,'lose'); return false; }
+ if(ctx.hMana < sk.mana){ addLog('⛔ '+T('Не хватает маны! Нужно ','Not enough mana! Need ')+sk.mana,'lose'); return false; }
 
  // W - Двойной Выстрел 2x200% + бличка 25% true 2р
  if(sk.name.includes('Двойной')){
@@ -42,14 +45,14 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
    let d = Math.max(15, Math.floor(cur.DMG*2.0) - effDefBase + rand(-10,10));
    if(isCrit) d=Math.floor(d*1.4);
    total+=d;
-   addLog('🎯 Стрела '+(i+1)+' → '+d+(isCrit?' CRIT!':''),'skill');
+   addLog('🎯 '+T('Стрела ','Arrow ')+(i+1)+' → '+d+(isCrit?' CRIT!':''),'skill');
    await new Promise(r=>setTimeout(r,60));
   }
   ctx.eHp=Math.max(0, ctx.eHp-total);
   addLog('🎯 '+sk.name+' [200% x2] → '+total+' [400%]','skill');
   bleedTurns=2;
   bleedDmg=Math.floor(cur.DMG*0.25);
-  addLog('🩸 Кровотечение 25% true ('+bleedDmg+') на 2р игнор DEF','skill');
+  addLog('🩸 '+T('Кровотечение ','Bleeding ')+'25% true ('+bleedDmg+') '+T('на ','for ')+'2'+T('р','r')+' '+T('игнор DEF','ignore DEF'),'skill');
   if(nextCrit) nextCrit=false;
   updBars(); return true;
  }
@@ -64,7 +67,7 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
   setEnemyStun(1);
   poisonTurns=3;
   poisonDmg=Math.floor(cur.DMG*0.25);
-  addLog('🌿 '+sk.name+' '+base+' [200%] + стан 1р + яд 25% true ('+poisonDmg+') 3р','skill');
+  addLog('🌿 '+SN(sk.name)+' '+base+' [200%] + '+T('стан ','stun ')+'1'+T('р','r')+' + '+T('яд ','poison ')+'25% true ('+poisonDmg+') 3'+T('р','r'),'skill');
   if(nextCrit) nextCrit=false;
   updBars(); return true;
  }
@@ -73,7 +76,7 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
  if(sk.name.includes('Глаз')){
   ctx.hMana-=sk.mana; ctx.cooldowns[idx]=sk.cd||20;
   hawkEyeTurns=4;
-  addLog('🦅 '+sk.name+' → +25% крит + игнор 20% брони 4р','skill');
+  addLog('🦅 '+SN(sk.name)+' → +25% '+T('крит','crit')+' + '+T('игнор','ignore')+' 20% '+T('брони','armor')+' 4'+T('р','r'),'skill');
   updBars(); return true;
  }
 
@@ -82,7 +85,7 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
   ctx.hMana-=sk.mana; ctx.cooldowns[idx]=sk.cd||25;
   stormTurns=3;
   stormLeft=9;
-  addLog('🌪️ '+sk.name+' → 9 стрел за 3р по 150% + 25% стан','skill');
+  addLog('🌪️ '+SN(sk.name)+' → 9 '+T('стрел','arrows')+' '+T('за ','for ')+'3'+T('р','r')+' '+T('по ','for ')+'150% + 25% '+T('стан','stun'),'skill');
   updBars(); return true;
  }
 
@@ -98,13 +101,13 @@ window.VOLAND_HERO_ON_TURN_END = function(ctx){
   // true damage - игнор DEF
   let d = bleedDmg;
   ctx.eHp=Math.max(0, ctx.eHp-d);
-  addLog('🩸 Кровотечение '+d+' true ['+bleedTurns+'р]','skill');
+  addLog('🩸 '+T('Кровотечение ','Bleeding ')+d+' true ['+bleedTurns+T('р','r')+']','skill');
   updBars();
  }
  if(poisonTurns>0){
   let d = poisonDmg;
   ctx.eHp=Math.max(0, ctx.eHp-d);
-  addLog('☠️ Яд '+d+' true ['+poisonTurns+'р]','skill');
+  addLog('☠️ '+T('Яд ','Poison ')+d+' true ['+poisonTurns+T('р','r')+']','skill');
   updBars();
  }
  if(stormTurns>0 && stormLeft>0){
@@ -121,7 +124,7 @@ window.VOLAND_HERO_ON_TURN_END = function(ctx){
   }
   stormLeft-=arrows;
   ctx.eHp=Math.max(0, ctx.eHp-total);
-  addLog('🌪️ Буря '+arrows+' стрел → '+total+' [150% x'+arrows+']'+(doStun?' + стан!':''),'skill');
+  addLog('🌪️ '+T('Буря ','Storm ')+arrows+' '+T('стрел','arrows')+' → '+total+' [150% x'+arrows+']'+(doStun?' + '+T('стан!','stun!'):''),'skill');
   if(doStun) window.VB._setStun=1;
   updBars();
  }
@@ -129,7 +132,7 @@ window.VOLAND_HERO_ON_TURN_END = function(ctx){
 
 window.VOLAND_HERO_ON_ENEMY_TURN = function(ctx){
  if(Math.random()*100 < ctx.cur.DODGE){
-  ctx.addLog('🐾 Тропы Зверя: уклонение! След удар 100% крит','skill');
+  ctx.addLog('🐾 '+SN('Тропы Зверя')+': '+T('уклонение!','dodge!')+' '+T('След удар ','Next hit ')+'100% '+T('крит','crit'),'skill');
   nextCrit=true;
   ctx.updBars();
   return true;
@@ -138,13 +141,13 @@ window.VOLAND_HERO_ON_ENEMY_TURN = function(ctx){
 };
 
 window.VOLAND_HERO_ON_ROUND_END = function(){
- if(bleedTurns>0){ bleedTurns--; if(bleedTurns==0) window.VB.addLog('🩸 Кровотечение кончилось','hit'); }
- if(poisonTurns>0){ poisonTurns--; if(poisonTurns==0) window.VB.addLog('☠️ Яд кончился','hit'); }
- if(hawkEyeTurns>0){ hawkEyeTurns--; if(hawkEyeTurns==0) window.VB.addLog('🦅 Глаз Ястреба кончился','hit'); }
+ if(bleedTurns>0){ bleedTurns--; if(bleedTurns==0) window.VB.addLog('🩸 '+T('Кровотечение ','Bleeding ')+T('кончилось','ended'),'hit'); }
+ if(poisonTurns>0){ poisonTurns--; if(poisonTurns==0) window.VB.addLog('☠️ '+T('Яд ','Poison ')+T('кончился','ended'),'hit'); }
+ if(hawkEyeTurns>0){ hawkEyeTurns--; if(hawkEyeTurns==0) window.VB.addLog('🦅 '+SN('Глаз Ястреба')+' '+T('кончился','ended'),'hit'); }
  if(stormTurns>0){
   stormTurns--;
   if(stormTurns==0){
-   window.VB.addLog('🌪️ Буря Стрел закончилась','hit');
+   window.VB.addLog('🌪️ '+SN('Буря Стрел')+' '+T('закончилась','ended'),'hit');
    stormLeft=0;
   }
  }
