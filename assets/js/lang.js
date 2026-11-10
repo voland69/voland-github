@@ -207,6 +207,9 @@ function volandItemName(item){
   if(!item) return '';
   let name = typeof item === 'string' ? item : (item.name || '');
   if(volandGetLang()!=='en') return name;
+  // Зелья: "Зелье HP XS" -> "HP Potion XS"
+  let pm = name.match(/^Зелье\s+(HP|MANA|STAM)\s+(\S+)$/);
+  if(pm){ return pm[1] + ' Potion ' + pm[2]; }
   // Паттерн: "Амулет Серый Lvl1", "Серьга 1 Серый Lvl1", "Кольцо 2 Синий Lvl5"
   // Разбираем: [Слот] [номер?] [Цвет] LvlN
   let m = name.match(/^(\S+)(?:\s+(\d+))?\s+(\S+)\s+(Lvl\d+)$/);
