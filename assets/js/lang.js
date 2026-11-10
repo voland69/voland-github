@@ -333,6 +333,71 @@ function volandSkillShort(rusName, rusShort){
   return volandSkillDesc(rusShort);
 }
 
+
+// ===== VOLAND LANG v1.3 — Stage 4: battle logs =====
+function volandBattleLog(t){
+  if(!t) return t;
+  if(volandGetLang()!=='en') return t;
+  let out = String(t);
+  try{
+    for(let k in VOLAND_SKILL_DICT){
+      if(out.indexOf(k)!==-1) out = out.split(k).join(VOLAND_SKILL_DICT[k].en);
+    }
+  }catch(e){}
+  let phrases = [
+    ['ПОБЕДА!', 'VICTORY!'],
+    ['ПОРАЖЕНИЕ!', 'DEFEAT!'],
+    ['НИЧЬЯ!', 'DRAW!'],
+    ['ТВОЙ ХОД', 'YOUR TURN'],
+    ['Не хватает маны', 'Not enough mana'],
+    ['Нет лута', 'No loot'],
+    ['Ты победил', 'You defeated'],
+    ['Тебя победил', 'Defeated you'],
+    ['убит!', 'killed!'],
+    ['неуязвим', 'invulnerable'],
+    ['уклонился', 'dodged'],
+    ['пропускает ход', 'skips turn'],
+    ['оглушен', 'stunned'],
+    ['Кровотечение', 'Bleeding'],
+    ['кровотечение', 'bleeding'],
+    ['Горение', 'Burning'],
+    ['Поджог земли', 'Ground burn'],
+    ['Ударная волна', 'Shockwave'],
+    ['Контратака', 'Counter'],
+    ['Отражение', 'Reflect'],
+    ['Лайфстил', 'Lifesteal'],
+    ['ХОД ', 'TURN '],
+    ['Конец раунда', 'End of round'],
+    ['Раунд', 'Round'],
+    ['Игрок:', 'Player:'],
+    ['Бот:', 'Bot:'],
+    ['взорвался', 'exploded'],
+    ['в клетке', 'in cage'],
+    ['невидимость', 'invisibility'],
+    ['инвиз крит', 'invis crit'],
+    ['инвиз', 'invis'],
+    ['100% урона', '100% damage'],
+    ['без маны', 'no mana'],
+    ['урона', 'damage'],
+    ['Урон:', 'Damage:'],
+    ['Мана:', 'Mana:'],
+    ['маны', 'mana'],
+    ['КД:', 'CD:'],
+    ['стан', 'stun'],
+    ['Яд', 'Poison'],
+    ['яд', 'poison'],
+    ['Лава', 'Lava'],
+    ['Щит', 'Shield'],
+    ['Блок:', 'Block:'],
+    ['поглотил', 'absorbed']
+  ];
+  for(let p of phrases){
+    if(out.indexOf(p[0])!==-1) out = out.split(p[0]).join(p[1]);
+  }
+  out = out.split('АТАКА').join('ATTACK');
+  return out;
+}
+
 document.addEventListener('DOMContentLoaded', function(){
   volandRenderLangToggle();
   volandApplyStaticLang();
