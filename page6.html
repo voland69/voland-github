@@ -185,7 +185,7 @@ html,body{height:100%;background:url("./assets/heroes/bg-battlefield.webp") cent
 
 
 <main class="center">
-<div class="title">BATTLEFIELD</div>
+<div class="title" id="bfTitle">BATTLEFIELD</div>
 <div class="sub">VOLAND • 6 ACTIVE + 2 SOON</div>
 <div class="loc-grid" id="locGrid"></div>
 </main>
@@ -209,6 +209,7 @@ html,body{height:100%;background:url("./assets/heroes/bg-battlefield.webp") cent
 <script>
 const LVLS=[1,5,10,15,20,25];
 function render(){
+  try{ let t=document.getElementById('bfTitle'); if(t) t.textContent = volandT('ПОЛЕ СРАЖЕНИЯ', 'BATTLEFIELD'); }catch(e){}
  const g=document.getElementById('locGrid');
  let a=[],s=[];
  try{
@@ -226,7 +227,7 @@ function render(){
   let hasBg = !!img;
   let bgStyle = hasBg ? `background: linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.65)), url('${img}') center/cover no-repeat` : '';
   let iconHtml = hasBg ? '' : `<div class="loc-icon">${l.icon}</div>`;
-  return `<div class="loc-card ${hasBg?'has-bg':''}" style="${bgStyle}" onclick="pickLoc('${l.id}')">${iconHtml}<div class="loc-name">${(volandGetLang()==='en'?l.eng:l.name)}</div><div class="loc-lvl">LVL ${LVLS[i]} • ENTER</div></div>`;
+  return `<div class="loc-card ${hasBg?'has-bg':''}" style="${bgStyle}" onclick="pickLoc('${l.id}')">${iconHtml}<div class="loc-name">${(volandGetLang()==='en'?l.eng:l.name)}</div><div class="loc-lvl">LVL ${LVLS[i]} • ${volandT('ВХОД', 'ENTER')}</div></div>`;
  }).join('');
  const bottom=s.map(l=>`<div class="loc-card soon"><div class="loc-icon">${l.icon}</div><div class="loc-name">${(volandGetLang()==='en'?l.eng:l.name)}</div><div class="loc-type">SOON</div><div class="soon-badge">SOON</div></div>`).join('');
  g.innerHTML=top+bottom;
