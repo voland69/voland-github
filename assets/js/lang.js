@@ -339,6 +339,28 @@ function volandBattleLog(t){
   if(!t) return t;
   if(volandGetLang()!=='en') return t;
   let out = String(t);
+  // 0. Pre — хвосты со скринов 10:31 / 10:35, длинные первыми
+  out = out.split('Ты оглушен').join('You are stunned');
+  out = out.split('Ты ').join('You ');
+  out = out.split('(авто)').join('(auto)');
+  out = out.split('авто').join('auto');
+  out = out.split('суперметеор').join('supermeteor');
+  out = out.split('Суперметеор').join('Supermeteor');
+  out = out.split('оглушенному').join('stunned');
+  out = out.split('оглушенного').join('stunned');
+  out = out.split('отражается').join('is reflected');
+  out = out.split('хилит').join('heals');
+  out = out.split('получаемого').join('taken');
+  out = out.split('взрыв').join('explosion');
+  out = out.split('Аннигиляция Времени').join('Time Annihilation');
+  out = out.split('Аннигиляция').join('Annihilation');
+  out = out.split('Времени').join('Time');
+  out = out.split(' на ').join(' for ');
+  out = out.split(' по ').join(' for ');
+  out = out.split(' и ').join(' and ');
+  out = out.split('победил').join('defeated');
+  out = out.split('ПОБЕДА!').join('VICTORY!');
+  out = out.split('бафы/дебафы').join('buffs/debuffs');
   // 1. Скиллы — целые имена, длинные первыми
   try{
     let keys = Object.keys(VOLAND_SKILL_DICT).sort((a,b)=>b.length-a.length);
@@ -409,7 +431,7 @@ function volandBattleLog(t){
   for(let p of phrases){
     if(out.indexOf(p[0])!==-1) out = out.split(p[0]).join(p[1]);
   }
-  out = out.replace(/стан(?=[\s,\:\]\!\.])/g, 'stun');
+  out = out.replace(/стан(?=[\s,\:\]\!\.]|$)/g, 'stun');
   
   // FIX LOG — полный словарь PVP лога
   let extra = [
