@@ -187,7 +187,7 @@ var VOLAND_MONTH_UP = {
   'ИЮЛЬ': 'JULY', 'АВГУСТ': 'AUGUST', 'СЕНТЯБРЬ': 'SEPTEMBER', 'ОКТЯБРЬ': 'OCTOBER', 'НОЯБРЬ': 'NOVEMBER', 'ДЕКАБРЬ': 'DECEMBER'
 };
 var VOLAND_RES_RU = {
-  'Кварц': 'Quartz', 'Дерево': 'Wood', 'Алмаз': 'Diamond', 'Вода': 'Water', 'Камень': 'Stone', 'Кость': 'Bone'
+  'Кварц': 'Quartz', 'Дерево': 'Wood', 'Алмаз': 'Diamond', 'Вода': 'Water', 'Камень': 'Stone', 'Кость': 'Bone', 'Золото': 'Gold', 'Клык Хищника': 'Predator Fang', 'Эссенция': 'Essence'
 };
 function volandMonthGen(ru){ return volandGetLang()==='en' && VOLAND_MONTH_GEN[ru] ? VOLAND_MONTH_GEN[ru] : ru; }
 function volandMonthUp(ru){ return volandGetLang()==='en' && VOLAND_MONTH_UP[ru] ? VOLAND_MONTH_UP[ru] : ru; }
@@ -207,6 +207,13 @@ function volandItemName(item){
   if(!item) return '';
   let name = typeof item === 'string' ? item : (item.name || '');
   if(volandGetLang()!=='en') return name;
+  // Если у предмета есть поле eng (ресурсы, будущие предметы) - берём его
+  if(typeof item !== 'string' && item.eng) return item.eng;
+  // Ресурсы как строка: 'Кварц' -> 'Quartz'
+  if(typeof VOLAND_RES_RU !== 'undefined' && VOLAND_RES_RU[name]) return VOLAND_RES_RU[name];
+  // Зелья: 'Зелье HP M' -> 'HP Potion M', 'Зелье MANA XS' -> 'MANA Potion XS'
+  let pm = name.match(/^Зелье\s+(HP|MANA|STAM)\s+(\S+)$/);
+  if(pm) return pm[1] + ' Potion ' + pm[2];
   // Паттерн: "Амулет Серый Lvl1", "Серьга 1 Серый Lvl1", "Кольцо 2 Синий Lvl5"
   // Разбираем: [Слот] [номер?] [Цвет] LvlN
   let m = name.match(/^(\S+)(?:\s+(\d+))?\s+(\S+)\s+(Lvl\d+)$/);
@@ -361,23 +368,6 @@ function volandBattleLog(t){
   out = out.split('победил').join('defeated');
   out = out.split('ПОБЕДА!').join('VICTORY!');
   out = out.split('бафы/дебафы').join('buffs/debuffs');
-  // Хвосты со скринов page8 - урон / аватар / всем / кончился
-  out = out.split('конец аватара').join('avatar ended');
-  out = out.split('Конец аватара').join('Avatar ended');
-  out = out.split('уже активен').join('already active');
-  out = out.split('Аватар уже').join('Avatar already');
-  out = out.split('АВАТАР').join('AVATAR');
-  out = out.split('Аватар').join('Avatar');
-  out = out.split('аватар').join('avatar');
-  out = out.split('неуязвим').join('invulnerable');
-  out = out.split('неуязв').join('invuln');
-  out = out.split('кончился').join('ended');
-  out = out.split('кончилась').join('ended');
-  out = out.split('истек').join('expired');
-  out = out.split('сломан').join('broken');
-  out = out.split('всем').join('to all');
-  out = out.split('урон').join('damage');
-  out = out.split('Урон').join('Damage');
   // Hero-логи Lion Warden / Bastion со скринов page8 - целые фразы первыми
   out = out.split('Имперский Бастион').join('Imperial Bastion');
   out = out.split('Бастион блок').join('Bastion block');
