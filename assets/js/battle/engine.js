@@ -110,7 +110,7 @@ function updBars(){
  document.getElementById('enemyHpBar').textContent='HP '+eHp+'/'+eMaxHp;
  let stat='DEF '+eDef+' • DMG '+eDmg;
  if(enemyStun>0) stat+=' • STUN '+enemyStun;
- if(window.VB.extraStat) stat+=' • '+window.VB.extraStat();
+ if(window.VB.extraStat){ let _es=window.VB.extraStat(); try{ if(typeof volandBattleLog==='function' && volandGetLang()==='en') _es=volandBattleLog(_es); }catch(e){} stat+=' • '+_es; }
  document.getElementById('enemyStatBar').textContent=stat;
  document.getElementById('turnInfo').textContent=volandT('ХОД ','TURN ')+turn+' • '+(isBattleOver?volandT('КОНЕЦ','END'):volandT('ТВОЙ ХОД','YOUR TURN'))+' • MANA '+hMana;
 }
