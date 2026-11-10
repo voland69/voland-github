@@ -176,7 +176,7 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
   </div>
 </div>
 <div class="center">
-<div class="title" id="locTitle">ПУСТЫНЯ<span id="locSub">DESERT • 4 STAGES</span></div>
+<div class="title" id="locTitle">ПУСТЫНЯ</div>
 <div id="staminaDisplay" style="margin-top:12px;font:700 10px JetBrains Mono,monospace;color:#3ad080;text-align:center"></div><div class="stages" id="stagesGrid"></div>
 </div>
 <div class="right">
@@ -262,7 +262,7 @@ try{
  else enemies=DESERT_FALLBACK;
  locData= locId==6 ? {name:'РУИНЫ',eng:'RUINS',img:'./assets/enemies/bg-ruins.webp'} : locId==5 ? {name:'ВУЛКАН',eng:'VOLCANO',img:'./assets/enemies/bg-volcano.webp'} : locId==4 ? {name:'БОЛОТО',eng:'SWAMP',img:'./assets/enemies/bg-swamp.webp'} : locId==3 ? {name:'ЛЕДЯНЫЕ ЗЕМЛИ',eng:'FROSTLANDS',img:'./assets/enemies/bg-frostlands.webp'} : locId==2 ? {name:'ТЕМНЫЙ ЛЕС',eng:'DARK FOREST',img:'./assets/enemies/bg-dark-forest.webp'} : {name:'ПУСТЫНЯ',eng:'DESERT',img:'./assets/enemies/bg-desert-dark.jpg'};
 }
-document.getElementById('locTitle').innerHTML=(volandGetLang()==='en' ? locData.eng : locData.name)+'<span id="locSub">'+locData.eng+' • '+enemies.length+' STAGES • CLICK TO FIGHT</span>';
+document.getElementById('locTitle').innerHTML=(volandGetLang()==='en' ? locData.eng : locData.name);
 try{
  let bgEl=document.getElementById('bgImg');
  if(bgEl){
@@ -348,7 +348,7 @@ document.getElementById('stagesGrid').innerHTML=enemies.map(e=>{
  }catch(err){}
  let rs = (REAL_STATS[locId] && REAL_STATS[locId][e.stage]) || (REAL_STATS[1] && REAL_STATS[1][e.stage]) || {hp:2000,def:100,dmg:150};
  let iconHtml = e.img ? `<img src="${e.img}" alt="${volandEnemyName(e)}" onerror="this.parentNode.innerHTML='${e.icon}'">` : `<div style="font-size:48px">${e.icon}</div>`;
- let staminaBadge = `<div class="boss-badge" style="background:rgba(30,60,30,.92);border:1px solid #3ad080;color:#3ad080;box-shadow:0 2px 8px rgba(0,0,0,.5)">${staminaCost} STAM</div>`;
+ let staminaBadge = `<div class="boss-badge" style="background:rgba(30,60,30,.92);border:1px solid #3ad080;color:#3ad080;box-shadow:0 2px 8px rgba(0,0,0,.5)">${staminaCost} ${volandT('ВЫН', 'STAM')}</div>`;
  let bossCounterBadge = '';
  if(isBoss){
    let kills = bossInfo.kills;
@@ -356,12 +356,12 @@ document.getElementById('stagesGrid').innerHTML=enemies.map(e=>{
    let color = kills>=limit ? '#e05050' : kills>=7 ? '#d0b040' : '#3ad080';
    let bg = kills>=limit ? 'rgba(180,30,30,.92)' : 'rgba(20,26,34,.88)';
    let border = kills>=limit ? 'rgba(224,80,80,.8)' : color;
-   bossCounterBadge = `<div class="boss-badge" style="top:8px;right:8px;background:${bg};border-color:${border};color:${kills>=limit?'#fff':color}">${kills}/${limit} BOSS</div>`;
+   bossCounterBadge = `<div class="boss-badge" style="top:8px;right:8px;background:${bg};border-color:${border};color:${kills>=limit?'#fff':color}">${kills}/${limit} ${volandT('БОСС', 'BOSS')}</div>`;
  }
  return `
  <div class="card ${e.boss?'boss':''} ${isBoss && !bossInfo.canFight ? 'boss-limit' : ''}" onclick="startBattle(${e.stage})" style="${isBoss && !bossInfo.canFight ? 'opacity:0.55;filter:grayscale(0.5)' : ''}">
   ${isBoss ? bossCounterBadge : staminaBadge}
-  ${isBoss ? `<div class="boss-badge" style="top:36px;right:8px;background:rgba(30,60,30,.92);border:1px solid #3ad080;color:#3ad080">${staminaCost} STAM</div>` : ''}
+  ${isBoss ? `<div class="boss-badge" style="top:36px;right:8px;background:rgba(30,60,30,.92);border:1px solid #3ad080;color:#3ad080">${staminaCost} ${volandT('ВЫН', 'STAM')}</div>` : ''}
   <div class="icon">${iconHtml}</div>
   <div class="name">${volandEnemyName(e)}<span style="display:block;margin-top:4px;font:400 8px 'JetBrains Mono',monospace;color:#8ab0d0;letter-spacing:.1em">HP ${rs.hp} • DEF ${rs.def} • DMG ${rs.dmg}</span></div>
  </div>
