@@ -17,6 +17,13 @@ function volandT(ru, en){
   return volandGetLang()==='en' ? en : ru;
 }
 var VOLAND_STATIC_DICT = {
+  'МАСТЕРСКАЯ • МОДЕРНИЗАЦИЯ': 'WORKSHOP • UPGRADE',
+  'ЗОЛОТО:': 'GOLD:',
+  'РЕС:': 'RES:',
+  'ТВОЙ ШМОТ': 'YOUR GEAR',
+  'Выбери предмет слева для модернизации': 'Choose item on the left to upgrade',
+  'Система: 5 мастей (bw → green → blue → red → gold) × 10 уровней': 'System: 5 tiers (bw → green → blue → red → gold) × 10 levels',
+  'Золото: 50×lvl, Ресурсы: кварц/дерево/алмаз/вода/камень/кость + клык/эссенция': 'Gold: 50×lvl, Resources: quartz/wood/diamond/water/stone/bone + fang/essence',
   'ПВП АРЕНА • ТЕСТ БОТА': 'PVP ARENA • BOT TEST',
   '8 ГЕРОЕВ • 3 СЛОЖНОСТИ • УМНЫЕ СКИЛЫ • HP x5': '8 HEROES • 3 DIFFICULTIES • SMART SKILLS • HP x5',
   '1 • ВЫБЕРИ СЛОЖНОСТЬ': '1 • CHOOSE DIFFICULTY',
