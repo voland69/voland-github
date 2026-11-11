@@ -15,20 +15,20 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
 .nav-item{width:48px;height:48px;background:#1a252f;border:1px solid #2a3a4a;border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0.6;transition:.2s;font-size:20px}
 .nav-item.active{background:#1e2f3e;border-color:#3a4a5a;opacity:1;box-shadow:0 0 12px rgba(230,213,160,.2)}
 .nav-label{font-size:7px;letter-spacing:.15em;color:#6a7a8a;margin-top:4px;text-align:center;font-family:'JetBrains Mono',monospace}
-.hero-panel{width:380px;min-width:380px;background:rgba(20,28,36,.45);border-right:1px solid rgba(30,42,50,.5);display:flex;flex-direction:column;overflow:hidden;backdrop-filter: blur(2px)}
-.hero-img-wrap{flex:1;background:#1a242f;display:flex;align-items:center;justify-content:center;padding:12px;position:relative;overflow:hidden}
+.hero-panel{width:380px;min-width:380px;background:transparent;border-right:1px solid rgba(30,42,50,.5);display:flex;flex-direction:column;overflow:hidden;backdrop-filter:none}
+.hero-img-wrap{flex:1;background:transparent;display:flex;align-items:center;justify-content:center;padding:12px;position:relative;overflow:hidden}
 .hero-img-wrap img{width:100%;height:100%;object-fit:cover;object-position:top center;border-radius:4px;max-height:72vh}
-.hero-info{padding:18px 16px;background:#1a242f;border-top:1px solid #1e2a32;text-align:center}
+.hero-info{padding:18px 16px;background:transparent;border-top:1px solid #1e2a32;text-align:center}
 .hero-name{font-family:'Cinzel Decorative',serif;font-size:16px;letter-spacing:.3em;color:#e6d5a0;font-weight:900}
 .hero-class{margin-top:8px;font-size:10px;letter-spacing:.15em;color:#8a9a6a;font-family:'JetBrains Mono',monospace;text-transform:uppercase}
-.main{flex:1;display:flex;flex-direction:column;background:rgba(16,22,30,.25);backdrop-filter: blur(2px);overflow:auto;padding:28px 0;gap:28px;justify-content:flex-start}
-.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:14px;background:rgba(19,26,34,.35);border-bottom:1px solid rgba(30,42,50,.5);backdrop-filter: blur(2px)}
-.stat-card{background:#1a242f;border:1px solid #2a3a4a;border-radius:8px;padding:14px 10px;text-align:center}
+.main{flex:1;display:flex;flex-direction:column;background:transparent;backdrop-filter:none;overflow:auto;padding:28px 0;gap:28px;justify-content:flex-start}
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:14px;background:transparent;border-bottom:1px solid rgba(30,42,50,.5);backdrop-filter:none}
+.stat-card{background:transparent;border:1px solid #2a3a4a;border-radius:8px;padding:14px 10px;text-align:center}
 .stat-label{font-size:8px;letter-spacing:.2em;color:#6a7a8a;font-family:'JetBrains Mono',monospace}
 .stat-value{margin-top:6px;font-size:22px;font-weight:800;color:#e6d5a0;font-family:'JetBrains Mono',monospace}
-.bars-panel{padding:18px 20px;background:rgba(17,24,33,.25);display:flex;flex-direction:column;gap:14px;backdrop-filter: blur(2px)}
-.stats-extra-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:0 20px 18px;background:rgba(17,24,33,.25);backdrop-filter:blur(2px)}
-.extra-card{background:#1a242f;border:1px solid #2a3a4a;border-radius:10px;padding:14px 12px;text-align:center;position:relative;overflow:hidden}
+.bars-panel{padding:18px 20px;background:transparent;display:flex;flex-direction:column;gap:14px;backdrop-filter:none}
+.stats-extra-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:0 20px 18px;background:transparent;backdrop-filter:none}
+.extra-card{background:transparent;border:1px solid #2a3a4a;border-radius:10px;padding:14px 12px;text-align:center;position:relative;overflow:hidden}
 .extra-card::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#2a3a4a,#e6d5a0)}
 .extra-icon{font-size:18px;margin-bottom:6px}
 .extra-label{font-size:7px;letter-spacing:.2em;color:#6a7a8a;font-family:'JetBrains Mono',monospace;text-transform:uppercase}
@@ -176,7 +176,7 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
 }
 
 
-.stat-points-panel{margin:0 20px 0 20px;background:rgba(19,26,34,.88);border:1px solid #e6d5a0;border-radius:10px;padding:16px;backdrop-filter:blur(4px)}
+.stat-points-panel{margin:0 20px 0 20px;background:transparent;border:1px solid #e6d5a0;border-radius:10px;padding:16px;backdrop-filter:none}
 .stat-points-title{font:900 13px 'Cinzel Decorative',serif;color:#e6d5a0;letter-spacing:.12em}
 .stat-points-sub{margin-top:6px;font:400 9px 'JetBrains Mono',monospace;color:#8a9aaa;line-height:1.5}
 .stat-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #1e2a32}
@@ -184,15 +184,15 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
 .stat-row-name{width:90px;font:700 10px 'JetBrains Mono',monospace;color:#e6d5a0}
 .stat-row-info{flex:1;font:400 9px 'JetBrains Mono',monospace;color:#8a9aaa;line-height:1.4}
 .stat-row-pts{width:70px;text-align:center;font:700 12px 'JetBrains Mono',monospace;color:#fff}
-.stat-btn{width:28px;height:28px;border-radius:6px;border:1px solid #2a3a4a;background:#1a252f;color:#e6d5a0;font:700 14px 'JetBrains Mono',monospace;cursor:pointer}
+.stat-btn{width:28px;height:28px;border-radius:6px;border:1px solid #2a3a4a;background:transparent;color:#e6d5a0;font:700 14px 'JetBrains Mono',monospace;cursor:pointer}
 .stat-btn:disabled{opacity:.3;cursor:default}
 .stat-btn.plus{border-color:#3ad080;color:#3ad080}
 .points-btn{font:700 10px 'JetBrains Mono',monospace;padding:10px 16px;border-radius:8px;border:1px solid #e6d5a0;background:#e6d5a0;color:#0a0e14;cursor:pointer}
-.points-btn.secondary{border-color:#2a3a4a;background:#1a252f;color:#e6d5a0}
+.points-btn.secondary{border-color:#2a3a4a;background:transparent;color:#e6d5a0}
 .points-btn:disabled{opacity:.4;cursor:default}
 
 
-.stat-points-strip{margin:0 20px 0 20px;background:rgba(19,26,34,.92);border:1px solid #e6d5a0;border-radius:8px;padding:10px 14px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.stat-points-strip{margin:0 20px 0 20px;background:transparent;border:1px solid #e6d5a0;border-radius:8px;padding:10px 14px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px}
 .stat-points-strip:hover{border-color:#fff}
 .stat-points-strip-title{font:900 11px 'Cinzel Decorative',serif;color:#e6d5a0;letter-spacing:.1em}
 .stat-points-strip-info{font:400 9px 'JetBrains Mono',monospace;color:#8a9aaa}
