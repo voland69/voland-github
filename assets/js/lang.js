@@ -17,6 +17,11 @@ function volandT(ru, en){
   return volandGetLang()==='en' ? en : ru;
 }
 var VOLAND_STATIC_DICT = {
+  'ВЫБОР ГЕРОЯ': 'SELECT HERO',
+  '8 ГЕРОЕВ': '8 HEROES',
+  'ВЫБЕРИ ГЕРОЯ • ВВЕДИ ИМЯ • ПОДТВЕРДИ → СТРАНИЦА ГЕРОЯ': 'CHOOSE HERO • ENTER NAME • CONFIRM → HERO PAGE',
+  'ВВЕДИ СВОЁ ИМЯ (мин. 3 символа)': 'ENTER YOUR NAME (min 3 chars)',
+  'ВВЕДИ ИМЯ ≥3 СИМВОЛА': 'ENTER NAME ≥3 CHARS',
   'ТЁМНОЕ ФЭНТЕЗИ': 'DARK FANTASY',
   'РПГ': 'RPG',
   'СТАБИЛЬНАЯ': 'STABLE',
