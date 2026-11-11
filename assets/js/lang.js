@@ -17,6 +17,10 @@ function volandT(ru, en){
   return volandGetLang()==='en' ? en : ru;
 }
 var VOLAND_STATIC_DICT = {
+  'СЕЗОН': 'SEASON',
+  'НАГРАДЫ': 'REWARDS',
+  '← НАЗАД': '← BACK',
+  'СЕЗОН 1': 'SEASON 1',
   'МАСТЕРСКАЯ • МОДЕРНИЗАЦИЯ': 'WORKSHOP • UPGRADE',
   'ЗОЛОТО:': 'GOLD:',
   'РЕС:': 'RES:',
