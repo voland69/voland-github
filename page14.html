@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VOLAND - GUILD</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+.left-nav{width:60px !important;min-width:60px !important;max-width:60px !important;flex:0 0 60px !important;background:rgba(18,24,30,.94) !important;border-right:1px solid #2a3a4a !important;display:flex !important;flex-direction:column !important;justify-content:space-between !important;align-items:center !important;height:100vh !important;height:100dvh !important;overflow:visible !important;padding:6px 4px !important;gap:0 !important;position:relative !important;z-index:20 !important}
+.nav-top{display:flex !important;flex-direction:column !important;gap:4px !important;align-items:center !important;width:100% !important;overflow:visible !important}
+.nav-bottom{margin-top:auto !important;padding-top:8px !important;border-top:1px solid rgba(255,255,255,.08) !important;width:100% !important;display:flex !important;flex-direction:column !important;align-items:center !important;gap:4px !important;overflow:visible !important}
+.nav-group{cursor:pointer !important;display:flex !important;flex-direction:column !important;align-items:center !important;gap:0 !important;width:100% !important;position:relative !important;overflow:visible !important}
+.nav-item{width:52px !important;height:52px !important;min-width:52px !important;min-height:52px !important;background:#1a252f !important;border:1px solid #2a3a4a !important;border-radius:9px !important;display:flex !important;align-items:center !important;justify-content:center !important;opacity:.75 !important;transition:.2s !important;flex-shrink:0 !important;padding:0 !important;overflow:hidden !important}
+.nav-item.active{border-color:#e6d5a0 !important;opacity:1 !important;background:#1e2f3e !important;box-shadow:0 0 10px rgba(230,213,160,.3) !important}
+.nav-item:hover{opacity:1 !important;border-color:#e6d5a0 !important}
+.nav-item img{width:100% !important;height:100% !important;object-fit:cover !important;display:block !important;border-radius:8px !important}
+.nav-label{position:fixed !important;left:64px !important;background:rgba(20,26,34,.96) !important;border:1px solid #e6d5a0 !important;color:#e6d5a0 !important;padding:5px 9px !important;border-radius:6px !important;font:700 8px 'JetBrains Mono',monospace !important;letter-spacing:.15em !important;white-space:nowrap !important;opacity:0 !important;pointer-events:none !important;transition:.18s !important;z-index:99999 !important;box-shadow:0 4px 16px rgba(0,0,0,.5) !important}
+.nav-group:hover .nav-label{opacity:1 !important}
+.wrap{display:flex !important;position:fixed !important;inset:0 !important}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,sans-serif;overflow:hidden}
+.bg{position:fixed;inset:0;z-index:0}.bg img{width:100%;height:100%;object-fit:cover}
+.bg:after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.6)}
+.center{flex:1;display:flex;flex-direction:column;overflow:hidden;background:rgba(16,22,30,.22)}
+.top-bar{height:48px;background:rgba(18,24,33,.85);border-bottom:1px solid rgba(30,42,50,.5);display:flex;align-items:center;justify-content:space-between;padding:0 16px;padding-right:130px}
+.top-title{font:900 16px 'Cinzel Decorative',serif;letter-spacing:.2em;color:#e6d5a0}
+.top-res{display:flex;gap:12px;font:700 10px 'JetBrains Mono',monospace;color:#8a9aaa}
+.top-res span{color:#d0b040}
+.main-area{flex:1;display:flex;overflow:hidden}
+.left-list{width:320px;min-width:320px;background:transparent;border-right:1px solid rgba(30,42,50,.5);display:flex;flex-direction:column;overflow:hidden}
+.list-header{padding:12px 14px;border-bottom:1px solid rgba(30,42,50,.3);font:700 9px 'JetBrains Mono',monospace;letter-spacing:.15em;color:#6a7a8a;display:flex;justify-content:space-between}
+.member-list{flex:1;overflow:auto;padding:8px;display:flex;flex-direction:column;gap:6px}
+.member-row{display:flex;gap:10px;align-items:center;padding:8px 10px;background:rgba(38,48,60,.85);border:1px solid #2a3a4a;border-radius:8px}
+.member-row.leader{border-color:#e6d5a0}
+.member-row.empty{opacity:.6;border-style:dashed}
+.member-ava{width:42px;height:42px;min-width:42px;border-radius:6px;background:#0a0e14;border:1px solid #2a3a4a;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.member-ava img{width:100%;height:100%;object-fit:cover;display:block}
+.member-info{flex:1;display:flex;flex-direction:column;gap:2px;overflow:hidden}
+.member-name{font:700 10px Inter,sans-serif;color:#e6d5a0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-transform:uppercase}
+.member-sub{font:400 8px 'JetBrains Mono',monospace;color:#6a7a8a}
+.member-tag{font:700 8px 'JetBrains Mono',monospace;color:#3ad080;border:1px solid #3ad080;border-radius:4px;padding:2px 5px}
+.right-preview{flex:1;display:flex;flex-direction:column;align-items:center;padding:20px;overflow:auto;gap:16px}
+.tabs{display:flex;gap:8px;width:100%;max-width:800px}
+.tab{flex:1;padding:10px;text-align:center;background:rgba(38,48,60,.85);border:1px solid #2a3a4a;border-radius:8px;font:700 9px 'JetBrains Mono',monospace;letter-spacing:.15em;color:#8a9aaa;cursor:pointer}
+.tab.active{background:#1e2f3e;border-color:#e6d5a0;color:#e6d5a0}
+.card{width:100%;max-width:800px;background:rgba(38,48,60,.85);border:1px solid #2a3a4a;border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:12px}
+.card-title{font:900 13px 'Cinzel Decorative',serif;color:#e6d5a0;letter-spacing:.12em;text-align:center}
+.guild-head{display:flex;gap:14px;align-items:center}
+.guild-emblem{width:72px;height:72px;min-width:72px;border-radius:12px;background:#0a0e14;border:1px solid #e6d5a0;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.guild-emblem img{width:100%;height:100%;object-fit:cover}
+.guild-meta{flex:1;display:flex;flex-direction:column;gap:4px}
+.guild-name{font:900 16px 'Cinzel Decorative',serif;color:#e6d5a0;letter-spacing:.1em}
+.guild-tag{font:700 9px 'JetBrains Mono',monospace;color:#8a9aaa;letter-spacing:.2em}
+.guild-desc{font:400 9px 'JetBrains Mono',monospace;color:#8a9aaa;line-height:1.5}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;width:100%;max-width:800px}
+.stat-box{background:rgba(38,48,60,.85);border:1px solid #2a3a4a;border-radius:10px;padding:14px 10px;text-align:center}
+.stat-label{font:700 7px 'JetBrains Mono',monospace;letter-spacing:.2em;color:#6a7a8a}
+.stat-value{margin-top:6px;font:800 18px 'JetBrains Mono',monospace;color:#e6d5a0}
+.hall-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;max-width:800px}
+.hall-card{background:rgba(38,48,60,.85);border:1px solid #2a3a4a;border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:8px;text-align:center}
+.hall-card.max{opacity:.6}
+.hall-icon{font-size:22px}
+.hall-name{font:700 10px Inter,sans-serif;color:#e6d5a0;text-transform:uppercase}
+.hall-desc{font:400 8px 'JetBrains Mono',monospace;color:#8a9aaa;line-height:1.5;min-height:28px}
+.hall-lvl{font:700 8px 'JetBrains Mono',monospace;color:#d0b040}
+.btn{padding:10px 14px;border-radius:8px;border:1px solid #2a3a4a;background:#1a242f;color:#d8d2b8;font:700 9px 'JetBrains Mono',monospace;letter-spacing:.12em;cursor:pointer;text-align:center;transition:.15s}
+.btn:hover{border-color:#e6d5a0;color:#e6d5a0}
+.btn.primary{background:#e6d5a0;color:#121214;font-weight:800;border-color:#e6d5a0}
+.btn.danger{background:transparent;border-color:#5a2a2a;color:#8a5a5a}
+.btn.danger:hover{border-color:#8a3a3a;color:#c07070}
+.btn:disabled{opacity:.4;cursor:default}
+.input{width:100%;padding:10px;background:#0a0e14;border:1px solid #2a3a4a;border-radius:8px;color:#e6d5a0;font:700 11px 'JetBrains Mono',monospace}
+.input::placeholder{color:#5a6a7a}
+.emblem-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.emblem-opt{height:56px;border-radius:8px;background:#0a0e14;border:1px solid #2a3a4a;overflow:hidden;cursor:pointer;padding:4px}
+.emblem-opt.selected{border-color:#e6d5a0;box-shadow:0 0 10px rgba(230,213,160,.3)}
+.emblem-opt img{width:100%;height:100%;object-fit:cover;border-radius:6px}
+.log{font:700 9px 'JetBrains Mono',monospace;min-height:16px;text-align:center}
+.log.ok{color:#3ad080}.log.err{color:#e05050}
+@media(max-width:900px){.left-list{display:none}.hall-grid{grid-template-columns:repeat(2,1fr)}.stats-row{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="bg"><img src="./assets/heroes/bg-battlefield.webp" onerror="this.style.display='none'"></div>
+<div class="wrap">
+<div class="left-nav">
+  <div class="nav-top">
+    <div class="nav-group" onclick="location.href='./page3.html'"><div class="nav-item" data-page="page3"><img src="./assets/ui/nav/hero.webp" alt="HERO"></div><div class="nav-label">HERO</div></div>
+    <div class="nav-group" onclick="location.href='./page4.html'"><div class="nav-item" data-page="page4"><img src="./assets/ui/nav/bag.webp" alt="BAG"></div><div class="nav-label">BAG</div></div>
+    <div class="nav-group" onclick="location.href='./page5.html'"><div class="nav-item" data-page="page5"><img src="./assets/ui/nav/skills.webp" alt="SKILLS"></div><div class="nav-label">SKILLS</div></div>
+    <div class="nav-group" onclick="location.href='./page6.html'"><div class="nav-item" data-page="page6"><img src="./assets/ui/nav/battle.webp" alt="BATTLE"></div><div class="nav-label">BATTLE</div></div>
+    <div class="nav-group" onclick="location.href='./page9.html'"><div class="nav-item" data-page="page9"><img src="./assets/ui/nav/missions.webp" alt="MISSIONS"></div><div class="nav-label">MISSIONS</div></div>
+    <div class="nav-group" onclick="location.href='./page10.html'"><div class="nav-item" data-page="page10"><img src="./assets/ui/nav/market.webp" alt="MARKET"></div><div class="nav-label">MARKET</div></div>
+    <div class="nav-group" onclick="location.href='./page11.html'"><div class="nav-item" data-page="page11"><img src="./assets/ui/nav/pvp.webp" alt="PVP"></div><div class="nav-label">PVP</div></div>
+    <div class="nav-group" onclick="location.href='./page12.html'"><div class="nav-item" data-page="page12"><img src="./assets/ui/nav/workshop.webp" alt="WORKSHOP"></div><div class="nav-label">WORKSHOP</div></div>
+    <div class="nav-group" onclick="location.href='./page13.html'"><div class="nav-item" data-page="page13"><img src="./assets/ui/nav/pass.webp" alt="PASS"></div><div class="nav-label">PASS</div></div>
+    <div class="nav-group active" onclick="location.href='./page14.html'"><div class="nav-item active" data-page="page14"><img src="./assets/ui/nav/guilds.webp" alt="GUILD"></div><div class="nav-label">GUILD</div></div>
+  </div>
+  <div class="nav-bottom">
+    <div class="nav-group" onclick="location.href='./index.html'"><div class="nav-item" data-page="index"><img src="./assets/ui/nav/start.webp" alt="START"></div><div class="nav-label">START</div></div>
+  </div>
+</div>
+<div class="center">
+  <div class="top-bar">
+    <div class="top-title">ГИЛЬДИЯ • 2 ВКЛАДКИ</div>
+    <div class="top-res">
+      <div><span id="goldLabel">ЗОЛОТО:</span> <span id="goldDisplay">0</span></div>
+      <div><span id="resLabel">РЕС:</span> <span id="resDisplay">0</span></div>
+    </div>
+  </div>
+  <div class="main-area" id="mainArea"></div>
+</div>
+</div>
+<script src="./assets/js/lang.js"></script>
+<script src="./assets/js/config.js"></script>
+<script src="./assets/js/db/heroes.js"></script>
+<script src="./assets/js/db/tiers.js"></script>
+<script src="./assets/js/db/resources.js"></script>
+<script src="./assets/js/db/items.js"></script>
+<script src="./assets/js/db/starter.js"></script>
+<script src="./assets/js/db/locations.js"></script>
+<script src="./assets/js/db/enemies.js"></script>
+<script src="./assets/js/db/missions.js"></script>
+<script src="./assets/js/storage.js"></script>
+<script>
+var GUILD_KEY = 'voland_v1_guild';
+var GUILD_MAX_SLOTS_BASE = 20;
+var GUILD_CREATE_COST = 1000;
+var EMBLEMS = ['./assets/ui/nav/guilds.webp','./assets/ui/nav/hero.webp','./assets/ui/nav/battle.webp','./assets/ui/nav/market.webp','./assets/ui/nav/pvp.webp','./assets/ui/nav/pass.webp'];
+var selectedEmblem = EMBLEMS[0];
+var currentTab = 'guild';
+var HALL = [
+  {id:'treasury', icon:'💰', nameRU:'КАЗНА', nameEN:'TREASURY', descRU:'+10% золота с миссий за уровень', descEN:'+10% gold from missions per level'},
+  {id:'xp', icon:'⭐', nameRU:'ОПЫТ', nameEN:'EXPERIENCE', descRU:'+5% XP за уровень', descEN:'+5% XP per level'},
+  {id:'power', icon:'⚔️', nameRU:'СИЛА', nameEN:'POWER', descRU:'+5% к атаке участников', descEN:'+5% attack for members'},
+  {id:'slots', icon:'👥', nameRU:'МЕСТА', nameEN:'SLOTS', descRU:'+5 мест в гильдии за уровень', descEN:'+5 guild slots per level'},
+  {id:'hp', icon:'❤️', nameRU:'ЗДОРОВЬЕ', nameEN:'HEALTH', descRU:'+5% HP за уровень', descEN:'+5% HP per level'},
+  {id:'stam', icon:'🔋', nameRU:'ВЫНОСЛИВОСТЬ', nameEN:'STAMINA', descRU:'+5% STAM за уровень', descEN:'+5% STAM per level'},
+  {id:'loot', icon:'🎒', nameRU:'ДОБЫЧА', nameEN:'LOOT', descRU:'+10% ресурсов с мобов', descEN:'+10% resources from mobs'},
+  {id:'discount', icon:'🏷️', nameRU:'СКИДКА', nameEN:'DISCOUNT', descRU:'-5% цен в магазине за уровень', descEN:'-5% shop prices per level'},
+  {id:'regen', icon:'🔄', nameRU:'ВОССТАНОВЛЕНИЕ', nameEN:'REGEN', descRU:'+10% к восстановлению STAM', descEN:'+10% STAM regen per level'},
+  {id:'crit', icon:'🎯', nameRU:'КРИТ', nameEN:'CRIT', descRU:'+2% к криту за уровень', descEN:'+2% crit per level'},
+  {id:'def', icon:'🛡️', nameRU:'ЗАЩИТА', nameEN:'DEFENSE', descRU:'+5% к защите за уровень', descEN:'+5% defense per level'},
+  {id:'craft', icon:'⚗️', nameRU:'КРАФТ', nameEN:'CRAFT', descRU:'+10% к эссенции с крафта', descEN:'+10% essence from crafting'}
+];
+function volandGetGuild(){
+  try{
+    var g = JSON.parse(localStorage.getItem(GUILD_KEY) || 'null');
+    if(g && g.name && g.tag) return g;
+  }catch(e){}
+  return null;
+}
+function volandSaveGuild(g){ try{ localStorage.setItem(GUILD_KEY, JSON.stringify(g)); }catch(e){} }
+function volandGetGuildSlots(){
+  var g = volandGetGuild();
+  var extra = 0;
+  if(g && g.upgrades && g.upgrades.slots) extra = g.upgrades.slots * 5;
+  return GUILD_MAX_SLOTS_BASE + extra;
+}
+function volandGetGuildPower(g){
+  var base = 100;
+  if(g && g.upgrades && g.upgrades.power) base += g.upgrades.power * 50;
+  try{
+    var saves = volandGetSaves();
+    var idx = volandGetActiveIndex();
+    if(saves[idx]){
+      var hero = VOLAND_HEROES[saves[idx].hero];
+      if(hero) base += (hero.st.DMG || 0) + (hero.st.HP || 0) / 10;
+    }
+  }catch(e){}
+  return Math.round(base);
+}
+function refreshTop(){
+  try{
+    try{ var gl=document.getElementById('goldLabel'); if(gl) gl.textContent = volandT('ЗОЛОТО:','GOLD:'); var rl=document.getElementById('resLabel'); if(rl) rl.textContent = volandT('РЕС:','RES:'); }catch(e){}
+    document.getElementById('goldDisplay').textContent = volandGetGold();
+    var res = volandGetResources();
+    var total = Object.values(res).reduce(function(a,b){return a+b;},0);
+    document.getElementById('resDisplay').textContent = total;
+  }catch(e){}
+}
+function selectEmblem(idx){
+  selectedEmblem = EMBLEMS[idx];
+  document.querySelectorAll('.emblem-opt').forEach(function(el,i){
+    el.classList.toggle('selected', i===idx);
+  });
+}
+function createGuild(){
+  try{
+    var name = (document.getElementById('guildName').value || '').trim();
+    var tag = (document.getElementById('guildTag').value || '').trim().toUpperCase();
+    var desc = (document.getElementById('guildDesc').value || '').trim();
+    if(name.length < 3){ showLog('createLog', volandT('Название от 3 символов','Name min 3 chars'),'err'); return; }
+    if(tag.length < 2 || tag.length > 4){ showLog('createLog', volandT('Тег 2-4 буквы','Tag 2-4 letters'),'err'); return; }
+    var gold = volandGetGold();
+    if(gold < GUILD_CREATE_COST){ showLog('createLog', volandT('Недостаточно золота: ','Not enough gold: ') + gold + '/' + GUILD_CREATE_COST,'err'); return; }
+    try{ volandSpendGold(GUILD_CREATE_COST); }catch(e){ localStorage.setItem('voland_v1_gold', String(gold - GUILD_CREATE_COST)); }
+    var g = {name:name, tag:tag, emblem:selectedEmblem, desc:desc || volandT('Гильдия VOLAND','VOLAND Guild'), created:Date.now(), level:1, treasury:0, upgrades:{}};
+    volandSaveGuild(g);
+    refreshTop();
+    render();
+  }catch(e){ showLog('createLog', volandT('Ошибка: ','Error: ') + e.message,'err'); }
+}
+function leaveGuild(){
+  var g = volandGetGuild();
+  if(!g) return;
+  if(!confirm(volandT('Покинуть гильдию ','Leave guild ') + g.name + '?')) return;
+  try{ localStorage.removeItem(GUILD_KEY); }catch(e){}
+  render();
+}
+function upgradeHall(id){
+  try{
+    var g = volandGetGuild();
+    if(!g) return;
+    if(!g.upgrades) g.upgrades = {};
+    var lvl = g.upgrades[id] || 0;
+    if(lvl >= 5){ showLog('hallLog', volandT('Максимум','Max'),'err'); return; }
+    var cost = 500 * (lvl + 1);
+    var gold = volandGetGold();
+    if(gold < cost){ showLog('hallLog', volandT('Недостаточно золота: ','Not enough gold: ') + gold + '/' + cost,'err'); return; }
+    try{ volandSpendGold(cost); }catch(e){ localStorage.setItem('voland_v1_gold', String(gold - cost)); }
+    g.upgrades[id] = lvl + 1;
+    if(id==='treasury') g.treasury = (g.treasury||0) + 50;
+    volandSaveGuild(g);
+    refreshTop();
+    render();
+    showLog('hallLog', volandT('Улучшено: ','Upgraded: ') + id + ' LVL ' + (lvl+1),'ok');
+  }catch(e){ showLog('hallLog', volandT('Ошибка: ','Error: ') + e.message,'err'); }
+}
+function showLog(id, msg, cls){
+  try{ var el = document.getElementById(id); if(el){ el.textContent = msg; el.className = 'log ' + (cls||''); } }catch(e){}
+}
+function switchTab(tab){
+  currentTab = tab;
+  render();
+}
+function renderMembers(){
+  var g = volandGetGuild();
+  var slots = volandGetGuildSlots();
+  var html = '';
+  var meName = 'YOU';
+  var meHero = '';
+  var meLvl = 1;
+  try{
+    var saves = volandGetSaves();
+    var idx = volandGetActiveIndex();
+    if(saves[idx]){
+      meName = (saves[idx].name || 'YOU').toUpperCase();
+      var hero = VOLAND_HEROES[saves[idx].hero];
+      if(hero) meHero = hero.n;
+      try{ var li = volandGetLevelInfo(parseInt(saves[idx].xp||0)); meLvl = li.lvl; }catch(e){}
+    }
+  }catch(e){}
+  for(var i=0;i<slots;i++){
+    if(i===0){
+      html += '<div class="member-row leader"><div class="member-ava"><img src="./assets/ui/nav/hero.webp" onerror="this.style.display=\'none\'"></div><div class="member-info"><div class="member-name">' + meName + ' • LVL ' + meLvl + '</div><div class="member-sub">' + (meHero || '') + '</div></div><span class="member-tag">' + volandT('ЛИДЕР','LEADER') + '</span></div>';
+    } else {
+      html += '<div class="member-row empty"><div class="member-ava"><span style="font-size:18px;color:#5a6a7a">+</span></div><div class="member-info"><div class="member-name">' + volandT('ПУСТОЙ СЛОТ ','EMPTY SLOT ') + (i+1) + '</div><div class="member-sub">' + volandT('Свободно • SOON','Free • SOON') + '</div></div></div>';
+    }
+  }
+  return html;
+}
+function render(){
+  refreshTop();
+  var g = volandGetGuild();
+  var area = document.getElementById('mainArea');
+  if(!g){
+    area.innerHTML = '<div class="right-preview" style="justify-content:center"><div class="card"><div class="card-title">' + volandT('СОЗДАТЬ ГИЛЬДИЮ','CREATE GUILD') + '</div>'
+      + '<div style="font:400 9px \'JetBrains Mono\',monospace;color:#8a9aaa;text-align:center;line-height:1.6">' + volandT('Пока ты один. Создай гильдию — задел на будущее. Потом подключим других игроков без переделки UI.','You are alone for now. Create a guild — prep for the future. We will add other players later without UI changes.') + '</div>'
+      + '<input class="input" id="guildName" placeholder="' + volandT('Название гильдии','Guild name') + '" maxlength="24">'
+      + '<input class="input" id="guildTag" placeholder="' + volandT('Тег 2-4 буквы, напр. VLND','Tag 2-4 letters, e.g. VLND') + '" maxlength="4" style="text-transform:uppercase">'
+      + '<div class="emblem-grid">' + EMBLEMS.map(function(e,i){ return '<div class="emblem-opt ' + (i===0?'selected':'') + '" onclick="selectEmblem(' + i + ')"><img src="' + e + '" onerror="this.style.display=\'none\'"></div>'; }).join('') + '</div>'
+      + '<input class="input" id="guildDesc" placeholder="' + volandT('Описание (необязательно)','Description (optional)') + '" maxlength="80">'
+      + '<div class="btn primary" onclick="createGuild()">' + volandT('СОЗДАТЬ ГИЛЬДИЮ • ','CREATE GUILD • ') + GUILD_CREATE_COST + 'g</div>'
+      + '<div class="log" id="createLog"></div></div></div>';
+    return;
+  }
+  var slots = volandGetGuildSlots();
+  var power = volandGetGuildPower(g);
+  var left = '<div class="left-list"><div class="list-header"><span>' + volandT('УЧАСТНИКИ','MEMBERS') + '</span><span>1/' + slots + '</span></div><div class="member-list">' + renderMembers() + '</div></div>';
+  var tabs = '<div class="tabs"><div class="tab ' + (currentTab==='guild'?'active':'') + '" onclick="switchTab(\'guild\')">1 • ' + volandT('ГИЛЬДИЯ','GUILD') + '</div><div class="tab ' + (currentTab==='hall'?'active':'') + '" onclick="switchTab(\'hall\')">2 • ' + volandT('ЗАЛ','HALL') + '</div></div>';
+  var right = '';
+  if(currentTab==='guild'){
+    right = '<div class="card"><div class="guild-head"><div class="guild-emblem"><img src="' + (g.emblem || EMBLEMS[0]) + '" onerror="this.style.display=\'none\'"></div><div class="guild-meta"><div class="guild-name">' + g.name.toUpperCase() + ' <span style="font-size:10px;color:#d0b040">[' + g.tag + ']</span></div><div class="guild-tag">LVL ' + (g.level||1) + ' • ' + volandT('СОЗДАНА ','CREATED ') + new Date(g.created).toLocaleDateString() + '</div><div class="guild-desc">' + (g.desc || '') + '</div></div></div>'
+      + '<div class="btn danger" onclick="leaveGuild()">' + volandT('ПОКИНУТЬ ГИЛЬДИЮ','LEAVE GUILD') + '</div></div>'
+      + '<div class="stats-row">'
+      + '<div class="stat-box"><div class="stat-label">' + volandT('УРОВЕНЬ','LEVEL') + '</div><div class="stat-value">' + (g.level||1) + '</div></div>'
+      + '<div class="stat-box"><div class="stat-label">' + volandT('СИЛА','POWER') + '</div><div class="stat-value">' + power + '</div></div>'
+      + '<div class="stat-box"><div class="stat-label">' + volandT('УЧАСТНИКИ','MEMBERS') + '</div><div class="stat-value">1/' + slots + '</div></div>'
+      + '<div class="stat-box"><div class="stat-label">' + volandT('КАЗНА','TREASURY') + '</div><div class="stat-value">' + (g.treasury||0) + 'g</div></div>'
+      + '</div>';
+  } else {
+    var cards = HALL.map(function(h){
+      var lvl = (g.upgrades && g.upgrades[h.id]) || 0;
+      var cost = 500 * (lvl + 1);
+      var max = lvl >= 5;
+      return '<div class="hall-card ' + (max?'max':'') + '"><div class="hall-icon">' + h.icon + '</div><div class="hall-name">' + volandT(h.nameRU, h.nameEN) + '</div><div class="hall-desc">' + volandT(h.descRU, h.descEN) + '</div><div class="hall-lvl">LVL ' + lvl + '/5 • ' + (max ? volandT('МАКС','MAX') : cost + 'g') + '</div><div class="btn primary" ' + (max?'disabled':'onclick="upgradeHall(\'' + h.id + '\')"') + '>' + volandT('УЛУЧШИТЬ','UPGRADE') + '</div></div>';
+    }).join('');
+    right = '<div class="card"><div class="card-title">' + volandT('ЗАЛ ГИЛЬДИИ • УЛУЧШЕНИЯ','GUILD HALL • UPGRADES') + '</div><div style="font:400 8px \'JetBrains Mono\',monospace;color:#8a9aaa;text-align:center">' + volandT('12 улучшений. Потом вместе переделаем. Пока локально — из твоего золота.','12 upgrades. We will redo together later. Local for now — from your gold.') + '</div></div><div class="hall-grid">' + cards + '</div><div class="log" id="hallLog"></div>';
+  }
+  area.innerHTML = left + '<div class="right-preview">' + tabs + right + '</div>';
+}
+render();
+</script>
+</body>
+</html>
