@@ -30,7 +30,7 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 .nav-group:hover .nav-label{opacity:1 !important}
 .wrap{display:flex !important;position:fixed !important;inset:0 !important}
 .center{flex:1;display:flex;flex-direction:column;overflow:hidden;background:rgba(16,22,30,.22)}
-.top-bar{height:48px;background:rgba(18,24,33,.85);border-bottom:1px solid rgba(30,42,50,.5);display:flex;align-items:center;justify-content:space-between;padding:0 16px}
+.top-bar{height:48px;background:rgba(18,24,33,.85);border-bottom:1px solid rgba(30,42,50,.5);display:flex;align-items:center;justify-content:space-between;padding:0 16px;padding-right:130px}
 .top-title{font:900 16px 'Cinzel Decorative',serif;letter-spacing:.2em;color:#e6d5a0}
 .top-res{display:flex;gap:12px;font:700 10px 'JetBrains Mono',monospace;color:#8a9aaa}
 .top-res span{color:#d0b040}
@@ -146,21 +146,21 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 </div>
 <div class="center">
   <div class="top-bar">
-    <div class="top-title">MARKET • 3 TABS</div>
+    <div class="top-title">РЫНОК • 3 ВКЛАДКИ</div>
     <div class="top-res">
-      <div>GOLD: <span id="goldDisplay">0</span></div>
-      <div>RES: <span id="resDisplay">0</span></div>
+      <div><span id="goldLabel">ЗОЛОТО:</span> <span id="goldDisplay">0</span></div>
+      <div><span id="resLabel">РЕС:</span> <span id="resDisplay">0</span></div>
     </div>
   </div>
   <div class="main-area">
     <div class="left-list">
-      <div class="list-header"><span>RESOURCES IN BAG</span><span id="countDisplay">0</span></div>
+      <div class="list-header"><span>РЕСУРСЫ В СУМКЕ</span><span id="countDisplay">0</span></div>
       <div class="res-list" id="resList"></div>
     </div>
     <div class="right-preview" id="previewArea">
       <div class="tabs">
-        <div class="tab active" data-tab="market" onclick="switchTab('market')">1 • MARKET</div>
-        <div class="tab" data-tab="exchange" onclick="switchTab('exchange')">2 • EXCHANGE</div>
+        <div class="tab active" data-tab="market" onclick="switchTab('market')">1 • РЫНОК</div>
+        <div class="tab" data-tab="exchange" onclick="switchTab('exchange')">2 • ОБМЕН</div>
         <div class="tab" data-tab="p2p" onclick="switchTab('p2p')">3 • P2P</div>
       </div>
       <div id="tabMarket" style="width:100%;max-width:800px"></div>
@@ -176,18 +176,18 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
     <div class="modal-header">
       <div class="modal-icon" id="modalIcon"><img src="" alt=""></div>
       <div class="modal-info">
-        <div class="modal-name" id="modalName">QUARTZ</div>
-        <div class="modal-desc" id="modalDesc">RESOURCE</div>
+        <div class="modal-name" id="modalName">КВАРЦ</div>
+        <div class="modal-desc" id="modalDesc">РЕСУРС</div>
         <div class="modal-have" id="modalHave">В рюкзаке: x0</div>
       </div>
     </div>
     <div class="modal-prices">
       <div class="price-chip buy">
-        <div class="price-label">BUY PRICE</div>
+        <div class="price-label">ЦЕНА ПОКУПКИ</div>
         <div class="price-val buy" id="modalBuyPrice">50g</div>
       </div>
       <div class="price-chip sell">
-        <div class="price-label">SELL PRICE</div>
+        <div class="price-label">ЦЕНА ПРОДАЖИ</div>
         <div class="price-val sell" id="modalSellPrice">25g</div>
       </div>
     </div>
@@ -199,10 +199,10 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
       <button class="qty-btn" onclick="changeQty(10)">+10</button>
     </div>
     <div class="action-row">
-      <button class="btn buy" id="modalBuyBtn" onclick="confirmBuy()">BUY</button>
-      <button class="btn sell" id="modalSellBtn" onclick="confirmSell()">SELL</button>
+      <button class="btn buy" id="modalBuyBtn" onclick="confirmBuy()">КУПИТЬ</button>
+      <button class="btn sell" id="modalSellBtn" onclick="confirmSell()">ПРОДАТЬ</button>
     </div>
-    <button class="btn close" onclick="closeModal()" style="width:100%">CLOSE</button>
+    <button class="btn close" onclick="closeModal()" style="width:100%">ЗАКРЫТЬ</button>
     <div class="log" id="modalLog"></div>
   </div>
 </div>
@@ -257,7 +257,7 @@ const RES_ICONS = {
   essence:'./assets/ui/loot/essence.webp'
 };
 const RES_NAMES = {
-  quartz:'QUARTZ', wood:'WOOD', diamond:'DIAMOND', water:'WATER', stone:'STONE', bone:'BONE', fang:'FANG', essence:'ESSENCE'
+  quartz:volandT('КВАРЦ','QUARTZ'), wood:volandT('ДЕРЕВО','WOOD'), diamond:volandT('АЛМАЗ','DIAMOND'), water:volandT('ВОДА','WATER'), stone:volandT('КАМЕНЬ','STONE'), bone:volandT('КОСТЬ','BONE'), fang:volandT('КЛЫК','FANG'), essence:volandT('ЭССЕНЦИЯ','ESSENCE')
 };
 
 let currentFilter = 'all';
@@ -283,6 +283,7 @@ let selectedResId = null;
 
 function refreshTop(){
   try{
+    try{ var gl=document.getElementById('goldLabel'); if(gl) gl.textContent = volandT('ЗОЛОТО:','GOLD:'); var rl=document.getElementById('resLabel'); if(rl) rl.textContent = volandT('РЕС:','RES:'); }catch(e){}
     document.getElementById('goldDisplay').textContent = volandGetGold();
     let res = volandGetResources();
     let total = Object.values(res).reduce((a,b)=>a+b,0);
@@ -309,7 +310,7 @@ function renderResList(){
       <div class="res-icon">${iconHtml}</div>
       <div class="res-info">
         <div class="res-name">${RES_NAMES[entry.id]} <span style="color:#3ad080">x${entry.amount}</span></div>
-        <div class="res-tier">${price ? price.buy+'g BUY / '+price.sell+'g SELL' : ''}</div>
+        <div class="res-tier">${price ? price.buy+'g '+volandT('КУПИТЬ','BUY')+' / '+price.sell+'g '+volandT('ПРОДАТЬ','SELL') : ''}</div>
       </div>
     `;
     listEl.appendChild(div);
@@ -340,7 +341,7 @@ function getMarketItems(){
     items.push({
       id, type:'res', name:RES_NAMES[id], icon:RES_ICONS[id],
       buy:MARKET_PRICES[id].buy, sell:MARKET_PRICES[id].sell,
-      have, desc:'RESOURCE', price:MARKET_PRICES[id].buy
+      have, desc:volandT('РЕСУРС','RESOURCE'), price:MARKET_PRICES[id].buy
     });
   });
   Object.keys(POTION_PRICES).forEach(id=>{
@@ -374,18 +375,18 @@ function renderMarket(){
 
   let filterHtml = `
     <div class="market-card">
-      <div class="card-title">MARKET • BUY / SELL FOR GOLD</div>
+      <div class="card-title">${volandT('РЫНОК • КУПИТЬ / ПРОДАТЬ ЗА ЗОЛОТО', 'MARKET • BUY / SELL FOR GOLD')}</div>
       <div class="filter-bar">
         <div class="filter-group">
-          <button class="filter-btn ${currentFilter==='all'?'active':''}" onclick="setFilter('all')">ALL • ${getMarketItems().length}</button>
-          <button class="filter-btn ${currentFilter==='res'?'active':''}" onclick="setFilter('res')">RES • ${getMarketItems().filter(x=>x.type==='res').length}</button>
-          <button class="filter-btn ${currentFilter==='potion'?'active':''}" onclick="setFilter('potion')">POTIONS • ${getMarketItems().filter(x=>x.type==='potion').length}</button>
+          <button class="filter-btn ${currentFilter==='all'?'active':''}" onclick="setFilter('all')">${volandT('ВСЕ','ALL')} • ${getMarketItems().length}</button>
+          <button class="filter-btn ${currentFilter==='res'?'active':''}" onclick="setFilter('res')">${volandT('РЕС','RES')} • ${getMarketItems().filter(x=>x.type==='res').length}</button>
+          <button class="filter-btn ${currentFilter==='potion'?'active':''}" onclick="setFilter('potion')">${volandT('ЗЕЛЬЯ','POTIONS')} • ${getMarketItems().filter(x=>x.type==='potion').length}</button>
         </div>
         <div class="sort-group">
-          <button class="sort-btn ${currentSort==='price-asc'?'active':''}" onclick="setSort('price-asc')">PRICE ↑</button>
-          <button class="sort-btn ${currentSort==='price-desc'?'active':''}" onclick="setSort('price-desc')">PRICE ↓</button>
-          <button class="sort-btn ${currentSort==='name'?'active':''}" onclick="setSort('name')">NAME</button>
-          <button class="sort-btn ${currentSort==='have-desc'?'active':''}" onclick="setSort('have-desc')">HAVE</button>
+          <button class="sort-btn ${currentSort==='price-asc'?'active':''}" onclick="setSort('price-asc')">${volandT('ЦЕНА','PRICE')} ↑</button>
+          <button class="sort-btn ${currentSort==='price-desc'?'active':''}" onclick="setSort('price-desc')">${volandT('ЦЕНА','PRICE')} ↓</button>
+          <button class="sort-btn ${currentSort==='name'?'active':''}" onclick="setSort('name')">${volandT('ИМЯ','NAME')}</button>
+          <button class="sort-btn ${currentSort==='have-desc'?'active':''}" onclick="setSort('have-desc')">${volandT('ЕСТЬ','HAVE')}</button>
         </div>
       </div>
       <div class="backpack-grid" id="marketGrid">
@@ -394,7 +395,7 @@ function renderMarket(){
   items.forEach(it=>{
     let haveClass = it.have>0 ? '' : 'zero';
     filterHtml += `
-      <div class="bag-slot ${it.type}-type" onclick="openModal('${it.id}')" title="${it.name} • BUY ${it.buy}g / SELL ${it.sell}g">
+      <div class="bag-slot ${it.type}-type" onclick="openModal('${it.id}')" title="${it.name} • ${volandT('КУПИТЬ','BUY')} ${it.buy}g / ${volandT('ПРОДАТЬ','SELL')} ${it.sell}g">
         <div class="type-dot"></div>
         <img src="${it.icon}" onerror="this.style.display='none'; this.parentElement.textContent='💎'">
         <div class="qty-badge ${haveClass}">x${it.have}</div>
