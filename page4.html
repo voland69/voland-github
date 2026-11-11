@@ -65,8 +65,8 @@
   height:52px !important;
   min-width:52px !important;
   min-height:52px !important;
-  background:#1a252f !important;
-  border:1px solid #2a3a4a !important;
+  background:transparent !important;
+  border:1px solid transparent !important;
   border-radius:9px !important;
   display:flex !important;
   align-items:center !important;
@@ -80,14 +80,14 @@
 .nav-item.active{
   border-color:#e6d5a0 !important;
   opacity:1 !important;
-  background:#1e2f3e !important;
+  background:transparent !important;
   box-shadow:0 0 10px rgba(230,213,160,.3) !important;
 }
 .nav-item:hover{
   opacity:1 !important;
   border-color:#e6d5a0 !important;
 }
-.nav-item img{
+.nav-item img{background:transparent !important;
   width:100% !important;
   height:100% !important;
   object-fit:cover !important;
@@ -126,6 +126,8 @@
 html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") center/cover no-repeat fixed #0a0e14;color:#d8d2b8;font-family:Inter,Arial,sans-serif;overflow:hidden}
 .bg{position:fixed;inset:0;z-index:0}.bg img{width:100%;height:100%;object-fit:cover}
 .wrap{position:fixed;inset:0;display:flex;z-index:2}
+
+
 
 
 .center-col{flex:1;display:flex;flex-direction:column;background:rgba(16,22,30,.25);overflow:hidden;backdrop-filter: blur(2px)}
@@ -289,7 +291,7 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
     <div class="nav-group " onclick="location.href='./page11.html'"><div class="nav-item " data-page="page11"><img src="./assets/ui/nav/pvp.webp" alt="PVP"></div><div class="nav-label">PVP</div></div>
     <div class="nav-group " onclick="location.href='./page12.html'"><div class="nav-item " data-page="page12"><img src="./assets/ui/nav/workshop.webp" alt="WORKSHOP"></div><div class="nav-label">WORKSHOP</div></div>
     <div class="nav-group " onclick="location.href='./page13.html'"><div class="nav-item " data-page="page13"><img src="./assets/ui/nav/pass.webp" alt="PASS"></div><div class="nav-label">PASS</div></div>
-    <div class="nav-group " onclick="location.href='./page14.html'"><div class="nav-item " data-page="page14"><img src="./assets/ui/nav/guilds.webp" alt="GUILD"></div><div class="nav-label">GUILD</div></div>
+    <div class="nav-group" onclick="location.href='./page14.html'"><div class="nav-item" data-page="page14"><img src="./assets/ui/nav/guilds.webp" alt="GUILD"></div><div class="nav-label">GUILD</div></div>
   </div>
   <div class="nav-bottom">
     <div class="nav-group" onclick="location.href='./index.html'"><div class="nav-item" data-page="index"><img src="./assets/ui/nav/start.webp" alt="START"></div><div class="nav-label">START</div></div>
@@ -302,9 +304,9 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
   
   <div class="center-col">
     <div class="top-row">
-      <div class="stats-panel" id="statsPanel"><div class="panel-title" style="display:none"></div></div>
+      <div class="stats-panel" id="statsPanel"><div class="panel-title">СТАТЫ ГЕРОЯ — 6 (A+B)</div></div>
       <div class="equip-zone">
-        
+        <div class="panel-title">ЭКИПИРОВКА — 11 • КЛИК СНЯТЬ</div>
         <div class="equip-grid" id="equipGrid">
           <div class="equip-col left-col">
             <div class="equip-slot ear-l" data-slot="ear1"><div class="slot-icon">👂</div><div class="slot-name">Серьга 1</div><div class="slot-empty">пусто</div></div>
@@ -325,10 +327,10 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
           </div>
         </div>
       </div>
-      <div class="bars-panel" id="barsPanel"><div class="panel-title" style="display:none"></div></div>
+      <div class="bars-panel" id="barsPanel"><div class="panel-title">БАРЫ ГЕРОЯ — 4 (C=D)</div></div>
     </div>
     <div class="inventory-zone">
-      <div class="panel-title" style="display:flex;justify-content:space-between"><span><span id="goldDisplay">0 GOLD</span> • <span id="resDisplay">0 RES</span></span><span id="equipCount">0/11</span></div>
+      <div class="panel-title" style="display:flex;justify-content:space-between"><span>ИНВЕНТАРЬ — 50 • <span id="goldDisplay">0 GOLD</span> • <span id="resDisplay">0 RES</span> • КЛИК НАДЕТЬ</span><span id="equipCount">0/11</span></div>
       <div class="inv-grid" id="invGrid"></div>
     </div>
   </div>
@@ -411,12 +413,12 @@ function rebuildInv(){
           return true;
         });
         if(saves[idx].inventory.length !== before){
-          
+          console.log('Force cleaned', before - saves[idx].inventory.length, 'weapons');
           volandSaveSaves(saves);
           localStorage.setItem('voland_v1_inventory', JSON.stringify(saves[idx].inventory));
         }
       }
-    }catch(e){  }
+    }catch(e){ console.log('force cleanup error', e); }
     
     if(typeof volandGetInventory==='function'){
       let dropped = volandGetInventory();
@@ -436,7 +438,7 @@ function rebuildInv(){
           heroClassForFilter = cmap[hid] || 'mage';
         }catch(e){}
         if(heroClassForFilter==='mage' && ['bow','sword','shield'].includes(base)){
-          
+          console.log('Filtered non-mage weapon', base, item.id);
           continue;
         }
         if(allowedWeaponBases && ['bow','staff','sword','shield'].includes(base) && !allowedWeaponBases.has(base)){
@@ -460,7 +462,7 @@ function rebuildInv(){
         }
       }
     }
-  }catch(e){  }
+  }catch(e){ console.log('rebuild dropped err', e); }
   Object.values(droppedGearMap).forEach(it=>{
     if(inv.length<50) inv.push(it);
   });
@@ -522,7 +524,7 @@ function rebuildInv(){
         }
       });
     }
-  }catch(e){  }
+  }catch(e){ console.log('rebuild res err', e); }
   // Зелья в сумке: считаем банки по id, каждое зелье — своя ячейка со стаком. Внутри rebuildInv, ДО паддинга null, иначе inv уже 50 и зелья не влезут.
   try{
     if(typeof volandGetInventory==='function' && typeof VOLAND_POTIONS!=='undefined'){
@@ -541,7 +543,7 @@ function rebuildInv(){
         inv.push({id:pot.id, icon:pot.icon, name:pot.name, desc:pot.desc||pot.name, isPotion:true, count:potionCounts[pid], type:'potion', rarity:pot.rarity||'common', potion:pot.potion});
       });
     }
-  }catch(e){  }
+  }catch(e){ console.log('potions in bag err', e); }
   while(inv.length<50) inv.push(null);
   inv = inv.slice(0,50);
 }
@@ -679,7 +681,7 @@ function renderInv(){
         // badge empty for gear as requested
         cell.innerHTML=`<div class="item-icon">${iconHtml}</div>`;
         cell.onclick=()=>openGearModal(it,i);
-        cell.title = volandItemName(it)+' '+(it.desc||'');
+        cell.title = it.name+' '+(it.desc||'');
       }
     } else {
       cell.classList.add('empty');
@@ -798,7 +800,7 @@ function equipItem(item, idx){
       }
       log(`${volandT('Снято: ', 'Removed: ')}${volandItemName(old)}`);
     }
-  }catch(e){  }
+  }catch(e){ console.log('equip inv err', e); }
   equipped[slot]=item;
   try{
     volandSaveEquip(equipped);
@@ -815,7 +817,7 @@ function unequipSlot(el){
     if(typeof volandAddToInventory==='function'){
       volandAddToInventory(it.id);
     }
-  }catch(e){  }
+  }catch(e){ console.log('unequip inv err', e); }
   delete equipped[slot];
   try{
     volandSaveEquip(equipped);
