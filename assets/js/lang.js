@@ -17,6 +17,10 @@ function volandT(ru, en){
   return volandGetLang()==='en' ? en : ru;
 }
 var VOLAND_STATIC_DICT = {
+  'ТЁМНОЕ ФЭНТЕЗИ': 'DARK FANTASY',
+  'РПГ': 'RPG',
+  'СТАБИЛЬНАЯ': 'STABLE',
+  '3 СЛОТА ГЕРОЕВ': '3 HERO SLOTS',
   'СЕЗОН': 'SEASON',
   'НАГРАДЫ': 'REWARDS',
   '← НАЗАД': '← BACK',
