@@ -15,20 +15,20 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
 .nav-item{width:48px;height:48px;background:#1a252f;border:1px solid #2a3a4a;border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0.6;transition:.2s;font-size:20px}
 .nav-item.active{background:#1e2f3e;border-color:#3a4a5a;opacity:1;box-shadow:0 0 12px rgba(230,213,160,.2)}
 .nav-label{font-size:7px;letter-spacing:.15em;color:#6a7a8a;margin-top:4px;text-align:center;font-family:'JetBrains Mono',monospace}
-.hero-panel{width:380px;min-width:380px;background:transparent;border-right:1px solid rgba(30,42,50,.5);display:flex;flex-direction:column;overflow:hidden;backdrop-filter:none}
+.hero-panel{width:380px;min-width:380px;background:transparent;border-right:none;display:flex;flex-direction:column;overflow:hidden;backdrop-filter:none}
 .hero-img-wrap{flex:1;background:transparent;display:flex;align-items:center;justify-content:center;padding:12px;position:relative;overflow:hidden}
 .hero-img-wrap img{width:100%;height:100%;object-fit:cover;object-position:top center;border-radius:4px;max-height:72vh}
 .hero-info{padding:18px 16px;background:transparent;border-top:1px solid #1e2a32;text-align:center}
 .hero-name{font-family:'Cinzel Decorative',serif;font-size:16px;letter-spacing:.3em;color:#e6d5a0;font-weight:900}
 .hero-class{margin-top:8px;font-size:10px;letter-spacing:.15em;color:#8a9a6a;font-family:'JetBrains Mono',monospace;text-transform:uppercase}
 .main{flex:1;display:flex;flex-direction:column;background:transparent;backdrop-filter:none;overflow:auto;padding:28px 0;gap:28px;justify-content:flex-start}
-.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:14px;background:transparent;border-bottom:1px solid rgba(30,42,50,.5);backdrop-filter:none}
-.stat-card{background:transparent;border:1px solid #2a3a4a;border-radius:8px;padding:14px 10px;text-align:center}
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:14px;background:transparent;border-bottom:none;backdrop-filter:none}
+.stat-card{background:rgba(38,48,60,.85);border:1px solid #2a3a4a;border-radius:8px;padding:14px 10px;text-align:center}
 .stat-label{font-size:8px;letter-spacing:.2em;color:#6a7a8a;font-family:'JetBrains Mono',monospace}
 .stat-value{margin-top:6px;font-size:22px;font-weight:800;color:#e6d5a0;font-family:'JetBrains Mono',monospace}
 .bars-panel{padding:18px 20px;background:transparent;display:flex;flex-direction:column;gap:14px;backdrop-filter:none}
 .stats-extra-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:0 20px 18px;background:transparent;backdrop-filter:none}
-.extra-card{background:transparent;border:1px solid #2a3a4a;border-radius:10px;padding:14px 12px;text-align:center;position:relative;overflow:hidden}
+.extra-card{background:rgba(38,48,60,.85);border:1px solid #2a3a4a;border-radius:10px;padding:14px 12px;text-align:center;position:relative;overflow:hidden}
 .extra-card::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#2a3a4a,#e6d5a0)}
 .extra-icon{font-size:18px;margin-bottom:6px}
 .extra-label{font-size:7px;letter-spacing:.2em;color:#6a7a8a;font-family:'JetBrains Mono',monospace;text-transform:uppercase}
@@ -36,7 +36,7 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
 .extra-sub{margin-top:4px;font-size:8px;color:#8a9a6a;font-family:'JetBrains Mono',monospace}
 
 .bar-row{display:flex;align-items:center;gap:12px}
-.bar-label{width:60px;font-size:9px;letter-spacing:.15em;color:#6a7a8a;text-align:right;font-family:'JetBrains Mono',monospace}
+.bar-label{width:60px;font-size:9px;letter-spacing:.15em;color:#e6d5a0;text-align:right;font-family:'JetBrains Mono',monospace}
 .bar-track{flex:1;height:18px;background:#0a0e14;border-radius:3px;overflow:hidden;border:1px solid #1e2a32;position:relative;display:flex;align-items:center;justify-content:center}
 .bar-fill{position:absolute;left:0;top:0;bottom:0;display:flex;align-items:center;justify-content:flex-start;font-size:9px;font-weight:700;font-family:'JetBrains Mono',monospace;transition:width .3s ease}
 .bar-text{position:relative;z-index:2;font-size:9px;font-weight:700;font-family:'JetBrains Mono',monospace;color:#fff;text-align:center;pointer-events:none;width:100%;text-shadow:0 1px 2px rgba(0,0,0,.8)}
@@ -192,7 +192,7 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
 .points-btn:disabled{opacity:.4;cursor:default}
 
 
-.stat-points-strip{margin:0 20px 0 20px;background:transparent;border:1px solid #e6d5a0;border-radius:8px;padding:10px 14px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.stat-points-strip{margin:0 20px 0 20px;background:rgba(38,48,60,.85);border:1px solid #e6d5a0;border-radius:8px;padding:10px 14px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px}
 .stat-points-strip:hover{border-color:#fff}
 .stat-points-strip-title{font:900 11px 'Cinzel Decorative',serif;color:#e6d5a0;letter-spacing:.1em}
 .stat-points-strip-info{font:400 9px 'JetBrains Mono',monospace;color:#8a9aaa}
