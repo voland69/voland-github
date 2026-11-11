@@ -17,6 +17,13 @@ function volandT(ru, en){
   return volandGetLang()==='en' ? en : ru;
 }
 var VOLAND_STATIC_DICT = {
+  'ГИЛЬДИЯ • 2 ВКЛАДКИ': 'GUILD • 2 TABS',
+  'СОЗДАТЬ ГИЛЬДИЮ': 'CREATE GUILD',
+  'ПОКИНУТЬ ГИЛЬДИЮ': 'LEAVE GUILD',
+  'УЧАСТНИКИ': 'MEMBERS',
+  'КАЗНА': 'TREASURY',
+  'ЗАЛ ГИЛЬДИИ • УЛУЧШЕНИЯ': 'GUILD HALL • UPGRADES',
+  'УЛУЧШИТЬ': 'UPGRADE',
   'РЫНОК • 3 ВКЛАДКИ': 'MARKET • 3 TABS',
   'РЕСУРСЫ В СУМКЕ': 'RESOURCES IN BAG',
   '1 • РЫНОК': '1 • MARKET',
