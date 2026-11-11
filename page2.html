@@ -13,7 +13,7 @@ html,body{height:100%;background:#080a0e;color:#d8d2b8;font-family:Inter,Arial,s
 .bg img{width:100%;height:100%;object-fit:cover}
 .bg:after{content:"";position:absolute;inset:0;background:rgba(8,10,14,.88)}
 .wrap{position:fixed;inset:0;z-index:2;display:flex;flex-direction:column}
-.top{height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;padding-right:130px;border-bottom:1px solid #1e2a32;background:rgba(14,18,24,.9)}
+.top{height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;padding-right:180px;border-bottom:1px solid #1e2a32;background:rgba(14,18,24,.9)}
 .top-title{font-family:'Cinzel Decorative',serif;font-size:18px;letter-spacing:.35em;color:#e6d5a0;font-weight:900}
 .top-sub{font-size:8px;color:#6a7a8a;font-family:'JetBrains Mono',monospace;letter-spacing:.15em}
 .main{flex:1;display:flex;overflow:hidden}
@@ -38,7 +38,9 @@ html,body{height:100%;background:#080a0e;color:#d8d2b8;font-family:Inter,Arial,s
 .hero-view{flex:1;display:flex;align-items:center;justify-content:center;background:#1a222e;position:relative;padding:0}
 .hero-view img{width:100%;height:100%;max-height:100%;max-width:100%;object-fit:cover;object-position:top center;filter:drop-shadow(0 0 24px rgba(0,0,0,.9))}
 .right{width:340px;min-width:340px;background:rgba(18,22,30,.94);border-left:1px solid #1e2a32;padding:14px;display:flex;flex-direction:column;overflow:auto}
-.hero-right{font-family:'Cinzel Decorative',serif;font-size:18px;letter-spacing:.3em;color:#e6d5a0;font-weight:900;padding-bottom:12px;border-bottom:1px solid #1e2a32;margin-bottom:14px}
+.hero-right{font-family:'Cinzel Decorative',serif;font-size:18px;letter-spacing:.3em;color:#e6d5a0;font-weight:900;padding-bottom:8px;margin-bottom:0}
+.hero-role{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.15em;color:#8a9aaa;padding-bottom:10px;border-bottom:1px solid #1e2a32;margin-bottom:14px}
+#stats{margin-top:6px}
 .stat-row{margin-bottom:10px}
 .stat{display:flex;justify-content:space-between;font-size:9px;letter-spacing:.1em;margin-bottom:3px}
 .val{color:#e6d5a0;font-weight:800}
@@ -70,10 +72,11 @@ html,body{height:100%;background:#080a0e;color:#d8d2b8;font-family:Inter,Arial,s
 </div>
 <div class="right">
 <div class="hero-right" id="heroRightName">AMETHYST</div>
+  <div class="hero-role" id="heroRightRole">MAGE • Archmage - Female</div>
 <div id="stats"></div>
 <div class="input-box">
 <div class="label">ВВЕДИ СВОЁ ИМЯ (мин. 3 символа)</div>
-<input id="nameIn" value="VOLAND 1337" placeholder="Твое имя...">
+<input id="nameIn" value="" placeholder="Твое имя...">
 </div>
 <div id="btn" class="btn disabled">ВВЕДИ ИМЯ ≥3 СИМВОЛА</div>
 </div>
@@ -111,11 +114,13 @@ function selectHero(id){
   selectedId = id;
   renderGrid();
   loadHero(id);
+  try{ chk(); }catch(e){}
 }
 function loadHero(id){
   const h = VOLAND_HEROES[id];
   if (!h) return;
   document.getElementById('heroRightName').textContent = h.n;
+  try{ let rr = document.getElementById('heroRightRole'); if(rr) rr.textContent = h.role || ''; }catch(e){}
   document.getElementById('heroImg').src = h.img;
   document.getElementById('leftSkills').innerHTML = h.sk.map(s=>{
     const sName = (typeof volandSkillName==='function' ? volandSkillName(s[0]) : s[0]);
@@ -153,7 +158,8 @@ function loadHero(id){
 let inp = document.getElementById('nameIn');
 let btn = document.getElementById('btn');
 let savedName = volandGetName();
-if (savedName && savedName!=='VOLAND 1337') inp.value = savedName;
+let slotParamInit = new URLSearchParams(location.search).get('slot');
+if (slotParamInit!==null) { inp.value = ''; } else if (savedName && savedName!=='VOLAND 1337') inp.value = savedName;
 function chk(){
   let v = inp.value.trim();
   if (v.length>=3 && VOLAND_HEROES[selectedId]){
