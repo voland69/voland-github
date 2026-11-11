@@ -17,6 +17,16 @@ function volandT(ru, en){
   return volandGetLang()==='en' ? en : ru;
 }
 var VOLAND_STATIC_DICT = {
+  'РЫНОК • 3 ВКЛАДКИ': 'MARKET • 3 TABS',
+  'РЕСУРСЫ В СУМКЕ': 'RESOURCES IN BAG',
+  '1 • РЫНОК': '1 • MARKET',
+  '2 • ОБМЕН': '2 • EXCHANGE',
+  'ЦЕНА ПОКУПКИ': 'BUY PRICE',
+  'ЦЕНА ПРОДАЖИ': 'SELL PRICE',
+  'КУПИТЬ': 'BUY',
+  'ПРОДАТЬ': 'SELL',
+  'ЗАКРЫТЬ': 'CLOSE',
+  'РЕСУРС': 'RESOURCE',
   'ВЫБОР ГЕРОЯ': 'SELECT HERO',
   '8 ГЕРОЕВ': '8 HEROES',
   'ВЫБЕРИ ГЕРОЯ • ВВЕДИ ИМЯ • ПОДТВЕРДИ → СТРАНИЦА ГЕРОЯ': 'CHOOSE HERO • ENTER NAME • CONFIRM → HERO PAGE',
