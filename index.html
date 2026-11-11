@@ -36,10 +36,10 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 <div class="bg"><img src="./assets/heroes/bg-battlefield.webp" onerror="this.style.display='none'"></div>
 <div class="wrap">
   <div class="logo">VOLAND</div>
-  <div class="sub">DARK FANTASY • RPG • v<span id="voland-version">2.0</span> STABLE • 3 HERO SLOTS</div>
+  <div class="sub">ТЁМНОЕ ФЭНТЕЗИ • РПГ • v<span id="voland-version">2.0</span> СТАБИЛЬНАЯ • 3 СЛОТА ГЕРОЕВ</div>
   <div id="content" style="width:100%;max-width:900px"></div>
-  <div class="note">Сохранение хранится в браузере (localStorage) • 3 слота • ./assets/</div>
 </div>
+<script src="./assets/js/lang.js"></script>
 <script src="./assets/js/config.js"></script>
 <script src="./assets/js/db/heroes.js"></script>
 <script src="./assets/js/db/tiers.js"></script>
@@ -59,13 +59,13 @@ function render(){
   if(saves.length===0){
     c.innerHTML = `
       <div style="margin-top:30px;text-align:center;max-width:500px;margin-left:auto;margin-right:auto;background:rgba(20,28,36,.6);border:1px solid #2a3a4a;border-radius:12px;padding:24px">
-        <div style="font-size:11px;color:#9a9a7a;line-height:1.7;font-family:'JetBrains Mono',monospace">Добро пожаловать в VOLAND.<br>Создай до 3 героев. Каждый со своим прогрессом.<br>Выбирай любого для продолжения.</div>
+        <div style="font-size:11px;color:#9a9a7a;line-height:1.7;font-family:'JetBrains Mono',monospace">${volandT('Добро пожаловать в VOLAND.','Welcome to VOLAND.')} <br> ${volandT('Создай до 3 героев. Каждый со своим прогрессом.','Create up to 3 heroes. Each with its own progress.')} <br> ${volandT('Выбирай любого для продолжения.','Choose any to continue.')}</div>
       </div>
       <div style="display:flex;justify-content:center;margin-top:20px">
         <div class="save-card empty" style="max-width:280px">
           <img src="./assets/heroes/warrior-f.webp">
-          <div class="hero-info"><div class="hero-name">НОВЫЙ ГЕРОЙ</div><div class="hero-stats">Пустой слот • Создай первого</div></div>
-          <div class="btn primary" onclick="location.href='./page2.html?slot=0'">CREATE HERO → SELECT</div>
+          <div class="hero-info"><div class="hero-name">${volandT("НОВЫЙ ГЕРОЙ","NEW HERO")}</div><div class="hero-stats">${volandT("Пустой слот • Создай первого","Empty slot • Create first")}</div></div>
+          <div class="btn primary" onclick="location.href='./page2.html?slot=0'">${volandT("СОЗДАТЬ ГЕРОЯ → ВЫБОР","CREATE HERO → SELECT")}</div>
         </div>
       </div>
     `;
@@ -94,24 +94,24 @@ function render(){
             <img src="${hero.img}" onerror="this.src='./assets/heroes/warrior-f.webp'">
             <div class="hero-info">
               <div class="hero-name">${(s.name||'').toUpperCase()} • LVL ${lvlInfo.lvl}</div>
-              <div class="hero-stats">${hero.n} • ${hero.role}<br>LVL ${lvlInfo.lvl} • XP ${lvlInfo.cur}/${lvlInfo.need} (${lvlInfo.pct}%)<br>HP ${cur.HP} • DMG ${cur.DMG} • DEF ${cur.DEF}<br>MANA ${cur.MANA} • CRIT ${cur.CRIT}% • SLOT ${i+1}</div>
+              <div class="hero-stats">${hero.n} • ${hero.role}<br>LVL ${lvlInfo.lvl} • XP ${lvlInfo.cur}/${lvlInfo.need} (${lvlInfo.pct}%)<br>HP ${cur.HP} • DMG ${cur.DMG} • DEF ${cur.DEF}<br>MANA ${cur.MANA} • CRIT ${cur.CRIT}% • ${volandT('СЛОТ','SLOT')} ${i+1}</div>
             </div>
-            <div class="btn primary" onclick="localStorage.setItem('voland_v1_active','${i}'); location.href='./page3.html'">CONTINUE → HERO ${i+1}</div>
-            <div class="btn danger" onclick="if(confirm('Удалить героя ${s.name}?')){ let sv=volandGetSaves(); sv.splice(${i},1); localStorage.setItem('voland_v1_saves', JSON.stringify(sv)); if(parseInt(localStorage.getItem('voland_v1_active')||'0')>=sv.length) localStorage.setItem('voland_v1_active','0'); location.reload(); }">DELETE SLOT ${i+1}</div>
+            <div class="btn primary" onclick="localStorage.setItem('voland_v1_active','${i}'); location.href='./page3.html'">${volandT('ПРОДОЛЖИТЬ → ГЕРОЙ ','CONTINUE → HERO ')}${i+1}</div>
+            <div class="btn danger" onclick="if(confirm(volandT('Удалить героя ','Delete hero ')+s.name+'?')){ let sv=volandGetSaves(); sv.splice(${i},1); localStorage.setItem('voland_v1_saves', JSON.stringify(sv)); if(parseInt(localStorage.getItem('voland_v1_active')||'0')>=sv.length) localStorage.setItem('voland_v1_active','0'); location.reload(); }">${volandT('УДАЛИТЬ СЛОТ ','DELETE SLOT ')}${i+1}</div>
           </div>
         `;
       } else {
         html += `
           <div class="save-card empty">
             <img src="./assets/heroes/warrior-f.webp" style="filter:grayscale(1)">
-            <div class="hero-info"><div class="hero-name">ПУСТОЙ СЛОТ ${i+1}</div><div class="hero-stats">Свободно • Создай героя</div></div>
-            <div class="btn primary" onclick="location.href='./page2.html?slot=${i}'">CREATE HERO ${i+1} → SELECT</div>
+            <div class="hero-info"><div class="hero-name">${volandT("ПУСТОЙ СЛОТ ","EMPTY SLOT ")}${i+1}</div><div class="hero-stats">${volandT("Свободно • Создай героя","Free • Create hero")}</div></div>
+            <div class="btn primary" onclick="location.href='./page2.html?slot=${i}'">${volandT('СОЗДАТЬ ГЕРОЯ ','CREATE HERO ')}${i+1}${volandT(' → ВЫБОР',' → SELECT')}</div>
           </div>
         `;
       }
     }
     html += '</div>';
-    html += `<div style="display:flex;gap:12px;justify-content:center;margin-top:22px"><div class="btn danger" style="max-width:280px" onclick="if(confirm('Точно стереть всех 3 героев?')){localStorage.clear(); location.reload();}">WIPE ALL 3 SLOTS</div></div>`;
+    html += `<div style="display:flex;gap:12px;justify-content:center;margin-top:22px"><div class="btn danger" style="max-width:280px" onclick="if(confirm(volandT('Точно стереть всех 3 героев?','Really wipe all 3 heroes?'))){localStorage.clear(); location.reload();}">${volandT('СТЕРЕТЬ ВСЕ 3 СЛОТА','WIPE ALL 3 SLOTS')}</div></div>`;
     c.innerHTML = html;
   }
 }
