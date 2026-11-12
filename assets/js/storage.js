@@ -410,7 +410,7 @@ function volandGetKills(){ try{ let cur=volandGetCurrentSave(); if(cur) return c
 function volandGetQuests(){ try{ let cur=volandGetCurrentSave(); if(cur) return {done: cur.quests||0, total: cur.quests_total||40}; return {done: parseInt(localStorage.getItem(VOLAND_KEYS.quests)||'0'), total: parseInt(localStorage.getItem(VOLAND_KEYS.quests_total)||'40')}; }catch(e){return {done:0,total:40};} }
 function volandGetPvp(){ try{ let cur=volandGetCurrentSave(); if(cur) return cur.pvp||0; return parseInt(localStorage.getItem(VOLAND_KEYS.pvp)||'0'); }catch(e){return 0;} }
 
-function volandAddKill(){ try{ let saves=volandGetSaves(); let idx=volandGetActiveIndex(); if(saves[idx]){ saves[idx].kills=(saves[idx].kills||0)+1; volandSaveSaves(saves); try{ localStorage.setItem('voland_v1_guild_kills_last_total', String(saves[idx].kills)); }catch(e){} } }catch(e){} try{ var gk=[]; try{ gk=JSON.parse(localStorage.getItem('voland_v1_guild_kills')||'[]'); }catch(e){ gk=[]; } gk.push({t:Date.now()}); if(gk.length>2000) gk=gk.slice(-2000); localStorage.setItem('voland_v1_guild_kills', JSON.stringify(gk)); }catch(e){} try{ var _g=JSON.parse(localStorage.getItem('voland_v1_guild')||'null'); if(_g&&_g.name&&_g.tag){ _g.xp=(_g.xp||0)+1; _g.xpKills=(_g.xpKills||0)+1; while((_g.xp||0)>=(_g.xpNeed||2000)){ _g.xp-=(_g.xpNeed||2000); _g.level=(_g.level||1)+1; _g.points=(_g.points||0)+1; _g.xpNeed=Math.round((_g.xpNeed||2000)*1.1); } localStorage.setItem('voland_v1_guild', JSON.stringify(_g)); } }catch(e){} }
+function volandAddKill(){ try{ let saves=volandGetSaves(); let idx=volandGetActiveIndex(); if(saves[idx]){ saves[idx].kills=(saves[idx].kills||0)+1; volandSaveSaves(saves); try{ localStorage.setItem('voland_v1_guild_kills_last_total', String(saves[idx].kills)); }catch(e){} } }catch(e){} try{ var gk=[]; try{ gk=JSON.parse(localStorage.getItem('voland_v1_guild_kills')||'[]'); }catch(e){ gk=[]; } gk.push({t:Date.now()}); if(gk.length>2000) gk=gk.slice(-2000); localStorage.setItem('voland_v1_guild_kills', JSON.stringify(gk)); }catch(e){} }
 
 
 function volandGetMissionStats(){
@@ -980,7 +980,8 @@ function volandAddToInventory(itemId){
 function volandRemoveFromInventory(itemId){
   try{
     let inv=volandGetInventory();
-    inv = inv.filter(x=>x.id!==itemId);
+    let removed=false;
+    inv = inv.filter(x=>{ if(!removed && x.id===itemId){ removed=true; return false; } return true; });
     return volandSaveInventory(inv);
   }catch(e){ return []; }
 }
@@ -1212,7 +1213,7 @@ function volandSetHPData(current, last){
   try{
     let max = 1000;
     try{ max = volandCalcStats().cur.HP || 1000; }catch(e){}
-    current = Math.max(0, Math.min(max, parseInt(current)||0));
+    current = Math.max(0, Math.min(max*2, parseInt(current)||0));
     last = last || Date.now();
     let saves = volandGetSaves();
     let idx = volandGetActiveIndex();
@@ -1243,7 +1244,7 @@ function volandGetCurrentHP(){
       volandSetHPData(newCurrent, newLast);
       return newCurrent;
     }
-    return Math.min(max, data.current);
+    return Math.min(max*2, data.current);
   }catch(e){ try{ return volandCalcStats().cur.HP; }catch(_){ return 1000; } }
 }
 
@@ -1510,18 +1511,18 @@ function volandUsePotion(potionId){
       return false;
     }
   }
-  // apply effect - FIXED LOGIC per user: XL 1 hour
+  // Баффы собираем отдельно - их применим ПОСЛЕ SetCurrent*, на свежем saves, иначе stale save их затрёт
+  let pendingBuffs = {};
+  // Эффект - SetCurrent* сами делают свежий volandGetSaves + volandSaveSaves внутри
   if(p.stat==='HP'){
     if(p.percent){
       if(p.value===100){
         let max = volandCalcStats().cur.HP;
         volandSetCurrentHP(max);
       } else if(p.value===200){
-        // HP XL: full +100% for 1h or until HP drops to normal
         let max = volandCalcStats().cur.HP;
         volandSetCurrentHP(max * 2);
-        save.buffs = save.buffs || {};
-        save.buffs.hpBonus = {value: max, until: Date.now() + 3600000, type:'double_until_normal'};
+        pendingBuffs.hpBonus = {value: max, until: Date.now() + 3600000, type:'double_until_normal'};
       }
     } else {
       let cur = volandGetCurrentHP();
@@ -1538,16 +1539,13 @@ function volandUsePotion(potionId){
           let max = volandCalcStats().cur.MANA;
           volandSetCurrentMANA(max);
         } else {
-          // MANA XL: +100% HP to existing HP (not full heal) for 1h
           let maxH = volandCalcStats().cur.HP;
           let curH = volandGetCurrentHP();
-          // adds +100% max to existing HP, not heal to 100%
           let newHP = curH + maxH;
           volandSetCurrentHP(Math.min(newHP, maxH*2));
           let maxM = volandCalcStats().cur.MANA;
           volandSetCurrentMANA(maxM);
-          save.buffs = save.buffs || {};
-          save.buffs.hpBonus = {value: maxH, until: Date.now() + 3600000, type:'additive'};
+          pendingBuffs.hpBonus = {value: maxH, until: Date.now() + 3600000, type:'additive'};
         }
       }
     } else {
@@ -1556,35 +1554,39 @@ function volandUsePotion(potionId){
       volandSetCurrentMANA(Math.min(cur + p.value, max));
     }
   } else if(p.stat==='STAM'){
+    let stamMax = 100; try{ stamMax = volandGetStaminaMax(); }catch(e){}
     if(p.percent){
       if(p.value===100){
         if(!p.tempBonus){
-          volandSetStamina(100);
+          volandSetStamina(stamMax);
         } else {
-          volandSetStamina(100);
-          save.buffs = save.buffs || {};
-          save.buffs.staminaRegen = {value:1000, until: Date.now() + 3600000};
+          volandSetStamina(stamMax);
+          pendingBuffs.staminaRegen = {value:1000, until: Date.now() + 3600000};
         }
       }
     } else {
       let cur = volandGetStamina();
-      volandSetStamina(Math.min(100, cur + p.value));
+      volandSetStamina(Math.min(stamMax, cur + p.value));
     }
   }
-  if(invIdx!==-1){
-    inv.splice(invIdx,1);
-    save.inventory = inv;
-    volandSaveSaves(saves);
-  }
-  if(typeof volandRemoveFromInventory==='function'){
-    volandRemoveFromInventory(potionId);
-  }
+  // ПЕРЕЧИТЫВАЕМ СВЕЖИЙ saves - это и была потерянная строка. Старый saves с HP 566 больше не перезаписывает 816 обратно.
+  saves = volandGetSaves();
+  idx = volandGetActiveIndex();
+  save = saves[idx];
+  if(!save) return false;
+  save.buffs = save.buffs || {};
+  Object.keys(pendingBuffs).forEach(k=>{ save.buffs[k] = pendingBuffs[k]; });
+  // Удаляем ТОЛЬКО ОДНУ банку, из свежего инвентаря
+  inv = save.inventory || [];
+  let freshIdx = inv.findIndex(x=> (x.id||x)===potionId);
+  if(freshIdx!==-1){ inv.splice(freshIdx,1); save.inventory = inv; }
   volandSaveSaves(saves);
+  try{ localStorage.setItem('voland_v1_inventory', JSON.stringify(save.inventory||[])); }catch(e){}
   return true;
  }catch(e){ console.error('potion use error', e); return false; }
 }
 
-// Check and clear expired buffs - call on load
+
 function volandCheckBuffs(){
  try{
   let saves = volandGetSaves();
