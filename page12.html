@@ -64,8 +64,8 @@
   height:52px !important;
   min-width:52px !important;
   min-height:52px !important;
-  background:transparent !important;
-  border:1px solid transparent !important;
+  background:#1a252f !important;
+  border:1px solid #2a3a4a !important;
   border-radius:9px !important;
   display:flex !important;
   align-items:center !important;
@@ -79,14 +79,14 @@
 .nav-item.active{
   border-color:#e6d5a0 !important;
   opacity:1 !important;
-  background:transparent !important;
+  background:#1e2f3e !important;
   box-shadow:0 0 10px rgba(230,213,160,.3) !important;
 }
 .nav-item:hover{
   opacity:1 !important;
   border-color:#e6d5a0 !important;
 }
-.nav-item img{background:transparent !important;
+.nav-item img{
   width:100% !important;
   height:100% !important;
   object-fit:cover !important;
@@ -173,6 +173,8 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 .cost-item.need{border-color:#e05050;color:#ff8a8a}
 .cost-item.have{border-color:#3ad080;color:#3ad080}
 .cost-item.gold{color:#d0b040}
+.guild-discount{color:#4a9aff;font:700 10px 'JetBrains Mono',monospace}
+.price-old{color:#6a7a8a;text-decoration:line-through}
 .up-btn{height:42px;border-radius:10px;border:1px solid #e6d5a0;background:linear-gradient(180deg,#e6d5a0,#c0a860);color:#0a0e14;font:800 10px 'JetBrains Mono',monospace;letter-spacing:.15em;cursor:pointer;transition:.15s}
 .up-btn:hover{filter:brightness(1.1);transform:translateY(-1px)}
 .up-btn:disabled{opacity:.4;cursor:not-allowed;filter:grayscale(.5);transform:none}
@@ -429,8 +431,11 @@ function selectItem(entry, divEl){
   // cost display
   let gold = volandGetGold();
   let res = volandGetResources();
-  let goldNeed = cost.gold;
+  let baseGoldNeed = cost.gold;
+  let craftDisc = (typeof volandGetCraftDiscount==='function' ? volandGetCraftDiscount() : 0);
+  let goldNeed = (typeof volandGetDiscountedUpgradeGold==='function' ? volandGetDiscountedUpgradeGold(baseGoldNeed) : baseGoldNeed);
   let goldClass = gold>=goldNeed ? 'have' : 'need';
+  let guildCraftHtml = (craftDisc>0 && baseGoldNeed!==goldNeed) ? ` <span class="price-old">${baseGoldNeed}g</span> <span class="guild-discount">${volandT('Гильдия','Guild')} -${craftDisc}% • ${baseGoldNeed}g → ${goldNeed}g</span>` : '';
   
   let resHtml = '';
   for(let rid in cost.resources){
@@ -459,7 +464,7 @@ function selectItem(entry, divEl){
       <div class="cost-box">
         <div class="cost-title">${volandT('СТОИМОСТЬ МОДЕРНИЗАЦИИ','UPGRADE COST')}</div>
         <div class="cost-row">
-          <div class="cost-item gold ${goldClass}">🪙 ${volandT('ЗОЛОТО','GOLD')}: ${gold}/${goldNeed}</div>
+          <div class="cost-item gold ${goldClass}">🪙 ${volandT('ЗОЛОТО','GOLD')}: ${gold}/${goldNeed}${guildCraftHtml}</div>
           ${resHtml}
         </div>
       </div>
@@ -474,7 +479,7 @@ function selectItem(entry, divEl){
       let result = volandUpgradeItem(cur.id);
       let logEl = document.getElementById('upLog');
       if(result.success){
-        logEl.textContent = volandT('УСПЕХ! → ','SUCCESS! → ') + result.nextId;
+        let _craftDisc = (typeof volandGetCraftDiscount==='function' ? volandGetCraftDiscount() : 0); let _baseGold = (result.cost && result.cost.baseGold) ? result.cost.baseGold : baseGoldNeed; let _paidGold = (result.cost && result.cost.gold) ? result.cost.gold : goldNeed; logEl.textContent = volandT('УСПЕХ! → ','SUCCESS! → ') + result.nextId + (_craftDisc>0 && _baseGold!==_paidGold ? ' ('+volandT('Гильдия','Guild')+' -'+_craftDisc+'% • '+volandT('было','was')+' '+_baseGold+'g)' : '');
         logEl.style.color = '#3ad080';
         setTimeout(()=>{
           renderList();
