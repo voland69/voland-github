@@ -410,7 +410,7 @@ function volandGetKills(){ try{ let cur=volandGetCurrentSave(); if(cur) return c
 function volandGetQuests(){ try{ let cur=volandGetCurrentSave(); if(cur) return {done: cur.quests||0, total: cur.quests_total||40}; return {done: parseInt(localStorage.getItem(VOLAND_KEYS.quests)||'0'), total: parseInt(localStorage.getItem(VOLAND_KEYS.quests_total)||'40')}; }catch(e){return {done:0,total:40};} }
 function volandGetPvp(){ try{ let cur=volandGetCurrentSave(); if(cur) return cur.pvp||0; return parseInt(localStorage.getItem(VOLAND_KEYS.pvp)||'0'); }catch(e){return 0;} }
 
-function volandAddKill(){ try{ let saves=volandGetSaves(); let idx=volandGetActiveIndex(); if(saves[idx]){ saves[idx].kills=(saves[idx].kills||0)+1; volandSaveSaves(saves);} }catch(e){} }
+function volandAddKill(){ try{ let saves=volandGetSaves(); let idx=volandGetActiveIndex(); if(saves[idx]){ saves[idx].kills=(saves[idx].kills||0)+1; volandSaveSaves(saves);} }catch(e){} try{ var gk=[]; try{ gk=JSON.parse(localStorage.getItem('voland_v1_guild_kills')||'[]'); }catch(e){ gk=[]; } gk.push({t:Date.now()}); if(gk.length>2000) gk=gk.slice(-2000); localStorage.setItem('voland_v1_guild_kills', JSON.stringify(gk)); }catch(e){} }
 
 
 function volandGetMissionStats(){
