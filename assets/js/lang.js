@@ -17,6 +17,10 @@ function volandT(ru, en){
   return volandGetLang()==='en' ? en : ru;
 }
 var VOLAND_STATIC_DICT = {
+  'БАНК': 'BANK',
+  'ОНЛАЙН': 'ONLINE',
+  'УЛУЧШЕНИЯ': 'UPGRADES',
+  'ИСТОРИЯ ДОНАТОВ': 'DONATION HISTORY',
   'ДЕНЬ': 'DAY',
   'НЕДЕЛЯ': 'WEEK',
   'ВСЕГО': 'TOTAL',
