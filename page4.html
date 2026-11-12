@@ -138,8 +138,8 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
 .stat-card.boosted{border-color:#3ad080;box-shadow:0 0 12px rgba(58,208,128,.3)}
 .stat-label{font-size:8px;letter-spacing:.15em;color:#6a7a8a;font-family:'JetBrains Mono',monospace}
 .stat-value{margin-top:4px;font-size:18px;font-weight:800;color:#e6d5a0;font-family:'JetBrains Mono',monospace}
-.stat-bonus{font-family:'JetBrains Mono',monospace;margin-top:6px;min-height:16px;font-weight:800;line-height:1.2;display:flex;flex-direction:row;gap:5px;align-items:center;justify-content:center;flex-wrap:nowrap;white-space:nowrap;overflow:hidden}.stat-bonus-gear{font-size:10.5px;color:#3ad080;font-weight:800;white-space:nowrap}.stat-bonus-guild{font-size:10.5px;color:#4a9aff;font-weight:800;white-space:nowrap}
-.stat-bonus-points{font-size:10.5px;color:#FFD700;font-weight:800;white-space:nowrap}
+.stat-bonus{font-family:'JetBrains Mono',monospace;margin-top:6px;min-height:36px;font-weight:800;line-height:1.3;display:flex;flex-direction:column;gap:1px;align-items:center;justify-content:center}.stat-bonus-gear{font-size:11px;color:#3ad080;font-weight:800;white-space:nowrap}.stat-bonus-guild{font-size:11px;color:#4a9aff;font-weight:800;white-space:nowrap}
+.stat-bonus-points{font-size:11px;color:#FFD700;font-weight:800;white-space:nowrap}
 .equip-zone{flex:1;padding:12px 16px 16px 16px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;background:rgba(16,22,30,.15)}
 .equip-grid{width:100%;max-width:680px;display:flex;gap:14px;align-items:stretch;justify-content:center;margin-top:6px}
 .equip-col{display:flex;flex-direction:column;gap:10px}
@@ -290,6 +290,7 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
     <div class="nav-group " onclick="location.href='./page11.html'"><div class="nav-item " data-page="page11"><img src="./assets/ui/nav/pvp.webp" alt="PVP"></div><div class="nav-label">PVP</div></div>
     <div class="nav-group " onclick="location.href='./page12.html'"><div class="nav-item " data-page="page12"><img src="./assets/ui/nav/workshop.webp" alt="WORKSHOP"></div><div class="nav-label">WORKSHOP</div></div>
     <div class="nav-group " onclick="location.href='./page13.html'"><div class="nav-item " data-page="page13"><img src="./assets/ui/nav/pass.webp" alt="PASS"></div><div class="nav-label">PASS</div></div>
+    <div class="nav-group " onclick="location.href='./page14.html'"><div class="nav-item " data-page="page14"><img src="./assets/ui/nav/guilds.webp" alt="GUILD"></div><div class="nav-label">GUILD</div></div>
   </div>
   <div class="nav-bottom">
     <div class="nav-group" onclick="location.href='./index.html'"><div class="nav-item" data-page="index"><img src="./assets/ui/nav/start.webp" alt="START"></div><div class="nav-label">START</div></div>
@@ -579,7 +580,7 @@ function renderStats(){
     if(gearV) bonusParts.push(`<span class="stat-bonus-gear">${volandT('Шмот ', 'Gear ')}${fmt(gearV)}</span>`);
     if(ptsV) bonusParts.push(`<span class="stat-bonus-points">${volandT('Очки ', 'Points ')}${fmt(ptsV)}</span>`);
     if(guildV) bonusParts.push(`<span class="stat-bonus-guild">${volandT('Гильдия ', 'Guild ')}${fmt(guildV)}</span>`);
-    let bonusHtml = bonusParts.join('<span style="color:#6a7a8a;font-size:10px">•</span>');
+    let bonusHtml = bonusParts.join('');
     div.innerHTML=`<div class="stat-label">${o.label}</div><div class="stat-value">${total}${suf}</div><div class="stat-bonus">${bonusHtml}</div>`;
     grid.appendChild(div);
   });
