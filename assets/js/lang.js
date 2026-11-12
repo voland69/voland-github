@@ -164,7 +164,7 @@ function volandRenderLangToggle(){
     if(document.getElementById('volandLangToggle')) return;
     var btn = document.createElement('div');
     btn.id = 'volandLangToggle';
-    btn.style.cssText = 'position:fixed;top:10px;right:10px;z-index:9999;display:flex;gap:0;border:1px solid #2a3a4a;border-radius:8px;overflow:hidden;font-family:JetBrains Mono,monospace;font-size:11px;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.4)';
+    var _hasRightPanel = false; try{ _hasRightPanel = !!(document.querySelector('.right') && window.innerWidth>900); }catch(e){} var _toggleRight = _hasRightPanel ? '212px' : '10px'; btn.style.cssText = 'position:fixed;top:10px;right:'+_toggleRight+';z-index:9999;display:flex;gap:0;border:1px solid #2a3a4a;border-radius:8px;overflow:hidden;font-family:JetBrains Mono,monospace;font-size:11px;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.4)';
     var lang = volandGetLang();
     var ruBtn = document.createElement('span');
     ruBtn.textContent = 'RU';
