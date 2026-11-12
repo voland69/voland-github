@@ -5,6 +5,7 @@ if(typeof volandHasSave==='function' && !volandHasSave()) location.href='./page2
 const p=new URLSearchParams(location.search);
 const loc=parseInt(p.get('loc')||localStorage.getItem('voland_location')||'1');
 const stage=parseInt(p.get('stage')||localStorage.getItem('voland_last_stage')||'1');
+if(stage===4 && typeof volandCanFightBoss==='function' && !volandCanFightBoss(loc)){ try{ var _bi=typeof volandGetBossLimitInfo==='function'?volandGetBossLimitInfo(loc):{kills:10,limit:10}; alert('Лимит боссов на сегодня! Ты уже убил '+_bi.kills+'/'+_bi.limit+' боссов этой локи.\nПриходи завтра. Сброс в полночь.'); }catch(e){} location.href='./page7.html?loc='+loc; return; }
 
 let heroId=(typeof volandGetHeroId==='function'?volandGetHeroId():'necro-f-new');
 if(typeof VOLAND_HEROES!=='undefined' && !VOLAND_HEROES[heroId]) heroId=Object.keys(VOLAND_HEROES)[0]||'necro-f-new';
@@ -323,8 +324,8 @@ function showVictory(){
         volandUpdateMissionStat('kill_boss', null, 1);
         volandUpdateMissionStat('kill_boss_diff', null, loc+'-'+stage);
         if(typeof volandAddBossKill==='function'){
-          try{ volandAddBossKill(loc); }catch(e){  }
-        }
+          try{ var _canBoss=true; try{ if(typeof volandCanFightBoss==='function') _canBoss=volandCanFightBoss(loc); }catch(e){} if(_canBoss) volandAddBossKill(loc); }catch(e){  }
+        } try{ if(enemyData && enemyData.boss && typeof volandCanFightBoss==='function' && !volandCanFightBoss(loc)){ var _b=document.getElementById('btnAgain'); if(_b){ _b.textContent='⛔ ЛИМИТ БОССА • К МОБАМ'; _b.onclick=function(){ location.href='./page7.html?loc='+loc; }; } } }catch(e){}
       }
     }
   }catch(e){  }
