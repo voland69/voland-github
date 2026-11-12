@@ -205,6 +205,8 @@ function volandApplyDebuff(effective, debuffPct){
 function volandGetGuildUpgrades(){ try{ var g=JSON.parse(localStorage.getItem('voland_v1_guild')||'null'); if(g&&g.upgrades) return g.upgrades; }catch(e){} return {}; }
 function volandGetGuildBonus(){ var u=volandGetGuildUpgrades(); return { HP:(u.hp||0)*50, DMG:(u.power||0)*10, DEF:(u.def||0)*10, CRIT:(u.crit||0)*1, STAM:(u.stam||0)*10, TREASURY:(u.treasury||0)*10, XP:(u.xp||0)*5, LOOT:(u.loot||0)*2, REGEN:(u.regen||0)*5, DISCOUNT:(u.discount||0)*5, CRAFT:(u.craft||0)*5 }; }
 function volandGetGuildMultiplier(){ var b=volandGetGuildBonus(); return { goldMissions:1+b.TREASURY/100, xp:1+b.XP/100, loot:1+b.LOOT/100, market:1-b.DISCOUNT/100, craft:1-b.CRAFT/100, regen:1+b.REGEN/100 }; }
+function volandGetCraftDiscount(){ try{ if(typeof volandGetGuildBonus==='function'){ var b=volandGetGuildBonus(); return b.CRAFT||0; } var g=JSON.parse(localStorage.getItem('voland_v1_guild')||'null'); if(g&&g.upgrades) return (g.upgrades.craft||0)*5; }catch(e){} return 0; }
+function volandGetDiscountedUpgradeGold(baseGold){ var d=volandGetCraftDiscount(); if(!d) return baseGold; return Math.max(1, Math.round(baseGold*(1-d/100))); }
 function volandCalcStats(){
   const heroId = volandGetHeroId();
   const base = VOLAND_HEROES[heroId]?.st || VOLAND_HEROES[Object.keys(VOLAND_HEROES)[0]].st;
@@ -1003,14 +1005,16 @@ function volandCanUpgrade(itemId){
     let cost = volandGetUpgradeCost(itemId);
     if(!cost) return {can:false, reason:(typeof volandT==='function' ? volandT('МАКС УРОВЕНЬ','MAX LEVEL') : 'MAX LEVEL')};
     let gold = volandGetGold();
-    if(gold < cost.gold) return {can:false, reason:(typeof volandT==='function' ? volandT('НУЖНО ЗОЛОТО '+cost.gold,'NEED GOLD '+cost.gold) : 'NEED GOLD '+cost.gold), needGold:cost.gold-cost.gold, gold:cost.gold};
+    let discGold = (typeof volandGetDiscountedUpgradeGold==='function' ? volandGetDiscountedUpgradeGold(cost.gold) : cost.gold);
+    let discCost = Object.assign({}, cost, {gold:discGold, baseGold:cost.gold});
+    if(gold < discGold) return {can:false, reason:(typeof volandT==='function' ? volandT('НУЖНО ЗОЛОТО '+discGold,'NEED GOLD '+discGold) : 'NEED GOLD '+discGold), needGold:discGold-gold, gold:discGold, cost:discCost};
     let res = volandGetResources();
     for(let rid in cost.resources){
       let need = cost.resources[rid];
       let have = res[rid]||0;
       if(have < need){ let rn = (typeof volandResourceName==='function' ? volandResourceName({id:rid, name:rid.toUpperCase()}) : rid.toUpperCase()); return {can:false, reason:(typeof volandT==='function' ? volandT('НУЖЕН '+rn+' '+need,'NEED '+rid.toUpperCase()+' '+need) : 'NEED '+rid.toUpperCase()+' '+need), needRes:rid, needAmount:need-have}; }
     }
-    return {can:true, cost:cost};
+    return {can:true, cost:discCost};
   }catch(e){ return {can:false, reason:'ERROR'}; }
 }
 
