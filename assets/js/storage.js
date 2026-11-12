@@ -172,6 +172,11 @@ function volandGetStatRespecCost(){
   try{ let lvl = volandGetLevel(); return 200 * lvl; }catch(e){ return 200; }
 }
 function volandGetClassAutoBonus(heroId){
+  // Гильдия - POWER +10 DMG, HEALTH +50 HP, DEFENSE +10, CRIT +1% за уровень
+  let guildBonus = {};
+  try{ guildBonus = volandGetGuildBonus(); }catch(e){ guildBonus = {}; }
+  let guildAdd = {HP: guildBonus.HP||0, DMG: guildBonus.DMG||0, DEF: guildBonus.DEF||0, CRIT: guildBonus.CRIT||0};
+  for(let k in guildAdd){ if(guildAdd[k]>0){ cur[k] = (cur[k]||0) + guildAdd[k]; bonus[k] = (bonus[k]||0) + guildAdd[k]; } }
   // Автомат от класса — за каждый уровень, сверх очка. (lvl-1) * bonus
   if(heroId==='warrior-f' || heroId==='warrior-m') return {HP:30, DEF:5, label:'Танк: +30 HP +5 DEF за уровень'};
   if(heroId==='archmage-m' || heroId==='mage-f-new') return {DMG:15, MANA:15, label:'Маг: +15 DMG +15 MANA за уровень'};
@@ -201,6 +206,10 @@ function volandApplyDebuff(effective, debuffPct){
   if(res<0) res=0;
   return Math.round(res*100)/100;
 }
+// ===== GUILD BONUS v1 - читается из voland_v1_guild, работает на всех pages =====
+function volandGetGuildUpgrades(){ try{ var g=JSON.parse(localStorage.getItem('voland_v1_guild')||'null'); if(g&&g.upgrades) return g.upgrades; }catch(e){} return {}; }
+function volandGetGuildBonus(){ var u=volandGetGuildUpgrades(); return { HP:(u.hp||0)*50, DMG:(u.power||0)*10, DEF:(u.def||0)*10, CRIT:(u.crit||0)*1, STAM:(u.stam||0)*10, TREASURY:(u.treasury||0)*10, XP:(u.xp||0)*5, LOOT:(u.loot||0)*2, REGEN:(u.regen||0)*5, DISCOUNT:(u.discount||0)*5, CRAFT:(u.craft||0)*5 }; }
+function volandGetGuildMultiplier(){ var b=volandGetGuildBonus(); return { goldMissions:1+b.TREASURY/100, xp:1+b.XP/100, loot:1+b.LOOT/100, market:1-b.DISCOUNT/100, craft:1-b.CRAFT/100, regen:1+b.REGEN/100 }; }
 function volandCalcStats(){
   const heroId = volandGetHeroId();
   const base = VOLAND_HEROES[heroId]?.st || VOLAND_HEROES[Object.keys(VOLAND_HEROES)[0]].st;
@@ -260,7 +269,7 @@ function volandCalcStats(){
   for(let k in equipBonus){ displayBonus[k] = (displayBonus[k]||0) + equipBonus[k]; }
   for(let k in pointsBonus){ displayBonus[k] = (displayBonus[k]||0) + pointsBonus[k]; }
   // Для крита/доджа/парирования бонус для отображения — сырой, а тотал эффективный. Page3 покажет сырой + эффективный
-  return {cur, bonus: displayBonus, heroId, hero: VOLAND_HEROES[heroId], equip: eq, equipBonus: equipBonus, pointsBonus: pointsBonus, autoBonus: autoBonus, base: base, baseWithAuto: baseWithAuto, alloc: alloc, lvl: lvl, raw: {CRIT: Math.round(rawCrit*100)/100, DODGE: Math.round(rawDodge*100)/100, PARRY: Math.round(rawParry*100)/100}, thresholds: {CRIT: critTh, DODGE: {threshold:20, cap:30}, PARRY: {threshold:20, cap:30}}};
+  return {cur, bonus: displayBonus, heroId, hero: VOLAND_HEROES[heroId], equip: eq, equipBonus: equipBonus, pointsBonus: pointsBonus, guildBonus: guildAdd, autoBonus: autoBonus, base: base, baseWithAuto: baseWithAuto, alloc: alloc, lvl: lvl, raw: {CRIT: Math.round(rawCrit*100)/100, DODGE: Math.round(rawDodge*100)/100, PARRY: Math.round(rawParry*100)/100}, thresholds: {CRIT: critTh, DODGE: {threshold:20, cap:30}, PARRY: {threshold:20, cap:30}}};
 }
 function volandSpendStatPoints(newAlloc){
   try{
@@ -1077,7 +1086,7 @@ const VOLAND_STAMINA_COSTS = {
   6: {1:6, 2:7, 3:8, 4:30} // ruins 6,7,8 boss 30
 };
 
-function volandGetStaminaMax(){ return VOLAND_STAMINA_MAX; }
+function volandGetStaminaMax(){ try{ var b=volandGetGuildBonus(); return VOLAND_STAMINA_MAX + (b.STAM||0); }catch(e){ return VOLAND_STAMINA_MAX; } }
 
 function volandGetStaminaData(){
   try{
@@ -1103,7 +1112,7 @@ function volandGetStaminaData(){
 
 function volandSetStaminaData(current, last){
   try{
-    current = Math.max(0, Math.min(VOLAND_STAMINA_MAX, parseInt(current)||0));
+    var _stamMax = VOLAND_STAMINA_MAX; try{ _stamMax = volandGetStaminaMax(); }catch(e){} current = Math.max(0, Math.min(_stamMax, parseInt(current)||0));
     last = last || Date.now();
     let saves = volandGetSaves();
     let idx = volandGetActiveIndex();
