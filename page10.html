@@ -30,7 +30,7 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 .nav-group:hover .nav-label{opacity:1 !important}
 .wrap{display:flex !important;position:fixed !important;inset:0 !important}
 .center{flex:1;display:flex;flex-direction:column;overflow:hidden;background:rgba(16,22,30,.22)}
-.top-bar{height:48px;background:rgba(18,24,33,.85);border-bottom:1px solid rgba(30,42,50,.5);display:flex;align-items:center;justify-content:space-between;padding:0 16px}
+.top-bar{height:48px;background:rgba(18,24,33,.85);border-bottom:1px solid rgba(30,42,50,.5);display:flex;align-items:center;justify-content:space-between;padding:0 16px;padding-right:130px}
 .top-title{font:900 16px 'Cinzel Decorative',serif;letter-spacing:.2em;color:#e6d5a0}
 .top-res{display:flex;gap:12px;font:700 10px 'JetBrains Mono',monospace;color:#8a9aaa}
 .top-res span{color:#d0b040}
@@ -142,6 +142,7 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
     <div class="nav-group " onclick="location.href='./page11.html'"><div class="nav-item " data-page="page11"><img src="./assets/ui/nav/pvp.webp" alt="PVP"></div><div class="nav-label">PVP</div></div>
     <div class="nav-group " onclick="location.href='./page12.html'"><div class="nav-item " data-page="page12"><img src="./assets/ui/nav/workshop.webp" alt="WORKSHOP"></div><div class="nav-label">WORKSHOP</div></div>
     <div class="nav-group " onclick="location.href='./page13.html'"><div class="nav-item " data-page="page13"><img src="./assets/ui/nav/pass.webp" alt="PASS"></div><div class="nav-label">PASS</div></div>
+    <div class="nav-group " onclick="location.href='./page14.html'"><div class="nav-item " data-page="page14"><img src="./assets/ui/nav/guilds.webp" alt="GUILD"></div><div class="nav-label">GUILD</div></div>
   </div>
   <div class="nav-bottom">
     <div class="nav-group" onclick="location.href='./index.html'"><div class="nav-item" data-page="index"><img src="./assets/ui/nav/start.webp" alt="START"></div><div class="nav-label">START</div></div>
@@ -149,21 +150,21 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
 </div>
 <div class="center">
   <div class="top-bar">
-    <div class="top-title">MARKET • 3 TABS</div>
+    <div class="top-title">РЫНОК • 3 ВКЛАДКИ</div>
     <div class="top-res">
-      <div>GOLD: <span id="goldDisplay">0</span></div>
-      <div>RES: <span id="resDisplay">0</span></div>
+      <div>ЗОЛОТО: <span id="goldDisplay">0</span></div>
+      <div>РЕС: <span id="resDisplay">0</span></div>
     </div>
   </div>
   <div class="main-area">
     <div class="left-list">
-      <div class="list-header"><span>RESOURCES IN BAG</span><span id="countDisplay">0</span></div>
+      <div class="list-header"><span>РЕСУРСЫ В СУМКЕ</span><span id="countDisplay">0</span></div>
       <div class="res-list" id="resList"></div>
     </div>
     <div class="right-preview" id="previewArea">
       <div class="tabs">
-        <div class="tab active" data-tab="market" onclick="switchTab('market')">1 • MARKET</div>
-        <div class="tab" data-tab="exchange" onclick="switchTab('exchange')">2 • EXCHANGE</div>
+        <div class="tab active" data-tab="market" onclick="switchTab('market')">1 • РЫНОК</div>
+        <div class="tab" data-tab="exchange" onclick="switchTab('exchange')">2 • ОБМЕН</div>
         <div class="tab" data-tab="p2p" onclick="switchTab('p2p')">3 • P2P</div>
       </div>
       <div id="tabMarket" style="width:100%;max-width:800px"></div>
@@ -179,18 +180,18 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
     <div class="modal-header">
       <div class="modal-icon" id="modalIcon"><img src="" alt=""></div>
       <div class="modal-info">
-        <div class="modal-name" id="modalName">QUARTZ</div>
-        <div class="modal-desc" id="modalDesc">RESOURCE</div>
+        <div class="modal-name" id="modalName">КВАРЦ</div>
+        <div class="modal-desc" id="modalDesc">РЕСУРС</div>
         <div class="modal-have" id="modalHave">В рюкзаке: x0</div>
       </div>
     </div>
     <div class="modal-prices">
       <div class="price-chip buy">
-        <div class="price-label">BUY PRICE</div>
+        <div class="price-label">ЦЕНА ПОКУПКИ</div>
         <div class="price-val buy" id="modalBuyPrice">50g</div>
       </div>
       <div class="price-chip sell">
-        <div class="price-label">SELL PRICE</div>
+        <div class="price-label">ЦЕНА ПРОДАЖИ</div>
         <div class="price-val sell" id="modalSellPrice">25g</div>
       </div>
     </div>
@@ -202,10 +203,10 @@ html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,s
       <button class="qty-btn" onclick="changeQty(10)">+10</button>
     </div>
     <div class="action-row">
-      <button class="btn buy" id="modalBuyBtn" onclick="confirmBuy()">BUY</button>
-      <button class="btn sell" id="modalSellBtn" onclick="confirmSell()">SELL</button>
+      <button class="btn buy" id="modalBuyBtn" onclick="confirmBuy()">КУПИТЬ</button>
+      <button class="btn sell" id="modalSellBtn" onclick="confirmSell()">ПРОДАТЬ</button>
     </div>
-    <button class="btn close" onclick="closeModal()" style="width:100%">CLOSE</button>
+    <button class="btn close" onclick="closeModal()" style="width:100%">ЗАКРЫТЬ</button>
     <div class="log" id="modalLog"></div>
   </div>
 </div>
@@ -316,7 +317,7 @@ function renderResList(){
       <div class="res-icon">${iconHtml}</div>
       <div class="res-info">
         <div class="res-name">${RES_NAMES[entry.id]} <span style="color:#3ad080">x${entry.amount}</span></div>
-        <div class="res-tier">${price ? volandGetDiscountedBuy(price.buy)+'g BUY' + (volandGetGuildDiscount()>0 ? ' <span class="price-old">'+price.buy+'g</span> <span class="guild-discount">Guild -'+volandGetGuildDiscount()+'%</span>' : '') + ' / '+price.sell+'g SELL' : ''}</div>
+        <div class="res-tier">${price ? volandGetDiscountedBuy(price.buy)+'g '+volandT('ПОКУПКА','BUY') + (volandGetGuildDiscount()>0 ? ' <span class="price-old">'+price.buy+'g</span> <span class="guild-discount">'+volandT('Гильдия','Guild')+' -'+volandGetGuildDiscount()+'%</span>' : '') + ' / '+price.sell+'g '+volandT('ПРОДАЖА','SELL') : ''}</div>
       </div>
     `;
     listEl.appendChild(div);
@@ -382,18 +383,18 @@ function renderMarket(){
 
   let filterHtml = `
     <div class="market-card">
-      <div class="card-title">MARKET • BUY / SELL FOR GOLD ${volandGetGuildDiscount()>0 ? '<span class="guild-badge">GUILD -'+volandGetGuildDiscount()+'% BUY</span>' : ''}</div>
+      <div class="card-title">${volandT('РЫНОК • ПОКУПКА / ПРОДАЖА ЗА ЗОЛОТО','MARKET • BUY / SELL FOR GOLD')} ${volandGetGuildDiscount()>0 ? '<span class="guild-badge">'+volandT('ГИЛЬДИЯ','GUILD')+' -'+volandGetGuildDiscount()+'% '+volandT('ПОКУПКА','BUY')+'</span>' : ''}</div>
       <div class="filter-bar">
         <div class="filter-group">
-          <button class="filter-btn ${currentFilter==='all'?'active':''}" onclick="setFilter('all')">ALL • ${getMarketItems().length}</button>
-          <button class="filter-btn ${currentFilter==='res'?'active':''}" onclick="setFilter('res')">RES • ${getMarketItems().filter(x=>x.type==='res').length}</button>
-          <button class="filter-btn ${currentFilter==='potion'?'active':''}" onclick="setFilter('potion')">POTIONS • ${getMarketItems().filter(x=>x.type==='potion').length}</button>
+          <button class="filter-btn ${currentFilter==='all'?'active':''}" onclick="setFilter('all')">${volandT('ВСЕ','ALL')} • ${getMarketItems().length}</button>
+          <button class="filter-btn ${currentFilter==='res'?'active':''}" onclick="setFilter('res')">${volandT('РЕС','RES')} • ${getMarketItems().filter(x=>x.type==='res').length}</button>
+          <button class="filter-btn ${currentFilter==='potion'?'active':''}" onclick="setFilter('potion')">${volandT('ЗЕЛЬЯ','POTIONS')} • ${getMarketItems().filter(x=>x.type==='potion').length}</button>
         </div>
         <div class="sort-group">
-          <button class="sort-btn ${currentSort==='price-asc'?'active':''}" onclick="setSort('price-asc')">PRICE ↑</button>
-          <button class="sort-btn ${currentSort==='price-desc'?'active':''}" onclick="setSort('price-desc')">PRICE ↓</button>
-          <button class="sort-btn ${currentSort==='name'?'active':''}" onclick="setSort('name')">NAME</button>
-          <button class="sort-btn ${currentSort==='have-desc'?'active':''}" onclick="setSort('have-desc')">HAVE</button>
+          <button class="sort-btn ${currentSort==='price-asc'?'active':''}" onclick="setSort('price-asc')">${volandT('ЦЕНА','PRICE')} ↑</button>
+          <button class="sort-btn ${currentSort==='price-desc'?'active':''}" onclick="setSort('price-desc')">${volandT('ЦЕНА','PRICE')} ↓</button>
+          <button class="sort-btn ${currentSort==='name'?'active':''}" onclick="setSort('name')">${volandT('ИМЯ','NAME')}</button>
+          <button class="sort-btn ${currentSort==='have-desc'?'active':''}" onclick="setSort('have-desc')">${volandT('В СУМКЕ','HAVE')}</button>
         </div>
       </div>
       <div class="backpack-grid" id="marketGrid">
@@ -458,7 +459,7 @@ function updateModalPrices(){
   let buyTotal = currentModalItem.buy*qty;
   let baseTotal = baseBuy*qty;
   let buyEl = document.getElementById('modalBuyPrice');
-  if(disc>0 && baseTotal!==buyTotal){ buyEl.innerHTML = buyTotal+'g <span class="price-old">'+baseTotal+'g</span><br><span class="guild-discount">Guild -'+disc+'% • '+baseBuy+'g → '+currentModalItem.buy+'g</span>'; } else { buyEl.textContent = buyTotal+'g ('+currentModalItem.buy+'g x'+qty+')'; }
+  if(disc>0 && baseTotal!==buyTotal){ buyEl.innerHTML = buyTotal+'g <span class="price-old">'+baseTotal+'g</span><br><span class="guild-discount">'+volandT('Гильдия','Guild')+' -'+disc+'% • '+baseBuy+'g → '+currentModalItem.buy+'g</span>'; } else { buyEl.textContent = buyTotal+'g ('+currentModalItem.buy+'g x'+qty+')'; }
   document.getElementById('modalSellPrice').textContent = (currentModalItem.sell*qty)+'g ('+currentModalItem.sell+'g x'+qty+')';
   let gold = 0; try{ gold = volandGetGold(); }catch(e){}
   let buyBtn = document.getElementById('modalBuyBtn');
@@ -500,7 +501,7 @@ function buyRes(id, qty){
     if(gold < price){ showLog('modalLog',volandT('Недостаточно GOLD: ', 'Not enough GOLD: ')+gold+'/'+price,'err'); return; }
     volandSetGold(gold - price);
     volandAddResource(id, qty);
-    showLog('modalLog',volandT('Куплено ', 'Bought ')+RES_NAMES[id]+' x'+qty+volandT(' за ', ' for ')+price+'g'+(_disc>0 ? ' (Guild -'+_disc+'% • было '+(_baseBuy*qty)+'g)' : ''),'ok');
+    showLog('modalLog',volandT('Куплено ', 'Bought ')+RES_NAMES[id]+' x'+qty+volandT(' за ', ' for ')+price+'g'+(_disc>0 ? ' ('+volandT('Гильдия','Guild')+' -'+_disc+'% • '+volandT('было','was')+' '+(_baseBuy*qty)+'g)' : ''),'ok');
     renderMarket(); refreshTop();
     if(currentModalItem && currentModalItem.id===id){
       currentModalItem.have += qty;
@@ -535,7 +536,7 @@ function buyPotion(id, qty){
     if(gold < price){ showLog('modalLog',volandT('Недостаточно золота', 'Not enough gold'),'err'); return; }
     volandAddGold(-price);
     for(let i=0;i<qty;i++){ if(typeof volandAddToInventory==='function') volandAddToInventory(id); }
-    showLog('modalLog','Куплено '+id+' x'+qty+' за '+price+'g'+(_discP>0 ? ' (Guild -'+_discP+'% • было '+(_baseBuyP*qty)+'g)' : ''),'ok');
+    showLog('modalLog','Куплено '+id+' x'+qty+' за '+price+'g'+(_discP>0 ? ' ('+volandT('Гильдия','Guild')+' -'+_discP+'% • '+volandT('было','was')+' '+(_baseBuyP*qty)+'g)' : ''),'ok');
     renderMarket(); refreshTop();
     if(currentModalItem && currentModalItem.id===id){
       currentModalItem.have += qty;
