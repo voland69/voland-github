@@ -265,7 +265,7 @@ const RES_ICONS = {
   essence:'./assets/ui/loot/essence.webp'
 };
 const RES_NAMES = {
-  quartz:'QUARTZ', wood:'WOOD', diamond:'DIAMOND', water:'WATER', stone:'STONE', bone:'BONE', fang:'FANG', essence:'ESSENCE'
+  quartz:volandT('КВАРЦ','QUARTZ'), wood:volandT('ДЕРЕВО','WOOD'), diamond:volandT('АЛМАЗ','DIAMOND'), water:volandT('ВОДА','WATER'), stone:volandT('КАМЕНЬ','STONE'), bone:volandT('КОСТЬ','BONE'), fang:volandT('КЛЫК','FANG'), essence:volandT('ЭССЕНЦИЯ','ESSENCE')
 };
 
 let currentFilter = 'all';
@@ -349,7 +349,7 @@ function getMarketItems(){
     items.push({
       id, type:'res', name:RES_NAMES[id], icon:RES_ICONS[id],
       buy:volandGetDiscountedBuy(baseBuy), baseBuy:baseBuy, sell:MARKET_PRICES[id].sell,
-      have, desc:'RESOURCE', price:volandGetDiscountedBuy(baseBuy)
+      have, desc:volandT('РЕСУРС','RESOURCE'), price:volandGetDiscountedBuy(baseBuy)
     });
   });
   Object.keys(POTION_PRICES).forEach(id=>{
