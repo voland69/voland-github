@@ -1098,16 +1098,16 @@ function volandGetStaminaData(){
         return {current: s.stamina, last: s.lastStaminaUpdate};
       }
       // NEW HERO isolation: full stamina for lvl1 hero, not global leak
-      return {current: VOLAND_STAMINA_MAX, last: Date.now()};
+      return {current: volandGetStaminaMax(), last: Date.now()};
     }
     // fallback localStorage (no active save)
     let cur = localStorage.getItem('voland_v1_stamina');
     let last = localStorage.getItem('voland_v1_stamina_last');
     if(cur!==null && last!==null){
-      return {current: parseInt(cur)||VOLAND_STAMINA_MAX, last: parseInt(last)||Date.now()};
+      return {current: parseInt(cur)||volandGetStaminaMax(), last: parseInt(last)||Date.now()};
     }
-    return {current: VOLAND_STAMINA_MAX, last: Date.now()};
-  }catch(e){ return {current: VOLAND_STAMINA_MAX, last: Date.now()}; }
+    return {current: volandGetStaminaMax(), last: Date.now()};
+  }catch(e){ return {current: volandGetStaminaMax(), last: Date.now()}; }
 }
 
 function volandSetStaminaData(current, last){
@@ -1129,24 +1129,25 @@ function volandSetStaminaData(current, last){
 
 function volandGetStamina(){
   try{
+    let _max = VOLAND_STAMINA_MAX; try{ _max = volandGetStaminaMax(); }catch(e){}
     let data = volandGetStaminaData();
     let now = Date.now();
     let elapsed = now - data.last;
     if(elapsed < 0) elapsed = 0;
     let regen = Math.floor(elapsed / VOLAND_STAMINA_REGEN_MS);
     if(regen > 0){
-      let newCurrent = Math.min(VOLAND_STAMINA_MAX, data.current + regen);
+      let newCurrent = Math.min(_max, data.current + regen);
       let newLast = data.last + regen * VOLAND_STAMINA_REGEN_MS;
       // if capped at max, reset last to now to avoid overflow
-      if(newCurrent >= VOLAND_STAMINA_MAX){
-        newCurrent = VOLAND_STAMINA_MAX;
+      if(newCurrent >= _max){
+        newCurrent = _max;
         newLast = now;
       }
       volandSetStaminaData(newCurrent, newLast);
       return newCurrent;
     }
     return data.current;
-  }catch(e){ return VOLAND_STAMINA_MAX; }
+  }catch(e){ try{ return volandGetStaminaMax(); }catch(_){ return VOLAND_STAMINA_MAX; } }
 }
 
 function volandSetStamina(val){
