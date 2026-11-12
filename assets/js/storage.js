@@ -172,11 +172,6 @@ function volandGetStatRespecCost(){
   try{ let lvl = volandGetLevel(); return 200 * lvl; }catch(e){ return 200; }
 }
 function volandGetClassAutoBonus(heroId){
-  // Гильдия - POWER +10 DMG, HEALTH +50 HP, DEFENSE +10, CRIT +1% за уровень
-  let guildBonus = {};
-  try{ guildBonus = volandGetGuildBonus(); }catch(e){ guildBonus = {}; }
-  let guildAdd = {HP: guildBonus.HP||0, DMG: guildBonus.DMG||0, DEF: guildBonus.DEF||0, CRIT: guildBonus.CRIT||0};
-  for(let k in guildAdd){ if(guildAdd[k]>0){ cur[k] = (cur[k]||0) + guildAdd[k]; bonus[k] = (bonus[k]||0) + guildAdd[k]; } }
   // Автомат от класса — за каждый уровень, сверх очка. (lvl-1) * bonus
   if(heroId==='warrior-f' || heroId==='warrior-m') return {HP:30, DEF:5, label:'Танк: +30 HP +5 DEF за уровень'};
   if(heroId==='archmage-m' || heroId==='mage-f-new') return {DMG:15, MANA:15, label:'Маг: +15 DMG +15 MANA за уровень'};
@@ -237,6 +232,11 @@ function volandCalcStats(){
       pointsBonus[k] = add;
     }
   }
+  // Гильдия - POWER +10 DMG, HEALTH +50 HP, DEFENSE +10, CRIT +1% за уровень
+  let guildBonus = {};
+  try{ guildBonus = volandGetGuildBonus(); }catch(e){ guildBonus = {}; }
+  let guildAdd = {HP: guildBonus.HP||0, DMG: guildBonus.DMG||0, DEF: guildBonus.DEF||0, CRIT: guildBonus.CRIT||0};
+  for(let k in guildAdd){ if(guildAdd[k]>0){ cur[k] = (cur[k]||0) + guildAdd[k]; bonus[k] = (bonus[k]||0) + guildAdd[k]; } }
   // Автомат от класса — (lvl-1) * bonus
   let lvl = 1;
   try{ lvl = volandGetLevel(); }catch(e){}
