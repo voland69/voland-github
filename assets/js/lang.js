@@ -17,6 +17,13 @@ function volandT(ru, en){
   return volandGetLang()==='en' ? en : ru;
 }
 var VOLAND_STATIC_DICT = {
+  'ДЕНЬ': 'DAY',
+  'НЕДЕЛЯ': 'WEEK',
+  'ВСЕГО': 'TOTAL',
+  'ЧАТ ГИЛЬДИИ': 'GUILD CHAT',
+  'ОБЩИЙ ЧАТ': 'GLOBAL CHAT',
+  'УЧАСТНИКИ ГИЛЬДИИ': 'GUILD MEMBERS',
+  'ОПЫТ ГИЛЬДИИ': 'GUILD XP',
   'ГИЛЬДИЯ • 2 ВКЛАДКИ': 'GUILD • 2 TABS',
   'СОЗДАТЬ ГИЛЬДИЮ': 'CREATE GUILD',
   'ПОКИНУТЬ ГИЛЬДИЮ': 'LEAVE GUILD',
