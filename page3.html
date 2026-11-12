@@ -218,6 +218,7 @@ html,body{height:100%;background: url("./assets/heroes/bg-battlefield.webp") cen
     <div class="nav-group " onclick="location.href='./page11.html'"><div class="nav-item " data-page="page11"><img src="./assets/ui/nav/pvp.webp" alt="PVP"></div><div class="nav-label">PVP</div></div>
     <div class="nav-group " onclick="location.href='./page12.html'"><div class="nav-item " data-page="page12"><img src="./assets/ui/nav/workshop.webp" alt="WORKSHOP"></div><div class="nav-label">WORKSHOP</div></div>
     <div class="nav-group " onclick="location.href='./page13.html'"><div class="nav-item " data-page="page13"><img src="./assets/ui/nav/pass.webp" alt="PASS"></div><div class="nav-label">PASS</div></div>
+    <div class="nav-group " onclick="location.href='./page14.html'"><div class="nav-item " data-page="page14"><img src="./assets/ui/nav/guilds.webp" alt="GUILD"></div><div class="nav-label">GUILD</div></div>
   </div>
   <div class="nav-bottom">
     <div class="nav-group" onclick="location.href='./index.html'"><div class="nav-item" data-page="index"><img src="./assets/ui/nav/start.webp" alt="START"></div><div class="nav-label">START</div></div>
@@ -447,7 +448,7 @@ function renderBarsStamina(){
     document.getElementById('barsPanel').innerHTML = `
       <div class="bar-row"><div class="bar-label">HP</div><div class="bar-track"><div class="bar-fill hp" style="width:${hpPct}%"></div><div class="bar-text">${curHP} / ${cur.HP}</div></div></div>
       <div class="bar-row"><div class="bar-label">MANA</div><div class="bar-track"><div class="bar-fill mana" style="width:${manaPct}%"></div><div class="bar-text">${curMANA} / ${cur.MANA}</div></div></div>
-      <div class="bar-row"><div class="bar-label">STAMINA</div><div class="bar-track"><div class="bar-fill stamina" style="width:${stamPct}%"></div><div class="bar-text">${curSTAM} / ${maxSTAM}${(function(){ try{ var _gb=volandGetGuildBonus(); return _gb.STAM>0 ? ' • Guild +' + _gb.STAM : ''; }catch(e){ return ''; } })()}</div></div></div>
+      <div class="bar-row"><div class="bar-label">STAMINA</div><div class="bar-track"><div class="bar-fill stamina" style="width:${stamPct}%"></div><div class="bar-text">${curSTAM} / ${maxSTAM}</div></div></div>
       <div class="bar-row"><div class="bar-label">XP</div><div class="bar-track"><div class="bar-fill xp" style="width:${lvlInfo.pct}%"></div><div class="bar-text">${lvlInfo.cur} / ${lvlInfo.need}</div></div></div>
     `;
   }catch(e){
