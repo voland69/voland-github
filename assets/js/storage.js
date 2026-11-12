@@ -687,6 +687,7 @@ function volandAddGold(add){
   }catch(e){ return 0; }
 }
 
+  function volandSpendGold(amt){   try{     let cur=volandGetGold(); amt = parseInt(amt)||0; if(amt<=0) return cur; if(cur < amt) return false; return volandSetGold(cur - amt);   }catch(e){ return false; } }
 function volandGetXp(){
   try{
     let saves=volandGetSaves();
@@ -1559,31 +1560,27 @@ function volandUsePotion(potionId){
     if(p.percent){
       if(p.value===100){
         if(!p.tempBonus){
-          try{ volandSetStamina(volandGetStaminaMax()); }catch(e){ volandSetStamina(100); }
+          volandSetStamina(100);
         } else {
-          try{ volandSetStamina(volandGetStaminaMax()); }catch(e){ volandSetStamina(100); }
+          volandSetStamina(100);
           save.buffs = save.buffs || {};
           save.buffs.staminaRegen = {value:1000, until: Date.now() + 3600000};
         }
       }
     } else {
       let cur = volandGetStamina();
-      let _smax = 100; try{ _smax = volandGetStaminaMax(); }catch(e){}
-      volandSetStamina(Math.min(_smax, cur + p.value));
+      volandSetStamina(Math.min(100, cur + p.value));
     }
   }
-  // FIX: перечитать свежие saves ПОСЛЕ volandSetCurrentHP / volandSetStamina, иначе старый saves с hp_current=1251 перезатрёт новый 1501
-  try{ saves = volandGetSaves(); idx = volandGetActiveIndex(); save = saves[idx]; inv = save.inventory || []; }catch(e){}
-  let invIdx2 = inv.findIndex(x=> (x.id||x)===potionId);
-  if(invIdx2!==-1){
-    inv.splice(invIdx2,1);
+  if(invIdx!==-1){
+    inv.splice(invIdx,1);
     save.inventory = inv;
     volandSaveSaves(saves);
-  } else if(typeof volandRemoveFromInventory==='function'){
-    volandRemoveFromInventory(potionId);
-    try{ saves = volandGetSaves(); }catch(e){}
   }
-  try{ volandSaveSaves(saves); }catch(e){}
+  if(typeof volandRemoveFromInventory==='function'){
+    volandRemoveFromInventory(potionId);
+  }
+  volandSaveSaves(saves);
   return true;
  }catch(e){ console.error('potion use error', e); return false; }
 }
