@@ -39,3 +39,5 @@ const VOLAND_ENEMIES = {
    {stage:4, name:'ПАДШИЙ ПАЛАДИН', eng:'Fallen Paladin - BOSS', icon:'⚔️', img:'./assets/enemies/fallen-paladin.webp', hp:23000, def:600, dmg:550, boss:true, gold:75, xp:2200, drops:[{id:'bone',chance:0.20},{id:'fang',chance:0.10},{id:'essence',chance:0.10}]},
  ],
 };
+// const не создаёт window.VOLAND_ENEMIES, поэтому явно выставляем для page7/engine.
+if(typeof window!=='undefined') window.VOLAND_ENEMIES = VOLAND_ENEMIES;
