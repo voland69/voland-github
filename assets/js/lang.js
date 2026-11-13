@@ -164,15 +164,15 @@ function volandRenderLangToggle(){
     if(document.getElementById('volandLangToggle')) return;
     var btn = document.createElement('div');
     btn.id = 'volandLangToggle';
-    var _hasRightPanel = false; try{ _hasRightPanel = !!(document.querySelector('.right') && window.innerWidth>900); }catch(e){} var _toggleRight = _hasRightPanel ? '212px' : '10px'; btn.style.cssText = 'position:fixed;top:10px;right:'+_toggleRight+';z-index:9999;display:flex;gap:0;border:1px solid #2a3a4a;border-radius:8px;overflow:hidden;font-family:JetBrains Mono,monospace;font-size:11px;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.4)';
+    var _hasChat = false; try{ _hasChat = !!(document.querySelector('.right .chat-header') || document.querySelector('.right .chat-head')); }catch(e){} btn.style.cssText = 'position:fixed;top:10px;right:10px;z-index:9999;display:flex;gap:0;' + (_hasChat ? 'width:180px;justify-content:center;' : '') + 'border:1px solid #2a3a4a;border-radius:8px;overflow:hidden;font-family:JetBrains Mono,monospace;font-size:11px;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.4)';
     var lang = volandGetLang();
     var ruBtn = document.createElement('span');
     ruBtn.textContent = 'RU';
-    ruBtn.style.cssText = 'padding:6px 10px;background:'+(lang==='ru' ? '#e6d5a0;color:#0a0f14' : '#1a242f;color:#8a9aaa');
+    ruBtn.style.cssText = (_hasChat ? 'flex:1;text-align:center;' : '') + 'padding:6px 10px;background:'+(lang==='ru' ? '#e6d5a0;color:#0a0f14' : '#1a242f;color:#8a9aaa');
     ruBtn.onclick = function(e){ e.stopPropagation(); if(volandGetLang()!=='ru') volandSetLang('ru'); };
     var enBtn = document.createElement('span');
     enBtn.textContent = 'EN';
-    enBtn.style.cssText = 'padding:6px 10px;background:'+(lang==='en' ? '#e6d5a0;color:#0a0f14' : '#1a242f;color:#8a9aaa');
+    enBtn.style.cssText = (_hasChat ? 'flex:1;text-align:center;' : '') + 'padding:6px 10px;background:'+(lang==='en' ? '#e6d5a0;color:#0a0f14' : '#1a242f;color:#8a9aaa');
     enBtn.onclick = function(e){ e.stopPropagation(); if(volandGetLang()!=='en') volandSetLang('en'); };
     btn.appendChild(ruBtn);
     btn.appendChild(enBtn);
