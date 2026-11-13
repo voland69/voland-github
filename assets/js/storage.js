@@ -207,6 +207,11 @@ function volandGetGuildBonus(){ var u=volandGetGuildUpgrades(); return { HP:(u.h
 function volandGetGuildMultiplier(){ var b=volandGetGuildBonus(); return { goldMissions:1+b.TREASURY/100, xp:1+b.XP/100, loot:1+b.LOOT/100, market:1-b.DISCOUNT/100, craft:1-b.CRAFT/100, regen:1+b.REGEN/100 }; }
 function volandGetCraftDiscount(){ try{ if(typeof volandGetGuildBonus==='function'){ var b=volandGetGuildBonus(); return b.CRAFT||0; } var g=JSON.parse(localStorage.getItem('voland_v1_guild')||'null'); if(g&&g.upgrades) return (g.upgrades.craft||0)*5; }catch(e){} return 0; }
 function volandGetDiscountedUpgradeGold(baseGold){ var d=volandGetCraftDiscount(); if(!d) return baseGold; return Math.max(1, Math.round(baseGold*(1-d/100))); }
+// ===== GUILD DISCOUNT - канон для магазина (page10) =====
+// Единственное место, где считается скидка гильдии. page10 своих копий не держит.
+function volandGetGuildDiscount(){ try{ if(typeof volandGetGuildBonus==='function'){ return volandGetGuildBonus().DISCOUNT||0; } }catch(e){} return 0; }
+function volandGetDiscountedBuy(baseBuy){ var d=volandGetGuildDiscount(); if(!d) return baseBuy; return Math.max(1, Math.round(baseBuy*(1-d/100))); }
+function volandGuildDiscountLabel(){ var d=volandGetGuildDiscount(); return d>0 ? 'Guild -'+d+'%' : ''; }
 function volandCalcStats(){
   const heroId = volandGetHeroId();
   const base = VOLAND_HEROES[heroId]?.st || VOLAND_HEROES[Object.keys(VOLAND_HEROES)[0]].st;
@@ -684,6 +689,15 @@ function volandAddGold(add){
     let cur=volandGetGold();
     let next=cur + (parseInt(add)||0);
     return volandSetGold(next);
+  }catch(e){ return 0; }
+}
+
+function volandSpendGold(amount){
+  try{
+    let cur=volandGetGold();
+    let spend=parseInt(amount)||0;
+    if(spend<0) spend=0;
+    return volandSetGold(cur - spend);
   }catch(e){ return 0; }
 }
 
