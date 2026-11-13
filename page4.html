@@ -443,4 +443,139 @@ function openGearModal(item, idx){
   if(bonuses.length===0 && item.desc){
     bonuses.push(item.desc);
   }
-  if(bonuses.length===0) bonuses.push(volandT('Без б
+  if(bonuses.length===0) bonuses.push(volandT('Без бонусов', 'No bonuses'));
+  bonusesEl.innerHTML = bonuses.map(b=>`<div class="gear-modal-bonus">${b}</div>`).join('');
+  overlay.classList.add('show');
+}
+function closeGearModal(){
+  document.getElementById('gearModal').classList.remove('show');
+  pendingGear=null; pendingGearIdx=-1;
+}
+function confirmEquipGear(){
+  if(pendingGear && pendingGearIdx>=0){
+    equipItem(pendingGear, pendingGearIdx);
+  }
+  closeGearModal();
+}
+
+function renderEquip(){
+  try{
+    let heroId = (typeof volandGetHeroId==='function') ? volandGetHeroId() : null;
+    if(heroId && typeof VOLAND_HERO_WEAPON_TYPE!=='undefined' && typeof VOLAND_WEAPON_SETS!=='undefined'){
+      let wType = VOLAND_HERO_WEAPON_TYPE[heroId] || null;
+      if(wType){
+        let allowed = new Set();
+        (VOLAND_WEAPON_SETS[wType]||[]).forEach(wid=>{
+          try{
+            let it = VOLAND_ITEMS.find(x=>x.id===wid);
+            if(it) allowed.add(it.baseId || wid.split('-')[0]);
+            else allowed.add(wid.split('-')[0]);
+          }catch(e){}
+        });
+        let toRemove=[];
+        for(let slot in equipped){
+          let it = equipped[slot];
+          if(!it) continue;
+          let base = it.baseId || (it.id||'').split('-')[0];
+          if(['bow','staff','sword','shield'].includes(base) && !allowed.has(base)){
+            toRemove.push(slot);
+          }
+        }
+        if(toRemove.length>0){
+          toRemove.forEach(s=>{ delete equipped[s]; });
+          try{ volandSaveEquip(equipped); }catch(e){}
+        }
+      }
+    }
+  }catch(e){}
+  document.querySelectorAll('.equip-slot').forEach(el=>{
+    const slot=el.dataset.slot; const it=equipped[slot];
+    const nameEl=el.querySelector('.slot-name'); const iconEl=el.querySelector('.slot-icon'); const emptyEl=el.querySelector('.slot-empty');
+    if(it){
+      el.classList.add('filled');
+      if(it.icon && (it.icon.includes('.webp') || it.icon.includes('/equipment/') || it.icon.includes('/weapons/') || it.icon.includes('/loot/'))){
+        iconEl.innerHTML = `<img src="${it.icon}" style="width:100%;height:100%;object-fit:cover;border-radius:6px" onerror="this.style.display='none'">`;
+      } else {
+        let displayIcon = it.emoji || '⚔️';
+        iconEl.textContent = displayIcon;
+      }
+      nameEl.textContent=volandItemName(it); emptyEl.textContent=it.desc; emptyEl.style.color='#3ad080';
+    } else {
+      el.classList.remove('filled');
+      const defs={head:{name:volandT('Шлем', 'Helmet')},ear1:{name:volandT('Серьга 1', 'Earring 1')},ear2:{name:volandT('Серьга 2', 'Earring 2')},amulet:{name:volandT('Амулет', 'Amulet')},armor:{name:volandT('Броня', 'Armor')},weapon:{name:volandT('Оружие', 'Weapon')},shield:{name:volandT('Щит', 'Shield')},ring1:{name:volandT('Кольцо 1', 'Ring 1')},ring2:{name:volandT('Кольцо 2', 'Ring 2')},gloves:{name:volandT('Перчатки', 'Gloves')},boots:{name:volandT('Ботинки', 'Boots')}};
+      const def=defs[slot];
+      iconEl.textContent='';
+      if(def){ nameEl.textContent=volandItemName(def); }
+      emptyEl.textContent=volandT('пусто', 'empty'); emptyEl.style.color='';
+    }
+  });
+  equipCount.textContent=Object.keys(equipped).length+'/11';
+}
+function equipItem(item, idx){
+  const slot=item.slot;
+  try{
+    // FIX: properly handle inventory storage - remove new item from storage, add old to storage
+    if(typeof volandRemoveFromInventory==='function'){
+      volandRemoveFromInventory(item.id);
+    }
+    if(equipped[slot]){
+      const old=equipped[slot];
+      if(typeof volandAddToInventory==='function'){
+        volandAddToInventory(old.id);
+      }
+      log(`${volandT('Снято: ', 'Removed: ')}${volandItemName(old)}`);
+    }
+  }catch(e){  }
+  equipped[slot]=item;
+  try{
+    volandSaveEquip(equipped);
+  }catch(e){}
+  try{
+    rebuildInv();
+  }catch(e){}
+  renderInv(); renderEquip(); renderStats(); renderBars();
+  log(`${volandT('Экипировано: ', 'Equipped: ')}${volandItemName(item)} ${item.desc}${volandT(' — сохранено на всех страницах', ' — saved on all pages')}`);
+}
+function unequipSlot(el){
+  const slot=el.dataset.slot; const it=equipped[slot]; if(!it) return;
+  try{
+    if(typeof volandAddToInventory==='function'){
+      volandAddToInventory(it.id);
+    }
+  }catch(e){  }
+  delete equipped[slot];
+  try{
+    volandSaveEquip(equipped);
+  }catch(e){}
+  try{
+    rebuildInv();
+  }catch(e){}
+  renderInv(); renderEquip(); renderStats(); renderBars();
+  log(`${volandT('Снято: ', 'Removed: ')}${volandItemName(it)}`);
+}
+document.querySelectorAll('.equip-slot').forEach(el=>{ el.onclick=()=>unequipSlot(el); });
+renderInv(); renderEquip(); renderStats(); renderBars();
+const chatIn=document.getElementById('chatIn'); const chatBtn=document.getElementById('chatBtn');
+chatBtn.onclick=()=>{ const v=chatIn.value.trim(); if(!v) return; log(volandT('Ты: ', 'You: ')+v); chatIn.value=''; };
+chatIn.addEventListener('keydown',e=>{ if(e.key==='Enter') chatBtn.click(); });
+</script>
+
+<script>
+// Tooltip positioning for page4 BAG
+document.querySelectorAll('.nav-group').forEach(g=>{
+  let label = g.querySelector('.nav-label');
+  if(!label) return;
+  g.addEventListener('mouseenter', ()=>{
+    let rect = g.getBoundingClientRect();
+    label.style.top = (rect.top + rect.height/2) + 'px';
+    label.style.transform = 'translateY(-50%) translateX(0)';
+  });
+  g.addEventListener('mouseleave', ()=>{
+    label.style.transform = 'translateY(-50%) translateX(-6px)';
+  });
+});
+</script>
+<script src="./assets/js/nav.js"></script>
+</body>
+
+</html>
