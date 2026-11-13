@@ -17,7 +17,7 @@ const VOLAND_HEROES = {
   n:'GRAVELORD', role:'TANK • Necro - Male',
   img:'./assets/heroes/necro-m.webp',
   thumb:'./assets/heroes/necro-m.webp',
-  st:{HP:1150,DEF:110,DMG:200,MANA:260,CRIT:10,PARRY:0,DODGE:8},
+  st:{HP:1150,DEF:110,DMG:200,MANA:260,CRIT:10,PARRY:8,DODGE:0},
   sk:[
     ['Костяной Легион','PASSIVE',['./assets/heroes/icon_kostyanoy_legion.jpg'],'🦴','Каждый раунд призывается по 1 скелету помощнику (макс 3). Скелеты наследуют 100% твоего урона. Скелеты бессмертны и воюют до конца боя.','Скелет 100% урона • Макс скелетов: 3'],
     ['Костяное Копье','1',['./assets/heroes/icon_kostyanoe_kopye.jpg'],'☠','Бросает кость, наносит +150% урона и накладывает Уязвимость Костей: +25% урон от саммонов на 2 раунда.','КД: 4 раунда • Мана: 15 • +25% урона от саммонов'],
