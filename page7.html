@@ -46,16 +46,18 @@ let locId=parseInt(p.get('loc')||localStorage.getItem('voland_location')||'1');
 let enemies;
 let locData;
 try{
-  if(window.VOLAND_ENEMIES && VOLAND_ENEMIES[locId]){
+  if(typeof VOLAND_ENEMIES!=='undefined' && VOLAND_ENEMIES[locId]){
    enemies=VOLAND_ENEMIES[locId];
+  } else if(typeof window!=='undefined' && window.VOLAND_ENEMIES && window.VOLAND_ENEMIES[locId]){
+   enemies=window.VOLAND_ENEMIES[locId];
   } else {
    document.getElementById('stagesGrid').innerHTML='<div style="padding:20px;color:#e05050">Ошибка загрузки enemies.js</div>';
-   throw new Error('VOLAND_ENEMIES missing');
+   enemies=[];
   }
- locData=(window.VOLAND_LOCATIONS&&VOLAND_LOCATIONS.find(l=>l.id==locId))|| (locId==6 ? {name:'РУИНЫ',eng:'RUINS',img:'./assets/enemies/bg-ruins.webp'} : locId==5 ? {name:'ВУЛКАН',eng:'VOLCANO',img:'./assets/enemies/bg-volcano.webp'} : locId==4 ? {name:'БОЛОТО',eng:'SWAMP',img:'./assets/enemies/bg-swamp.webp'} : locId==3 ? {name:'ЛЕДЯНЫЕ ЗЕМЛИ',eng:'FROSTLANDS',img:'./assets/enemies/bg-frostlands.webp'} : locId==2 ? {name:'ТЕМНЫЙ ЛЕС',eng:'DARK FOREST',img:'./assets/enemies/bg-dark-forest.webp'} : {name:'ПУСТЫНЯ',eng:'DESERT',img:'./assets/enemies/bg-desert-dark.jpg'});
+ locData=(typeof VOLAND_LOCATIONS!=='undefined'&&VOLAND_LOCATIONS.find(l=>l.id==locId))|| (locId==6 ? {name:'РУИНЫ',eng:'RUINS',img:'./assets/enemies/bg-ruins.webp'} : locId==5 ? {name:'ВУЛКАН',eng:'VOLCANO',img:'./assets/enemies/bg-volcano.webp'} : locId==4 ? {name:'БОЛОТО',eng:'SWAMP',img:'./assets/enemies/bg-swamp.webp'} : locId==3 ? {name:'ЛЕДЯНЫЕ ЗЕМЛИ',eng:'FROSTLANDS',img:'./assets/enemies/bg-frostlands.webp'} : locId==2 ? {name:'ТЕМНЫЙ ЛЕС',eng:'DARK FOREST',img:'./assets/enemies/bg-dark-forest.webp'} : {name:'ПУСТЫНЯ',eng:'DESERT',img:'./assets/enemies/bg-desert-dark.jpg'});
 }catch(e){
   document.getElementById('stagesGrid').innerHTML='<div style="padding:20px;color:#e05050">Ошибка загрузки enemies.js</div>';
-  throw e;
+  enemies=[];
  locData= locId==6 ? {name:'РУИНЫ',eng:'RUINS',img:'./assets/enemies/bg-ruins.webp'} : locId==5 ? {name:'ВУЛКАН',eng:'VOLCANO',img:'./assets/enemies/bg-volcano.webp'} : locId==4 ? {name:'БОЛОТО',eng:'SWAMP',img:'./assets/enemies/bg-swamp.webp'} : locId==3 ? {name:'ЛЕДЯНЫЕ ЗЕМЛИ',eng:'FROSTLANDS',img:'./assets/enemies/bg-frostlands.webp'} : locId==2 ? {name:'ТЕМНЫЙ ЛЕС',eng:'DARK FOREST',img:'./assets/enemies/bg-dark-forest.webp'} : {name:'ПУСТЫНЯ',eng:'DESERT',img:'./assets/enemies/bg-desert-dark.jpg'};
 }
 document.getElementById('locTitle').innerHTML=(volandGetLang()==='en' ? locData.eng : locData.name);
