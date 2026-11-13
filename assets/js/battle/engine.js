@@ -222,13 +222,16 @@ function endRound(){
  addLog('--- Ход '+turn+': твой ход ---','');
 }
 
+
 function showVictory(){
   isBattleOver=true;
   // Награды ТОЛЬКО из VOLAND_ENEMIES (enemies.js).
   let goldReward = (enemyData && enemyData.gold) ? parseInt(enemyData.gold) : 5;
   let xpReward = (enemyData && enemyData.xp) ? parseInt(enemyData.xp) : 80;
-  // GUILD: DOBYCHA (mobs) - gold, OPYT - XP. KAZNA does NOT apply to mobs, only missions.
-  try{ var _gb=(typeof volandGetGuildBonus==='function') ? volandGetGuildBonus() : {}; var _goldMobsPct=_gb.GOLD_MOBS||0; var _xpPct=_gb.XP||0; if(_goldMobsPct>0) goldReward=Math.round(goldReward*(1+_goldMobsPct/100)); if(_xpPct>0) xpReward=Math.round(xpReward*(1+_xpPct/100)); }catch(e){}
+  // GUILD: DOBYCHA - gold, OPYT - XP. KAZNA does NOT apply to mobs, only missions.
+  var _baseGold=goldReward, _baseXp=xpReward, _goldMobsPct=0, _xpPct=0;
+  try{ var _gb=(typeof volandGetGuildBonus==='function') ? volandGetGuildBonus() : {}; _goldMobsPct=_gb.GOLD_MOBS||0; _xpPct=_gb.XP||0; if(_goldMobsPct>0) goldReward=Math.round(goldReward*(1+_goldMobsPct/100)); if(_xpPct>0) xpReward=Math.round(xpReward*(1+_xpPct/100)); }catch(e){}
+  var _goldBonus=goldReward-_baseGold, _xpBonus=xpReward-_baseXp;
 
   // ЕДИНЫЙ РОЛЛ ЛУТА — один раз на всю победу.
   // То, что выпало здесь, и показывается в модалке, и выдаётся в сумку.
@@ -242,13 +245,14 @@ function showVictory(){
       drop = {resources:[], potions:[]};
     }
   }catch(e){ drop = {resources:[], potions:[]}; }
-  // GUILD DOBYCHA: +1% resources from mobs per level - each dropped resource has LOOT% chance for +1 extra copy
-  try{ var _lootPct=(typeof volandGetGuildBonus==='function') ? (volandGetGuildBonus().LOOT||0) : 0; if(_lootPct>0 && drop && Array.isArray(drop.resources)){ drop.resources.forEach(function(r){ if(Math.random() < _lootPct/100) r.count=(r.count||1)+1; }); } }catch(e){}
 
+  // GUILD DOBYCHA: +1% resources - each dropped resource has LOOT% chance for +1 extra copy
+  try{ var _lootPct=(typeof volandGetGuildBonus==='function') ? (volandGetGuildBonus().LOOT||0) : 0; if(_lootPct>0 && drop && Array.isArray(drop.resources)){ drop.resources.forEach(function(r){ if(Math.random() < _lootPct/100) r.count=(r.count||1)+1; }); } }catch(e){}
   // Показ в модалке — из ТОГО ЖЕ drop, что выдаём. Каждый предмет — в своём окошке.
   try{
     document.getElementById('rewGold').textContent='+'+goldReward;
     document.getElementById('rewXp').textContent='+'+xpReward;
+    try{ var _gEl=document.getElementById('rewGoldGuild'); if(_gEl){ if(_goldBonus>0){ var _gTxt=(typeof volandT==='function'?volandT('гильдия','guild'):'гильдия'); _gEl.textContent='+'+_goldBonus+' ('+_goldMobsPct+'% \u2022 '+_gTxt+')'; _gEl.style.display='inline-block'; } else { _gEl.textContent=''; _gEl.style.display='none'; } } var _xEl=document.getElementById('rewXpGuild'); if(_xEl){ if(_xpBonus>0){ var _xTxt=(typeof volandT==='function'?volandT('гильдия','guild'):'гильдия'); _xEl.textContent='+'+_xpBonus+' ('+_xpPct+'% \u2022 '+_xTxt+')'; _xEl.style.display='inline-block'; } else { _xEl.textContent=''; _xEl.style.display='none'; } } }catch(e){}
     let lootBoxesEl = document.getElementById('lootBoxes');
     if(lootBoxesEl){
       let boxesHtml = '';
@@ -321,6 +325,7 @@ function showVictory(){
   }catch(e){  }
 }
 
+
 function showDefeat(){
   isBattleOver=true;
   // SAVE HP/MANA even on defeat - stays low then regens
@@ -350,6 +355,7 @@ function showDefeat(){
   document.getElementById('victoryModal').classList.add('show');
   renderSkillBar();
 }
+
 
 function tryNav(url){ if(!isBattleOver){ addLog('⛔ Нельзя выйти из боя! Закончи бой','lose'); return; } location.href=url; }
 window.tryNav=tryNav;
