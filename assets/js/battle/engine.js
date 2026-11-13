@@ -29,41 +29,10 @@ document.getElementById('heroIcon').innerHTML='<img src="'+heroData.img+'" onerr
 document.getElementById('heroName').textContent=profileName.toUpperCase();
 document.getElementById('heroRole').textContent=heroData.n+' • '+heroData.role;
 
-// РЕАЛЬНЫЕ СТАТЫ - РУКАМИ
-// DESERT LOC1: Мышь 4000/100/150, Скорп 3000/200/150, Змея 4000/150/200, Титан 6000/200/250
-// FOREST LOC2: Призрак 5000/150/250, Волк 5000/150/300, Голем 7000/300/250, Дриада 10000/350/300
-let eDef, eDmg, eMaxHp;
-if(loc==3){
-  // ЛЕДЯНЫЕ ЗЕМЛИ LOC3
-  eDef = stage==4 ? 400 : stage==3 ? 300 : stage==2 ? 200 : 200;
-  eDmg = stage==4 ? 400 : stage==3 ? 300 : stage==2 ? 350 : 250;
-  eMaxHp = stage==4 ? 13000 : stage==3 ? 10000 : stage==2 ? 7000 : 7000;
-} else if(loc==2){
-  // ТЕМНЫЙ ЛЕС
-  eDef = stage==4 ? 350 : stage==3 ? 300 : stage==2 ? 150 : 150;
-  eDmg = stage==4 ? 300 : stage==3 ? 250 : stage==2 ? 300 : 250;
-  eMaxHp = stage==4 ? 10000 : stage==3 ? 7000 : stage==2 ? 5000 : 5000;
-} else if(loc==6){
-  // РУИНЫ LOC6
-  eDef = stage==4 ? 600 : stage==3 ? 350 : stage==2 ? 350 : 400;
-  eDmg = stage==4 ? 550 : stage==3 ? 550 : stage==2 ? 500 : 350;
-  eMaxHp = stage==4 ? 23000 : stage==3 ? 15000 : stage==2 ? 9000 : 10000;
-} else if(loc==5){
-  // ВУЛКАН LOC5
-  eDef = stage==4 ? 500 : stage==3 ? 300 : stage==2 ? 400 : 300;
-  eDmg = stage==4 ? 500 : stage==3 ? 500 : stage==2 ? 450 : 400;
-  eMaxHp = stage==4 ? 20000 : stage==3 ? 11000 : stage==2 ? 10000 : 9000;
-} else if(loc==4){
-  // БОЛОТО LOC4
-  eDef = stage==4 ? 450 : stage==3 ? 400 : stage==2 ? 200 : 250;
-  eDmg = stage==4 ? 450 : stage==3 ? 250 : stage==2 ? 350 : 250;
-  eMaxHp = stage==4 ? 15000 : stage==3 ? 10000 : stage==2 ? 8000 : 9000;
-} else {
-  // ПУСТЫНЯ LOC1
-  eDef = stage==4 ? 200 : stage==3 ? 150 : stage==2 ? 200 : 100;
-  eDmg = stage==4 ? 250 : stage==3 ? 200 : stage==2 ? 150 : 150;
-  eMaxHp = stage==4 ? 6000 : stage==3 ? 4000 : stage==2 ? 3000 : 4000;
-}
+// Статы врага - только из enemies.js (VOLAND_ENEMIES). Копий нет.
+let eDef = parseInt(enemyData.def)||100;
+let eDmg = parseInt(enemyData.dmg)||150;
+let eMaxHp = parseInt(enemyData.hp)||4000;
 const baseEDmg = eDmg;
 
 // HP/MANA from storage with regen - after battle stays low then regens
@@ -87,13 +56,29 @@ const logZone=document.getElementById('logZone');
 function addLog(t,c=''){ try{ if(typeof volandBattleLog==='function') t=volandBattleLog(t); }catch(e){} const d=document.createElement('div'); d.className='log-line '+c; d.textContent=t; logZone.appendChild(d); logZone.scrollTop=9999; }
 window.VB.addLog=addLog;
 
+function parseMultiHit(full){
+ // Мульти-удар V2: каждый удар отдельно. Ищем N по X% / Каждая X%.
+ // Призыв скелетов не считаем мульти-ударом, это саммоны, а не прямой урон.
+ if(/Призывает.*скелет/i.test(full)) return null;
+ if(!/кажд/i.test(full) && !/по\s*\d+%/i.test(full)) return null;
+ let countMatch = full.match(/(\d+)\s*(?:аметистовых\s+)?(?:душ|стрел|стрелы|удара|ударов|метеора|метеоров)/i);
+ if(!countMatch) return null;
+ let hits = parseInt(countMatch[1]);
+ if(hits<2 || hits>20) return null;
+ let perMatch = full.match(/кажд[а-я]+\s+[^%]*?(\d+)%/i) || full.match(/по\s*(\d+)%/i);
+ if(!perMatch) return null;
+ let perHit = parseInt(perMatch[1]);
+ if(perHit<50 || perHit>1000) return null;
+ return {hits:hits, perHit:perHit};
+}
 function parseSkill(sk){
  const full=(sk[4]||'')+' '+(sk[5]||'');
  const manaMatch=full.match(/Мана:\s*(\d+)/i);
  const cdMatch=full.match(/КД:\s*(\d+)/i);
  const dmgMatches=[...full.matchAll(/(\d+)%\s*урона/gi)];
  let maxDmg=0; dmgMatches.forEach(m=>{let v=parseInt(m[1]); if(v>maxDmg) maxDmg=v;});
- return {name:sk[0],num:sk[1],icons:sk[2]||[],emoji:sk[3]||'⚔️',desc:sk[4]||'',short:sk[5]||'',mana:manaMatch?parseInt(manaMatch[1]):0,cd:cdMatch?parseInt(cdMatch[1]):0,dmgPct:maxDmg||0,hasStun:/стан|оглуш/i.test(full)};
+ let mh=parseMultiHit(full);
+ return {name:sk[0],num:sk[1],icons:sk[2]||[],emoji:sk[3]||'⚔️',desc:sk[4]||'',short:sk[5]||'',mana:manaMatch?parseInt(manaMatch[1]):0,cd:cdMatch?parseInt(cdMatch[1]):0,dmgPct:maxDmg||0,hasStun:/стан|оглуш/i.test(full),hits:mh?mh.hits:1,perHitPct:mh?mh.perHit:(maxDmg||0)};
 }
 const allSkills=heroData.sk.map(parseSkill);
 const passive=allSkills[0];
@@ -121,7 +106,7 @@ function renderSkillBar(){
  const bar=document.getElementById('skillBar'); bar.innerHTML='';
  const list=[{name:'АТАКА',emoji:'⚔️',mana:0,cd:0,icons:[],isAttack:true,key:'Q'}, ...activeSkills.map((s,i)=>({...s,idx:i,key:['W','E','R','T'][i]}))];
  list.forEach((s,idx)=>{
-  const cd=cooldowns[idx]; const can=s.isAttack||hMana>=s.mana; const dis=cd>0||!can||isBattleOver;
+  const cd=cooldowns[idx]; const can=s.isAttack||hMana>=s.mana; const dis=cd>0||!can||isBattleOver||(!heroModuleLoaded && !heroModuleFailed);
   const btn=document.createElement('div'); btn.className='skill-btn'+(dis?' disabled':'')+(s.num=='4'?' ultimate':'');
   btn.onclick=()=>{if(!dis) useAction(idx);};
   const iconPath=s.icons&&s.icons[0]?s.icons[0]:'';
@@ -135,6 +120,7 @@ window.VB.renderSkillBar=renderSkillBar;
 
 async function useAction(idx){
  if(isBattleOver) return; if(cooldowns[idx]>0) return;
+ if(!heroModuleLoaded && !heroModuleFailed){ addLog('⏳ Механика героя ещё грузится, жди...','skill'); return; }
  // хук героя
  if(window.VOLAND_HERO_USE_SKILL){
    let handled = await window.VOLAND_HERO_USE_SKILL(idx, {cur, eDef, eDmg, eMaxHp, get eHp(){return eHp}, set eHp(v){eHp=v}, get hHp(){return hHp}, set hHp(v){hHp=v}, get hMana(){return hMana}, set hMana(v){hMana=v}, hMax, hMaxMana, enemyData, heroData, activeSkills, getMult, rand, addLog, updBars, cooldowns, turn, spellCount, enemyStun, setEnemyStun:v=>enemyStun=v, isBattleOver, allSkills});
@@ -154,6 +140,25 @@ async function useAction(idx){
   if(hMana<sk.mana){ addLog('⛔ Не хватает маны! Нужно '+sk.mana,'lose'); return; }
   if(idx===4 && typeof volandUpdateMissionStat==='function'){ try{ volandUpdateMissionStat('ult', null, 1); }catch(e){} }
   hMana-=sk.mana; cooldowns[idx]=sk.cd||1; if(cooldowns[idx]==0) cooldowns[idx]=1;
+  // Мульти-удар V2: каждый удар отдельно, свой крит, свой DEF, свой лог, стоп если враг умер.
+  let hits=sk.hits||1;
+  let perHitPct=sk.perHitPct||0;
+  if(hits>1 && perHitPct>0){
+    let total=0;
+    for(let hi=0; hi<hits; hi++){
+      let m=perHitPct/100;
+      let b=Math.max(15, Math.floor(cur.DMG*m) - eDef + rand(-10,10));
+      let c=Math.random()*100<cur.CRIT; if(c) b=Math.floor(b*1.4);
+      total+=b;
+      eHp=Math.max(0, eHp-b);
+      addLog('🔮 '+sk.name+' [удар '+(hi+1)+'/'+hits+' '+perHitPct+'%] → '+enemyData.name+' на '+b+(c?' CRIT!':''),'skill');
+      updBars();
+      if(eHp<=0){ addLog('✅ ПОБЕДА! '+enemyData.name+' убит!','win'); showVictory(); return; }
+    }
+    if(sk.hasStun){ enemyStun=1; addLog('💫 '+sk.name+' оглушает на 1 раунд!','skill'); }
+    addLog('🔮 '+sk.name+' итого '+total+' ['+hits+'x'+perHitPct+'%]','skill');
+    afterHeroAction(); return;
+  }
   let mult=getMult(sk, idx-1);
   let base=Math.floor(cur.DMG*mult);
   base=Math.max(15, base - eDef + rand(-10,10));
@@ -232,26 +237,8 @@ function showVictory(){
     if(typeof volandRollDrops==='function'){
       drop = volandRollDrops(enemyData) || drop;
     } else {
-      // Fallback, если drop.js не подключён: один ролл вручную
-      if(enemyData && Array.isArray(enemyData.drops)){
-        enemyData.drops.forEach(d=>{
-          if(Math.random() < (d.chance||0)) drop.resources.push({id:d.id, count:1});
-        });
-      }
-      // Зелья в fallback: шанс как у ресурсов, размер по стадии, XL не падает
-      {
-        let stageFallback = enemyData ? enemyData.stage : 1;
-        let sizeMapFallback = {1:'xs', 2:'s', 3:'m', 4:'l'};
-        let sizeFallback = sizeMapFallback[stageFallback] || 'xs';
-        let potionChanceFallback = 0.10;
-        if(enemyData && Array.isArray(enemyData.drops) && enemyData.drops.length>0) potionChanceFallback = enemyData.drops[0].chance || 0.10;
-        else if(enemyData && enemyData.boss) potionChanceFallback = 0.20;
-        if(Math.random() < potionChanceFallback){
-          let typesFallback = ['hp','mana','stam'];
-          let pickFallback = typesFallback[Math.floor(Math.random()*typesFallback.length)];
-          drop.potions.push({id:'potion-'+pickFallback+'-'+sizeFallback, count:1});
-        }
-      }
+      // Единственный ролл лута - в loot/drop.js (volandRollDrops). Второго ролла здесь нет.
+      drop = {resources:[], potions:[]};
     }
   }catch(e){ drop = {resources:[], potions:[]}; }
 
@@ -366,17 +353,32 @@ function showDefeat(){
 function tryNav(url){ if(!isBattleOver){ addLog('⛔ Нельзя выйти из боя! Закончи бой','lose'); return; } location.href=url; }
 window.tryNav=tryNav;
 
+let heroModuleLoaded=false, heroModuleFailed=false;
 function loadHeroModule(){
+ heroModuleLoaded=false; heroModuleFailed=false;
+ try{ window.VOLAND_HERO_USE_SKILL=null; window.VOLAND_HERO_ON_TURN_END=null; window.VOLAND_HERO_ON_ENEMY_TURN=null; window.VOLAND_HERO_ON_ENEMY_HIT=null; window.VOLAND_HERO_ON_ROUND_END=null; }catch(e){}
  const s=document.createElement('script');
  s.src='./assets/js/battle/heroes/'+heroId+'.js?v='+Date.now();
- s.onload=()=>{ addLog('✨ Механика героя '+heroData.n+' загружена из heroes/'+heroId+'.js?v=anti-cache','skill'); renderSkillBar(); };
- s.onerror=()=>{ addLog('ℹ️ Нет отдельной механики для '+heroId+' — используется база DMG-DEF','hit'); };
+ s.onload=()=>{
+   if(typeof window.VOLAND_HERO_USE_SKILL==='function'){
+     heroModuleLoaded=true;
+     addLog('✨ Механика героя '+heroData.n+' загружена из heroes/'+heroId+'.js','skill');
+   } else {
+     heroModuleFailed=true; heroModuleLoaded=true;
+     addLog('❌ Механика героя '+heroId+' не определилась после загрузки heroes/'+heroId+'.js — используется база DMG-DEF','lose');
+   }
+   renderSkillBar();
+ };
+ s.onerror=(e)=>{
+   heroModuleFailed=true; heroModuleLoaded=true;
+   addLog('❌ Ошибка загрузки heroes/'+heroId+'.js — механика не загружена, используется база DMG-DEF','lose');
+   renderSkillBar();
+ };
  document.head.appendChild(s);
 }
 
 updBars(); renderSkillBar();
 addLog('Бой: '+profileName+' ['+heroData.n+'] vs '+enemyData.name+' [LOC '+loc+' STAGE '+stage+']','');
-addLog('Моб UI: hp '+enemyData.hp+'% бар • Реал: DEF '+eDef+' DMG '+eDmg+' HP '+eMaxHp+' (ручками в engine.js)','skill');
 addLog('Формула: урон = DMG героя - DEF моба + rand, мин 10 • Мана +8 за ход','');
 addLog('Пассивка: '+passive.name+' — '+passive.desc,'skill');
 addLog('⬇️ Жми: Q=Атака, W,E,R,T=Скилы','');
