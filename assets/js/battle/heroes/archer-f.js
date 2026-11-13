@@ -45,10 +45,12 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
    let d = Math.max(15, Math.floor(cur.DMG*2.0) - effDefBase + rand(-10,10));
    if(isCrit) d=Math.floor(d*1.4);
    total+=d;
+   ctx.eHp=Math.max(0, ctx.eHp-d);
    addLog('🎯 '+T('Стрела ','Arrow ')+(i+1)+' → '+d+(isCrit?' CRIT!':''),'skill');
+   updBars();
    await new Promise(r=>setTimeout(r,60));
+   if(ctx.eHp<=0) break;
   }
-  ctx.eHp=Math.max(0, ctx.eHp-total);
   addLog('🎯 '+sk.name+' [200% x2] → '+total+' [400%]','skill');
   bleedTurns=2;
   bleedDmg=Math.floor(cur.DMG*0.25);
@@ -120,10 +122,11 @@ window.VOLAND_HERO_ON_TURN_END = function(ctx){
    let d=Math.max(10, Math.floor(cur.DMG*1.5) - effDef + rand(-6,6));
    if(Math.random()*100 < (cur.CRIT + (hawkEyeTurns>0?25:0))) d=Math.floor(d*1.4);
    total+=d;
+   ctx.eHp=Math.max(0, ctx.eHp-d);
    if(Math.random()*100 < 25) doStun=true;
+   if(ctx.eHp<=0) { stormLeft=0; break; }
   }
-  stormLeft-=arrows;
-  ctx.eHp=Math.max(0, ctx.eHp-total);
+  if(ctx.eHp>0) stormLeft-=arrows;
   addLog('🌪️ '+T('Буря ','Storm ')+arrows+' '+T('стрел','arrows')+' → '+total+' [150% x'+arrows+']'+(doStun?' + '+T('стан!','stun!'):''),'skill');
   if(doStun) window.VB._setStun=1;
   updBars();

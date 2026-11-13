@@ -91,8 +91,11 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
      bleedExtra = Math.max(5, Math.floor(cur.DMG*bMult) + rand(-5,5));
      if(isCrit1||isCrit2) bleedExtra = Math.floor(bleedExtra*1.2);
    }
-   let total = base1+base2+bleedExtra;
-   ctx.eHp = Math.max(0, ctx.eHp - total);
+   // Мульти-удар V2: каждый удар отдельно, стоп если враг умер
+   let total = 0;
+   ctx.eHp = Math.max(0, ctx.eHp - base1); total += base1;
+   if(ctx.eHp>0){ ctx.eHp = Math.max(0, ctx.eHp - base2); total += base2; }
+   if(ctx.eHp>0 && bleedExtra>0){ ctx.eHp = Math.max(0, ctx.eHp - bleedExtra); total += bleedExtra; }
    let heal = 0;
    if(low){
      heal = Math.floor(total*0.3);
@@ -131,8 +134,11 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
      if(low) bMult *= 1.5;
      bleedExtra = Math.max(5, Math.floor(cur.DMG*bMult) + rand(-5,5));
    }
-   let total = base1+base2+bleedExtra;
-   ctx.eHp = Math.max(0, ctx.eHp - total);
+   // Мульти-удар V2: каждый удар отдельно, стоп если враг умер
+   let total = 0;
+   ctx.eHp = Math.max(0, ctx.eHp - base1); total += base1;
+   if(ctx.eHp>0){ ctx.eHp = Math.max(0, ctx.eHp - base2); total += base2; }
+   if(ctx.eHp>0 && bleedExtra>0){ ctx.eHp = Math.max(0, ctx.eHp - bleedExtra); total += bleedExtra; }
    setEnemyStun(1);
    let heal = 0;
    if(low){

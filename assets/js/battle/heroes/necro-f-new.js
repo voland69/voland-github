@@ -56,8 +56,7 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
    ctx.hMana-=sk.mana; ctx.cooldowns[idx]=sk.cd||25;
    setEnemyStun(1);
    let total=0;
-   for(let i=0;i<5;i++){ let b=Math.floor(cur.DMG*2.0); b=Math.max(15, b - eDef + rand(-10,10)); if(Math.random()*100<cur.CRIT) b=Math.floor(b*1.4); total+=b; addLog('🌌 '+T('Душа ','Soul ')+(i+1)+' → '+b,'skill'); await new Promise(r=>setTimeout(r,80)); }
-   ctx.eHp=Math.max(0, ctx.eHp-total); 
+   for(let i=0;i<5;i++){ let b=Math.floor(cur.DMG*2.0); b=Math.max(15, b - eDef + rand(-10,10)); if(Math.random()*100<cur.CRIT) b=Math.floor(b*1.4); total+=b; ctx.eHp=Math.max(0, ctx.eHp-b); addLog('🌌 '+T('Душа ','Soul ')+(i+1)+' → '+b,'skill'); updBars(); await new Promise(r=>setTimeout(r,80)); if(ctx.eHp<=0) break; } 
    addLog('🌌 '+T('Закат ','Sunset ')+T('всего ','total ')+total+' ['+T('до ','up to ')+'1000%] + '+T('стан','stun'),'skill'); 
    spellCounter++;
    if(spellCounter%3===0){ spiritTurns=3; addLog('🔮 '+SN('Шепот Аметиста')+': '+T('дух ','spirit ')+'3 '+T('раунда','rounds'),'crit'); }

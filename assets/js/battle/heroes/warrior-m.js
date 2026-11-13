@@ -95,14 +95,14 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
    ctx.eHp = Math.max(0, ctx.eHp - aoe);
    addLog('👑 '+SN('Аватар Империи')+' AOE '+T('всем ','to all ')+aoe+' [200%]'+(isCrit?' CRIT':''),'skill');
    avatarTurns = 2; // неуязв 2р
-   avatarDmgTurns = 3; // +300% 3р
+   avatarDmgTurns = 3; // +200% 3р
    if(avatarHPBonus==0){
      avatarHPBonus = Math.floor(window.VB.hMax*0.5);
      window.VB.hMax = window.VB.hMax + avatarHPBonus;
      window.VB.hHp = window.VB.hHp + avatarHPBonus;
      addLog('👑 +50% HP +'+avatarHPBonus+' → HP '+window.VB.hHp+'/'+window.VB.hMax+' '+T('неуязв','invuln')+' 2'+T('р','r')+' +200% '+T('урон','damage')+' 3'+T('р','r'),'skill');
    } else {
-     addLog('👑 '+T('Аватар уже активен ','Avatar already active ')+T('неуязв','invuln')+' '+avatarTurns+T('р','r')+' +300% '+avatarDmgTurns+T('р','r'),'skill');
+     addLog('👑 '+T('Аватар уже активен ','Avatar already active ')+T('неуязв','invuln')+' '+avatarTurns+T('р','r')+' +200% '+avatarDmgTurns+T('р','r'),'skill');
    }
    updBars(); return true;
  }
