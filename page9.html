@@ -13,7 +13,7 @@
   display:flex !important;
   position:fixed !important;
   inset:0 !important;
-}.right{width:200px;min-width:200px;background:rgba(14,20,26,1);border-left:1px solid rgba(30,42,50,.5);display:flex;flex-direction:column;margin-top:48px;height:calc(100% - 48px)}.chat-header{padding:12px;border-bottom:1px solid #1e2a32;display:flex;align-items:center;gap:8px;background:#141c24}.chat-title{font-size:9px;letter-spacing:.2em;color:#6a7a8a;font-family:'JetBrains Mono',monospace}.chat-body{flex:1;padding:10px;overflow:auto;display:flex;flex-direction:column;gap:8px}.chat-input{padding:8px;border-top:1px solid #1e2a32;display:flex;gap:6px;background:#12181e}.chat-input input{flex:1;background:#0a0e14;border:1px solid #1e2a32;border-radius:6px;padding:8px;font-size:11px;color:#d8d2b8}.chat-input button{width:32px;background:#e6d5a0;border:none;border-radius:6px;cursor:pointer;font-weight:800}.dot{width:8px;height:8px;border-radius:50%;background:#3ad080;box-shadow:0 0 6px #3ad080}.sys-msg{background:#1a242f;border-left:2px solid #d0b040;padding:8px;font-size:9px;color:#9a9a7a;line-height:1.3;border-radius:0 6px 6px 0}</style>
+}</style>
 </head>
 <body>
 <div class="bg"></div>
@@ -23,13 +23,7 @@
 <h1 style="font:900 24px 'Cinzel Decorative';color:#e6d5a0">МИССИИ • 51</h1>
 <div id="missGrid" class="miss-grid"></div>
 </div>
-<div class="right">
-<div class="chat-header"><div class="dot"></div><div class="chat-title">CHAT</div></div>
-<div class="chat-body" id="chatBody"><div class="sys-msg">Система: Общий чат — заглушка. Мультиплеер будет с сервером.</div></div>
-<div class="chat-input"><input id="chatIn" placeholder="..."><button id="chatBtn">▶</button></div>
 </div>
-</div>
-<script>(function(){var b=document.getElementById('chatBtn'),i=document.getElementById('chatIn'),body=document.getElementById('chatBody');if(!b||!i||!body)return;function send(){var v=i.value.trim();if(!v)return;var d=document.createElement('div');d.className='sys-msg';d.textContent='Ты: '+v;body.appendChild(d);body.scrollTop=9999;i.value='';}b.onclick=send;i.addEventListener('keydown',function(e){if(e.key==='Enter')send();});})();</script>
 <script src="./assets/js/lang.js"></script>
 <script src="./assets/js/config.js"></script>
 <script src="./assets/js/db/heroes.js"></script>
@@ -156,7 +150,7 @@ function render(){
       let col = tc==='green' ? '#3ad080' : tc==='blue' ? '#6ab0ff' : tc==='red' ? '#e05050' : tc==='yellow' ? '#e6d5a0' : '#e6d5a0';
       titleHtml = `<div style="color:${col};font-size:10px;margin-top:4px;text-shadow:0 0 8px ${col}">👑 ${volandT('ТИТУЛ', 'TITLE')}: ${volandMissionTitle(m.reward.title)}</div>`;
     }
-    let html=`<div class="miss-top"><div class="miss-icon">${m.icon}</div><div class="miss-title">${volandMissionName(m)}</div></div><div class="miss-desc">${volandMissionDesc(m)}</div><div class="miss-reward">💰 ${m.reward.gold} • XP ${m.reward.xp}</div>${titleHtml}`;
+    let html=`<div class="miss-top"><div class="miss-icon">${m.icon}</div><div class="miss-title">${volandMissionName(m)}</div></div><div class="miss-desc">${volandMissionDesc(m)}</div><div class="miss-reward">💰 ${Math.round(m.reward.gold*((typeof volandGetGuildMultiplier==='function'?volandGetGuildMultiplier().goldMissions:1)||1))} • XP ${Math.round(m.reward.xp*((typeof volandGetGuildMultiplier==='function'?volandGetGuildMultiplier().xp:1)||1))}</div>${titleHtml}`;
     if(!done){
       html+=`<div class="miss-progress"><div class="miss-progress-fill" style="width:${pct}%"></div></div><div class="miss-progress-text">${prog}/${target} (${pct}%)</div>`;
     }
