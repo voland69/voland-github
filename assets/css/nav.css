@@ -1,0 +1,13 @@
+/* VOLAND NAV - единый навбар для page3-page14. Канон, копий в страницах нет. */
+.left-nav{width:60px;min-width:60px;max-width:60px;flex:0 0 60px;background:rgba(18,24,30,.94);border-right:1px solid #2a3a4a;display:flex;flex-direction:column;justify-content:space-between;align-items:center;height:100vh;height:100dvh;overflow:hidden;overflow-y:hidden;overflow-x:visible;scrollbar-width:none;-ms-overflow-style:none;padding:6px 4px;gap:0;position:relative;z-index:20}
+.left-nav::-webkit-scrollbar{display:none;width:0;height:0}
+.nav-top{display:flex;flex-direction:column;gap:4px;align-items:center;width:100%;overflow:hidden}
+.nav-bottom{margin-top:auto;padding-top:8px;border-top:1px solid rgba(255,255,255,.08);width:100%;display:flex;flex-direction:column;align-items:center;gap:4px;overflow:hidden}
+.nav-group{cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:0;width:100%;position:relative;overflow:visible}
+.nav-item{width:52px;height:52px;min-width:52px;min-height:52px;background:transparent;border:1px solid transparent;border-radius:9px;display:flex;align-items:center;justify-content:center;opacity:.75;transition:.2s;flex-shrink:0;padding:0;overflow:hidden}
+.nav-item.active{border-color:#e6d5a0;opacity:1;background:transparent;box-shadow:0 0 10px rgba(230,213,160,.3)}
+.nav-item:hover{opacity:1;border-color:#e6d5a0}
+.nav-item img{background:transparent;width:100%;height:100%;object-fit:cover;display:block;border-radius:8px}
+.nav-label{position:fixed;left:64px;background:rgba(20,26,34,.96);border:1px solid #e6d5a0;color:#e6d5a0;padding:5px 9px;border-radius:6px;font:700 8px 'JetBrains Mono',monospace;letter-spacing:.15em;white-space:nowrap;opacity:0;pointer-events:none;transition:.18s;z-index:99999;box-shadow:0 4px 16px rgba(0,0,0,.5)}
+.nav-group:hover .nav-label{opacity:1}
+.nav-group.active .nav-label{color:#e6d5a0}
