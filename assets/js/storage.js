@@ -203,8 +203,10 @@ function volandApplyDebuff(effective, debuffPct){
 }
 // ===== GUILD BONUS v1 - читается из voland_v1_guild, работает на всех pages =====
 function volandGetGuildUpgrades(){ try{ var g=JSON.parse(localStorage.getItem('voland_v1_guild')||'null'); if(g&&g.upgrades) return g.upgrades; }catch(e){} return {}; }
-function volandGetGuildBonus(){ var u=volandGetGuildUpgrades(); return { HP:(u.hp||0)*50, DMG:(u.power||0)*10, DEF:(u.def||0)*10, CRIT:(u.crit||0)*1, STAM:(u.stam||0)*10, TREASURY:(u.treasury||0)*10, XP:(u.xp||0)*5, LOOT:(u.loot||0)*2, REGEN:(u.regen||0)*5, DISCOUNT:(u.discount||0)*5, CRAFT:(u.craft||0)*5 }; }
-function volandGetGuildMultiplier(){ var b=volandGetGuildBonus(); return { goldMissions:1+b.TREASURY/100, xp:1+b.XP/100, loot:1+b.LOOT/100, market:1-b.DISCOUNT/100, craft:1-b.CRAFT/100, regen:1+b.REGEN/100 }; }
+function volandGetGuildBonus(){ var u=volandGetGuildUpgrades(); return { HP:(u.hp||0)*50, DMG:(u.power||0)*10, DEF:(u.def||0)*10, CRIT:(u.crit||0)*1, STAM:(u.stam||0)*10, TREASURY:(u.treasury||0)*10, XP:(u.xp||0)*5, LOOT:(u.loot||0)*1, GOLD_MOBS:(u.loot||0)*10, REGEN:(u.regen||0)*5, DISCOUNT:(u.discount||0)*5, CRAFT:(u.craft||0)*5 }; }
+function volandGetGuildMultiplier(){ var b=volandGetGuildBonus(); return { goldMissions:1+b.TREASURY/100, xp:1+b.XP/100, loot:1+b.LOOT/100, goldMobs:1+(b.GOLD_MOBS||0)/100, market:1-b.DISCOUNT/100, craft:1-b.CRAFT/100, regen:1+b.REGEN/100 }; }
+// GUILD XP: 1 mob = 1 XP guild. Called from volandAddKill (mobs only, PvP does not call it).
+function volandAddGuildXp(amount){ try{ var add=parseInt(amount)||0; if(add<=0) return false; var g=JSON.parse(localStorage.getItem('voland_v1_guild')||'null'); if(!g||!g.name||!g.tag) return false; if(g.xp==null) g.xp=0; if(!g.xpNeed) g.xpNeed=2000; if(g.level==null) g.level=1; if(g.points==null) g.points=0; g.xp+=add; while((g.xp||0)>=(g.xpNeed||2000)){ g.xp-=(g.xpNeed||2000); g.level=(g.level||1)+1; g.points=(g.points||0)+1; g.xpNeed=Math.round((g.xpNeed||2000)*1.1); } localStorage.setItem('voland_v1_guild', JSON.stringify(g)); return true; }catch(e){ return false; } }
 function volandGetCraftDiscount(){ try{ if(typeof volandGetGuildBonus==='function'){ var b=volandGetGuildBonus(); return b.CRAFT||0; } var g=JSON.parse(localStorage.getItem('voland_v1_guild')||'null'); if(g&&g.upgrades) return (g.upgrades.craft||0)*5; }catch(e){} return 0; }
 function volandGetDiscountedUpgradeGold(baseGold){ var d=volandGetCraftDiscount(); if(!d) return baseGold; return Math.max(1, Math.round(baseGold*(1-d/100))); }
 // ===== GUILD DISCOUNT - канон для магазина (page10) =====
@@ -415,7 +417,7 @@ function volandGetKills(){ try{ let cur=volandGetCurrentSave(); if(cur) return c
 function volandGetQuests(){ try{ let cur=volandGetCurrentSave(); if(cur) return {done: cur.quests||0, total: cur.quests_total||40}; return {done: parseInt(localStorage.getItem(VOLAND_KEYS.quests)||'0'), total: parseInt(localStorage.getItem(VOLAND_KEYS.quests_total)||'40')}; }catch(e){return {done:0,total:40};} }
 function volandGetPvp(){ try{ let cur=volandGetCurrentSave(); if(cur) return cur.pvp||0; return parseInt(localStorage.getItem(VOLAND_KEYS.pvp)||'0'); }catch(e){return 0;} }
 
-function volandAddKill(){ try{ let saves=volandGetSaves(); let idx=volandGetActiveIndex(); if(saves[idx]){ saves[idx].kills=(saves[idx].kills||0)+1; volandSaveSaves(saves); try{ localStorage.setItem('voland_v1_guild_kills_last_total', String(saves[idx].kills)); }catch(e){} } }catch(e){} try{ var gk=[]; try{ gk=JSON.parse(localStorage.getItem('voland_v1_guild_kills')||'[]'); }catch(e){ gk=[]; } gk.push({t:Date.now()}); if(gk.length>2000) gk=gk.slice(-2000); localStorage.setItem('voland_v1_guild_kills', JSON.stringify(gk)); }catch(e){} }
+function volandAddKill(){ try{ let saves=volandGetSaves(); let idx=volandGetActiveIndex(); if(saves[idx]){ saves[idx].kills=(saves[idx].kills||0)+1; volandSaveSaves(saves); try{ localStorage.setItem('voland_v1_guild_kills_last_total', String(saves[idx].kills)); }catch(e){} } }catch(e){} try{ var gk=[]; try{ gk=JSON.parse(localStorage.getItem('voland_v1_guild_kills')||'[]'); }catch(e){ gk=[]; } gk.push({t:Date.now()}); if(gk.length>2000) gk=gk.slice(-2000); localStorage.setItem('voland_v1_guild_kills', JSON.stringify(gk)); }catch(e){} try{ if(typeof volandAddGuildXp==='function') volandAddGuildXp(1); }catch(e){} }
 
 
 function volandGetMissionStats(){
@@ -615,8 +617,9 @@ function volandClaimMission(id){
   if(prog < m.target) return false;
   // give rewards
   if(m.reward){
-    if(m.reward.gold && typeof volandAddGold==='function') volandAddGold(m.reward.gold);
-    if(m.reward.xp && typeof volandAddXp==='function') volandAddXp(m.reward.xp);
+    var mult={goldMissions:1, xp:1}; try{ if(typeof volandGetGuildMultiplier==='function') mult=volandGetGuildMultiplier(); }catch(e){}
+    if(m.reward.gold && typeof volandAddGold==='function') volandAddGold(Math.round(m.reward.gold*(mult.goldMissions||1)));
+    if(m.reward.xp && typeof volandAddXp==='function') volandAddXp(Math.round(m.reward.xp*(mult.xp||1)));
   }
   done.push(id);
   volandSaveMissionsDone(done);
