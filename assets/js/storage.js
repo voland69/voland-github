@@ -1095,6 +1095,8 @@ function volandUpgradeItem(itemId){
 // Rates: STAMINA 2 per 3 min = 1 per 90 sec, HP 10 per min = 1 per 6 sec, MANA 3 per min = 1 per 20 sec
 const VOLAND_STAMINA_MAX = 100;
 const VOLAND_STAMINA_REGEN_MS = 90 * 1000; // 90 sec per 1 stamina
+// GUILD REGEN: +5% per lvl -> interval = 90s / guildMult. Buff potion +1000% -> x11. If no guild, 90s.
+function volandGetStaminaRegenMs(){ try{ var base=VOLAND_STAMINA_REGEN_MS; var mult=1; try{ if(typeof volandGetGuildMultiplier==='function') mult*=(volandGetGuildMultiplier().regen||1); }catch(e){} try{ if(typeof volandGetStaminaRegenBoost==='function'){ var b=volandGetStaminaRegenBoost(); if(b>0) mult*=(1+b/100); } }catch(e){} if(!(mult>0)) mult=1; return Math.max(1000, Math.round(base/mult)); }catch(e){ return VOLAND_STAMINA_REGEN_MS; } }
 const VOLAND_HP_REGEN_MS = 6 * 1000; // 6 sec per 1 HP (10 per min)
 const VOLAND_MANA_REGEN_MS = 20 * 1000; // 20 sec per 1 MANA (3 per min)
 
@@ -1156,10 +1158,11 @@ function volandGetStamina(){
     let now = Date.now();
     let elapsed = now - data.last;
     if(elapsed < 0) elapsed = 0;
-    let regen = Math.floor(elapsed / VOLAND_STAMINA_REGEN_MS);
+    let _regenMs=VOLAND_STAMINA_REGEN_MS; try{ _regenMs=volandGetStaminaRegenMs(); }catch(e){}
+    let regen = Math.floor(elapsed / _regenMs);
     if(regen > 0){
       let newCurrent = Math.min(_max, data.current + regen);
-      let newLast = data.last + regen * VOLAND_STAMINA_REGEN_MS;
+      let newLast = data.last + regen * _regenMs;
       // if capped at max, reset last to now to avoid overflow
       if(newCurrent >= _max){
         newCurrent = _max;
@@ -1444,7 +1447,8 @@ function volandGetStaminaInfo(){
   let data = volandGetStaminaData();
   let now = Date.now();
   let elapsed = now - data.last;
-  let toNext = VOLAND_STAMINA_REGEN_MS - (elapsed % VOLAND_STAMINA_REGEN_MS);
+  let _regenMs2=VOLAND_STAMINA_REGEN_MS; try{ _regenMs2=volandGetStaminaRegenMs(); }catch(e){}
+  let toNext = _regenMs2 - (elapsed % _regenMs2);
   if(cur >= max) toNext = 0;
   return {cur, max, toNext, pct: Math.round(cur/max*100)};
 }
