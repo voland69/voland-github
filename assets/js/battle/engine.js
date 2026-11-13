@@ -222,12 +222,13 @@ function endRound(){
  addLog('--- Ход '+turn+': твой ход ---','');
 }
 
-
 function showVictory(){
   isBattleOver=true;
   // Награды ТОЛЬКО из VOLAND_ENEMIES (enemies.js).
   let goldReward = (enemyData && enemyData.gold) ? parseInt(enemyData.gold) : 5;
   let xpReward = (enemyData && enemyData.xp) ? parseInt(enemyData.xp) : 80;
+  // GUILD: DOBYCHA (mobs) - gold, OPYT - XP. KAZNA does NOT apply to mobs, only missions.
+  try{ var _gb=(typeof volandGetGuildBonus==='function') ? volandGetGuildBonus() : {}; var _goldMobsPct=_gb.GOLD_MOBS||0; var _xpPct=_gb.XP||0; if(_goldMobsPct>0) goldReward=Math.round(goldReward*(1+_goldMobsPct/100)); if(_xpPct>0) xpReward=Math.round(xpReward*(1+_xpPct/100)); }catch(e){}
 
   // ЕДИНЫЙ РОЛЛ ЛУТА — один раз на всю победу.
   // То, что выпало здесь, и показывается в модалке, и выдаётся в сумку.
@@ -241,6 +242,8 @@ function showVictory(){
       drop = {resources:[], potions:[]};
     }
   }catch(e){ drop = {resources:[], potions:[]}; }
+  // GUILD DOBYCHA: +1% resources from mobs per level - each dropped resource has LOOT% chance for +1 extra copy
+  try{ var _lootPct=(typeof volandGetGuildBonus==='function') ? (volandGetGuildBonus().LOOT||0) : 0; if(_lootPct>0 && drop && Array.isArray(drop.resources)){ drop.resources.forEach(function(r){ if(Math.random() < _lootPct/100) r.count=(r.count||1)+1; }); } }catch(e){}
 
   // Показ в модалке — из ТОГО ЖЕ drop, что выдаём. Каждый предмет — в своём окошке.
   try{
@@ -318,7 +321,6 @@ function showVictory(){
   }catch(e){  }
 }
 
-
 function showDefeat(){
   isBattleOver=true;
   // SAVE HP/MANA even on defeat - stays low then regens
@@ -348,7 +350,6 @@ function showDefeat(){
   document.getElementById('victoryModal').classList.add('show');
   renderSkillBar();
 }
-
 
 function tryNav(url){ if(!isBattleOver){ addLog('⛔ Нельзя выйти из боя! Закончи бой','lose'); return; } location.href=url; }
 window.tryNav=tryNav;
