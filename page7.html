@@ -5,177 +5,21 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>VOLAND - LOCATIONS</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
-*{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,sans-serif;overflow:hidden}
-.bg{position:fixed;inset:0;z-index:0}.bg img{width:100%;height:100%;object-fit:cover;opacity:.9}
-.bg:after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.45)}
-.wrap{position:fixed;inset:0;display:flex;z-index:2}
-.left-nav{width:68px;min-width:68px;background:rgba(18,24,30,.35);border-right:1px solid rgba(30,42,50,.5);display:flex;flex-direction:column;align-items:center;padding:12px 6px;gap:18px}
-.nav-item{width:48px;height:48px;background:#1a252f;border:1px solid #2a3a4a;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;opacity:.6;transition:.2s}
-.nav-item.active{background:#1e2f3e;border-color:#e6d5a0;opacity:1}
-.nav-label{font-size:7px;letter-spacing:.15em;color:#6a7a8a;margin-top:4px;text-align:center;font-family:'JetBrains Mono',monospace}
-.center{flex:1;display:flex;flex-direction:column;padding:20px 16px;overflow:auto;background:rgba(16,22,30,.18);width:100%;max-width:100%}
-.title{font:900 34px 'Cinzel Decorative',serif;letter-spacing:.15em;color:#e6d5a0;line-height:1}
-.title span{display:block;font:400 10px 'JetBrains Mono',monospace;letter-spacing:.35em;color:#7a90a8;margin-top:8px}
-.stages{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;max-width:100%;width:100%;margin-top:20px}
-.card{position:relative;background:rgba(20,26,34,.88);border:1px solid rgba(122,144,168,.22);border-radius:12px;padding:0;text-align:center;cursor:pointer;transition:.25s;overflow:hidden;min-height:260px;height:300px;display:flex;flex-direction:column}
-.card:hover{transform:translateY(-4px);border-color:#e6d5a0;box-shadow:0 12px 28px rgba(0,0,0,.5),0 0 16px rgba(230,213,160,.18)}
-.card.boss{border-color:rgba(224,80,80,.45)}
-.card.boss-limit{opacity:0.55;filter:grayscale(0.5)}
-
-.boss-badge{position:absolute;top:8px;right:8px;background:rgba(180,30,30,.9);color:#fff;font:900 9px 'JetBrains Mono',monospace;letter-spacing:.15em;padding:4px 7px;border-radius:4px;z-index:3;box-shadow:0 2px 8px rgba(0,0,0,.5);border:1px solid rgba(255,100,100,.5)}
-.card .icon{flex:1;width:100%;height:100%;margin:0;display:flex;align-items:center;justify-content:center;position:relative;padding:0;overflow:hidden}
-.card .icon img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block}
-.card .name{position:absolute;bottom:0;left:0;right:0;padding:14px 8px 10px;background:linear-gradient(transparent,rgba(0,0,0,.9));font:700 12px Inter,sans-serif;color:#e6d5a0;text-transform:uppercase;z-index:2;letter-spacing:.05em;line-height:1.3}
-.card .eng,.card .desc,.card .lvl,.card .track,.card .hint,.card .num{display:none}
-.right{width:200px;min-width:200px;background:rgba(14,20,26,.92);border-left:1px solid rgba(30,42,50,.5);display:flex;flex-direction:column} #volandLangToggle{right:212px !important;top:10px !important} @media(max-width:900px){ #volandLangToggle{right:10px !important} }
-.chat-head{padding:12px;border-bottom:1px solid #1e2a32;display:flex;align-items:center;gap:8px}
-.dot{width:8px;height:8px;border-radius:50%;background:#3ad080;box-shadow:0 0 6px #3ad080}
-.chat-title{font-size:9px;letter-spacing:.2em;color:#6a7a8a;font-family:'JetBrains Mono',monospace}
-.chat-body{flex:1;padding:12px;overflow:auto;display:flex;flex-direction:column;gap:10px}
-.sys{font:9px 'JetBrains Mono',monospace;color:#7a90a8;background:rgba(122,144,168,.08);border-radius:6px;padding:8px;line-height:1.4}
-@media(max-width:900px){.stages{grid-template-columns:1fr 1fr}.right{display:none}}
-
-.main,.center,.center-col,.hero-panel{
+<link rel="stylesheet" href="./assets/css/nav.css">
+<style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,sans-serif;overflow:hidden}.bg{position:fixed;inset:0;z-index:0}.bg img{width:100%;height:100%;object-fit:cover;opacity:.9}.bg:after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.45)}.wrap{position:fixed;inset:0;display:flex;z-index:2}.center{flex:1;display:flex;flex-direction:column;padding:20px 16px;overflow:auto;background:rgba(16,22,30,.18);width:100%;max-width:100%}.title{font:900 34px 'Cinzel Decorative',serif;letter-spacing:.15em;color:#e6d5a0;line-height:1}.title span{display:block;font:400 10px 'JetBrains Mono',monospace;letter-spacing:.35em;color:#7a90a8;margin-top:8px}.stages{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;max-width:100%;width:100%;margin-top:20px}.card{position:relative;background:rgba(20,26,34,.88);border:1px solid rgba(122,144,168,.22);border-radius:12px;padding:0;text-align:center;cursor:pointer;transition:.25s;overflow:hidden;min-height:260px;height:300px;display:flex;flex-direction:column}.card:hover{transform:translateY(-4px);border-color:#e6d5a0;box-shadow:0 12px 28px rgba(0,0,0,.5),0 0 16px rgba(230,213,160,.18)}.card.boss{border-color:rgba(224,80,80,.45)}.card.boss-limit{opacity:0.55;filter:grayscale(0.5)}.boss-badge{position:absolute;top:8px;right:8px;background:rgba(180,30,30,.9);color:#fff;font:900 9px 'JetBrains Mono',monospace;letter-spacing:.15em;padding:4px 7px;border-radius:4px;z-index:3;box-shadow:0 2px 8px rgba(0,0,0,.5);border:1px solid rgba(255,100,100,.5)}.card .icon{flex:1;width:100%;height:100%;margin:0;display:flex;align-items:center;justify-content:center;position:relative;padding:0;overflow:hidden}.card .icon img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block}.card .name{position:absolute;bottom:0;left:0;right:0;padding:14px 8px 10px;background:linear-gradient(transparent,rgba(0,0,0,.9));font:700 12px Inter,sans-serif;color:#e6d5a0;text-transform:uppercase;z-index:2;letter-spacing:.05em;line-height:1.3}.card .eng,.card .desc,.card .lvl,.card .track,.card .hint,.card .num{display:none}.right{width:200px;min-width:200px;background:rgba(14,20,26,.92);border-left:1px solid rgba(30,42,50,.5);display:flex;flex-direction:column}#volandLangToggle{right:212px !important;top:10px !important}@media(max-width:900px){#volandLangToggle{right:10px !important}}.chat-head{padding:12px;border-bottom:1px solid #1e2a32;display:flex;align-items:center;gap:8px}.dot{width:8px;height:8px;border-radius:50%;background:#3ad080;box-shadow:0 0 6px #3ad080}.chat-title{font-size:9px;letter-spacing:.2em;color:#6a7a8a;font-family:'JetBrains Mono',monospace}.chat-body{flex:1;padding:12px;overflow:auto;display:flex;flex-direction:column;gap:10px}.sys{font:9px 'JetBrains Mono',monospace;color:#7a90a8;background:rgba(122,144,168,.08);border-radius:6px;padding:8px;line-height:1.4}@media(max-width:900px){.stages{grid-template-columns:1fr 1fr}.right{display:none}}.main,.center,.center-col,.hero-panel{
   position:relative !important;
   z-index:1 !important;
-}
-
-
-/* VOLAND NAV FIX - 60px / 52x52 / gap 4 / no scroll / hover label */
-.left-nav{
-  width:60px !important;
-  min-width:60px !important;
-  max-width:60px !important;
-  flex:0 0 60px !important;
-  background:rgba(18,24,30,.94) !important;
-  border-right:1px solid #2a3a4a !important;
-  display:flex !important;
-  flex-direction:column !important;
-  justify-content:flex-start !important;
-  align-items:center !important;
-  height:100vh !important;
-  height:100dvh !important;
-  padding:6px 4px !important;
-  gap:0 !important;
-  overflow:visible !important;
-  position:relative !important;
-  z-index:20 !important;
-  backdrop-filter:blur(6px) !important;
-}
-.nav-top{
-  display:flex !important;
-  flex-direction:column !important;
-  gap:4px !important;
-  align-items:center !important;
-  width:100% !important;
-}
-.nav-bottom{
-  margin-top:auto !important;
-  padding-top:8px !important;
-  border-top:1px solid rgba(255,255,255,.08) !important;
-  width:100% !important;
-  display:flex !important;
-  flex-direction:column !important;
-  align-items:center !important;
-  gap:4px !important;
-}
-.nav-group{
-  cursor:pointer !important;
-  display:flex !important;
-  flex-direction:column !important;
-  align-items:center !important;
-  gap:0 !important;
-  width:100% !important;
-  position:relative !important;
-}
-.nav-item{
-  width:52px !important;
-  height:52px !important;
-  min-width:52px !important;
-  min-height:52px !important;
-  background:transparent !important;
-  border:1px solid transparent !important;
-  border-radius:9px !important;
-  display:flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-  opacity:.75 !important;
-  transition:.2s !important;
-  flex-shrink:0 !important;
-  padding:0 !important;
-  overflow:hidden !important;
-}
-.nav-item.active{
-  border-color:#e6d5a0 !important;
-  opacity:1 !important;
-  background:transparent !important;
-  box-shadow:0 0 10px rgba(230,213,160,.3) !important;
-}
-.nav-item:hover{
-  opacity:1 !important;
-  border-color:#e6d5a0 !important;
-}
-.nav-item img{background:transparent !important;
-  width:100% !important;
-  height:100% !important;
-  object-fit:cover !important;
-  display:block !important;
-  border-radius:8px !important;
-}
-.nav-label{
-  position:absolute !important;
-  left:64px !important;
-  top:50% !important;
-  transform:translateY(-50%) translateX(-6px) !important;
-  background:rgba(20,26,34,.96) !important;
-  border:1px solid #e6d5a0 !important;
-  color:#e6d5a0 !important;
-  padding:5px 9px !important;
-  border-radius:6px !important;
-  font:700 8px 'JetBrains Mono',monospace !important;
-  letter-spacing:.15em !important;
-  white-space:nowrap !important;
-  opacity:0 !important;
-  pointer-events:none !important;
-  transition:.18s !important;
-  z-index:30 !important;
-  box-shadow:0 4px 16px rgba(0,0,0,.5) !important;
-}
-.nav-group:hover .nav-label{
-  opacity:1 !important;
-  transform:translateY(-50%) translateX(0) !important;
-}
-.wrap{
+}.wrap{
   display:flex !important;
   position:fixed !important;
   inset:0 !important;
-}
-
-</style>
+}</style>
 </head>
 <body>
 <div class="bg"><img id="bgImg" src="./assets/enemies/bg-desert-dark.jpg" onerror="this.src='./assets/heroes/bg-battlefield.webp'"></div>
 <div class="wrap">
-<div class="left-nav">
-  <div class="nav-top">
-    <div class="nav-group " onclick="location.href='./page3.html'"><div class="nav-item " data-page="page3"><img src="./assets/ui/nav/hero.webp" alt="HERO"></div><div class="nav-label">HERO</div></div>
-    <div class="nav-group " onclick="location.href='./page4.html'"><div class="nav-item " data-page="page4"><img src="./assets/ui/nav/bag.webp" alt="BAG"></div><div class="nav-label">BAG</div></div>
-    <div class="nav-group " onclick="location.href='./page5.html'"><div class="nav-item " data-page="page5"><img src="./assets/ui/nav/skills.webp" alt="SKILLS"></div><div class="nav-label">SKILLS</div></div>
-    <div class="nav-group active" onclick="location.href='./page6.html'"><div class="nav-item active" data-page="page6"><img src="./assets/ui/nav/battle.webp" alt="BATTLE"></div><div class="nav-label">BATTLE</div></div>
-    <div class="nav-group " onclick="location.href='./page9.html'"><div class="nav-item " data-page="page9"><img src="./assets/ui/nav/missions.webp" alt="MISSIONS"></div><div class="nav-label">MISSIONS</div></div>
-    <div class="nav-group " onclick="location.href='./page10.html'"><div class="nav-item " data-page="page10"><img src="./assets/ui/nav/market.webp" alt="MARKET"></div><div class="nav-label">MARKET</div></div>
-    <div class="nav-group " onclick="location.href='./page11.html'"><div class="nav-item " data-page="page11"><img src="./assets/ui/nav/pvp.webp" alt="PVP"></div><div class="nav-label">PVP</div></div>
-    <div class="nav-group " onclick="location.href='./page12.html'"><div class="nav-item " data-page="page12"><img src="./assets/ui/nav/workshop.webp" alt="WORKSHOP"></div><div class="nav-label">WORKSHOP</div></div>
-    <div class="nav-group " onclick="location.href='./page13.html'"><div class="nav-item " data-page="page13"><img src="./assets/ui/nav/pass.webp" alt="PASS"></div><div class="nav-label">PASS</div></div>
-    <div class="nav-group " onclick="location.href='./page14.html'"><div class="nav-item " data-page="page14"><img src="./assets/ui/nav/guilds.webp" alt="GUILD"></div><div class="nav-label">GUILD</div></div>
-  </div>
-  <div class="nav-bottom">
-    <div class="nav-group" onclick="location.href='./index.html'"><div class="nav-item" data-page="index"><img src="./assets/ui/nav/start.webp" alt="START"></div><div class="nav-label">START</div></div>
-  </div>
-</div>
+<div class="left-nav" id="voland-nav"></div>
 <div class="center">
 <div class="title" id="locTitle">ПУСТЫНЯ</div>
 <div id="staminaDisplay" style="margin-top:12px;font:700 10px JetBrains Mono,monospace;color:#3ad080;text-align:center"></div><div class="stages" id="stagesGrid"></div>
@@ -201,66 +45,17 @@ const p=new URLSearchParams(location.search);
 let locId=parseInt(p.get('loc')||localStorage.getItem('voland_location')||'1');
 let enemies;
 let locData;
-const DESERT_FALLBACK = [
-   {stage:1, name:'ПЕСЧАНАЯ МЫШЬ', eng:'Sand Gerbil', icon:'🐭', img:'./assets/enemies/sand-gerbil.jpg', desc:'Грызун пустыни', lvl:'LVL 1', hp:40, hpColor:'#3ad080'},
-   {stage:2, name:'ПУСТЫННЫЙ СКОРПИОН', eng:'Desert Scorpion', icon:'🦂', img:'./assets/enemies/desert-scorpion.jpg', desc:'Ядовитое жало', lvl:'LVL 3', hp:65, hpColor:'#d0b040'},
-   {stage:3, name:'ЗМЕЯ ТРЕЩЕТКА', eng:'Rattlesnake', icon:'🐍', img:'./assets/enemies/rattlesnake.jpg', desc:'Ядовитый укус', lvl:'LVL 5', hp:85, hpColor:'#e05050'},
-   {stage:4, name:'ТИТАН ДЮН', eng:'Dune Tyrant - BOSS', icon:'👹', img:'./assets/enemies/dune-tyrant.jpg', desc:'Босс Пустыни', lvl:'BOSS LVL 7', hp:100, hpColor:'#e6d5a0', boss:true},
-];
-const FOREST_FALLBACK = [
-   {stage:1, name:'ЛЕСНОЙ ПРИЗРАК', eng:'Forest Wraith', icon:'👻', img:'./assets/enemies/forest-wraith.webp', desc:'Призрак леса', lvl:'LVL 2', hp:50, hpColor:'#6ab0ff'},
-   {stage:2, name:'ТЕНЕВОЙ ВОЛК', eng:'Shadow Wolf', icon:'🐺', img:'./assets/enemies/shadow-wolf.webp', desc:'Прыжок из тени', lvl:'LVL 4', hp:70, hpColor:'#a0a0ff'},
-   {stage:3, name:'МШИСТЫЙ ГОЛЕМ', eng:'Moss Golem', icon:'🪨', img:'./assets/enemies/moss-golem.webp', desc:'Каменная кожа', lvl:'LVL 6', hp:85, hpColor:'#3ad080'},
-   {stage:4, name:'ШИПОВАЯ ДРИАДА', eng:'Thorn Dryad - BOSS', icon:'🌹', img:'./assets/enemies/thorn-dryad.webp', desc:'Босс Леса', lvl:'BOSS LVL 8', hp:100, hpColor:'#e6d5a0', boss:true},
-];
-const FROST_FALLBACK = [
-   {stage:1, name:'ЛЕДЯНОЙ ПРИЗРАК', eng:'Ice Wraith', icon:'👻', img:'./assets/enemies/ice-wraith.webp', desc:'Призрак льда', lvl:'LVL 3', hp:50, hpColor:'#6ab0ff'},
-   {stage:2, name:'МОРОЗНЫЙ КЛЫК', eng:'Frostfang Wolf', icon:'🐺', img:'./assets/enemies/frostfang-wolf.webp', desc:'Укус мороза', lvl:'LVL 5', hp:70, hpColor:'#a0a0ff'},
-   {stage:3, name:'ЛЕДЯНОЙ ТРОЛЛЬ', eng:'Frost Troll', icon:'🧌', img:'./assets/enemies/frost-troll.webp', desc:'Ледяная броня', lvl:'LVL 7', hp:85, hpColor:'#3ad080'},
-   {stage:4, name:'МОРОЗНЫЙ ПАУК', eng:'Frost Spider - BOSS', icon:'🕷️', img:'./assets/enemies/frost-spider.webp', desc:'Босс Льда', lvl:'BOSS LVL 10', hp:100, hpColor:'#e6d5a0', boss:true},
-];
-const SWAMP_FALLBACK = [
-   {stage:1, name:'ЧУДИЩЕ БОЛОТНОЕ', eng:'Toxic Toad', icon:'🐸', img:'./assets/enemies/toxic-toad.webp', hp:60, hpColor:'#3ad080'},
-   {stage:2, name:'БОЛОТНЫЙ ЖУК', eng:'Swamp Hag', icon:'🪲', img:'./assets/enemies/swamp-hag.webp', hp:70, hpColor:'#d0b040'},
-   {stage:3, name:'ЛОЗЯНОЙ УЖАС', eng:'Vine Horror', icon:'🌿', img:'./assets/enemies/vine-horror.webp', hp:85, hpColor:'#e05050'},
-   {stage:4, name:'ТОКСИЧНАЯ ЖАБА', eng:'Mire Crawler - BOSS', icon:'🐸', img:'./assets/enemies/mire-crawler.webp', hp:100, hpColor:'#e6d5a0', boss:true},
-];
-const VOLCANO_FALLBACK = [
-   {stage:1, name:'УГОЛЬНЫЙ БЕС', eng:'Ember Imp', icon:'🔥', img:'./assets/enemies/ember-imp.webp', hp:60, hpColor:'#6ab0ff'},
-   {stage:2, name:'МАГМОВАЯ САЛАМАНДРА', eng:'Magma Salamander', icon:'🦎', img:'./assets/enemies/magma-salamander.webp', hp:70, hpColor:'#a0a0ff'},
-   {stage:3, name:'ОБСИДИАНОВАЯ ГОРГУЛЬЯ', eng:'Obsidian Gargoyle', icon:'🗿', img:'./assets/enemies/obsidian-gargoyle.webp', hp:85, hpColor:'#3ad080'},
-   {stage:4, name:'ОГНЕННЫЙ ТРОЛЛЬ', eng:'Fire Troll - BOSS', icon:'🧌', img:'./assets/enemies/fire-troll.webp', hp:100, hpColor:'#e6d5a0', boss:true},
-];
-const RUINS_FALLBACK = [
-   {stage:1, name:'СКЕЛЕТ-ЛЕГИОНЕР', eng:'Skeleton Liegionnaire', icon:'💀', img:'./assets/enemies/skeleton-liegionnaire.webp', hp:60, hpColor:'#6ab0ff'},
-   {stage:2, name:'ПРИВИДЕНИЕ РУИН', eng:'Ruin Specter', icon:'👻', img:'./assets/enemies/ruin-specter.webp', hp:70, hpColor:'#a0a0ff'},
-   {stage:3, name:'КАМЕННАЯ ГОРГУЛЬЯ', eng:'Stone Gargoyle', icon:'🗿', img:'./assets/enemies/stone-gargoyle.webp', hp:85, hpColor:'#3ad080'},
-   {stage:4, name:'ПАДШИЙ ПАЛАДИН', eng:'Fallen Paladin - BOSS', icon:'⚔️', img:'./assets/enemies/fallen-paladin.webp', hp:100, hpColor:'#e6d5a0', boss:true},
-];
 try{
- if(window.VOLAND_ENEMIES && VOLAND_ENEMIES[locId]){
-  enemies=VOLAND_ENEMIES[locId];
- } else if(locId==6){
-  enemies=RUINS_FALLBACK;
- } else if(locId==5){
-  enemies=VOLCANO_FALLBACK;
- } else if(locId==4){
-  enemies=SWAMP_FALLBACK;
- } else if(locId==3){
-  enemies=FROST_FALLBACK;
- } else if(locId==2){
-  enemies=FOREST_FALLBACK;
- } else {
-  enemies=DESERT_FALLBACK;
- }
+  if(window.VOLAND_ENEMIES && VOLAND_ENEMIES[locId]){
+   enemies=VOLAND_ENEMIES[locId];
+  } else {
+   document.getElementById('stagesGrid').innerHTML='<div style="padding:20px;color:#e05050">Ошибка загрузки enemies.js</div>';
+   throw new Error('VOLAND_ENEMIES missing');
+  }
  locData=(window.VOLAND_LOCATIONS&&VOLAND_LOCATIONS.find(l=>l.id==locId))|| (locId==6 ? {name:'РУИНЫ',eng:'RUINS',img:'./assets/enemies/bg-ruins.webp'} : locId==5 ? {name:'ВУЛКАН',eng:'VOLCANO',img:'./assets/enemies/bg-volcano.webp'} : locId==4 ? {name:'БОЛОТО',eng:'SWAMP',img:'./assets/enemies/bg-swamp.webp'} : locId==3 ? {name:'ЛЕДЯНЫЕ ЗЕМЛИ',eng:'FROSTLANDS',img:'./assets/enemies/bg-frostlands.webp'} : locId==2 ? {name:'ТЕМНЫЙ ЛЕС',eng:'DARK FOREST',img:'./assets/enemies/bg-dark-forest.webp'} : {name:'ПУСТЫНЯ',eng:'DESERT',img:'./assets/enemies/bg-desert-dark.jpg'});
 }catch(e){
- if(locId==6) enemies=RUINS_FALLBACK;
- else if(locId==5) enemies=VOLCANO_FALLBACK;
- else if(locId==4) enemies=SWAMP_FALLBACK;
- else if(locId==3) enemies=FROST_FALLBACK;
- else if(locId==2) enemies=FOREST_FALLBACK;
- else enemies=DESERT_FALLBACK;
+  document.getElementById('stagesGrid').innerHTML='<div style="padding:20px;color:#e05050">Ошибка загрузки enemies.js</div>';
+  throw e;
  locData= locId==6 ? {name:'РУИНЫ',eng:'RUINS',img:'./assets/enemies/bg-ruins.webp'} : locId==5 ? {name:'ВУЛКАН',eng:'VOLCANO',img:'./assets/enemies/bg-volcano.webp'} : locId==4 ? {name:'БОЛОТО',eng:'SWAMP',img:'./assets/enemies/bg-swamp.webp'} : locId==3 ? {name:'ЛЕДЯНЫЕ ЗЕМЛИ',eng:'FROSTLANDS',img:'./assets/enemies/bg-frostlands.webp'} : locId==2 ? {name:'ТЕМНЫЙ ЛЕС',eng:'DARK FOREST',img:'./assets/enemies/bg-dark-forest.webp'} : {name:'ПУСТЫНЯ',eng:'DESERT',img:'./assets/enemies/bg-desert-dark.jpg'};
 }
 document.getElementById('locTitle').innerHTML=(volandGetLang()==='en' ? locData.eng : locData.name);
@@ -326,14 +121,6 @@ function startBattle(stage){
  }catch(e){}
  location.href='./page8.html?loc='+locId+'&stage='+stage;
 }
-const REAL_STATS = {
- 1:{1:{hp:4000,def:100,dmg:150},2:{hp:3000,def:200,dmg:150},3:{hp:4000,def:150,dmg:200},4:{hp:6000,def:200,dmg:250}},
- 2:{1:{hp:5000,def:150,dmg:250},2:{hp:5000,def:150,dmg:300},3:{hp:7000,def:300,dmg:250},4:{hp:10000,def:350,dmg:300}},
- 3:{1:{hp:7000,def:200,dmg:250},2:{hp:7000,def:200,dmg:350},3:{hp:10000,def:300,dmg:300},4:{hp:13000,def:400,dmg:400}},
- 4:{1:{hp:9000,def:250,dmg:250},2:{hp:8000,def:200,dmg:350},3:{hp:10000,def:400,dmg:250},4:{hp:15000,def:450,dmg:450}},
- 5:{1:{hp:9000,def:300,dmg:400},2:{hp:10000,def:400,dmg:450},3:{hp:11000,def:300,dmg:500},4:{hp:20000,def:500,dmg:500}},
- 6:{1:{hp:10000,def:400,dmg:350},2:{hp:9000,def:350,dmg:500},3:{hp:15000,def:350,dmg:550},4:{hp:23000,def:600,dmg:550}}
-};
 document.getElementById('stagesGrid').innerHTML=enemies.map(e=>{
  let staminaCost = 1;
  try{
@@ -347,7 +134,7 @@ document.getElementById('stagesGrid').innerHTML=enemies.map(e=>{
      bossInfo = volandGetBossLimitInfo(locId);
    }
  }catch(err){}
- let rs = (REAL_STATS[locId] && REAL_STATS[locId][e.stage]) || (REAL_STATS[1] && REAL_STATS[1][e.stage]) || {hp:2000,def:100,dmg:150};
+ let rs = e;
  let iconHtml = e.img ? `<img src="${e.img}" alt="${volandEnemyName(e)}" onerror="this.parentNode.innerHTML='${e.icon}'">` : `<div style="font-size:48px">${e.icon}</div>`;
  let staminaBadge = `<div class="boss-badge" style="background:rgba(30,60,30,.92);border:1px solid #3ad080;color:#3ad080;box-shadow:0 2px 8px rgba(0,0,0,.5)">${staminaCost} STAM</div>`;
  let bossCounterBadge = '';
@@ -369,5 +156,6 @@ document.getElementById('stagesGrid').innerHTML=enemies.map(e=>{
 `;
 }).join('');
 </script>
+<script src="./assets/js/nav.js"></script>
 </body>
 </html>

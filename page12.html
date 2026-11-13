@@ -5,202 +5,17 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>VOLAND - WORKSHOP</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<style>
-.left-nav{
-  width:60px !important;
-  min-width:60px !important;
-  max-width:60px !important;
-  flex:0 0 60px !important;
-  background:rgba(18,24,30,.94) !important;
-  border-right:1px solid #2a3a4a !important;
-  display:flex !important;
-  flex-direction:column !important;
-  justify-content:space-between !important;
-  align-items:center !important;
-  height:100vh !important;
-  height:100dvh !important;
-  overflow:visible !important;
-  overflow-y:visible !important;
-  overflow-x:visible !important;
-  scrollbar-width:none !important;
-  -ms-overflow-style:none !important;
-  padding:6px 4px !important;
-  gap:0 !important;
-  position:relative !important;
-  z-index:20 !important;
-}
-.left-nav::-webkit-scrollbar{display:none !important;width:0 !important;height:0 !important;}
-.nav-top{
-  display:flex !important;
-  flex-direction:column !important;
-  gap:4px !important;
-  align-items:center !important;
-  width:100% !important;
-  overflow:visible !important;
-}
-.nav-bottom{
-  margin-top:auto !important;
-  padding-top:8px !important;
-  border-top:1px solid rgba(255,255,255,.08) !important;
-  width:100% !important;
-  display:flex !important;
-  flex-direction:column !important;
-  align-items:center !important;
-  gap:4px !important;
-  overflow:visible !important;
-}
-.nav-group{
-  cursor:pointer !important;
-  display:flex !important;
-  flex-direction:column !important;
-  align-items:center !important;
-  gap:0 !important;
-  width:100% !important;
-  position:relative !important;
-  overflow:visible !important;
-}
-.nav-item{
-  width:52px !important;
-  height:52px !important;
-  min-width:52px !important;
-  min-height:52px !important;
-  background:#1a252f !important;
-  border:1px solid #2a3a4a !important;
-  border-radius:9px !important;
-  display:flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-  opacity:.75 !important;
-  transition:.2s !important;
-  flex-shrink:0 !important;
-  padding:0 !important;
-  overflow:hidden !important;
-}
-.nav-item.active{
-  border-color:#e6d5a0 !important;
-  opacity:1 !important;
-  background:#1e2f3e !important;
-  box-shadow:0 0 10px rgba(230,213,160,.3) !important;
-}
-.nav-item:hover{
-  opacity:1 !important;
-  border-color:#e6d5a0 !important;
-}
-.nav-item img{
-  width:100% !important;
-  height:100% !important;
-  object-fit:cover !important;
-  display:block !important;
-  border-radius:8px !important;
-}
-.nav-label{
-  position:fixed !important;
-  left:64px !important;
-  background:rgba(20,26,34,.96) !important;
-  border:1px solid #e6d5a0 !important;
-  color:#e6d5a0 !important;
-  padding:5px 9px !important;
-  border-radius:6px !important;
-  font:700 8px 'JetBrains Mono',monospace !important;
-  letter-spacing:.15em !important;
-  white-space:nowrap !important;
-  opacity:0 !important;
-  pointer-events:none !important;
-  transition:.18s !important;
-  z-index:99999 !important;
-  box-shadow:0 4px 16px rgba(0,0,0,.5) !important;
-}
-.nav-group:hover .nav-label{
-  opacity:1 !important;
-}
-.wrap{
+<link rel="stylesheet" href="./assets/css/nav.css">
+<style>.wrap{
   display:flex !important;
   position:fixed !important;
   inset:0 !important;
-}
-
-
-*{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,sans-serif;overflow:hidden}
-.bg{position:fixed;inset:0;z-index:0}.bg img{width:100%;height:100%;object-fit:cover}
-.bg:after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.6)}
-
-
-/* NAV FIX 60px / 52x52 / no scroll */
-
-
-.nav-group:hover 
-
-
-.center{flex:1;display:flex;flex-direction:column;overflow:hidden;background:rgba(16,22,30,.22)}
-.top-bar{height:48px;background:rgba(18,24,33,.85);border-bottom:1px solid rgba(30,42,50,.5);display:flex;align-items:center;justify-content:space-between;padding:0 16px;padding-right:130px}
-.top-title{font:900 16px 'Cinzel Decorative',serif;letter-spacing:.2em;color:#e6d5a0}
-.top-res{display:flex;gap:12px;font:700 10px 'JetBrains Mono',monospace;color:#8a9aaa}
-.top-res span{color:#d0b040}
-.main-area{flex:1;display:flex;overflow:hidden}
-.left-list{width:320px;min-width:320px;background:rgba(18,24,33,.55);border-right:1px solid rgba(30,42,50,.5);display:flex;flex-direction:column;overflow:hidden}
-.list-header{padding:12px 14px;border-bottom:1px solid rgba(30,42,50,.3);font:700 9px 'JetBrains Mono',monospace;letter-spacing:.15em;color:#6a7a8a;display:flex;justify-content:space-between}
-.item-list{flex:1;overflow:auto;padding:8px;display:flex;flex-direction:column;gap:6px}
-.gear-row{display:flex;gap:10px;align-items:center;padding:8px 10px;background:#1a242f;border:1px solid #2a3a4a;border-radius:8px;cursor:pointer;transition:.15s}
-.gear-row:hover{border-color:#e6d5a0;transform:translateY(-1px)}
-.gear-row.selected{border-color:#e6d5a0;background:#1e2f3e;box-shadow:0 0 10px rgba(230,213,160,.15)}
-.gear-row.max{opacity:.5;cursor:not-allowed}
-.gear-icon{width:42px;height:42px;min-width:42px;border-radius:6px;background:#0a0e14;border:1px solid #2a3a4a;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:20px}
-.gear-icon img{width:100%;height:100%;object-fit:cover;display:block}
-.gear-info{flex:1;display:flex;flex-direction:column;gap:2px;overflow:hidden}
-.gear-name{font:700 10px Inter,sans-serif;color:#e6d5a0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-transform:uppercase}
-.gear-tier{font:700 7px 'JetBrains Mono',monospace;letter-spacing:.1em}
-.gear-tier.bw{color:#8a8a8a}.gear-tier.green{color:#3ad080}.gear-tier.blue{color:#6ab0ff}.gear-tier.red{color:#e05050}.gear-tier.gold{color:#d0b040}
-.gear-lvl{font:400 8px 'JetBrains Mono',monospace;color:#6a7a8a}
-.right-preview{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;overflow:auto;background:radial-gradient(ellipse at center, rgba(230,213,160,.05), transparent 70%)}
-.preview-empty{font:400 11px 'JetBrains Mono',monospace;color:#5a6a7a;text-align:center}
-.upgrade-card{width:100%;max-width:680px;background:linear-gradient(180deg,#1e2a3a,#121a26);border:1px solid rgba(230,213,160,.2);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:14px;box-shadow:0 12px 32px rgba(0,0,0,.5)}
-.upgrade-top{display:flex;gap:16px;align-items:flex-start}
-.upgrade-icons{display:flex;gap:12px;align-items:center}
-.up-icon{width:64px;height:64px;border-radius:10px;background:#0a0e14;border:1px solid #2a3a4a;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:28px;position:relative}
-.up-icon img{width:100%;height:100%;object-fit:cover;display:block}
-.up-arrow{font:900 18px 'Cinzel Decorative',serif;color:#e6d5a0}
-.up-info{flex:1;display:flex;flex-direction:column;gap:6px}
-.up-name{font:800 13px Inter,sans-serif;color:#e6d5a0;text-transform:uppercase;white-space:nowrap}
-.up-stats{display:flex;flex-direction:column;gap:3px;margin-top:4px}
-.up-stat{font:600 10px 'JetBrains Mono',monospace;color:#8a9aaa}
-.up-stat b{color:#3ad080}
-.up-stat.next b{color:#6ab0ff}
-.cost-box{background:rgba(0,0,0,.3);border:1px solid rgba(42,58,74,.5);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px}
-.cost-title{font:700 8px 'JetBrains Mono',monospace;letter-spacing:.15em;color:#6a7a8a}
-.cost-row{display:flex;gap:8px;flex-wrap:wrap}
-.cost-item{display:flex;align-items:center;gap:4px;background:#1a242f;border:1px solid #2a3a4a;border-radius:6px;padding:4px 8px;font:700 10px 'JetBrains Mono',monospace;color:#d8d2b8}
-.cost-item.need{border-color:#e05050;color:#ff8a8a}
-.cost-item.have{border-color:#3ad080;color:#3ad080}
-.cost-item.gold{color:#d0b040}
-.guild-discount{color:#4a9aff;font:700 10px 'JetBrains Mono',monospace}
-.price-old{color:#6a7a8a;text-decoration:line-through}
-.up-btn{height:42px;border-radius:10px;border:1px solid #e6d5a0;background:linear-gradient(180deg,#e6d5a0,#c0a860);color:#0a0e14;font:800 10px 'JetBrains Mono',monospace;letter-spacing:.15em;cursor:pointer;transition:.15s}
-.up-btn:hover{filter:brightness(1.1);transform:translateY(-1px)}
-.up-btn:disabled{opacity:.4;cursor:not-allowed;filter:grayscale(.5);transform:none}
-.up-log{margin-top:10px;font:400 9px 'JetBrains Mono',monospace;color:#6a7a8a;text-align:center;min-height:14px}
-</style>
+}*{margin:0;padding:0;box-sizing:border-box}html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,sans-serif;overflow:hidden}.bg{position:fixed;inset:0;z-index:0}.bg img{width:100%;height:100%;object-fit:cover}.bg:after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.6)}.top-bar{height:48px;background:rgba(18,24,33,.85);border-bottom:1px solid rgba(30,42,50,.5);display:flex;align-items:center;justify-content:space-between;padding:0 16px;padding-right:130px}.top-title{font:900 16px 'Cinzel Decorative',serif;letter-spacing:.2em;color:#e6d5a0}.top-res{display:flex;gap:12px;font:700 10px 'JetBrains Mono',monospace;color:#8a9aaa}.top-res span{color:#d0b040}.main-area{flex:1;display:flex;overflow:hidden}.left-list{width:320px;min-width:320px;background:rgba(18,24,33,.55);border-right:1px solid rgba(30,42,50,.5);display:flex;flex-direction:column;overflow:hidden}.list-header{padding:12px 14px;border-bottom:1px solid rgba(30,42,50,.3);font:700 9px 'JetBrains Mono',monospace;letter-spacing:.15em;color:#6a7a8a;display:flex;justify-content:space-between}.item-list{flex:1;overflow:auto;padding:8px;display:flex;flex-direction:column;gap:6px}.gear-row{display:flex;gap:10px;align-items:center;padding:8px 10px;background:#1a242f;border:1px solid #2a3a4a;border-radius:8px;cursor:pointer;transition:.15s}.gear-row:hover{border-color:#e6d5a0;transform:translateY(-1px)}.gear-row.selected{border-color:#e6d5a0;background:#1e2f3e;box-shadow:0 0 10px rgba(230,213,160,.15)}.gear-row.max{opacity:.5;cursor:not-allowed}.gear-icon{width:42px;height:42px;min-width:42px;border-radius:6px;background:#0a0e14;border:1px solid #2a3a4a;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:20px}.gear-icon img{width:100%;height:100%;object-fit:cover;display:block}.gear-info{flex:1;display:flex;flex-direction:column;gap:2px;overflow:hidden}.gear-name{font:700 10px Inter,sans-serif;color:#e6d5a0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-transform:uppercase}.gear-tier{font:700 7px 'JetBrains Mono',monospace;letter-spacing:.1em}.gear-tier.bw{color:#8a8a8a}.gear-tier.green{color:#3ad080}.gear-tier.blue{color:#6ab0ff}.gear-tier.red{color:#e05050}.gear-tier.gold{color:#d0b040}.gear-lvl{font:400 8px 'JetBrains Mono',monospace;color:#6a7a8a}.right-preview{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;overflow:auto;background:radial-gradient(ellipse at center, rgba(230,213,160,.05), transparent 70%)}.preview-empty{font:400 11px 'JetBrains Mono',monospace;color:#5a6a7a;text-align:center}.upgrade-card{width:100%;max-width:680px;background:linear-gradient(180deg,#1e2a3a,#121a26);border:1px solid rgba(230,213,160,.2);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:14px;box-shadow:0 12px 32px rgba(0,0,0,.5)}.upgrade-top{display:flex;gap:16px;align-items:flex-start}.upgrade-icons{display:flex;gap:12px;align-items:center}.up-icon{width:64px;height:64px;border-radius:10px;background:#0a0e14;border:1px solid #2a3a4a;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:28px;position:relative}.up-icon img{width:100%;height:100%;object-fit:cover;display:block}.up-arrow{font:900 18px 'Cinzel Decorative',serif;color:#e6d5a0}.up-info{flex:1;display:flex;flex-direction:column;gap:6px}.up-name{font:800 13px Inter,sans-serif;color:#e6d5a0;text-transform:uppercase;white-space:nowrap}.up-stats{display:flex;flex-direction:column;gap:3px;margin-top:4px}.up-stat{font:600 10px 'JetBrains Mono',monospace;color:#8a9aaa}.up-stat b{color:#3ad080}.up-stat.next b{color:#6ab0ff}.cost-box{background:rgba(0,0,0,.3);border:1px solid rgba(42,58,74,.5);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px}.cost-title{font:700 8px 'JetBrains Mono',monospace;letter-spacing:.15em;color:#6a7a8a}.cost-row{display:flex;gap:8px;flex-wrap:wrap}.cost-item{display:flex;align-items:center;gap:4px;background:#1a242f;border:1px solid #2a3a4a;border-radius:6px;padding:4px 8px;font:700 10px 'JetBrains Mono',monospace;color:#d8d2b8}.cost-item.need{border-color:#e05050;color:#ff8a8a}.cost-item.have{border-color:#3ad080;color:#3ad080}.cost-item.gold{color:#d0b040}.guild-discount{color:#4a9aff;font:700 10px 'JetBrains Mono',monospace}.price-old{color:#6a7a8a;text-decoration:line-through}.up-btn{height:42px;border-radius:10px;border:1px solid #e6d5a0;background:linear-gradient(180deg,#e6d5a0,#c0a860);color:#0a0e14;font:800 10px 'JetBrains Mono',monospace;letter-spacing:.15em;cursor:pointer;transition:.15s}.up-btn:hover{filter:brightness(1.1);transform:translateY(-1px)}.up-btn:disabled{opacity:.4;cursor:not-allowed;filter:grayscale(.5);transform:none}.up-log{margin-top:10px;font:400 9px 'JetBrains Mono',monospace;color:#6a7a8a;text-align:center;min-height:14px}</style>
 </head>
 <body>
 <div class="bg"><img src="./assets/heroes/bg-battlefield.webp" onerror="this.style.display='none'"></div>
 <div class="wrap">
-<div class="left-nav">
-  <div class="nav-top">
-    <div class="nav-group " onclick="location.href='./page3.html'"><div class="nav-item " data-page="page3"><img src="./assets/ui/nav/hero.webp" alt="HERO"></div><div class="nav-label">HERO</div></div>
-    <div class="nav-group " onclick="location.href='./page4.html'"><div class="nav-item " data-page="page4"><img src="./assets/ui/nav/bag.webp" alt="BAG"></div><div class="nav-label">BAG</div></div>
-    <div class="nav-group " onclick="location.href='./page5.html'"><div class="nav-item " data-page="page5"><img src="./assets/ui/nav/skills.webp" alt="SKILLS"></div><div class="nav-label">SKILLS</div></div>
-    <div class="nav-group " onclick="location.href='./page6.html'"><div class="nav-item " data-page="page6"><img src="./assets/ui/nav/battle.webp" alt="BATTLE"></div><div class="nav-label">BATTLE</div></div>
-    <div class="nav-group " onclick="location.href='./page9.html'"><div class="nav-item " data-page="page9"><img src="./assets/ui/nav/missions.webp" alt="MISSIONS"></div><div class="nav-label">MISSIONS</div></div>
-    <div class="nav-group " onclick="location.href='./page10.html'"><div class="nav-item " data-page="page10"><img src="./assets/ui/nav/market.webp" alt="MARKET"></div><div class="nav-label">MARKET</div></div>
-    <div class="nav-group " onclick="location.href='./page11.html'"><div class="nav-item " data-page="page11"><img src="./assets/ui/nav/pvp.webp" alt="PVP"></div><div class="nav-label">PVP</div></div>
-    <div class="nav-group active" onclick="location.href='./page12.html'"><div class="nav-item active" data-page="page12"><img src="./assets/ui/nav/workshop.webp" alt="WORKSHOP"></div><div class="nav-label">WORKSHOP</div></div>
-    <div class="nav-group " onclick="location.href='./page13.html'"><div class="nav-item " data-page="page13"><img src="./assets/ui/nav/pass.webp" alt="PASS"></div><div class="nav-label">PASS</div></div>
-    <div class="nav-group " onclick="location.href='./page14.html'"><div class="nav-item " data-page="page14"><img src="./assets/ui/nav/guilds.webp" alt="GUILD"></div><div class="nav-label">GUILD</div></div>
-  </div>
-  <div class="nav-bottom">
-    <div class="nav-group" onclick="location.href='./index.html'"><div class="nav-item" data-page="index"><img src="./assets/ui/nav/start.webp" alt="START"></div><div class="nav-label">START</div></div>
-  </div>
-</div>
+<div class="left-nav" id="voland-nav"></div>
 <div class="center">
   <div class="top-bar">
     <div class="top-title">МАСТЕРСКАЯ • МОДЕРНИЗАЦИЯ</div>
@@ -521,6 +336,7 @@ document.querySelectorAll('.nav-group').forEach(g=>{
   });
 });
 </script>
+<script src="./assets/js/nav.js"></script>
 </body>
 
 </html>

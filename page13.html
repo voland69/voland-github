@@ -5,120 +5,12 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>VOLAND - PASS</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-<style>
-.left-nav{
-  width:60px !important;
-  min-width:60px !important;
-  max-width:60px !important;
-  flex:0 0 60px !important;
-  background:rgba(18,24,30,.94) !important;
-  border-right:1px solid #2a3a4a !important;
-  display:flex !important;
-  flex-direction:column !important;
-  justify-content:space-between !important;
-  align-items:center !important;
-  height:100vh !important;
-  height:100dvh !important;
-  overflow:hidden !important;
-  overflow-y:hidden !important;
-  overflow-x:visible !important;
-  scrollbar-width:none !important;
-  -ms-overflow-style:none !important;
-  padding:6px 4px !important;
-  gap:0 !important;
-  position:relative !important;
-  z-index:20 !important;
-}
-.left-nav::-webkit-scrollbar{display:none !important;width:0 !important;height:0 !important;}
-.nav-top{
-  display:flex !important;
-  flex-direction:column !important;
-  gap:4px !important;
-  align-items:center !important;
-  width:100% !important;
-  overflow:hidden !important;
-}
-.nav-bottom{
-  margin-top:auto !important;
-  padding-top:8px !important;
-  border-top:1px solid rgba(255,255,255,.08) !important;
-  width:100% !important;
-  display:flex !important;
-  flex-direction:column !important;
-  align-items:center !important;
-  gap:4px !important;
-  overflow:hidden !important;
-}
-.nav-group{
-  cursor:pointer !important;
-  display:flex !important;
-  flex-direction:column !important;
-  align-items:center !important;
-  gap:0 !important;
-  width:100% !important;
-  position:relative !important;
-  overflow:visible !important;
-}
-.nav-item{
-  width:52px !important;
-  height:52px !important;
-  min-width:52px !important;
-  min-height:52px !important;
-  background:transparent !important;
-  border:1px solid transparent !important;
-  border-radius:9px !important;
-  display:flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-  opacity:.75 !important;
-  transition:.2s !important;
-  flex-shrink:0 !important;
-  padding:0 !important;
-  overflow:hidden !important;
-}
-.nav-item.active{
-  border-color:#e6d5a0 !important;
-  opacity:1 !important;
-  background:transparent !important;
-  box-shadow:0 0 10px rgba(230,213,160,.3) !important;
-}
-.nav-item:hover{
-  opacity:1 !important;
-  border-color:#e6d5a0 !important;
-}
-.nav-item img{background:transparent !important;
-  width:100% !important;
-  height:100% !important;
-  object-fit:cover !important;
-  display:block !important;
-  border-radius:8px !important;
-}
-.nav-label{
-  position:fixed !important;
-  left:64px !important;
-  background:rgba(20,26,34,.96) !important;
-  border:1px solid #e6d5a0 !important;
-  color:#e6d5a0 !important;
-  padding:5px 9px !important;
-  border-radius:6px !important;
-  font:700 8px 'JetBrains Mono',monospace !important;
-  letter-spacing:.15em !important;
-  white-space:nowrap !important;
-  opacity:0 !important;
-  pointer-events:none !important;
-  transition:.18s !important;
-  z-index:99999 !important;
-  box-shadow:0 4px 16px rgba(0,0,0,.5) !important;
-}
-.nav-group:hover .nav-label{
-  opacity:1 !important;
-}
-.wrap{
+<link rel="stylesheet" href="./assets/css/nav.css">
+<style>.wrap{
   display:flex !important;
   position:fixed !important;
   inset:0 !important;
-}
-.center{
+}.center{
   flex:1 !important;
   padding:24px !important;
   overflow:auto !important;
@@ -128,8 +20,7 @@
   justify-content:flex-start !important;
   background:rgba(16,22,30,.18) !important;
   width:100% !important;
-}
-.placeholder-grid{
+}.placeholder-grid{
   display:grid !important;
   grid-template-columns:repeat(3,1fr) !important;
   gap:18px !important;
@@ -139,8 +30,7 @@
   justify-content:center !important;
   place-items:stretch !important;
   justify-items:center !important;
-}
-.ph-card{
+}.ph-card{
   background:rgba(20,26,34,.88) !important;
   border:1px solid rgba(122,144,168,.22) !important;
   border-radius:12px !important;
@@ -151,128 +41,18 @@
   width:100% !important;
   max-width:340px !important;
   margin:0 auto !important;
-}
+}@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
 
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
-
-*{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,sans-serif;overflow:hidden}
-.bg{position:fixed;inset:0;z-index:0;background:url("./assets/heroes/bg-battlefield.webp") center/cover no-repeat fixed}
-.bg:after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.6)}
-
-
-
-
-
-
-
-
-
-.nav-group.active 
-.center{flex:1;padding:24px;overflow:auto;display:flex;flex-direction:column;align-items:center;background:rgba(16,22,30,.18)}
-.page-title{font:900 32px 'Cinzel Decorative',serif;color:#e6d5a0;letter-spacing:.15em;text-align:center}
-.page-sub{margin-top:8px;font:400 9px 'JetBrains Mono',monospace;letter-spacing:.35em;color:#7a90a8;text-transform:uppercase;text-align:center}
-.placeholder-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;width:100%;max-width:1100px;margin-top:28px}
-.ph-card{background:rgba(20,26,34,.88);border:1px solid rgba(122,144,168,.22);border-radius:12px;padding:22px;text-align:center;backdrop-filter:blur(8px);transition:.2s}
-.ph-card:hover{border-color:#e6d5a0;transform:translateY(-2px)}
-.ph-icon{font-size:36px;margin-bottom:12px}
-.ph-name{font:700 13px Inter,sans-serif;letter-spacing:.08em;color:#e6d5a0;text-transform:uppercase}
-.ph-desc{margin-top:8px;font:400 10px 'JetBrains Mono',monospace;color:#8a9aaa;line-height:1.5}
-.ph-badge{margin-top:14px;display:inline-block;font:900 10px 'JetBrains Mono',monospace;letter-spacing:.25em;color:#5a6e80;border:1px solid #3a4a5a;border-radius:6px;padding:5px 10px;background:rgba(0,0,0,.2)}
-
-
-.main,.center,.center-col,.hero-panel{
+*{margin:0;padding:0;box-sizing:border-box}html,body{height:100%;background:#0a0e14;color:#d8d2b8;font-family:Inter,Arial,sans-serif;overflow:hidden}.bg{position:fixed;inset:0;z-index:0;background:url("./assets/heroes/bg-battlefield.webp") center/cover no-repeat fixed}.bg:after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.6)}.page-title{font:900 32px 'Cinzel Decorative',serif;color:#e6d5a0;letter-spacing:.15em;text-align:center}.page-sub{margin-top:8px;font:400 9px 'JetBrains Mono',monospace;letter-spacing:.35em;color:#7a90a8;text-transform:uppercase;text-align:center}.placeholder-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;width:100%;max-width:1100px;margin-top:28px}.ph-card{background:rgba(20,26,34,.88);border:1px solid rgba(122,144,168,.22);border-radius:12px;padding:22px;text-align:center;backdrop-filter:blur(8px);transition:.2s}.ph-card:hover{border-color:#e6d5a0;transform:translateY(-2px)}.ph-icon{font-size:36px;margin-bottom:12px}.ph-name{font:700 13px Inter,sans-serif;letter-spacing:.08em;color:#e6d5a0;text-transform:uppercase}.ph-desc{margin-top:8px;font:400 10px 'JetBrains Mono',monospace;color:#8a9aaa;line-height:1.5}.ph-badge{margin-top:14px;display:inline-block;font:900 10px 'JetBrains Mono',monospace;letter-spacing:.25em;color:#5a6e80;border:1px solid #3a4a5a;border-radius:6px;padding:5px 10px;background:rgba(0,0,0,.2)}.main,.center,.center-col,.hero-panel{
   position:relative !important;
   z-index:1 !important;
-}
-
-
-/* VOLAND NAV FIX - 60px / 52x52 / gap 4 / no scroll / hover label */
-
-
-
-
-
-
-
-
-
-.nav-group:hover 
-
-
-
-.section-card{background:rgba(20,26,34,.88);border:1px solid rgba(122,144,168,.22);border-radius:12px;padding:22px;backdrop-filter:blur(8px)}
-.section-title{font:900 16px 'Cinzel Decorative',serif;color:#e6d5a0;letter-spacing:.12em}
-.section-sub{margin-top:6px;font:400 9px 'JetBrains Mono',monospace;letter-spacing:.2em;color:#7a90a8;text-transform:uppercase}
-.back-btn{margin-bottom:12px;font:700 10px 'JetBrains Mono',monospace;padding:8px 14px;border-radius:8px;border:1px solid #e6d5a0;background:#0a0e14;color:#e6d5a0;cursor:pointer}
-.season-bar{margin-top:14px;height:10px;background:#0a0e14;border:1px solid #2a3a4a;border-radius:6px;overflow:hidden}
-.season-fill{height:100%;background:linear-gradient(90deg,#3ad080,#e6d5a0)}
-.news-list{margin-top:14px;display:flex;flex-direction:column;gap:8px}
-.news-item{padding:10px 12px;background:#0a0e14;border:1px solid #2a3a4a;border-radius:8px;font:400 11px Inter,sans-serif;color:#d8d2b8;line-height:1.5}
-.news-item b{color:#e6d5a0}
-.calendar-grid{margin-top:16px;display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
-@media(max-width:900px){.calendar-grid{grid-template-columns:repeat(5,1fr)}}
-.day-cell{background:#0a0e14;border:1px solid #2a3a4a;border-radius:8px;padding:10px 6px;text-align:center;min-height:78px;display:flex;flex-direction:column;gap:4px;align-items:center;justify-content:center}
-.day-cell.today{border-color:#e6d5a0;box-shadow:0 0 12px rgba(230,213,160,.35)}
-.day-cell.claimed{border-color:rgba(58,208,128,.5);opacity:.75}
-.day-cell.missed{opacity:.45}
-.day-num{font:700 10px 'JetBrains Mono',monospace;color:#e6d5a0}
-.day-gift{font-size:18px}
-.day-label{font:400 8px 'JetBrains Mono',monospace;color:#8a9aaa;line-height:1.3}
-.day-btn{margin-top:4px;font:700 8px 'JetBrains Mono',monospace;padding:5px 8px;border-radius:6px;border:1px solid #e6d5a0;background:#e6d5a0;color:#0a0e14;cursor:pointer}
-/* PASS — как на скринах */
-.pass-top{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-top:14px;padding:16px;background:#0a0e14;border:1px solid #2a3a4a;border-radius:12px}
-.pass-circle{width:110px;height:110px;min-width:110px;border-radius:50%;border:3px solid #e6d5a0;background:radial-gradient(circle,#1e2f3e,#0a0e14);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
-.pass-circle-lvl{font:900 10px 'JetBrains Mono',monospace;color:#e6d5a0;letter-spacing:.15em}
-.pass-circle-num{font:900 26px 'JetBrains Mono',monospace;color:#fff;line-height:1}
-.pass-circle-max{font:400 9px 'JetBrains Mono',monospace;color:#8a9aaa}
-.pass-top-info{flex:1;min-width:220px}
-.pass-xp{font:700 18px 'JetBrains Mono',monospace;color:#fff}
-.pass-xp span{color:#6ab0ff}
-.pass-xp-bar{margin-top:8px;height:8px;background:#121a26;border:1px solid #2a3a4a;border-radius:4px;overflow:hidden}
-.pass-xp-fill{height:100%;background:#e6d5a0}
-.pass-time{margin-top:10px;font:700 12px 'JetBrains Mono',monospace;color:#e6d5a0}
-.claim-all{font:700 11px 'JetBrains Mono',monospace;padding:12px 18px;border-radius:10px;border:1px solid #3ad080;background:#3ad080;color:#0a0e14;cursor:pointer;white-space:nowrap}
-.claim-all:disabled{opacity:.45;cursor:default}
-.pass-scroll{margin-top:16px;overflow-x:auto;padding-bottom:8px}
-.pass-inner{display:flex;flex-direction:column;gap:8px;min-width:calc(50*78px)}
-.pass-row{display:flex;gap:6px}
-.pass-header-cell{width:72px;min-width:72px;text-align:center;font:700 10px 'JetBrains Mono',monospace;color:#8a9aaa;padding:6px 0;background:#121a26;border:1px solid #2a3a4a;border-radius:6px}
-.pass-header-cell.cur{color:#e6d5a0;border-color:#e6d5a0}
-.pass-label{width:92px;min-width:92px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;font:700 10px Inter,sans-serif;color:#e6d5a0;background:#121a26;border:1px solid #2a3a4a;border-radius:8px;padding:8px 4px}
-.pass-cell{width:72px;min-width:72px;background:#0a0e14;border:1px solid #2a3a4a;border-radius:8px;padding:8px 4px;text-align:center;display:flex;flex-direction:column;gap:4px;align-items:center;justify-content:center;cursor:pointer;min-height:86px}
-.pass-cell.free.unlocked{border-color:rgba(58,208,128,.5)}
-.pass-cell.free.current{border-color:#e6d5a0;box-shadow:0 0 8px rgba(230,213,160,.3)}
-.pass-cell.prem{cursor:default;opacity:.9}
-.pass-cell-icon{font-size:20px}
-.pass-cell-label{font:400 8px 'JetBrains Mono',monospace;color:#d8d2b8;line-height:1.3}
-.pass-dot{width:10px;height:10px;border-radius:50%;background:#2a3a4a;margin:2px auto 0 auto}
-.pass-dot.avail{background:#3ad080;box-shadow:0 0 6px #3ad080}
-.pass-dot.done{background:#3ad080;opacity:.5}
-
-</style>
+}.section-title{font:900 16px 'Cinzel Decorative',serif;color:#e6d5a0;letter-spacing:.12em}.section-sub{margin-top:6px;font:400 9px 'JetBrains Mono',monospace;letter-spacing:.2em;color:#7a90a8;text-transform:uppercase}.back-btn{margin-bottom:12px;font:700 10px 'JetBrains Mono',monospace;padding:8px 14px;border-radius:8px;border:1px solid #e6d5a0;background:#0a0e14;color:#e6d5a0;cursor:pointer}.season-bar{margin-top:14px;height:10px;background:#0a0e14;border:1px solid #2a3a4a;border-radius:6px;overflow:hidden}.season-fill{height:100%;background:linear-gradient(90deg,#3ad080,#e6d5a0)}.news-list{margin-top:14px;display:flex;flex-direction:column;gap:8px}.news-item{padding:10px 12px;background:#0a0e14;border:1px solid #2a3a4a;border-radius:8px;font:400 11px Inter,sans-serif;color:#d8d2b8;line-height:1.5}.news-item b{color:#e6d5a0}.calendar-grid{margin-top:16px;display:grid;grid-template-columns:repeat(7,1fr);gap:8px}@media(max-width:900px){.calendar-grid{grid-template-columns:repeat(5,1fr)}}.day-cell{background:#0a0e14;border:1px solid #2a3a4a;border-radius:8px;padding:10px 6px;text-align:center;min-height:78px;display:flex;flex-direction:column;gap:4px;align-items:center;justify-content:center}.day-cell.today{border-color:#e6d5a0;box-shadow:0 0 12px rgba(230,213,160,.35)}.day-cell.claimed{border-color:rgba(58,208,128,.5);opacity:.75}.day-cell.missed{opacity:.45}.day-num{font:700 10px 'JetBrains Mono',monospace;color:#e6d5a0}.day-gift{font-size:18px}.day-label{font:400 8px 'JetBrains Mono',monospace;color:#8a9aaa;line-height:1.3}.day-btn{margin-top:4px;font:700 8px 'JetBrains Mono',monospace;padding:5px 8px;border-radius:6px;border:1px solid #e6d5a0;background:#e6d5a0;color:#0a0e14;cursor:pointer}/* PASS — как на скринах */
+.pass-top{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-top:14px;padding:16px;background:#0a0e14;border:1px solid #2a3a4a;border-radius:12px}.pass-circle{width:110px;height:110px;min-width:110px;border-radius:50%;border:3px solid #e6d5a0;background:radial-gradient(circle,#1e2f3e,#0a0e14);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}.pass-circle-lvl{font:900 10px 'JetBrains Mono',monospace;color:#e6d5a0;letter-spacing:.15em}.pass-circle-num{font:900 26px 'JetBrains Mono',monospace;color:#fff;line-height:1}.pass-circle-max{font:400 9px 'JetBrains Mono',monospace;color:#8a9aaa}.pass-top-info{flex:1;min-width:220px}.pass-xp{font:700 18px 'JetBrains Mono',monospace;color:#fff}.pass-xp span{color:#6ab0ff}.pass-xp-bar{margin-top:8px;height:8px;background:#121a26;border:1px solid #2a3a4a;border-radius:4px;overflow:hidden}.pass-xp-fill{height:100%;background:#e6d5a0}.pass-time{margin-top:10px;font:700 12px 'JetBrains Mono',monospace;color:#e6d5a0}.claim-all{font:700 11px 'JetBrains Mono',monospace;padding:12px 18px;border-radius:10px;border:1px solid #3ad080;background:#3ad080;color:#0a0e14;cursor:pointer;white-space:nowrap}.claim-all:disabled{opacity:.45;cursor:default}.pass-scroll{margin-top:16px;overflow-x:auto;padding-bottom:8px}.pass-inner{display:flex;flex-direction:column;gap:8px;min-width:calc(50*78px)}.pass-row{display:flex;gap:6px}.pass-header-cell{width:72px;min-width:72px;text-align:center;font:700 10px 'JetBrains Mono',monospace;color:#8a9aaa;padding:6px 0;background:#121a26;border:1px solid #2a3a4a;border-radius:6px}.pass-header-cell.cur{color:#e6d5a0;border-color:#e6d5a0}.pass-label{width:92px;min-width:92px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;font:700 10px Inter,sans-serif;color:#e6d5a0;background:#121a26;border:1px solid #2a3a4a;border-radius:8px;padding:8px 4px}.pass-cell{width:72px;min-width:72px;background:#0a0e14;border:1px solid #2a3a4a;border-radius:8px;padding:8px 4px;text-align:center;display:flex;flex-direction:column;gap:4px;align-items:center;justify-content:center;cursor:pointer;min-height:86px}.pass-cell.free.unlocked{border-color:rgba(58,208,128,.5)}.pass-cell.free.current{border-color:#e6d5a0;box-shadow:0 0 8px rgba(230,213,160,.3)}.pass-cell.prem{cursor:default;opacity:.9}.pass-cell-icon{font-size:20px}.pass-cell-label{font:400 8px 'JetBrains Mono',monospace;color:#d8d2b8;line-height:1.3}.pass-dot{width:10px;height:10px;border-radius:50%;background:#2a3a4a;margin:2px auto 0 auto}.pass-dot.avail{background:#3ad080;box-shadow:0 0 6px #3ad080}.pass-dot.done{background:#3ad080;opacity:.5}</style>
 </head>
 <body>
 <div class="bg"></div>
 <div class="wrap">
-<div class="left-nav">
-  <div class="nav-top">
-    <div class="nav-group " onclick="location.href='./page3.html'"><div class="nav-item " data-page="page3"><img src="./assets/ui/nav/hero.webp" alt="HERO"></div><div class="nav-label">HERO</div></div>
-    <div class="nav-group " onclick="location.href='./page4.html'"><div class="nav-item " data-page="page4"><img src="./assets/ui/nav/bag.webp" alt="BAG"></div><div class="nav-label">BAG</div></div>
-    <div class="nav-group " onclick="location.href='./page5.html'"><div class="nav-item " data-page="page5"><img src="./assets/ui/nav/skills.webp" alt="SKILLS"></div><div class="nav-label">SKILLS</div></div>
-    <div class="nav-group " onclick="location.href='./page6.html'"><div class="nav-item " data-page="page6"><img src="./assets/ui/nav/battle.webp" alt="BATTLE"></div><div class="nav-label">BATTLE</div></div>
-    <div class="nav-group " onclick="location.href='./page9.html'"><div class="nav-item " data-page="page9"><img src="./assets/ui/nav/missions.webp" alt="MISSIONS"></div><div class="nav-label">MISSIONS</div></div>
-    <div class="nav-group " onclick="location.href='./page10.html'"><div class="nav-item " data-page="page10"><img src="./assets/ui/nav/market.webp" alt="MARKET"></div><div class="nav-label">MARKET</div></div>
-    <div class="nav-group " onclick="location.href='./page11.html'"><div class="nav-item " data-page="page11"><img src="./assets/ui/nav/pvp.webp" alt="PVP"></div><div class="nav-label">PVP</div></div>
-    <div class="nav-group " onclick="location.href='./page12.html'"><div class="nav-item " data-page="page12"><img src="./assets/ui/nav/workshop.webp" alt="WORKSHOP"></div><div class="nav-label">WORKSHOP</div></div>
-    <div class="nav-group active" onclick="location.href='./page13.html'"><div class="nav-item active" data-page="page13"><img src="./assets/ui/nav/pass.webp" alt="PASS"></div><div class="nav-label">PASS</div></div>
-    <div class="nav-group " onclick="location.href='./page14.html'"><div class="nav-item " data-page="page14"><img src="./assets/ui/nav/guilds.webp" alt="GUILD"></div><div class="nav-label">GUILD</div></div>
-  </div>
-  <div class="nav-bottom">
-    <div class="nav-group" onclick="location.href='./index.html'"><div class="nav-item" data-page="index"><img src="./assets/ui/nav/start.webp" alt="START"></div><div class="nav-label">START</div></div>
-  </div>
-</div>
+<div class="left-nav" id="voland-nav"></div>
 <div class="center">
 <div class="page-title">PASS</div>
 <div class="page-sub">VOLAND • SEASON • REWARDS • BATTLE PASS</div>
@@ -668,6 +448,7 @@ document.querySelectorAll('.nav-item').forEach(el=>{
   }
 });
 </script>
+<script src="./assets/js/nav.js"></script>
 </body>
 
 </html>
