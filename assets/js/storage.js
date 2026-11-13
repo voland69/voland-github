@@ -403,15 +403,19 @@ function volandFixMissingStatPoints(){
   }catch(e){ return {fixed:0, remaining:0}; }
 }
 
-// New helpers for page3 stats
-function volandGetPlaytimeHours(){
-  try{
-    let cur = volandGetCurrentSave();
-    let created = cur ? cur.created : parseInt(localStorage.getItem(VOLAND_KEYS.created)||Date.now());
-    let diff = Date.now() - created;
-    return Math.floor(diff/1000/60/60);
-  }catch(e){ return 0; }
-}
+// PLAYTIME - only real time in game, not since creation.
+// Accumulated in save.playtimeMs + current visible session. Flush on hide/unload + every 30s.
+// Old value (Date.now()-created) was 220h for 9 days - wrong, cannot be recovered, new counter starts from 0.
+var __volandPlayStart = Date.now();
+var __volandPlayInit = false;
+function volandGetPlaytimeMsRaw(){ try{ var cur=volandGetCurrentSave(); if(cur && typeof cur.playtimeMs==='number') return cur.playtimeMs; return parseInt(localStorage.getItem('voland_v1_playtime')||'0')||0; }catch(e){ return 0; } }
+function volandSetPlaytimeMs(ms){ try{ var cur=volandGetCurrentSave(); if(cur){ var saves=volandGetSaves(); var idx=volandGetActiveIndex(); if(saves[idx]){ saves[idx].playtimeMs=Math.max(0, Math.floor(ms)); volandSaveSaves(saves); } } localStorage.setItem('voland_v1_playtime', String(Math.max(0, Math.floor(ms)))); }catch(e){} }
+function volandGetPlaytimeMs(){ try{ var raw=volandGetPlaytimeMsRaw(); if(typeof document!=='undefined' && document.hidden) return raw; var el=Date.now()-__volandPlayStart; if(el<0) el=0; if(el>3600000) el=3600000; return raw+el; }catch(e){ return 0; } }
+function volandFlushPlaytime(){ try{ if(typeof document!=='undefined' && document.hidden) return; var now=Date.now(); var el=now-__volandPlayStart; if(el<0) el=0; if(el>3600000) el=3600000; if(el>0){ volandSetPlaytimeMs(volandGetPlaytimeMsRaw()+el); } __volandPlayStart=now; }catch(e){} }
+function volandGetPlaytimeHours(){ try{ return Math.floor(volandGetPlaytimeMs()/3600000); }catch(e){ return 0; } }
+function volandGetPlaytimeMinutes(){ try{ return Math.floor(volandGetPlaytimeMs()/60000); }catch(e){ return 0; } }
+function volandInitPlaytime(){ try{ if(__volandPlayInit) return; __volandPlayInit=true; __volandPlayStart=Date.now(); if(typeof document!=='undefined' && document.addEventListener){ document.addEventListener('visibilitychange', function(){ if(document.hidden){ volandFlushPlaytime(); } else { __volandPlayStart=Date.now(); } }); } if(typeof window!=='undefined' && window.addEventListener){ window.addEventListener('pagehide', function(){ volandFlushPlaytime(); }); window.addEventListener('beforeunload', function(){ volandFlushPlaytime(); }); } try{ setInterval(function(){ volandFlushPlaytime(); }, 30000); }catch(e){} }catch(e){} }
+try{ volandInitPlaytime(); }catch(e){}
 
 function volandGetKills(){ try{ let cur=volandGetCurrentSave(); if(cur) return cur.kills||0; return parseInt(localStorage.getItem(VOLAND_KEYS.kills)||'0'); }catch(e){return 0;} }
 function volandGetQuests(){ try{ let cur=volandGetCurrentSave(); if(cur) return {done: cur.quests||0, total: cur.quests_total||40}; return {done: parseInt(localStorage.getItem(VOLAND_KEYS.quests)||'0'), total: parseInt(localStorage.getItem(VOLAND_KEYS.quests_total)||'40')}; }catch(e){return {done:0,total:40};} }
