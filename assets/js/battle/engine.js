@@ -120,7 +120,7 @@ window.VB.renderSkillBar=renderSkillBar;
 
 async function useAction(idx){
  if(isBattleOver) return; if(cooldowns[idx]>0) return;
- if(!heroModuleLoaded && !heroModuleFailed){ addLog('⏳ Механика героя ещё грузится, жди...','skill'); return; }
+ if(!heroModuleLoaded && !heroModuleFailed){ return; }
  // хук героя
  if(window.VOLAND_HERO_USE_SKILL){
    let handled = await window.VOLAND_HERO_USE_SKILL(idx, {cur, eDef, eDmg, eMaxHp, get eHp(){return eHp}, set eHp(v){eHp=v}, get hHp(){return hHp}, set hHp(v){hHp=v}, get hMana(){return hMana}, set hMana(v){hMana=v}, hMax, hMaxMana, enemyData, heroData, activeSkills, getMult, rand, addLog, updBars, cooldowns, turn, spellCount, enemyStun, setEnemyStun:v=>enemyStun=v, isBattleOver, allSkills});
@@ -362,16 +362,13 @@ function loadHeroModule(){
  s.onload=()=>{
    if(typeof window.VOLAND_HERO_USE_SKILL==='function'){
      heroModuleLoaded=true;
-     addLog('✨ Механика героя '+heroData.n+' загружена из heroes/'+heroId+'.js','skill');
    } else {
      heroModuleFailed=true; heroModuleLoaded=true;
-     addLog('❌ Механика героя '+heroId+' не определилась после загрузки heroes/'+heroId+'.js — используется база DMG-DEF','lose');
    }
    renderSkillBar();
  };
  s.onerror=(e)=>{
    heroModuleFailed=true; heroModuleLoaded=true;
-   addLog('❌ Ошибка загрузки heroes/'+heroId+'.js — механика не загружена, используется база DMG-DEF','lose');
    renderSkillBar();
  };
  document.head.appendChild(s);
@@ -381,7 +378,6 @@ updBars(); renderSkillBar();
 addLog('Бой: '+profileName+' ['+heroData.n+'] vs '+enemyData.name+' [LOC '+loc+' STAGE '+stage+']','');
 addLog('Формула: урон = DMG героя - DEF моба + rand, мин 10 • Мана +8 за ход','');
 addLog('Пассивка: '+passive.name+' — '+passive.desc,'skill');
-addLog('⬇️ Жми: Q=Атака, W,E,R,T=Скилы','');
 loadHeroModule();
 document.addEventListener('keydown',e=>{ const k=e.key.toLowerCase(); if(k=='q') useAction(0); if(k=='w') useAction(1); if(k=='e') useAction(2); if(k=='r') useAction(3); if(k=='t') useAction(4); });
 window.useAction=useAction;
