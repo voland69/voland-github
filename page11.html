@@ -191,6 +191,61 @@ document.addEventListener('DOMContentLoaded', ()=>{
 });
 setTimeout(()=>{ renderHeroGrid(); }, 200);
 </script>
+<script>
+// P1 FIX: static UI in page11 was hardcoded RU, so EN version showed Russian.
+// Hero roles (h.role) are NOT translated by request - left as is.
+// Only UI labels: titles, buttons, chat, result modal, PLAYER/BOT labels.
+function applyPvpStaticLang(){
+  try{
+    if(typeof volandT!=='function') return;
+    var T = volandT;
+    var q = function(s){ return document.querySelector(s); };
+    var qa = function(s){ return document.querySelectorAll(s); };
+    var topTitle = q('.top-title'); if(topTitle) topTitle.textContent = T('ПВП АРЕНА • ТЕСТ БОТА','PVP ARENA • BOT TEST');
+    var topSub = q('.top-sub'); if(topSub) topSub.textContent = T('8 ГЕРОЕВ • 3 СЛОЖНОСТИ • УМНЫЕ СКИЛЫ • HP x5','8 HEROES • 3 DIFFICULTIES • SMART SKILLS • HP x5');
+    // section titles
+    var secs = qa('.section-title');
+    if(secs[0]) secs[0].textContent = T('1 • ВЫБЕРИ СЛОЖНОСТЬ','1 • CHOOSE DIFFICULTY');
+    if(secs[1]) secs[1].textContent = T('2 • ВЫБЕРИ ПРОТИВНИКА • 8 ГЕРОЕВ','2 • CHOOSE OPPONENT • 8 HEROES');
+    if(secs[2]) secs[2].textContent = T('3 • ПРОСМОТР И БОЙ','3 • PREVIEW & FIGHT');
+    // diff buttons - keep pct, translate labels
+    var diffs = qa('.diff-btn');
+    diffs.forEach(function(b){
+      var d = b.dataset.diff;
+      var span = b.querySelector('span');
+      if(!span) return;
+      if(d==='easy'){ span.textContent = T('ЛЕГКО','EASY'); }
+      if(d==='medium'){ span.textContent = T('СРЕДНЕ','MEDIUM'); }
+      if(d==='hard'){ span.textContent = T('ТЯЖЕЛО','HARD'); }
+      var small = b.querySelector('span:last-child');
+      // third span is description - translate via index
+      var all = b.querySelectorAll('span');
+      if(all[2]){
+        if(d==='easy') all[2].textContent = T('Слабый • Рандом скилы','Weak • Random skills');
+        if(d==='medium') all[2].textContent = T('Как ты • Умные скилы','Like you • Smart skills');
+        if(d==='hard') all[2].textContent = T('+30% статы • Идеальный AI','+30% stats • Perfect AI');
+      }
+    });
+    var fightBtn = document.getElementById('fightBtn');
+    if(fightBtn && fightBtn.disabled) fightBtn.textContent = T('ВЫБЕРИ ГЕРОЯ','CHOOSE HERO');
+    // fighter labels PLAYER / BOT - NOT hero roles, these are UI labels
+    var pRole = document.getElementById('pRole'); if(pRole) pRole.textContent = T('ИГРОК','PLAYER');
+    var bRole = document.getElementById('bRole'); if(bRole) bRole.textContent = T('БОТ','BOT');
+    var pName = document.getElementById('pName'); if(pName && pName.textContent==='ТЫ') pName.textContent = T('ТЫ','YOU');
+    // back to lobby button
+    var backBtn = document.querySelector('.battle-area .btn'); if(backBtn) backBtn.textContent = T('← НАЗАД В ЛОББИ','← BACK TO LOBBY');
+    // chat
+    var sysMsg = document.querySelector('.sys-msg'); if(sysMsg && sysMsg.textContent.indexOf('Общий чат')!==-1) sysMsg.textContent = T('Система: Общий чат — заглушка. Мультиплеер будет с сервером.','System: Global chat is a stub. Multiplayer will come with server.');
+    // result modal
+    var rt = document.getElementById('resultTitle'); if(rt && rt.textContent==='ПОБЕДА!') rt.textContent = T('ПОБЕДА!','VICTORY!');
+    var rs = document.getElementById('resultSub'); if(rs && rs.textContent==='Ты победил бота') rs.textContent = T('Ты победил бота','You defeated the bot');
+    var rem = document.querySelector('.result-actions .btn.primary'); if(rem) rem.textContent = T('РЕВАНШ','REMATCH');
+    var lob = document.querySelector('.result-actions .btn:not(.primary)'); if(lob) lob.textContent = T('ЛОББИ','LOBBY');
+  }catch(e){}
+}
+document.addEventListener('DOMContentLoaded', function(){ setTimeout(applyPvpStaticLang, 100); });
+setTimeout(applyPvpStaticLang, 500);
+</script>
 <script src="./assets/js/nav.js"></script>
 </body>
 </html>
