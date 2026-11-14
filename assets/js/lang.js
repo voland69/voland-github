@@ -427,6 +427,10 @@ function volandBattleLog(t){
   out = out.split('Ты ').join('You ');
   out = out.split('(авто)').join('(auto)');
   out = out.split('авто').join('auto');
+  out = out.split('каждый').join('each');
+  out = out.split('kazhdyi').join('each');
+  out = out.split('Искривление Времени').join('Time Warp');
+  out = out.split('Искривление').join('Warp');
   out = out.split('суперметеор').join('supermeteor');
   out = out.split('Суперметеор').join('Supermeteor');
   out = out.split('оглушенному').join('stunned');
@@ -453,6 +457,7 @@ function volandBattleLog(t){
   }catch(e){}
   // 2. Целые фразы — длинные первыми, чтобы "эффекты: яды, скелеты, сферы" не разбилась на куски
   let phrases = [
+    ['5 скелетов на 3р по 100% урона каждый!', '5 skeletons for 3 rounds, 100% damage each!'],
     ['эффекты: яды, скелеты, сферы', 'effects: poisons, skeletons, spheres'],
     ['Эффекты: яды, скелеты, сферы', 'Effects: poisons, skeletons, spheres'],
     ['Конец раунда', 'End of round'],
@@ -606,6 +611,7 @@ function volandBattleLog(t){
     ['все враги получают урон', 'all enemies take damage'],
     ['Костяной Щит', 'Bone Shield'],
     ['при разрушении взрыв', 'on destroy explosion'],
+    ['при разрушении', 'on destroy'],
     ['Щит', 'Shield'],
     ['поглотил', 'absorbed'],
     ['осталось', 'left'],
@@ -626,36 +632,65 @@ function volandBattleLog(t){
     ['не хватает маны', 'not enough mana'],
     ['Не хватает маны', 'Not enough mana'],
     ['Пассивы', 'Passives'],
-    ['за 4р по', 'over 4r for'],
-    ['за 3р по', 'over 3r for'],
-    ['за 4р', 'over 4r'],
-    ['за 3р', 'over 3r'],
+    ['за 4р по', 'over 4 rounds for'],
+    ['за 3р по', 'over 3 rounds for'],
+    ['за 4р', 'over 4 rounds'],
+    ['за 3р', 'over 3 rounds'],
     ['по 150%', 'for 150%'],
     ['по 200%', 'for 200%'],
     ['по 100%', 'for 100%'],
     ['по 160%', 'for 160%'],
     ['каждый раунд', 'each round'],
     ['каждого', 'each'],
-    ['на 2р', 'for 2r'],
-    ['на 3р', 'for 3r'],
-    ['на 4р', 'for 4r'],
-    ['на 1р', 'for 1r'],
-    ['в 1р', 'in 1r'],
-    ['во 2р', 'in 2r'],
-    ['4р', '4r'],
-    ['3р', '3r'],
-    ['2р', '2r'],
-    ['1р', '1r'],
-    ['р]', 'r]'],
-    ['р,', 'r,'],
-    ['р!', 'r!'],
-    ['р.', 'r.']
+    ['на 2р', 'for 2 rounds'],
+    ['на 3р', 'for 3 rounds'],
+    ['на 4р', 'for 4 rounds'],
+    ['на 1р', 'for 1 round'],
+    ['в 1р', 'in 1 round'],
+    ['во 2р', 'in 2 rounds'],
+    ['4р', '4 rounds'],
+    ['3р', '3 rounds'],
+    ['2р', '2 rounds'],
+    ['1р', '1 round'],
+    ['р]', ' rounds]'],
+    ['р,', ' rounds,'],
+    ['р!', ' rounds!'],
+    ['р.', ' rounds.'],
+    // P1 FIX - missing from EN screenshots
+    ['каждый', 'each'],
+    ['kazhdyi', 'each'],
+    ['каждый раунд', 'each round'],
+    ['Искривление', 'Warp'],
+    ['Искривление Времени', 'Time Warp'],
+    ['не прошёл', 'blocked'],
+    ['не прошёл', 'blocked'],
+    ['неуязвим, не прошёл', 'invulnerable, blocked'],
+    ['неуязвим, взрыв не прошёл', 'invulnerable, explosion blocked'],
+    ['неуязвим, отраж не прошёл', 'invulnerable, reflect blocked'],
+    ['Подрывник', 'Bomber'],
+    ['Скелет', 'Skeleton'],
+    ['Дух', 'Spirit'],
+    ['Сфера Бури', 'Storm Sphere'],
+    ['Судный День', 'Doomsday'],
+    ['Ударная волна Метеора', 'Meteor Shockwave'],
+    ['Костяной Легион', 'Bone Legion'],
+    ['всего', 'total'],
+    ['тик...', 'tick...'],
+    ['взрыв через', 'explosion in'],
+    ['кончился', 'ended'],
+    ['Аватар урон', 'Avatar damage'],
+    ['Волк', 'Wolf'],
+    ['Буря', 'Storm'],
+    ['стрела', 'arrow'],
+    ['Стрела Бездны', 'Abyss Arrow'],
+    ['Стрела', 'Arrow']
   ];
   for(let p of extra){
     if(out.indexOf(p[0])!==-1) out = out.split(p[0]).join(p[1]);
   }
   // Цифра + Cyrillic р -> цифра + r (напр. 5р -> 5r)
-  out = out.replace(/(\d+)р/g, '$1r');
+  // P1 FIX: '2р' -> '2 rounds', not '2 rounds'. Keep 'р' as rounds in EN.
+  out = out.replace(/(\d+)р/g, '$1 rounds');
   // Остаток: " за " в контексте "9 стрел за 3r" уже покрыт, но " за " одиночный -> " over "
   out = out.replace(/ за /g, ' over ');
 
