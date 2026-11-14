@@ -21,8 +21,8 @@ window.VOLAND_HERO_USE_SKILL = async function(idx, ctx){
 window.VOLAND_HERO_ON_TURN_END = function(ctx){
  let {cur, rand, addLog, updBars}=ctx; let eDef=window.VB.eDef; let vuln=boneVulnTurns>0?1.25:1.0;
  if(legionCount<3){ legionCount++; addLog('🦴 '+T('Легион ','Legion ')+'+1 '+T('скелет ','skeleton ')+legionCount+'/3','skill'); }
- if(legionCount>0) for(let i=0;i<legionCount;i++){ if(ctx.eHp<=0) break; let d=Math.max(5, Math.floor(cur.DMG*1.0*vuln) - Math.floor(eDef/3) + rand(-5,5)); ctx.eHp=Math.max(0, ctx.eHp-d); addLog('🦴 '+T('Легион ','Legion ')+(i+1)+' '+d,'skill'); }
- if(armyTurns>0) for(let i=0;i<armyCount;i++){ if(ctx.eHp<=0) break; let d=Math.max(5, Math.floor(cur.DMG*1.0*vuln) - Math.floor(eDef/3) + rand(-5,5)); ctx.eHp=Math.max(0, ctx.eHp-d); addLog('💀 '+T('Армия ','Army ')+(i+1)+' '+d,'skill'); }
+ if(legionCount>0) for(let i=0;i<legionCount;i++){ if(ctx.eHp<=0) break; let d=Math.max(5, Math.floor(cur.DMG*1.0*vuln) - Math.floor(eDef * 0.75) + rand(-5,5)); ctx.eHp=Math.max(0, ctx.eHp-d); addLog('🦴 '+T('Легион ','Legion ')+(i+1)+' '+d,'skill'); }
+ if(armyTurns>0) for(let i=0;i<armyCount;i++){ if(ctx.eHp<=0) break; let d=Math.max(5, Math.floor(cur.DMG*1.0*vuln) - Math.floor(eDef * 0.75) + rand(-5,5)); ctx.eHp=Math.max(0, ctx.eHp-d); addLog('💀 '+T('Армия ','Army ')+(i+1)+' '+d,'skill'); }
  updBars();
  if(bomber1>0){ let d=Math.max(15, Math.floor(cur.DMG*2.0*vuln) - eDef + rand(-10,10)); ctx.eHp=Math.max(0, ctx.eHp-d); addLog('💣 '+T('Бомбер','Bomber')+'1 '+d+' [200%]','skill'); bomber1=0; updBars(); }
  if(bomber2>0){ bomber2--; if(bomber2==0){ let d=Math.max(15, Math.floor(cur.DMG*3.0*vuln) - eDef + rand(-10,10)); ctx.eHp=Math.max(0, ctx.eHp-d); addLog('💣 '+T('Бомбер','Bomber')+'2 '+d+' [300%]','skill'); updBars(); } else addLog('💣 '+T('Бомбер','Bomber')+'2 '+T('тик...','tick...'),'hit'); }
