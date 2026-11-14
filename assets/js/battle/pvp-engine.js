@@ -1,6 +1,12 @@
 // VOLAND PVP ENGINE V3 - Full PVE-like: buffs/debuffs/passives/summons for all 8 heroes
 (function(){
 const DIFF_MULT = { easy: 0.7, medium: 1.0, hard: 1.3 };
+const T = (ru,en)=> (typeof volandT==='function' ? volandT(ru,en) : ru);
+// P2+P3+P4: helper for end-of-round damage that must respect invuln/shield/dodge.
+// All summon / sphere / storm / meteor / doomsday damage now goes through dealDamage, not direct hp-=.
+// P3: summary logs for multi-hits removed - they looked like double damage (909 + 909).
+// P1: new logs use T() at source, old logs are translated via volandBattleLog in lang.js (extended). Roles NOT translated by request.
+
 const PVP_HP_MULT = 5;
 let player=null, bot=null, turn=1, isOver=false;
 let logEl, pHpBar, bHpBar, pManaBar, bManaBar, pHpText, bHpText, pManaText, bManaText;
@@ -131,17 +137,17 @@ function parseCd(desc){
 }
 function dealDamage(attacker, defender, rawDmg, opts={}){
   if(isOver) return 0;
-  if(defender.invulnTurns>0){ addLog(`👑 ${defender.name} неуязвим! (${defender.invulnTurns}р)`, 'skill'); return 0; }
+  if(defender.invulnTurns>0){ addLog(`👑 ${defender.name} ${T('неуязвим!','invulnerable!')} (${defender.invulnTurns}${T('р',' rounds')})${opts.skillName ? ' - '+opts.skillName+' '+T('не прошёл','blocked') : ''}`, 'skill'); return 0; }
   if(!opts.isTrue && opts.canDodge!==false){
     if(Math.random()*100 < effDodge(defender)){
-      addLog(`💨 ${defender.name} уклонился от ${opts.skillName||'атаки'}!`, 'enemy-hit');
+      addLog(`💨 ${defender.name} ${T('уклонился от','dodged')} ${opts.skillName||T('атаки','attack')}!`, 'enemy-hit');
       if(defender.id==='archer-f'){ defender.nextCrit=true; addLog(`🐾 Тропы Зверя: ${defender.name} уклонился, след. удар 100% крит!`, 'skill'); }
       return 0;
     }
   }
   if(defender.blockTurns>0 && defender.blockChance>0){
     if(Math.random()*100 < defender.blockChance){
-      addLog(`🛡️ ${defender.name} заблокировал удар!`, 'skill');
+      addLog(`🛡️ ${defender.name} ${T('заблокировал удар!','blocked the hit!')}${opts.skillName ? ' ['+opts.skillName+']' : ''}`, 'skill');
       if(defender.id==='warrior-f'){
         let counter=Math.floor(effDmg(defender)*3.5);
         addLog(`🐺 Контратака Волка ${counter} [350%]!`, 'skill');
@@ -157,6 +163,7 @@ function dealDamage(attacker, defender, rawDmg, opts={}){
   else {
     let def=effDef(defender);
     if(opts.ignoreDef) def=Math.floor(def*0.8);
+    if(opts.defDiv) def=Math.floor(def/opts.defDiv); // P2: скелеты в PvE бьют по DEF/3, иначе танк с DEF 180 почти не получает урона от скелетов
     finalDmg=Math.max(10, rawDmg - def + rand(-12,12));
   }
   if(defender.markTurns>0 && attacker.id==='archer-m'){
@@ -173,21 +180,25 @@ function dealDamage(attacker, defender, rawDmg, opts={}){
     let blocked=Math.floor(orig*0.5);
     let reflect=Math.floor(orig*0.25);
     finalDmg=blocked;
-    addLog(`🛡️ Бастион: блок 50% ${blocked} (из ${orig}) отраж ${reflect}`, 'skill');
-    attacker.hp=Math.max(0, attacker.hp-reflect);
+    if(attacker.invulnTurns>0){ addLog(`🛡️ ${T('Бастион: блок 50%','Bastion: block 50%')} ${blocked} (${T('из','of')} ${orig}) ${T('отраж','reflect')} ${reflect} - ${attacker.name} ${T('неуязвим, отраж не прошёл','invulnerable, reflect blocked')}`, 'skill'); }
+    else { addLog(`🛡️ ${T('Бастион: блок 50%','Bastion: block 50%')} ${blocked} (${T('из','of')} ${orig}) ${T('отраж','reflect')} ${reflect}`, 'skill'); attacker.hp=Math.max(0, attacker.hp-reflect); }
   }
+  let shieldAbsorbed=0;
   if(defender.shield>0){
     let absorbed=Math.min(defender.shield, finalDmg);
-    defender.shield-=absorbed; finalDmg-=absorbed;
-    addLog(`🛡️ Щит ${defender.name} поглотил ${absorbed} (осталось ${defender.shield})`, 'skill');
+    defender.shield-=absorbed; finalDmg-=absorbed; shieldAbsorbed=absorbed;
+    // P3 FIX: если щит поглотил частично, не логируем отдельной строкой, а покажем в итоговой строке урона, иначе одна стрела выглядит как 2 удара (щит + HP)
+    if(finalDmg<=0){
+      addLog(`🛡️ ${T('Щит','Shield')} ${defender.name} ${T('поглотил','absorbed')} ${absorbed} (${T('осталось','left')} ${defender.shield})${opts.skillName ? ' ['+opts.skillName+']' : ''}`, 'skill');
+    }
     if(defender.shield<=0){
       defender.shield=0;
-      if(defender.shieldExplode>0){ let expl=defender.shieldExplode; defender.shieldExplode=0; addLog(`💥 Щит ${defender.name} взорвался ${expl} [300%]!`, 'skill'); attacker.hp=Math.max(0, attacker.hp-expl); }
+      if(defender.shieldExplode>0){ let expl=defender.shieldExplode; defender.shieldExplode=0; if(attacker.invulnTurns>0){ addLog(`💥 ${T('Щит','Shield')} ${defender.name} ${T('взорвался','exploded')} ${expl} [300%]! - ${attacker.name} ${T('неуязвим, взрыв не прошёл','invulnerable, explosion blocked')}`, 'skill'); } else { addLog(`💥 ${T('Щит','Shield')} ${defender.name} ${T('взорвался','exploded')} ${expl} [300%]!`, 'skill'); attacker.hp=Math.max(0, attacker.hp-expl); } }
     }
     if(finalDmg<=0){ updateBars(); return 0; }
   }
   defender.hp=Math.max(0, defender.hp-finalDmg);
-  addLog(`${opts.skillName? '🔥 '+attacker.name+' '+opts.skillName+' → '+defender.name+' на '+finalDmg : '⚔️ '+attacker.name+' → '+defender.name+' '+finalDmg}${isCrit?' CRIT!':''}`, isCrit?'crit':'hit');
+  addLog(`${opts.skillName? '🔥 '+attacker.name+' '+opts.skillName+' → '+defender.name+' '+T('на','for')+' '+finalDmg : '⚔️ '+attacker.name+' → '+defender.name+' '+finalDmg}${shieldAbsorbed>0 ? ' ('+T('щит поглотил','shield absorbed')+' '+shieldAbsorbed+')' : ''}${isCrit?' CRIT!':''}`, isCrit?'crit':'hit');
   if(attacker.id==='warrior-f' && attacker.hp/attacker.maxHp<0.30){
     let heal=Math.floor(finalDmg*0.30); attacker.hp=Math.min(attacker.maxHp, attacker.hp+heal); addLog(`🐺 Клятва Стаи: +${heal} HP лайфстил 30%`, 'skill');
   }
@@ -196,11 +207,11 @@ function dealDamage(attacker, defender, rawDmg, opts={}){
   }
   if(defender.linkTurns>0){
     let refl=Math.floor(finalDmg*0.30); let heal=Math.floor(finalDmg*0.30);
-    attacker.hp=Math.max(0, attacker.hp-refl); defender.hp=Math.min(defender.maxHp, defender.hp+heal);
-    addLog(`💜 Похищение Жизни: отраж ${refl} + хил ${heal} [30%]`, 'skill');
+    if(attacker.invulnTurns>0){ addLog(`💜 ${T('Похищение Жизни: отраж','Life Steal: reflect')} ${refl} + ${T('хил','heal')} ${heal} [30%] - ${attacker.name} ${T('неуязвим, отраж не прошёл','invulnerable, reflect blocked')}`, 'skill'); defender.hp=Math.min(defender.maxHp, defender.hp+heal); }
+    else { attacker.hp=Math.max(0, attacker.hp-refl); defender.hp=Math.min(defender.maxHp, defender.hp+heal); addLog(`💜 ${T('Похищение Жизни: отраж','Life Steal: reflect')} ${refl} + ${T('хил','heal')} ${heal} [30%]`, 'skill'); }
   }
   if(defender.reflectPct>0 && defender.reflectTurns>0){
-    let refl=Math.floor(finalDmg*defender.reflectPct/100); attacker.hp=Math.max(0, attacker.hp-refl); addLog(`🪞 Отражение ${refl}`, 'skill');
+    let refl=Math.floor(finalDmg*defender.reflectPct/100); if(attacker.invulnTurns>0){ addLog(`🪞 ${T('Отражение','Reflect')} ${refl} - ${attacker.name} ${T('неуязвим, отраж не прошёл','invulnerable, reflect blocked')}`, 'skill'); } else { attacker.hp=Math.max(0, attacker.hp-refl); addLog(`🪞 ${T('Отражение','Reflect')} ${refl}`, 'skill'); }
   }
   updateBars();
   return finalDmg;
@@ -240,7 +251,7 @@ function executeSkill(attacker, defender, idx){
         let total=0;
         for(let i=0;i<5;i++){ let d=dealDamage(attacker, defender, Math.floor(dmgBase*2.0), {skillName:'Аметистовая Душа '+(i+1)+' [200%]', canDodge:true}); total+=d; if(defender.hp<=0) break; }
         defender.stunTurns=Math.max(defender.stunTurns,1);
-        addLog(`🌌 Аметистовый Закат: 5 душ → ${total} [1000%] + стан 1р!`, 'skill');
+        // P3: summary removed - per-soul logs above already show damage, summary looked like double damage (909 + 909)
       }
       break;
     case 'necro-m':
@@ -251,14 +262,14 @@ function executeSkill(attacker, defender, idx){
         addLog(`☠️ Уязвимость Костей: +25% урона от саммонов 2р`, 'skill');
       } else if(info.name.includes('Щит')){
         let sh=Math.floor(attacker.maxHp*0.20); attacker.shield=sh; attacker.shieldTurns=10; attacker.shieldExplode=Math.floor(dmgBase*3.0);
-        addLog(`🛡️ Костяной Щит: ${sh} HP, при разрушении взрыв ${attacker.shieldExplode} [300%]`, 'skill');
+        addLog(`🛡️ ${T('Костяной Щит','Bone Shield')}: ${sh} HP, ${T('при разрушении взрыв','on destroy explosion')} ${attacker.shieldExplode} [300%]`, 'skill');
       } else if(info.name.includes('Поднять')){
         attacker.skeletons.push({dmg:Math.floor(dmgBase*2.0), turns:1, type:'bomber', explodeIn:1});
         attacker.skeletons.push({dmg:Math.floor(dmgBase*3.0), turns:2, type:'bomber', explodeIn:2});
         addLog(`👥 Поднять Мертвых: 2 подрывника - взрыв 200% в 1р и 300% во 2р`, 'skill');
       } else if(info.name.includes('Армия')){
         for(let i=0;i<5;i++) attacker.skeletons.push({dmg:Math.floor(dmgBase*1.0), turns:3, type:'normal'});
-        addLog(`💀 Армия Погибели: 5 скелетов на 3р по 100% урона каждый!`, 'skill');
+        addLog(`💀 ${T('Армия Погибели: 5 скелетов на 3р по 100% урона каждый!','Army of Doom: 5 skeletons for 3 rounds, 100% damage each!')}`, 'skill');
       }
       break;
     case 'archer-f':
@@ -291,7 +302,7 @@ function executeSkill(attacker, defender, idx){
       if(info.name.includes('Беглый')){ dealDamage(attacker, defender, Math.floor(dmgBase*2.0), {skillName:info.name}); }
       else if(info.name.includes('Шаг')){ attacker.invisTurns=3; addLog(`🌑 Шаг в Ничто: невидимость 3р, след. атака гарант крит`, 'skill'); }
       else if(info.name.includes('Призрачная')){ dealDamage(attacker, defender, Math.floor(dmgBase*2.0), {skillName:info.name}); if(Math.random()*100<33){ defender.stunTurns=Math.max(defender.stunTurns,1); addLog(`💫 Призрачная Стрела: стан 1р [33%]!`, 'skill'); } }
-      else if(info.name.includes('Залп')){ let total=0; for(let i=0;i<7;i++){ total+=dealDamage(attacker, defender, Math.floor(dmgBase*2.0), {skillName:'Стрела Бездны '+(i+1)+' [200%]'}); if(defender.hp<=0) break; } addLog(`🌌 Залп Бездны: 7 стрел → ${total} [1400%]!`, 'skill'); }
+      else if(info.name.includes('Залп')){ for(let i=0;i<7;i++){ dealDamage(attacker, defender, Math.floor(dmgBase*2.0), {skillName: T('Стрела Бездны','Abyss Arrow')+' '+(i+1)+' [200%]'}); if(defender.hp<=0) break; } /* P3: summary removed - 7 per-arrow logs above are the damage, extra line '7 arrows -> 909' looked like second 909 */ }
       break;
     case 'archmage-m':
       if(isAtk){ dealDamage(attacker, defender, Math.floor(dmgBase*1.0), {skillName:'АТАКА'}); break; }
@@ -318,7 +329,7 @@ function executeSkill(attacker, defender, idx){
         break;
       }
       if(info.name.includes('Рассекающий')){
-        let t=0; for(let i=0;i<2;i++) t+=dealDamage(attacker, defender, Math.floor(dmgBase*2.0), {skillName:'Волк '+(i+1)+' [200%]'}); addLog(`🗡️ Рассекающий Волк: ${t} [400%]`, 'skill');
+        for(let i=0;i<2;i++){ dealDamage(attacker, defender, Math.floor(dmgBase*2.0), {skillName: T('Волк','Wolf')+' '+(i+1)+' [200%]'}); if(defender.hp<=0) break; } /* P3: summary removed */
         if(attacker.wolfTurns>0){ defender.bleedTurns=2; defender.bleedDmg=Math.floor(dmgBase*0.50); addLog(`🩸 Волк: кровотечение 50% true`, 'skill'); }
       } else if(info.name.includes('Щит')){ attacker.blockChance=50; attacker.blockTurns=4; attacker.counterPct=350; addLog(`🛡️ Щит Волчьего Вожака: блок 50% 4р, контра 350%`, 'skill'); }
       else if(info.name.includes('Зов')){ defender.stunTurns=Math.max(defender.stunTurns,1); dealDamage(attacker, defender, Math.floor(dmgBase*4.0), {skillName:'Зов Стаи [400% стан]'}); addLog(`🐾 Зов Стаи: стан 1р + 200% x2 по оглушенному`, 'skill'); }
@@ -347,49 +358,104 @@ function executeSkill(attacker, defender, idx){
 }
 function endRoundEffects(){
   if(isOver) return;
+  // DoT на самом бойце: яд, кровотечение, горение, лава - true damage, но неуязвимость блокирует и их (Аватар 2р)
   [player, bot].forEach(f=>{
-    if(f.poisonTurns>0){ let d=f.poisonDmg; f.hp=Math.max(0,f.hp-d); addLog(`☠️ Яд ${f.name} -${d} true [${f.poisonTurns}р]`, 'skill'); }
-    if(f.bleedTurns>0){ let d=f.bleedDmg; f.hp=Math.max(0,f.hp-d); addLog(`🩸 Кровотечение ${f.name} -${d} true [${f.bleedTurns}р]`, 'skill'); }
-    if(f.burnTurns>0){ let d=f.burnDmg; f.hp=Math.max(0,f.hp-d); addLog(`🔥 Горение ${f.name} -${d} [${f.burnTurns}р]`, 'skill'); }
-    if(f.lavaTurns>0){ let d=f.lavaDmg; f.hp=Math.max(0,f.hp-d); addLog(`🌋 Лава ${f.name} -${d} [${f.lavaTurns}р]`, 'skill'); }
+    let isInvuln = f.invulnTurns>0;
+    if(f.poisonTurns>0){ let d=f.poisonDmg; if(isInvuln){ addLog(`☠️ ${T('Яд','Poison')} ${f.name} -${d} true [${f.poisonTurns}${T('р',' rounds')}] - ${T('неуязвим, не прошёл','invulnerable, blocked')}`, 'skill'); } else { f.hp=Math.max(0,f.hp-d); addLog(`☠️ ${T('Яд','Poison')} ${f.name} -${d} true [${f.poisonTurns}${T('р',' rounds')}]`, 'skill'); } }
+    if(f.bleedTurns>0){ let d=f.bleedDmg; if(isInvuln){ addLog(`🩸 ${T('Кровотечение','Bleeding')} ${f.name} -${d} true [${f.bleedTurns}${T('р',' rounds')}] - ${T('неуязвим, не прошёл','invulnerable, blocked')}`, 'skill'); } else { f.hp=Math.max(0,f.hp-d); addLog(`🩸 ${T('Кровотечение','Bleeding')} ${f.name} -${d} true [${f.bleedTurns}${T('р',' rounds')}]`, 'skill'); } }
+    if(f.burnTurns>0){ let d=f.burnDmg; if(isInvuln){ addLog(`🔥 ${T('Горение','Burning')} ${f.name} -${d} [${f.burnTurns}${T('р',' rounds')}] - ${T('неуязвим, не прошёл','invulnerable, blocked')}`, 'skill'); } else { f.hp=Math.max(0,f.hp-d); addLog(`🔥 ${T('Горение','Burning')} ${f.name} -${d} [${f.burnTurns}${T('р',' rounds')}]`, 'skill'); } }
+    if(f.lavaTurns>0){ let d=f.lavaDmg; if(isInvuln){ addLog(`🌋 ${T('Лава','Lava')} ${f.name} -${d} [${f.lavaTurns}${T('р',' rounds')}] - ${T('неуязвим, не прошёл','invulnerable, blocked')}`, 'skill'); } else { f.hp=Math.max(0,f.hp-d); addLog(`🌋 ${T('Лава','Lava')} ${f.name} -${d} [${f.lavaTurns}${T('р',' rounds')}]`, 'skill'); } }
   });
+  // P2 + P4: все саммоны и эффекты конца раунда - по отдельности через dealDamage, а не суммой и не прямым hp-=
+  // Каждый скелет / дух / сфера / стрела бури / метеор - отдельный удар: свой DEF, крит, dodge, щит, блок, неуязвимость. Стоп если враг умер.
   [player, bot].forEach(f=>{
     let opp = f===player ? bot : player;
+    if(opp.hp<=0) return;
+    // Скелеты: обычные + подрывники
     if(f.skeletons.length>0){
-      let total=0; let remaining=[];
-      f.skeletons.forEach(s=>{
-        if(s.type==='bomber'){ s.explodeIn--; if(s.explodeIn<=0){ total+=s.dmg; addLog(`💥 Подрывник ${f.name} взорвался ${s.dmg}!`, 'skill'); } else remaining.push(s); }
-        else { let bonus = f._summonBonusTurns>0 ? 1.25 : 1; let d=Math.floor(s.dmg*bonus); total+=d; if(s.turns>1) remaining.push({...s, turns:s.turns-1}); }
-      });
+      let remaining=[];
+      // Копируем массив, чтобы безопасно фильтровать
+      let list = [...f.skeletons];
+      for(let si=0; si<list.length; si++){
+        let s = list[si];
+        if(opp.hp<=0) { // враг умер - остальные скелеты не бьют, но не теряются если у них остались раунды
+          if(s.type!=='bomber' && s.turns>1) remaining.push({...s, turns:s.turns-1});
+          else if(s.type==='bomber' && s.explodeIn>1) remaining.push({...s, explodeIn:s.explodeIn});
+          continue;
+        }
+        if(s.type==='bomber'){
+          s.explodeIn--;
+          if(s.explodeIn<=0){
+            // P2: подрывник - отдельный удар через dealDamage
+            dealDamage(f, opp, s.dmg, {skillName: T('Подрывник','Bomber')+' '+(si+1)+' [200%/300%]', canDodge:true});
+          } else {
+            remaining.push(s);
+            addLog(`💣 ${T('Подрывник','Bomber')} ${f.name} ${T('тик...','tick...')} ${T('взрыв через','explosion in')} ${s.explodeIn}${T('р',' rounds')}`, 'skill');
+          }
+        } else {
+          let bonus = f._summonBonusTurns>0 ? 1.25 : 1;
+          let d = Math.floor(s.dmg*bonus);
+          // P2: каждый скелет отдельно
+          dealDamage(f, opp, d, {skillName: T('Скелет','Skeleton')+' '+(si+1)+' [100%]'+(bonus>1 ? ' +25%' : ''), defDiv:3}); // PvE: скелеты бьют по DEF/3
+          if(s.turns>1) remaining.push({...s, turns:s.turns-1});
+        }
+        if(opp.hp<=0) break;
+      }
       f.skeletons=remaining;
-      if(total>0){ opp.hp=Math.max(0, opp.hp-total); addLog(`🦴 Скелеты ${f.name} → ${opp.name} ${total} [${f.skeletons.length} скелетов]`, 'skill'); }
     }
+    if(opp.hp<=0) return;
+    // Духи Аметиста: каждый дух отдельно +5 маны
     if(f.spirits.length>0){
-      let total=0; let rem=[];
-      f.spirits.forEach(sp=>{ total+=sp.dmg; f.mana=Math.min(f.maxMana, f.mana+5); if(sp.turns>1) rem.push({...sp, turns:sp.turns-1}); });
+      let rem=[];
+      let list=[...f.spirits];
+      for(let si=0; si<list.length; si++){
+        let sp=list[si];
+        if(opp.hp<=0){ if(sp.turns>1) rem.push({...sp, turns:sp.turns-1}); continue; }
+        dealDamage(f, opp, sp.dmg, {skillName: T('Дух','Spirit')+' '+(si+1)+' [100%]'});
+        f.mana=Math.min(f.maxMana, f.mana+5);
+        addLog(`🔮 ${T('Дух','Spirit')} ${f.name} +5 ${T('маны','mana')}`, 'skill');
+        if(sp.turns>1) rem.push({...sp, turns:sp.turns-1});
+        if(opp.hp<=0) break;
+      }
       f.spirits=rem;
-      if(total>0){ opp.hp=Math.max(0, opp.hp-total); addLog(`🔮 Дух ${f.name} → ${opp.name} ${total} +5 маны`, 'skill'); }
     }
-    if(f.sphereTurns>0){ let d=f.sphereDmg; opp.hp=Math.max(0, opp.hp-d); addLog(`⚡ Сфера Бури ${f.name} → ${opp.name} ${d} [160%] [${f.sphereTurns}р]`, 'skill'); }
+    if(opp.hp<=0) return;
+    // Сфера Бури: 1 удар в раунд через dealDamage (уважает неуязвимость, щит, dodge)
+    if(f.sphereTurns>0){
+      dealDamage(f, opp, f.sphereDmg, {skillName: T('Сфера Бури','Storm Sphere')+' [160%]', canDodge:true});
+    }
+    if(opp.hp<=0) return;
+    // Буря Стрел: каждая стрела отдельно
     if(f.stormTurns>0 && f.stormLeft>0){
       let arrows=Math.ceil(f.stormLeft/f.stormTurns); arrows=Math.min(arrows, f.stormLeft);
-      let total=0; let doStun=false;
-      for(let i=0;i<arrows;i++){ total+=Math.max(10, Math.floor(effDmg(f)*1.5) - effDef(opp) + rand(-6,6)); if(Math.random()*100<25) doStun=true; }
-      f.stormLeft-=arrows; opp.hp=Math.max(0, opp.hp-total); addLog(`🌪️ Буря ${f.name} ${arrows} стрел → ${total} [150% x${arrows}]${doStun?' + стан!':''}`, 'skill'); if(doStun) opp.stunTurns=Math.max(opp.stunTurns,1);
+      let doStun=false;
+      for(let i=0;i<arrows;i++){
+        if(opp.hp<=0) break;
+        // dealDamage сам кинет dodge / щит / неуязвимость, а стан роллим отдельно
+        dealDamage(f, opp, Math.floor(effDmg(f)*1.5), {skillName: T('Буря','Storm')+' '+T('стрела','arrow')+' '+(i+1)+' [150%]'});
+        if(Math.random()*100<25) doStun=true;
+        f.stormLeft--;
+      }
+      if(doStun && opp.hp>0){ opp.stunTurns=Math.max(opp.stunTurns,1); addLog(`🌪️ ${T('Буря','Storm')} ${f.name} - ${T('стан!','stun!')}`, 'skill'); }
     }
-    if(f.meteorDelay>0){ f.meteorDelay--; if(f.meteorDelay===0){ let d=f.meteorDmg; opp.hp=Math.max(0, opp.hp-d); addLog(`☄️ Ударная волна Метеора ${d} [300%]!`, 'skill'); } }
+    if(opp.hp<=0) return;
+    // Метеор: ударная волна через dealDamage
+    if(f.meteorDelay>0){ f.meteorDelay--; if(f.meteorDelay===0){ dealDamage(f, opp, f.meteorDmg, {skillName: T('Ударная волна Метеора','Meteor Shockwave')+' [300%]'}); } }
+    if(opp.hp<=0) return;
+    // Судный День: 1 метеор в раунд, последний 400%
     if(f.doomsdayTurns>0 && f.doomsdayLeft>0){
       let isLast = f.doomsdayLeft===1;
       let mult = isLast ? 4.0 : 2.0;
-      let d=Math.floor(effDmg(f)*mult); opp.hp=Math.max(0, opp.hp-d); addLog(`🌋 Судный День ${f.name} метеор ${d} [${Math.round(mult*100)}%] ${f.doomsdayLeft}р`, 'skill');
-      if(isLast){ opp.burnTurns=2; opp.burnDmg=Math.floor(effDmg(f)*0.50); addLog(`🌋 Поджог земли 50% 2р`, 'skill'); }
+      let d=Math.floor(effDmg(f)*mult);
+      dealDamage(f, opp, d, {skillName: T('Судный День','Doomsday')+' '+T('метеор','meteor')+' ['+Math.round(mult*100)+'%]'});
+      if(isLast && opp.hp>0){ opp.burnTurns=2; opp.burnDmg=Math.floor(effDmg(f)*0.50); addLog(`🌋 ${T('Поджог земли','Ground burn')} 50% 2${T('р',' rounds')}`, 'skill'); }
     }
     if(f._summonBonusTurns>0) f._summonBonusTurns--;
   });
   [player, bot].forEach(f=>{
     if(f.id==='necro-m'){
       let normal = f.skeletons.filter(s=>s.type==='normal').length;
-      if(normal<3){ f.skeletons.push({dmg:Math.floor(effDmg(f)*1.0), turns:99, type:'normal'}); addLog(`🦴 Костяной Легион: +1 скелет (всего ${f.skeletons.length})`, 'skill'); }
+      if(normal<3){ f.skeletons.push({dmg:Math.floor(effDmg(f)*1.0), turns:99, type:'normal'}); addLog(`🦴 ${T('Костяной Легион','Bone Legion')}: +1 ${T('скелет','skeleton')} (${T('всего','total')} ${f.skeletons.length})`, 'skill'); }
     }
   });
   [player, bot].forEach(f=>{
@@ -407,17 +473,18 @@ function endRoundEffects(){
     if(f.markTurns>0) f.markTurns--;
     if(f.dmgDownTurns>0) f.dmgDownTurns--;
     if(f.defDownTurns>0) f.defDownTurns--;
-    if(f.wolfTurns>0){ f.wolfTurns--; if(f.wolfTurns===0){ f.dmgBonusPct=Math.max(0, f.dmgBonusPct-30); addLog(`🌕 Волк ${f.name} кончился`, 'hit'); } }
-    if(f.avatarDmgTurns>0){ f.avatarDmgTurns--; if(f.avatarDmgTurns===0){ f.dmgBonusPct=Math.max(0, f.dmgBonusPct-200); addLog(`👑 Аватар урон ${f.name} кончился`, 'hit'); } }
+    if(f.wolfTurns>0){ f.wolfTurns--; if(f.wolfTurns===0){ f.dmgBonusPct=Math.max(0, f.dmgBonusPct-30); addLog(`🌕 ${T('Волк','Wolf')} ${f.name} ${T('кончился','ended')}`, 'hit'); } }
+    if(f.avatarDmgTurns>0){ f.avatarDmgTurns--; if(f.avatarDmgTurns===0){ f.dmgBonusPct=Math.max(0, f.dmgBonusPct-200); addLog(`👑 ${T('Аватар урон','Avatar damage')} ${f.name} ${T('кончился','ended')}`, 'hit'); } }
     if(f.timeWarpStacks>0 && Math.random()<0.2) f.timeWarpStacks=0;
     f.mana=Math.min(f.maxMana, f.mana+8);
     for(let i=0;i<f.cd.length;i++) if(f.cd[i]>0) f.cd[i]--;
   });
   updateBars();
-  if(player.hp<=0 && bot.hp<=0){ addLog(`💀 Оба пали! Ничья`, 'lose'); isOver=true; let m=document.getElementById('resultModal'); if(m) m.classList.add('show'); let t=document.getElementById('resultTitle'); if(t) t.textContent='НИЧЬЯ!'; let s=document.getElementById('resultSub'); if(s) s.textContent=`Оба пали • ${window.CURRENT_DIFF.toUpperCase()}`; return; }
+  if(player.hp<=0 && bot.hp<=0){ addLog(`💀 ${T('Оба пали! Ничья','Both fell! Draw')}`, 'lose'); isOver=true; let m=document.getElementById('resultModal'); if(m) m.classList.add('show'); let t=document.getElementById('resultTitle'); if(t) t.textContent=T('НИЧЬЯ!','DRAW!'); let s=document.getElementById('resultSub'); if(s) s.textContent=`${T('Оба пали','Both fell')} • ${window.CURRENT_DIFF.toUpperCase()}`; return; }
   if(bot.hp<=0){ win(); return; }
   if(player.hp<=0){ lose(); return; }
 }
+
 function playerAction(idx){
   if(isOver) return;
   if(player.stunTurns>0){
