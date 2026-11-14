@@ -163,7 +163,8 @@ function dealDamage(attacker, defender, rawDmg, opts={}){
   else {
     let def=effDef(defender);
     if(opts.ignoreDef) def=Math.floor(def*0.8);
-    if(opts.defDiv) def=Math.floor(def/opts.defDiv); // P2: скелеты в PvE бьют по DEF/3, иначе танк с DEF 180 почти не получает урона от скелетов
+    if(opts.defDiv) def=Math.floor(def/opts.defDiv);
+    if(opts.defMult) def=Math.floor(def*opts.defMult); // Скелеты Легиона и Армии: игнор 25% DEF, то есть DEF * 0.75
     finalDmg=Math.max(10, rawDmg - def + rand(-12,12));
   }
   if(defender.markTurns>0 && attacker.id==='archer-m'){
@@ -396,7 +397,7 @@ function endRoundEffects(){
           let bonus = f._summonBonusTurns>0 ? 1.25 : 1;
           let d = Math.floor(s.dmg*bonus);
           // P2: каждый скелет отдельно
-          dealDamage(f, opp, d, {skillName: T('Скелет','Skeleton')+' '+(si+1)+' [100%]'+(bonus>1 ? ' +25%' : ''), defDiv:3}); // PvE: скелеты бьют по DEF/3
+          dealDamage(f, opp, d, {skillName: T('Скелет','Skeleton')+' '+(si+1)+' [100%]'+(bonus>1 ? ' +25%' : ''), defMult:0.75}); // PvE: скелеты бьют по DEF/3
           if(s.turns>1) remaining.push({...s, turns:s.turns-1});
         }
         if(opp.hp<=0) break;
